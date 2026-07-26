@@ -74,7 +74,7 @@ final_image_path = add_hook_text_overlay(
     subtitle=seo_data.get('subtitle_hook', 'ELEGANCE THAT SHINES'),
     badge_text=seo_data.get('badge_hook', 'AMAZON TOP FIND'),
     price_str=prod['price'],
-    style="glowing_neon"
+    style="auto"
 )
 print(f" -> Final Pin Graphic: {final_image_path}")
 

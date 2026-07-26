@@ -284,7 +284,9 @@ def add_hook_text_overlay(
 
     all_styles = ['glowing_neon', 'cozy_lamp', 'bird_lamp', 'script_productivity', 'smart_gadgets']
     if style == "auto" or style not in all_styles:
-        style = "glowing_neon"
+        style_idx = abs(hash(Path(image_path).stem)) % len(all_styles)
+        style = all_styles[style_idx]
+        print(f"[Image Gen] Dynamic style='auto' selected reference style: '{style}' for {Path(image_path).name}")
     img = Image.open(image_path).convert("RGBA")
     width, height = img.size
 
