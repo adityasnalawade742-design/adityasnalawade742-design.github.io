@@ -205,6 +205,41 @@ def generate_bridge_page(product: dict, seo: dict, image_path: str) -> str:
     if Path(image_path).exists():
         shutil.copy(image_path, root_image_file)
 
-    print(f"[Bridge Creator] Created aesthetic bridge page: {page_file} (Synced to root bridge_{product['id']}.html)")
+    # Automatically update root index.html showcase gallery
+    update_showcase_index_page(product, image_name)
+
+    print(f"[Bridge Creator] Created aesthetic bridge page: {page_file} (Synced to root bridge_{product['id']}.html & index.html)")
     return str(page_file)
+
+
+def update_showcase_index_page(product: dict, image_name: str):
+    """Dynamically updates root index.html showcase gallery with the latest product card."""
+    project_root = Path(__file__).resolve().parent.parent
+    index_file = project_root / "index.html"
+    
+    if not index_file.exists():
+        return
+
+    try:
+        with open(index_file, "r", encoding="utf-8") as f:
+            html = f.read()
+
+        card_href = f"./bridge_{product['id']}.html"
+        if card_href in html:
+            return  # Already present in index.html
+
+        new_card = f"""        <a class="card" href="./bridge_{product['id']}.html">
+            <img src="./{image_name}?v=2" alt="{product.get('title', 'Product')}">
+            <h2>{product.get('title', 'Cozy Room Find')[:45]}...</h2>
+            <div class="price">{product.get('price', '')}</div>
+        </a>"""
+
+        grid_marker = '<div class="grid">'
+        if grid_marker in html:
+            html = html.replace(grid_marker, f"{grid_marker}\n{new_card}\n")
+            with open(index_file, "w", encoding="utf-8") as f:
+                f.write(html)
+            print(f"[Bridge Creator] Updated index.html showcase with card for {product['id']}")
+    except Exception as e:
+        print(f"[Bridge Creator] Error updating index.html: {e}")
 
