@@ -1,131 +1,131 @@
+import json
 import sys
 import io
-import json
+import shutil
 from pathlib import Path
 
-# Ensure UTF-8 output encoding for Windows PowerShell/CMD
+# Ensure UTF-8 stdout
 if hasattr(sys.stdout, "buffer"):
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
-from config import NICHE, OUTPUT_DIR, BASE_BRIDGE_URL, AMAZON_ASSOCIATE_TAG
+from config import OUTPUT_DIR, BASE_BRIDGE_URL
 from modules.amazon_extractor import get_product_details_and_photos
+from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image, add_hook_text_overlay
 from modules.vision_prompt import generate_cozy_image_prompt
-from modules.image_generator import generate_cozy_image, add_hook_text_overlay
 from modules.seo_copywriter import generate_pin_seo_data
 from modules.bridge_creator import generate_bridge_page
 from modules.pinterest_publisher import publish_pin_to_pinterest
 
-def process_diffuser_campaign():
-    target_url = "https://www.amazon.com/dp/B07Y7N4P38?tag=smartdeal0358-21"
-    
-    print("=" * 65)
-    print(f"🚀 Processing New Aesthetic Product: Ceramic Essential Oil Diffuser")
-    print(f"📌 Link: {target_url}")
-    print("=" * 65)
+amazon_url = "https://www.amazon.com/dp/B0BZXNSW5K"
+print("🚀 [Step 1] Extracting Product Details & Multi-Photos for ASIN B0BZXNSW5K...")
 
-    # Step 1: Extract Amazon Product & Photo Suite
-    print("\n🔍 [Step 1] Extracting Product Data & Photo Suite...")
-    product = get_product_details_and_photos(target_url)
-    if not product:
-        tag = AMAZON_ASSOCIATE_TAG
-        product = {
-            "id": "B07Y7N4P38",
-            "title": "Aesthetic Ceramic Essential Oil Aroma Diffuser with Warm Nightlight",
-            "category": "Cozy Home & Aromatherapy",
-            "price": "$29.99",
-            "rating": "4.7",
-            "reviews_count": 4820,
-            "affiliate_url": f"https://www.amazon.com/dp/B07Y7N4P38?tag={tag}",
-            "original_image_url": "https://m.media-amazon.com/images/I/712yfgNo9nL._AC_SL1500_.jpg",
-            "features": "Handcrafted matte ceramic shell, 7 color ambient nightlight, whisper quiet mist, auto shut off."
-        }
+prod = get_product_details_and_photos(amazon_url)
+if not prod:
+    print("❌ Error: Could not extract product details from Amazon.")
+    sys.exit(1)
 
-    print(f" -> ASIN: {product['id']}")
-    print(f" -> Title: {product['title']}")
-    print(f" -> Price: {product['price']} | Rating: {product['rating']}")
+print(f"🛍️ Title: {prod['title']}")
+print(f"💰 Price: {prod['price']} | ⭐ Rating: {prod['rating']}")
+photos = prod.get("all_photos", [])
+print(f"📸 Found {len(photos)} Amazon listing photos.")
 
-    # Step 2: Vision Prompt Generator
-    print("\n🎨 [Step 2] Generating Vision Prompt for Ceramic Diffuser...")
-    cozy_prompt = generate_cozy_image_prompt(
-        product_title=product['title'],
-        category=product['category'],
-        key_features=product['features']
-    )
-    print(f" -> Prompt: {cozy_prompt}")
+# Step 2: Create 6-photo multi-angle reference sheet
+print("\n📸 [Step 2] Creating Multi-Angle Composite Reference Sheet...")
+ref_sheet_path = create_multi_photo_reference_sheet(photos, filename_prefix=f"product_{prod['id']}", max_photos=6)
+print(f" -> Multi-Angle Reference Sheet: {ref_sheet_path}")
 
-    # Step 3: Generate AI Vertical 3:4 Image via FLUX-Dev
-    print("\n🖼️ [Step 3] Generating AI Cozy Room Image via Replicate FLUX-Dev...")
-    raw_image_path = generate_cozy_image(
-        prompt=cozy_prompt,
-        filename_prefix=f"focus_product_{product['id']}"
-    )
+# Step 3: Gemini Vision Prompt / Master Commercial Prompt
+print("\n👁️ [Step 3] Generating Master Commercial AI Image Prompt...")
+cozy_prompt = generate_cozy_image_prompt(
+    product_title=prod['title'],
+    category=prod['category'],
+    key_features=prod['features'],
+    ref_sheet_path=ref_sheet_path
+)
+print(f" -> Generated Vision Prompt: {cozy_prompt}")
 
-    # Step 4: SEO Title & Description
-    print("\n✍️ [Step 4] Writing Pinterest SEO Copy...")
-    seo_data = generate_pin_seo_data(
-        product_title=product['title'],
-        price=product['price'],
-        category=product['category']
-    )
-    print(f" -> Title: {seo_data['pin_title']}")
-    print(f" -> Hook Text: {seo_data['image_hook']}")
+# Step 4: Replicate FLUX-Dev Img2Img Exact Product Render
+print("\n🖼️ [Step 4] Paid Replicate FLUX-Dev Img2Img Rendering 8K 3:4 Commercial Graphic...")
+init_photo = photos[0] if photos else ""
+raw_image_path = generate_cozy_image(
+    prompt=cozy_prompt,
+    filename_prefix=f"focus_product_{prod['id']}",
+    init_image_path=init_photo
+)
+print(f" -> FLUX-Dev Img2Img Exact Product Render: {raw_image_path}")
 
-    # Step 5: Overlay Hook Text
-    print("\n🎯 [Step 5] Overlaying Typography & Frosted Glass Card...")
-    final_image_path = add_hook_text_overlay(
-        image_path=raw_image_path,
-        hook_text=seo_data['image_hook']
-    )
+# Step 5: SEO Data Generator
+print("\n✍️ [Step 5] Writing Pinterest SEO Title & Description...")
+seo_data = generate_pin_seo_data(
+    product_title=prod['title'],
+    price=prod['price'],
+    category=prod['category']
+)
+print(f" -> SEO Title: {seo_data['pin_title']}")
+print(f" -> Image Hook: {seo_data['image_hook']}")
+print(f" -> Subtitle Hook: {seo_data.get('subtitle_hook', '')}")
+print(f" -> Badge Hook: {seo_data.get('badge_hook', '')}")
 
-    # Step 6: Create Bridge Landing Page
-    print("\n🌉 [Step 6] Creating Amazon <-> Pinterest Bridge Page...")
-    bridge_page_path = generate_bridge_page(
-        product=product,
-        seo=seo_data,
-        image_path=final_image_path
-    )
+# Step 6: Ultra-Aesthetic Typography Overlay
+print("\n✨ [Step 6] Overlaying Ultra-Aesthetic Backlit Typography (matching reference pin)...")
+final_image_path = add_hook_text_overlay(
+    image_path=raw_image_path,
+    hook_text=seo_data['image_hook'],
+    subtitle=seo_data.get('subtitle_hook', 'ELEGANCE THAT SHINES'),
+    badge_text=seo_data.get('badge_hook', 'AMAZON TOP FIND'),
+    price_str=prod['price'],
+    style="glowing_neon"
+)
+print(f" -> Final Pin Graphic: {final_image_path}")
 
-    # Live destination URLs
-    bridge_filename = Path(bridge_page_path).name
-    image_filename = Path(final_image_path).name
-    
-    if BASE_BRIDGE_URL and "your-app.vercel.app" not in BASE_BRIDGE_URL:
-        live_destination_url = f"{BASE_BRIDGE_URL.rstrip('/')}/bridge_pages/{bridge_filename}"
-        live_image_url = f"{BASE_BRIDGE_URL.rstrip('/')}/images/{image_filename}"
-    else:
-        live_destination_url = f"file:///{bridge_page_path}"
-        live_image_url = f"file:///{final_image_path}"
+# Step 7: Mobile Bridge Landing Page & Homepage Sync
+print("\n🌉 [Step 7] Generating Amazon <-> Pinterest Mobile Bridge Landing Page & Updating Homepage...")
+bridge_page_path = generate_bridge_page(
+    product=prod,
+    seo=seo_data,
+    image_path=final_image_path
+)
+print(f" -> Saved Bridge Page: {bridge_page_path}")
 
-    # Step 7: Prepare Pinterest Payload
-    print("\n📌 [Step 7] Preparing Pinterest Pin Payload...")
-    pin_result = publish_pin_to_pinterest(
-        image_path=final_image_path,
-        title=seo_data['pin_title'],
-        description=seo_data['description'],
-        destination_url=live_destination_url,
-        image_url=live_image_url,
-        board_id=seo_data.get('suggested_board')
-    )
+# Sync to root for GitHub Pages
+image_filename = Path(final_image_path).name
+root_bridge_file = f"bridge_{prod['id']}.html"
+root_image_file = image_filename
 
-    result = {
-        "product": product,
-        "seo": seo_data,
-        "final_image_path": final_image_path,
-        "bridge_page_path": bridge_page_path,
-        "live_destination_url": live_destination_url,
-        "pinterest_pin": pin_result
-    }
+shutil.copy(bridge_page_path, root_bridge_file)
+shutil.copy(final_image_path, root_image_file)
 
-    summary_path = OUTPUT_DIR / "diffuser_summary.json"
-    with open(summary_path, "w", encoding="utf-8") as f:
-        json.dump(result, f, indent=2)
+live_destination_url = f"{BASE_BRIDGE_URL.rstrip('/')}/{root_bridge_file}"
+live_image_url = f"{BASE_BRIDGE_URL.rstrip('/')}/{root_image_file}"
 
-    print("\n" + "=" * 65)
-    print(f"🎉 Ceramic Diffuser Campaign Execution Complete!")
-    print(f"🖼️ Pin Graphic: {final_image_path}")
-    print(f"🌐 Live Bridge Page: {live_destination_url}")
-    print("=" * 65)
-    return result
+# Step 8: Pinterest Pin Payload
+print("\n📌 [Step 8] Preparing Pinterest Pin Payload...")
+pin_result = publish_pin_to_pinterest(
+    image_path=final_image_path,
+    title=seo_data['pin_title'],
+    description=seo_data['description'],
+    destination_url=live_destination_url,
+    image_url=live_image_url,
+    board_id=seo_data.get('suggested_board')
+)
 
-if __name__ == "__main__":
-    process_diffuser_campaign()
+result = {
+    "product": prod,
+    "seo": seo_data,
+    "ref_sheet_path": ref_sheet_path,
+    "final_image_path": final_image_path,
+    "bridge_page_path": bridge_page_path,
+    "live_destination_url": live_destination_url,
+    "pinterest_pin": pin_result
+}
+
+summary_path = OUTPUT_DIR / f"summary_{prod['id']}.json"
+with open(summary_path, "w", encoding="utf-8") as f:
+    json.dump(result, f, indent=2)
+
+print("\n" + "=" * 65)
+print(f"🎉 CAMPAIGN PROCESSING COMPLETE FOR {prod['id']}!")
+print(f"📸 Reference Sheet: {ref_sheet_path}")
+print(f"🖼️ Pin Graphic: {final_image_path}")
+print(f"🌐 Live Bridge Landing Page: {live_destination_url}")
+print("=" * 65)
