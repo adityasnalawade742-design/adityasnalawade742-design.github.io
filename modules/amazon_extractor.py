@@ -37,12 +37,14 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
     print(f"[Amazon Extractor] Extracting full photo suite for ASIN: {asin}...")
 
     
+    domain = "amazon.co.uk" if "amazon.co.uk" in url_or_asin else "amazon.com"
+
     # 1. Primary Extraction: SerpAPI Amazon Product Engine
     if SERPAPI_KEY:
         try:
             r = requests.get(
                 "https://serpapi.com/search.json",
-                params={"engine": "amazon_product", "asin": asin, "api_key": SERPAPI_KEY},
+                params={"engine": "amazon_product", "asin": asin, "amazon_domain": domain, "api_key": SERPAPI_KEY},
                 timeout=20
             )
             if r.status_code == 200:
@@ -91,7 +93,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
     # 2. Fallback Extraction: Direct BeautifulSoup Scraper
     try:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
-        res = requests.get(f"https://www.amazon.com/dp/{asin}", headers=headers, timeout=10)
+        res = requests.get(f"https://www.{domain}/dp/{asin}", headers=headers, timeout=10)
         if res.status_code == 200:
             soup = BeautifulSoup(res.text, "html.parser")
             title_el = soup.find("span", {"id": "productTitle"})
