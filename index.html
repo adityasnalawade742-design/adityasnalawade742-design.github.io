@@ -42,20 +42,19 @@
             text-align: center;
         }
         .admin-toggle-btn {
+            display: none; /* Hidden from public visitors by default */
             margin-top: 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #aaa;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #f87171;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .admin-toggle-btn:hover, .admin-toggle-btn.active {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
-            color: #f87171;
+        body.is-admin .admin-toggle-btn {
+            display: inline-block;
         }
         .grid {
             display: grid;
@@ -123,7 +122,7 @@
         .delete-btn:hover {
             background: #dc2626;
         }
-        body.admin-mode .delete-btn {
+        body.is-admin .delete-btn {
             display: block;
         }
     </style>
@@ -132,7 +131,7 @@
     <div class="header">
         <h1>Cozy Room Finds</h1>
         <p class="subtitle">✨ Curated Pinterest Home Decor & Smart Gadgets</p>
-        <button id="adminBtn" class="admin-toggle-btn" onclick="toggleAdminMode()">🔐 Admin Controls</button>
+        <button id="adminBtn" class="admin-toggle-btn" onclick="exitAdminMode()">🔐 Admin Mode Active (Click to Exit)</button>
     </div>
 
     <div class="grid" id="productGrid">
@@ -156,18 +155,22 @@
     </div>
 
     <script>
-        // Check if admin mode is requested via URL query string ?admin=true
+        // Secret Admin Activation: Only activates if URL has ?admin=true or admin session is stored
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('admin') === 'true' || localStorage.getItem('admin_mode') === 'true') {
-            document.body.classList.add('admin-mode');
-            document.getElementById('adminBtn').classList.add('active');
+        const isAdminRequested = urlParams.get('admin') === 'true';
+
+        if (isAdminRequested) {
+            sessionStorage.setItem('is_admin_session', 'true');
         }
 
-        function toggleAdminMode() {
-            document.body.classList.toggle('admin-mode');
-            const isActive = document.body.classList.contains('admin-mode');
-            document.getElementById('adminBtn').classList.toggle('active', isActive);
-            localStorage.setItem('admin_mode', isActive ? 'true' : 'false');
+        if (sessionStorage.getItem('is_admin_session') === 'true') {
+            document.body.classList.add('is-admin');
+        }
+
+        function exitAdminMode() {
+            sessionStorage.removeItem('is_admin_session');
+            document.body.classList.remove('is-admin');
+            window.location.href = window.location.pathname; // Reload as public visitor
         }
 
         function deleteCard(asin, elementId) {
