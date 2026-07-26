@@ -186,7 +186,7 @@ def generate_cozy_image(
                 "output_quality": 98
             }
             if init_image_path:
-                input_payload["image"] = init_image_path
+                input_payload["image"] = img_input_uri if img_input_uri else init_image_path
                 input_payload["prompt_strength"] = 0.65
                 print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img async (1 API Call)...")
             else:
