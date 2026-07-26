@@ -452,10 +452,13 @@
 
     <footer>
         <p>© 2026 Cozy Room Finds. Curated Amazon Associate Partner. As an Amazon Associate, we earn from qualifying purchases.</p>
+        <p style="margin-top: 10px;">
+            <button id="footerAdminBtn" onclick="toggleAdminMode()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #ffb703; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;">🔐 Admin Mode (Toggle Delete Buttons)</button>
+        </p>
     </footer>
 
     <script>
-        // Secret Admin Activation: Only activates if URL has ?admin=true or admin session is stored
+        // Check Admin Status
         const urlParams = new URLSearchParams(window.location.search);
         const isAdminRequested = urlParams.get('admin') === 'true';
 
@@ -465,13 +468,46 @@
 
         if (sessionStorage.getItem('is_admin_session') === 'true') {
             document.body.classList.add('is-admin');
+            updateAdminBtnState(true);
+        }
+
+        function toggleAdminMode() {
+            const current = sessionStorage.getItem('is_admin_session') === 'true';
+            if (current) {
+                sessionStorage.removeItem('is_admin_session');
+                document.body.classList.remove('is-admin');
+                updateAdminBtnState(false);
+            } else {
+                sessionStorage.setItem('is_admin_session', 'true');
+                document.body.classList.add('is-admin');
+                updateAdminBtnState(true);
+            }
         }
 
         function exitAdminMode() {
             sessionStorage.removeItem('is_admin_session');
             document.body.classList.remove('is-admin');
-            window.location.href = window.location.pathname; // Reload as public visitor
+            updateAdminBtnState(false);
         }
+
+        function updateAdminBtnState(active) {
+            const footerBtn = document.getElementById('footerAdminBtn');
+            const adminBanner = document.getElementById('adminBtn');
+            if (active) {
+                if (footerBtn) footerBtn.innerHTML = '🟢 Admin Active (Click to Hide Delete Buttons)';
+                if (adminBanner) adminBanner.style.display = 'inline-block';
+            } else {
+                if (footerBtn) footerBtn.innerHTML = '🔐 Admin Mode (Toggle Delete Buttons)';
+                if (adminBanner) adminBanner.style.display = 'none';
+            }
+        }
+
+        // Shortcut: Ctrl + Shift + A toggles admin mode
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+                toggleAdminMode();
+            }
+        });
 
         function deleteCard(asin, elementId) {
             if (confirm(`Are you sure you want to delete product ${asin} from the homepage?`)) {
