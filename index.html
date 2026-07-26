@@ -3,115 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Room Finds | Pinterest Affiliate Showcase</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <title>Cozy Room Finds | Curated Luxury Home Decor & Viral Amazon Deals</title>
+    <meta name="description" content="Discover viral aesthetic room upgrades, cozy lighting, and luxury Amazon home finds curated for Pinterest setup lovers.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-dark: #0a090d;
+            --card-glass: rgba(22, 20, 28, 0.82);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --gold-accent: #ffb703;
+            --gold-glow: #fb8500;
+            --text-light: #f8f9fa;
+            --text-sub: #adb5bd;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: 'Outfit', sans-serif;
-            background: #0f0e13;
-            color: #f8f9fa;
+            background: var(--bg-dark);
+            color: var(--text-light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            background-image: radial-gradient(circle at 50% 10%, rgba(251, 133, 0, 0.15), transparent 60%);
+            padding: 40px 20px 80px;
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(251, 133, 0, 0.22), transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(138, 43, 226, 0.08), transparent 50%),
+                radial-gradient(circle at 90% 40%, rgba(255, 183, 3, 0.08), transparent 50%);
+            background-attachment: fixed;
         }
-        .header {
+
+        /* Top Brand Navigation */
+        .top-nav {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+        }
+
+        .brand-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .brand-logo span.sparkle {
+            color: var(--gold-accent);
+        }
+
+        .nav-badge {
+            background: linear-gradient(135deg, rgba(251, 133, 0, 0.2), rgba(255, 183, 3, 0.2));
+            border: 1px solid rgba(255, 183, 3, 0.5);
+            color: var(--gold-accent);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 50px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Hero Header */
+        .hero {
             position: relative;
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 40px;
-        }
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 36px;
-            margin-bottom: 8px;
-            color: #fff;
             text-align: center;
+            margin-bottom: 44px;
         }
-        p.subtitle {
-            color: #ffb703;
-            font-size: 14px;
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            color: var(--gold-accent);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 50px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-align: center;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.15;
+            color: #ffffff;
+            margin-bottom: 14px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .hero p {
+            color: var(--text-sub);
+            font-size: 17px;
+            max-width: 620px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        /* Category Filter Pills */
+        .filter-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d1d5db;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .filter-pill:hover, .filter-pill.active {
+            background: linear-gradient(135deg, var(--gold-glow), var(--gold-accent));
+            color: #0d0c10;
+            border-color: #ffffff;
+            box-shadow: 0 6px 20px rgba(251, 133, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
         .admin-toggle-btn {
-            display: none; /* Hidden from public visitors by default */
-            margin-top: 16px;
+            display: none;
+            margin-top: 20px;
             background: rgba(239, 68, 68, 0.15);
             border: 1px solid #ef4444;
             color: #f87171;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
         body.is-admin .admin-toggle-btn {
             display: inline-block;
         }
+
+        /* Product Showcase Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            max-width: 1000px;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 30px;
+            max-width: 1120px;
             width: 100%;
         }
+
         .card-wrapper {
             position: relative;
             display: flex;
             flex-direction: column;
         }
+
         .card {
-            background: rgba(26, 24, 33, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(16px);
-            border-radius: 20px;
-            padding: 16px;
+            position: relative;
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 18px;
             text-decoration: none;
             color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex;
             flex-direction: column;
-            align-items: center;
             height: 100%;
+            overflow: hidden;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
         }
+
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(251, 133, 0, 0.3);
+            transform: translateY(-8px) scale(1.015);
+            border-color: rgba(255, 183, 3, 0.6);
+            box-shadow: 0 20px 50px rgba(251, 133, 0, 0.35);
         }
+
+        .card-img-container {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            margin-bottom: 16px;
+        }
+
         .card img {
             width: 100%;
-            border-radius: 12px;
-            aspect-ratio: 3/4;
+            height: 100%;
             object-fit: cover;
-            margin-bottom: 14px;
+            transition: transform 0.4s ease;
         }
-        .card h2 {
-            font-size: 16px;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 8px;
+
+        .card:hover img {
+            transform: scale(1.05);
         }
-        .card .price {
-            color: #ffb703;
+
+        .card-price-tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #fb8500, #ffb703);
+            border: 1.5px solid #ffffff;
+            color: #0d0c10;
+            font-family: 'Playfair Display', serif;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+            z-index: 2;
         }
+
+        .card-rating {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(13, 12, 16, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #ffb703;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.35;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--gold-accent);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card-cta span.arrow {
+            display: inline-block;
+            transition: transform 0.25s ease;
+        }
+
+        .card:hover .card-cta span.arrow {
+            transform: translateX(5px);
+        }
+
         .delete-btn {
             display: none;
             margin-top: 10px;
             background: #ef4444;
             color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
+            padding: 10px 16px;
+            border-radius: 14px;
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
@@ -125,52 +328,131 @@
         body.is-admin .delete-btn {
             display: block;
         }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            color: #6c757d;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--gold-accent);
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Cozy Room Finds</h1>
-        <p class="subtitle">✨ Curated Pinterest Home Decor & Smart Gadgets</p>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <a href="#" class="brand-logo">
+            <span class="sparkle">✦</span> COZY ROOM FINDS
+        </a>
+        <div class="nav-badge">VIRAL AMAZON DECOR</div>
+    </div>
+
+    <!-- Hero Header -->
+    <div class="hero">
+        <div class="hero-tag">✨ PINTEREST AESTHETIC SELECTION</div>
+        <h1>Elevate Your Space with Cozy Aesthetics</h1>
+        <p>Handpicked viral room lamps, ambient lighting, and aesthetic home finds. Transform your bedroom, living room, or desk into a cozy sanctuary.</p>
+        
+        <div class="filter-container">
+            <button class="filter-pill active">✨ All Finds</button>
+            <button class="filter-pill">🕯️ Cozy Lamps</button>
+            <button class="filter-pill">🌿 Room Decor</button>
+            <button class="filter-pill">⚡ Prime Deals</button>
+        </div>
+
         <button id="adminBtn" class="admin-toggle-btn" onclick="exitAdminMode()">🔐 Admin Mode Active (Click to Exit)</button>
     </div>
 
+    <!-- Product Showcase Grid -->
     <div class="grid" id="productGrid">
+
+        <!-- Card B0BZXNSW5K -->
         <div class="card-wrapper" id="card-B0BZXNSW5K">
             <a class="card" href="./bridge_B0BZXNSW5K.html">
-                <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=2" alt="Fenmzee Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet | 3-Way Dimmable, LED Bulb Included, Fabric Lampshade, Wood-Grain Metal Base, 14" Small Nightstand Lamp for Desk, Living Room">
-                <h2>Fenmzee Bedside Table Lamp for Bedroom - Dimm...</h2>
-                <div class="price">$19.99</div>
+                <div class="card-img-container">
+                    <div class="card-price-tag">$19.99</div>
+                    <div class="card-rating">★ 4.5</div>
+                    <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=3" alt="Fenmzee Bedside Touch Lamp">
+                </div>
+                <div class="card-content">
+                    <h2>Fenmzee Cozy Bedside Touch Lamp</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
             </a>
             <button class="delete-btn" onclick="deleteCard('B0BZXNSW5K', 'card-B0BZXNSW5K')">🗑️ Delete Product</button>
         </div>
 
+        <!-- Card B0DXKGL1T2 -->
         <div class="card-wrapper" id="card-B0DXKGL1T2">
             <a class="card" href="./bridge_B0DXKGL1T2.html">
-                <img src="./focus_product_B0DXKGL1T2_hook.jpg?v=2" alt="Flower Table Lamp Green">
-                <h2>Flower Table Lamp Green, 5 Lily of The Valley</h2>
-                <div class="price">£36.38</div>
+                <div class="card-img-container">
+                    <div class="card-price-tag">£36.38</div>
+                    <div class="card-rating">★ 4.8</div>
+                    <img src="./focus_product_B0DXKGL1T2_hook.jpg?v=3" alt="Flower Table Lamp Green">
+                </div>
+                <div class="card-content">
+                    <h2>Lily Of The Valley Flower Table Lamp</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
             </a>
             <button class="delete-btn" onclick="deleteCard('B0DXKGL1T2', 'card-B0DXKGL1T2')">🗑️ Delete Product</button>
         </div>
 
+        <!-- Card B0D1FRDFFX -->
         <div class="card-wrapper" id="card-B0D1FRDFFX">
             <a class="card" href="./bridge_B0D1FRDFFX.html">
-                <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=2" alt="Mushroom Touch Lamp">
-                <h2>Dawnwake Mushroom Touch Table Lamp</h2>
-                <div class="price">$39.98</div>
+                <div class="card-img-container">
+                    <div class="card-price-tag">$39.98</div>
+                    <div class="card-rating">★ 4.6</div>
+                    <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=3" alt="Mushroom Touch Lamp">
+                </div>
+                <div class="card-content">
+                    <h2>Dawnwake Mushroom Touch Table Lamp</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
             </a>
             <button class="delete-btn" onclick="deleteCard('B0D1FRDFFX', 'card-B0D1FRDFFX')">🗑️ Delete Product</button>
         </div>
 
+        <!-- Card B0D8P8CSYP -->
         <div class="card-wrapper" id="card-B0D8P8CSYP">
             <a class="card" href="./bridge_B0D8P8CSYP.html">
-                <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=2" alt="Bird Touch Lamp">
-                <h2>2Pack Small Cute Bird Table Lamp</h2>
-                <div class="price">$20.56</div>
+                <div class="card-img-container">
+                    <div class="card-price-tag">$20.56</div>
+                    <div class="card-rating">★ 4.7</div>
+                    <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=3" alt="Bird Touch Lamp">
+                </div>
+                <div class="card-content">
+                    <h2>Cute Bird Dimmable Touch Night Lamp</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
             </a>
             <button class="delete-btn" onclick="deleteCard('B0D8P8CSYP', 'card-B0D8P8CSYP')">🗑️ Delete Product</button>
         </div>
+
     </div>
+
+    <footer>
+        <p>© 2026 Cozy Room Finds. Curated Amazon Associate Partner. As an Amazon Associate, we earn from qualifying purchases.</p>
+    </footer>
 
     <script>
         // Secret Admin Activation: Only activates if URL has ?admin=true or admin session is stored

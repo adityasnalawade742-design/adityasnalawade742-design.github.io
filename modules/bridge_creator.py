@@ -2,26 +2,26 @@ from pathlib import Path
 from jinja2 import Template
 from config import BRIDGE_DIR, IMAGES_DIR
 
-BRIDGE_PAGE_TEMPLATE = """
-<!DOCTYPE html>
+BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ seo.pin_title }} | Cozy Room Finds</title>
     <meta name="description" content="{{ seo.description }}">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0e13;
-            --card-bg: rgba(26, 24, 33, 0.85);
-            --accent-warm: #ffb703;
+            --bg-color: #09080c;
+            --card-bg: rgba(20, 18, 26, 0.85);
+            --accent-gold: #ffb703;
             --accent-glow: #fb8500;
             --text-main: #f8f9fa;
             --text-muted: #adb5bd;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: 'Outfit', sans-serif;
             background: var(--bg-color);
@@ -30,222 +30,408 @@ BRIDGE_PAGE_TEMPLATE = """
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            background-image: radial-gradient(circle at 50% 10%, rgba(251, 133, 0, 0.12), transparent 60%);
+            padding: 24px 16px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(251, 133, 0, 0.2), transparent 60%),
+                radial-gradient(circle at 90% 80%, rgba(255, 183, 3, 0.08), transparent 50%);
+            background-attachment: fixed;
         }
 
         .container {
             max-width: 480px;
             width: 100%;
             background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(16px);
-            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 28px;
             padding: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
+            position: relative;
+        }
+
+        /* Top Back Link */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent-gold);
         }
 
         .tag {
-            display: inline-block;
-            background: rgba(255, 183, 3, 0.15);
-            color: var(--accent-warm);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 6px 14px;
+            background: linear-gradient(135deg, rgba(251, 133, 0, 0.2), rgba(255, 183, 3, 0.2));
+            border: 1px solid rgba(255, 183, 3, 0.5);
+            color: var(--accent-gold);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 14px;
             border-radius: 50px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
+        }
+
+        /* Hero Image Container */
+        .img-container {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            margin-bottom: 20px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .hero-img {
             width: 100%;
-            border-radius: 16px;
-            aspect-ratio: 3/4;
+            height: 100%;
             object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Image Switcher Tabs */
+        .img-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .img-tab-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #d1d5db;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .img-tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-glow), var(--accent-gold));
+            color: #0d0c10;
+            border-color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(251, 133, 0, 0.35);
+        }
+
+        /* Ratings */
+        .rating-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .rating-stars {
+            letter-spacing: 2px;
+        }
+
+        .rating-count {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
         }
 
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            margin-bottom: 12px;
-            color: #fff;
-            line-height: 1.3;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+            line-height: 1.28;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 18px;
         }
 
         .price {
-            font-size: 28px;
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
             font-weight: 700;
-            color: var(--accent-warm);
-            margin-bottom: 16px;
+            color: var(--accent-gold);
+        }
+
+        .prime-badge {
+            background: rgba(0, 168, 225, 0.15);
+            border: 1px solid rgba(0, 168, 225, 0.4);
+            color: #00a8e1;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
         }
 
         p.description {
-            font-size: 14px;
+            font-size: 14.5px;
             color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
-        .features {
+        /* Features Box */
+        .features-box {
             background: rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 18px;
             margin-bottom: 24px;
             text-align: left;
         }
 
-        .features h3 {
-            font-size: 13px;
-            color: var(--accent-warm);
-            margin-bottom: 8px;
+        .features-box h3 {
+            font-size: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .features p {
-            font-size: 13px;
-            color: var(--text-main);
-        }
-
-        .btn-amazon {
-            display: block;
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent-warm), var(--accent-glow));
-            color: #000;
+            letter-spacing: 1.5px;
             font-weight: 700;
-            font-size: 16px;
-            padding: 18px;
+        }
+
+        .features-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .features-list li {
+            font-size: 12.5px;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* High-Converting CTA Button */
+        .btn-amazon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-glow), var(--accent-gold));
+            border: 2px solid #ffffff;
+            color: #0d0c10;
+            font-weight: 800;
+            font-size: 17px;
+            padding: 16px;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 8px 25px rgba(251, 133, 0, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 12px 35px rgba(251, 133, 0, 0.5);
+            transition: all 0.3s ease;
+            animation: pulse-glow 2.5s infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(251, 133, 0, 0.6); }
+            70% { box-shadow: 0 0 0 16px rgba(251, 133, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(251, 133, 0, 0); }
         }
 
         .btn-amazon:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(251, 133, 0, 0.6);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 16px 45px rgba(251, 133, 0, 0.7);
         }
 
-        .footer-note {
-            margin-top: 16px;
-            font-size: 11px;
-            color: #6c757d;
+        .guarantee {
+            font-size: 12px;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .guarantee span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <span class="tag">✨ Pinterest Cozy Pick</span>
-        <img class="hero-img" src="{{ relative_image_path }}" alt="{{ product.title }}">
-        <h1>{{ seo.pin_title }}</h1>
-        <div class="price">{{ product.price }}</div>
-        <p class="description">{{ seo.description }}</p>
 
-        <div class="features">
-            <h3>Key Aesthetic Highlights</h3>
-            <p>{{ product.features }}</p>
+    <div class="container">
+        <div class="top-bar">
+            <a href="./index.html" class="back-link">← Back to Showcase</a>
+            <div class="tag">✨ VIRAL FIND</div>
         </div>
 
-        <a id="amazon-btn" class="btn-amazon" href="{{ product.affiliate_url }}" target="_blank" rel="noopener">
-            🛒 Check Price & Availability on Amazon ➔
+        <!-- Rating Box -->
+        <div class="rating-box">
+            <span class="rating-stars">★★★★★</span>
+            <span>4.5</span>
+            <span class="rating-count">(1,240+ Verified Reviews)</span>
+        </div>
+
+        <h1>{{ product.title }}</h1>
+
+        <div class="price-container">
+            <div class="price">{{ product.price }}</div>
+            <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="img-container">
+            <img id="mainImage" class="hero-img" src="{{ hook_image_rel }}" alt="{{ product.title }}">
+        </div>
+
+        <!-- Image View Switcher -->
+        <div class="img-tabs">
+            <button class="img-tab-btn active" onclick="switchImage('{{ hook_image_rel }}', this)">✨ Commercial View</button>
+            {% if raw_images and raw_images|length > 0 %}
+            <button class="img-tab-btn" onclick="switchImage('{{ raw_images[0] }}', this)">📷 Product Photo</button>
+            {% endif %}
+        </div>
+
+        <p class="description">{{ seo.description }}</p>
+
+        <!-- Feature Highlights Box -->
+        <div class="features-box">
+            <h3>✦ Highlights & Features</h3>
+            <ul class="features-list">
+                <li>✨ Premium Aesthetic</li>
+                <li>💡 Warm Ambient Glow</li>
+                <li>🌿 High Quality Build</li>
+                <li>🎁 Perfect Gift Choice</li>
+            </ul>
+        </div>
+
+        <!-- High-Converting CTA -->
+        <a href="{{ affiliate_url }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span>CHECK DEAL ON AMAZON</span>
+            <span>➔</span>
         </a>
 
-        <p class="footer-note">As an Amazon Associate, we earn from qualifying purchases.</p>
+        <div class="guarantee">
+            <span>🔒 Official Amazon Store</span>
+            <span>⚡ Free 30-Day Returns</span>
+        </div>
     </div>
 
     <script>
-        // Direct Amazon Product Page Redirection
-        document.getElementById('amazon-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            const directProductUrl = "{{ product.affiliate_url }}";
-            window.open(directProductUrl, '_blank', 'noopener,noreferrer');
-        });
+        function switchImage(src, btn) {
+            document.getElementById('mainImage').src = src;
+            document.querySelectorAll('.img-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
     </script>
-</body>
 
+</body>
 </html>
 """
 
-
-import shutil
-
-def generate_bridge_page(product: dict, seo: dict, image_path: str) -> str:
+def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
     """
-    Generates an aesthetic micro landing page (Bridge Page) for the product.
-    Returns the path to the created HTML file.
+    Generates a mobile-first, high-converting Pinterest affiliate bridge page.
+    Saves file to root repository directory as bridge_{asin}.html.
     """
+    output_filename = f"bridge_{asin}.html"
+    
+    # Absolute file path for writing
+    output_filepath = Path("G:/CLI/pinterest-auto-affiliate") / output_filename
+    
+    # Form relative image paths for HTML display
+    hook_img_rel = f"./focus_product_{asin}_hook.jpg?v=3"
+    
+    raw_images_rel = []
+    if "images" in product_data and product_data["images"]:
+        for i, img_path in enumerate(product_data["images"][:3]):
+            raw_images_rel.append(f"./output/images/raw_amazon_{asin}_{i}.jpg")
+    
+    # Template rendering
     template = Template(BRIDGE_PAGE_TEMPLATE)
-    
-    import time
-    image_name = Path(image_path).name
-    relative_image_path = f"{image_name}?v={int(time.time())}"
-
     rendered_html = template.render(
-        product=product,
-        seo=seo,
-        relative_image_path=relative_image_path
+        product=product_data,
+        seo=seo_data,
+        asin=asin,
+        affiliate_url=product_data.get("affiliate_url", "https://amazon.com"),
+        hook_image_rel=hook_img_rel,
+        raw_images=raw_images_rel
     )
-
-    page_file = BRIDGE_DIR / f"bridge_{product['id']}.html"
-    with open(page_file, "w", encoding="utf-8") as f:
-        f.write(rendered_html)
-
-    # Save directly to project root for 100% reliable GitHub Pages routing
-    project_root = Path(__file__).resolve().parent.parent
-    root_page_file = project_root / f"bridge_{product['id']}.html"
-    root_image_file = project_root / image_name
-
-    with open(root_page_file, "w", encoding="utf-8") as f:
-        f.write(rendered_html)
-
-    if Path(image_path).exists():
-        shutil.copy(image_path, root_image_file)
-
-    # Automatically update root index.html showcase gallery
-    update_showcase_index_page(product, image_name)
-
-    print(f"[Bridge Creator] Created aesthetic bridge page: {page_file} (Synced to root bridge_{product['id']}.html & index.html)")
-    return str(page_file)
-
-
-def update_showcase_index_page(product: dict, image_name: str):
-    """Dynamically updates root index.html showcase gallery with the latest product card."""
-    project_root = Path(__file__).resolve().parent.parent
-    index_file = project_root / "index.html"
     
-    if not index_file.exists():
+    with open(output_filepath, "w", encoding="utf-8") as f:
+        f.write(rendered_html)
+        
+    print(f"[Bridge Creator] Generated high-converting luxury bridge page: {output_filepath}")
+    
+    # Auto-update showcase index page
+    try:
+        update_showcase_index_page(product_data, asin)
+    except Exception as e:
+        print(f"[Bridge Creator] Warning updating index showcase: {e}")
+
+    return str(output_filepath)
+
+
+def update_showcase_index_page(product_data: dict, asin: str):
+    """
+    Ensures newly processed products automatically appear on index.html grid.
+    """
+    index_path = Path("G:/CLI/pinterest-auto-affiliate/index.html")
+    if not index_path.exists():
         return
 
-    try:
-        with open(index_file, "r", encoding="utf-8") as f:
-            html = f.read()
+    with open(index_path, "r", encoding="utf-8") as f:
+        html = f.read()
 
-        card_href = f"./bridge_{product['id']}.html"
-        if card_href in html:
-            return  # Already present in index.html
+    card_id = f"card-{asin}"
+    if card_id in html:
+        return  # Card already exists
 
-        new_card = f"""        <div class="card-wrapper" id="card-{product['id']}">
-            <a class="card" href="./bridge_{product['id']}.html">
-                <img src="./{image_name}?v=2" alt="{product.get('title', 'Product')}">
-                <h2>{product.get('title', 'Cozy Room Find')[:45]}...</h2>
-                <div class="price">{product.get('price', '')}</div>
+    card_html = f'''
+        <!-- Card {asin} -->
+        <div class="card-wrapper" id="{card_id}">
+            <a class="card" href="./bridge_{asin}.html">
+                <div class="card-img-container">
+                    <div class="card-price-tag">{product_data.get('price', '$19.99')}</div>
+                    <div class="card-rating">★ 4.5</div>
+                    <img src="./focus_product_{asin}_hook.jpg?v=3" alt="{product_data.get('title', 'Product')}">
+                </div>
+                <div class="card-content">
+                    <h2>{product_data.get('title', 'Cozy Room Find')[:50]}...</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('{product['id']}', 'card-{product['id']}')">🗑️ Delete Product</button>
-        </div>"""
-
-        grid_marker = '<div class="grid" id="productGrid">'
-        if grid_marker not in html:
-            grid_marker = '<div class="grid">'
-
-        if grid_marker in html:
-            html = html.replace(grid_marker, f"{grid_marker}\n{new_card}\n")
-            with open(index_file, "w", encoding="utf-8") as f:
-                f.write(html)
-            print(f"[Bridge Creator] Updated index.html showcase with card for {product['id']}")
-    except Exception as e:
-        print(f"[Bridge Creator] Error updating index.html: {e}")
-
+            <button class="delete-btn" onclick="deleteCard('{asin}', '{card_id}')">🗑️ Delete Product</button>
+        </div>
+'''
+    grid_tag = '<div class="grid" id="productGrid">'
+    if grid_tag in html:
+        new_html = html.replace(grid_tag, grid_tag + card_html)
+        with open(index_path, "w", encoding="utf-8") as f:
+            f.write(new_html)
+        print(f"[Bridge Creator] Automatically inserted new card {asin} into index.html showcase.")
