@@ -141,51 +141,70 @@ def generate_method1_composite_image(real_image_url: str, filename_prefix: str =
     
     return ""
 
-def generate_cozy_image(prompt: str, filename_prefix: str = "pin", real_image_url: str = "", multi_reference_photos: list = None) -> str:
+def generate_cozy_image(
+    prompt: str,
+    filename_prefix: str = "pin",
+    real_image_url: str = "",
+    multi_reference_photos: list = None,
+    init_image_path: str = ""
+) -> str:
     """
     Generates a high-quality vertical 3:4 Pinterest lifestyle graphic using Replicate FLUX.
-    If real_image_url is provided, can fallback to Method 1 composite to guarantee exact product accuracy.
+    If init_image_path is provided, uses Img2Img / Depth ControlNet to lock onto the exact physical product structure.
     """
-    # 1. Primary Commercial AI Generator: Replicate FLUX 1.1 Pro / Dev / Schnell
+    # 1. Primary Commercial AI Generator: Replicate FLUX-Dev Img2Img (1 Single API Call)
     if REPLICATE_API_TOKEN:
-        print(f"[Image Gen - Replicate] Generating commercial 8K photo via Replicate FLUX API...")
+        print(f"[Image Gen - Replicate] Generating commercial 8K photo via Replicate FLUX API (Strict 1 API Call Limit)...")
         os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
-        client = replicate.Client(api_token=REPLICATE_API_TOKEN, timeout=300.0)
-        
-        flux_models = [
-            "black-forest-labs/flux-1.1-pro",
-            "black-forest-labs/flux-dev",
-            "black-forest-labs/flux-schnell"
-        ]
+        client = replicate.Client(api_token=REPLICATE_API_TOKEN, timeout=120.0)
 
-        for model_name in flux_models:
-            try:
-                print(f"[Image Gen - Replicate] Trying model: {model_name}...")
-                output = client.run(
-                    model_name,
-                    input={
-                        "prompt": prompt,
-                        "aspect_ratio": "3:4",
-                        "output_format": "jpg",
-                        "output_quality": 98
-                    }
-                )
-                img_url = ""
-                if isinstance(output, list) and len(output) > 0:
-                    img_url = str(output[0])
-                elif output:
-                    img_url = str(output)
+        img_input_uri = ""
+        if init_image_path:
+            if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
+                try:
+                    res_img = requests.get(init_image_path, timeout=15)
+                    if res_img.status_code == 200 and len(res_img.content) > 1000:
+                        import base64
+                        b64_data = base64.b64encode(res_img.content).decode("utf-8")
+                        img_input_uri = f"data:image/jpeg;base64,{b64_data}"
+                        print(f"[Image Gen - Img2Img] Prepared Base64 Product Image ({len(b64_data)} bytes) for 100% exact product match")
+                except Exception as e_dl:
+                    print(f"[Image Gen - Img2Img] Warning downloading listing image: {e_dl}")
+            elif Path(init_image_path).exists():
+                import base64
+                with open(init_image_path, "rb") as img_f:
+                    b64_data = base64.b64encode(img_f.read()).decode("utf-8")
+                    img_input_uri = f"data:image/jpeg;base64,{b64_data}"
+                print(f"[Image Gen - Img2Img] Prepared Local Product Base64 Image for 100% exact product match")
 
-                if img_url and img_url.startswith("http"):
-                    res = requests.get(img_url, timeout=30)
-                    if res.status_code == 200 and len(res.content) > 5000:
-                        file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
-                        with open(file_path, "wb") as f:
-                            f.write(res.content)
-                        print(f"[Image Gen - Replicate] Successfully saved {model_name} image to: {file_path}")
-                        return str(file_path)
-            except Exception as e:
-                print(f"[Image Gen - Replicate] Model {model_name} error: {e}")
+        # Call #1 (and ONLY call): black-forest-labs/flux-dev
+        try:
+            input_payload = {
+                "prompt": prompt,
+                "aspect_ratio": "3:4",
+                "output_format": "jpg",
+                "output_quality": 98
+            }
+            if img_input_uri:
+                input_payload["image"] = img_input_uri
+                input_payload["prompt_strength"] = 0.65
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (1 API Call)...")
+            else:
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image (1 API Call)...")
+
+            output = client.run("black-forest-labs/flux-dev", input=input_payload)
+            img_url = str(output[0]) if isinstance(output, list) and len(output) > 0 else str(output)
+
+            if img_url and img_url.startswith("http"):
+                res = requests.get(img_url, timeout=35)
+                if res.status_code == 200 and len(res.content) > 5000:
+                    file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
+                    with open(file_path, "wb") as f:
+                        f.write(res.content)
+                    print(f"[Image Gen - Success] Saved exact product image to: {file_path}")
+                    return str(file_path)
+        except Exception as e:
+            print(f"[Image Gen - Error] FLUX API Call Failed: {e}")
 
     # 2. Secondary AI Generator: Free Pollinations FLUX API
     print(f"[Image Gen] Generating AI room photo via Pollinations FLUX...")
@@ -343,10 +362,10 @@ def add_hook_text_overlay(
         gdraw.text((sx, sy), spaced_sub, fill=(255, 210, 120, 220), font=sub_font_spaced)
 
         # 4. Glowing Price Pill Box
-        clean_price = price_str if (price_str and price_str.strip() and price_str != ".99") else "$24.99"
-        if not clean_price.startswith("$") and not clean_price.endswith("$"):
-            clean_price = f"${clean_price}"
-        price_display = clean_price.replace("$", "") + "$" if "$" in clean_price else clean_price
+        p_raw = price_str.strip() if price_str else "$24.99"
+        if not any(curr in p_raw for curr in ["$", "£", "€"]):
+            p_raw = f"${p_raw}"
+        price_display = p_raw
 
         bbox_p = draw.textbbox((0, 0), price_display, font=price_font_lg)
         pw = bbox_p[2] - bbox_p[0] + 64
