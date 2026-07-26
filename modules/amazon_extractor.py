@@ -66,7 +66,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 photos = [enhance_to_max_resolution(img) for img in raw_photos if img]
                 photos = list(dict.fromkeys(photos)) # Deduplicate while preserving order
                 
-                affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+                affiliate_url = f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
                 
                 features_list = p.get("features", []) or p.get("description", "")
                 if isinstance(features_list, list):
@@ -111,7 +111,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 "price": "$14.99",
                 "rating": "4.6",
                 "reviews_count": 500,
-                "affiliate_url": f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}",
+                "affiliate_url": f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}",
                 "original_image_url": photos[0] if photos else "",
                 "all_photos": photos,
                 "features": f"Aesthetic {title} for cozy room decor."
