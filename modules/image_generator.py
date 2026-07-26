@@ -263,6 +263,68 @@ def generate_cozy_image(
     print("[Image Gen] Creating aesthetic ambient cozy render fallback...")
     return _create_fallback_aesthetic_image(prompt, filename_prefix)
 
+def get_adaptive_vibe_colors(img, top_crop_ratio=0.35):
+    """
+    Analyzes the top area of the image to determine optimal typography colors,
+    scrim opacity, and accent hues matching the aesthetic vibe.
+    """
+    width, height = img.size
+    top_region = img.crop((0, 0, width, max(10, int(height * top_crop_ratio)))).convert("RGB")
+    
+    pixels = list(top_region.getdata())
+    if not pixels:
+        return {
+            "text_color": (255, 253, 250, 250),
+            "accent_color": (255, 183, 3, 255),
+            "glow_color": (255, 195, 90, 220),
+            "pill_bg": (255, 255, 255, 45),
+            "pill_border": (255, 255, 255, 180),
+            "pill_text": (255, 255, 255, 255),
+            "scrim_opacity": 130
+        }
+    
+    r_avg = sum(p[0] for p in pixels) / len(pixels)
+    g_avg = sum(p[1] for p in pixels) / len(pixels)
+    b_avg = sum(p[2] for p in pixels) / len(pixels)
+    
+    brightness = 0.299 * r_avg + 0.587 * g_avg + 0.114 * b_avg
+    is_light_bg = brightness > 165
+    
+    if is_light_bg:
+        return {
+            "is_light": True,
+            "text_color": (32, 28, 24, 250),
+            "accent_color": (160, 110, 40, 255),
+            "glow_color": (255, 255, 255, 220),
+            "pill_bg": (32, 28, 24, 220),
+            "pill_border": (60, 50, 40, 240),
+            "pill_text": (255, 253, 250, 255),
+            "scrim_opacity": 40
+        }
+    elif g_avg > r_avg + 10 and g_avg > b_avg + 10:
+        return {
+            "is_light": False,
+            "text_color": (255, 253, 250, 250),
+            "accent_color": (180, 215, 170, 255),
+            "glow_color": (140, 180, 130, 180),
+            "pill_bg": (45, 65, 40, 180),
+            "pill_border": (180, 215, 170, 200),
+            "pill_text": (255, 253, 250, 255),
+            "scrim_opacity": 120
+        }
+    else:
+        return {
+            "is_light": False,
+            "text_color": (255, 253, 250, 250),
+            "accent_color": (255, 195, 90, 255),
+            "glow_color": (255, 180, 70, 200),
+            "pill_bg": (255, 255, 255, 45),
+            "pill_border": (255, 210, 120, 200),
+            "pill_text": (255, 253, 250, 255),
+            "scrim_opacity": 130
+        }
+
+
 def add_hook_text_overlay(
     image_path: str,
     hook_text: str,
@@ -272,10 +334,11 @@ def add_hook_text_overlay(
     style: str = "glowing_neon"
 ) -> str:
     """
-    Overlays authentic high-converting Pinterest typography matching the reference image 
-    'Cute Bird Touch Table Lamp _ Rechargeable Dimmable Night Light for Bedroom Decor.jpg'.
+    Overlays authentic high-converting Pinterest typography with dynamic color palette matching
+    the exact vibe, lighting, and color tones of the input image.
     """
     import random
+    import re
     from PIL import ImageFilter
 
     if style in ["none", "no_text", "clean"]:
@@ -287,8 +350,23 @@ def add_hook_text_overlay(
         style_idx = abs(hash(Path(image_path).stem)) % len(all_styles)
         style = all_styles[style_idx]
         print(f"[Image Gen] Dynamic style='auto' selected reference style: '{style}' for {Path(image_path).name}")
+
     img = Image.open(image_path).convert("RGBA")
     width, height = img.size
+
+    # Extract adaptive color vibe from image
+    vibe = get_adaptive_vibe_colors(img)
+
+    # Clean hook text to 2-4 punchy words without prepositions
+    clean_title_raw = re.sub(r'[^\x00-\x7F]+', '', hook_text).strip()
+    words_raw = clean_title_raw.split()
+    while words_raw and words_raw[-1].lower() in ["for", "with", "and", "in", "on", "of", "by", "the", "a", "an"]:
+        words_raw.pop()
+    clean_title_raw = " ".join(words_raw)
+    if len(words_raw) > 4:
+        clean_title_raw = " ".join(words_raw[:4])
+
+    title_text = clean_title_raw.title() if clean_title_raw else "Cozy Bedside Lamp"
 
     overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
@@ -314,11 +392,6 @@ def add_hook_text_overlay(
     # STYLE 1: 'glowing_neon' (Matches Ref #4 - Light Up Your Space / Glowing $24.99)
     # -------------------------------------------------------------
     if style == "glowing_neon":
-        # Subtle top ambient dark gradient
-        for y in range(0, int(height * 0.45)):
-            alpha = int(120 * (1.0 - (y / (height * 0.45)) ** 1.5))
-            draw.line([(0, y), (width, y)], fill=(0, 0, 0, alpha))
-
         # 1. Title formatting (Playfair Display 62pt)
         try:
             title_font_lg = ImageFont.truetype(str(playfair_font_path), 64)
@@ -346,19 +419,26 @@ def add_hook_text_overlay(
         if curr:
             lines.append(curr)
 
+        text_clr = vibe["text_color"]
+        accent_clr = vibe["accent_color"]
+        glow_clr = vibe["glow_color"]
+        pill_bg = vibe["pill_bg"]
+        pill_border = vibe["pill_border"]
+        pill_text = vibe["pill_text"]
+
         start_y = 65
         lh = 72
 
         glow_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
         gdraw = ImageDraw.Draw(glow_layer)
 
-        # 1. Warm Golden Backlit Glow Aura behind letters
+        # 1. Backlit Glow Aura behind letters (Adapts to Image Vibe)
         for i, line in enumerate(lines):
             bbox = draw.textbbox((0, 0), line, font=title_font_lg)
             lw = bbox[2] - bbox[0]
             lx = (width - lw) // 2
             ly = start_y + (i * lh)
-            gdraw.text((lx, ly), line, fill=(255, 195, 90, 255), font=title_font_lg)
+            gdraw.text((lx, ly), line, fill=glow_clr, font=title_font_lg)
 
         next_y = start_y + (len(lines) * lh) + 12
 
@@ -367,10 +447,10 @@ def add_hook_text_overlay(
         cx = width // 2
         div_y = next_y + 5
         
-        gdraw.line([(cx - line_w - 20, div_y + 10), (cx - 20, div_y + 10)], fill=(255, 210, 120, 220), width=3)
-        gdraw.polygon([(cx, div_y + 2), (cx + 6, div_y + 10), (cx, div_y + 18), (cx - 6, div_y + 10)], fill=(255, 240, 180, 255))
-        gdraw.polygon([(cx - 9, div_y + 10), (cx + 9, div_y + 10), (cx, div_y + 10)], fill=(255, 240, 190, 255))
-        gdraw.line([(cx + 20, div_y + 10), (cx + line_w + 20, div_y + 10)], fill=(255, 210, 120, 220), width=3)
+        gdraw.line([(cx - line_w - 20, div_y + 10), (cx - 20, div_y + 10)], fill=accent_clr, width=3)
+        gdraw.polygon([(cx, div_y + 2), (cx + 6, div_y + 10), (cx, div_y + 18), (cx - 6, div_y + 10)], fill=accent_clr)
+        gdraw.polygon([(cx - 9, div_y + 10), (cx + 9, div_y + 10), (cx, div_y + 10)], fill=accent_clr)
+        gdraw.line([(cx + 20, div_y + 10), (cx + line_w + 20, div_y + 10)], fill=accent_clr, width=3)
 
         # 3. Wide Letter-Spaced Subtitle (E L E G A N C E   T H A T   S H I N E S)
         raw_sub = subtitle.strip().upper() if subtitle else "ELEGANCE THAT SHINES"
@@ -379,7 +459,7 @@ def add_hook_text_overlay(
         sw = bbox_sub[2] - bbox_sub[0]
         sx = (width - sw) // 2
         sy = div_y + 36
-        gdraw.text((sx, sy), spaced_sub, fill=(255, 210, 120, 220), font=sub_font_spaced)
+        gdraw.text((sx, sy), spaced_sub, fill=accent_clr, font=sub_font_spaced)
 
         # 4. Glowing Price Pill Box
         p_raw = price_str.strip() if price_str else "$24.99"
@@ -393,15 +473,21 @@ def add_hook_text_overlay(
         px = (width - pw) // 2
         py = sy + 42
 
-        gdraw.rounded_rectangle([(px, py), (px + pw, py + ph)], radius=24, outline=(255, 195, 90, 255), width=6)
-        gdraw.text(((width - (bbox_p[2] - bbox_p[0])) // 2, py + 8), price_display, fill=(255, 195, 90, 255), font=price_font_lg)
+        draw.rounded_rectangle([(px, py), (px + pw, py + ph)], radius=24, fill=pill_bg, outline=pill_border, width=3)
+        draw.text(((width - (bbox_p[2] - bbox_p[0])) // 2, py + 8), price_display, fill=pill_text, font=price_font_lg)
 
         # Multi-pass Gaussian Blur for warm ambient backlit halo glow effect
         glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(16))
         overlay = Image.alpha_composite(overlay, glow_layer)
         draw = ImageDraw.Draw(overlay)
 
-        # 5. Crisp White Text & Lines on top
+        # 5. Crisp Crisp Title & Lines on top
+        for i, line in enumerate(lines):
+            bbox = draw.textbbox((0, 0), line, font=title_font_lg)
+            lw = bbox[2] - bbox[0]
+            lx = (width - lw) // 2
+            ly = start_y + (i * lh)
+            draw.text((lx, ly), line, fill=text_clr, font=title_font_lg)
         for i, line in enumerate(lines):
             bbox = draw.textbbox((0, 0), line, font=title_font_lg)
             lw = bbox[2] - bbox[0]
