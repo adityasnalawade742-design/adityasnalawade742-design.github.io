@@ -176,7 +176,7 @@ def generate_cozy_image(
                 except Exception as e_f:
                     print(f"[Image Gen - Img2Img] Warning opening local file: {e_f}")
 
-        # Call #1 (and ONLY call): black-forest-labs/flux-dev (Full FP16 Precision, 32 Steps)
+        # Call #1 (and ONLY call): black-forest-labs/flux-dev (Full FP16 Precision, Seed 591928, 32 Steps)
         try:
             input_payload = {
                 "prompt": prompt,
@@ -185,7 +185,8 @@ def generate_cozy_image(
                 "output_quality": 100,
                 "go_fast": False,
                 "num_inference_steps": 32,
-                "guidance_scale": 3.5
+                "guidance_scale": 3.5,
+                "seed": 591928
             }
             if init_image_path:
                 if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
