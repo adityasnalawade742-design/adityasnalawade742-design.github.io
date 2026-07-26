@@ -228,13 +228,19 @@ def update_showcase_index_page(product: dict, image_name: str):
         if card_href in html:
             return  # Already present in index.html
 
-        new_card = f"""        <a class="card" href="./bridge_{product['id']}.html">
-            <img src="./{image_name}?v=2" alt="{product.get('title', 'Product')}">
-            <h2>{product.get('title', 'Cozy Room Find')[:45]}...</h2>
-            <div class="price">{product.get('price', '')}</div>
-        </a>"""
+        new_card = f"""        <div class="card-wrapper" id="card-{product['id']}">
+            <a class="card" href="./bridge_{product['id']}.html">
+                <img src="./{image_name}?v=2" alt="{product.get('title', 'Product')}">
+                <h2>{product.get('title', 'Cozy Room Find')[:45]}...</h2>
+                <div class="price">{product.get('price', '')}</div>
+            </a>
+            <button class="delete-btn" onclick="deleteCard('{product['id']}', 'card-{product['id']}')">🗑️ Delete Product</button>
+        </div>"""
 
-        grid_marker = '<div class="grid">'
+        grid_marker = '<div class="grid" id="productGrid">'
+        if grid_marker not in html:
+            grid_marker = '<div class="grid">'
+
         if grid_marker in html:
             html = html.replace(grid_marker, f"{grid_marker}\n{new_card}\n")
             with open(index_file, "w", encoding="utf-8") as f:
