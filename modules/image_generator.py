@@ -158,39 +158,45 @@ def generate_cozy_image(
         os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
         client = replicate.Client(api_token=REPLICATE_API_TOKEN, timeout=120.0)
 
-        img_input_uri = ""
+        image_file_obj = None
         if init_image_path:
             if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
                 try:
-                    res_img = requests.get(init_image_path, timeout=15)
+                    res_img = requests.get(init_image_path, timeout=20)
                     if res_img.status_code == 200 and len(res_img.content) > 1000:
-                        import base64
-                        b64_data = base64.b64encode(res_img.content).decode("utf-8")
-                        img_input_uri = f"data:image/jpeg;base64,{b64_data}"
-                        print(f"[Image Gen - Img2Img] Prepared Base64 Product Image ({len(b64_data)} bytes) for 100% exact product match")
+                        image_file_obj = io.BytesIO(res_img.content)
+                        image_file_obj.name = "product.jpg"
+                        print(f"[Image Gen - Img2Img] Downloaded Amazon photo ({len(res_img.content)} bytes) into BytesIO file object for Replicate upload")
                 except Exception as e_dl:
                     print(f"[Image Gen - Img2Img] Warning downloading listing image: {e_dl}")
             elif Path(init_image_path).exists():
-                import base64
-                with open(init_image_path, "rb") as img_f:
-                    b64_data = base64.b64encode(img_f.read()).decode("utf-8")
-                    img_input_uri = f"data:image/jpeg;base64,{b64_data}"
-                print(f"[Image Gen - Img2Img] Prepared Local Product Base64 Image for 100% exact product match")
+                try:
+                    image_file_obj = open(init_image_path, "rb")
+                    print(f"[Image Gen - Img2Img] Opened local file ({init_image_path}) for Replicate upload")
+                except Exception as e_f:
+                    print(f"[Image Gen - Img2Img] Warning opening local file: {e_f}")
 
-        # Call #1 (and ONLY call): black-forest-labs/flux-dev
+        # Call #1 (and ONLY call): black-forest-labs/flux-dev (Full FP16 Precision, 32 Steps)
         try:
             input_payload = {
                 "prompt": prompt,
                 "aspect_ratio": "3:4",
                 "output_format": "jpg",
-                "output_quality": 98
+                "output_quality": 100,
+                "go_fast": False,
+                "num_inference_steps": 32,
+                "guidance_scale": 3.5
             }
-            if init_image_path:
-                input_payload["image"] = img_input_uri if img_input_uri else init_image_path
+            if image_file_obj:
+                input_payload["image"] = image_file_obj
                 input_payload["prompt_strength"] = 0.65
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img async (1 API Call)...")
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (Full FP16 Precision, 32 Steps, 1 API Call)...")
+            elif init_image_path:
+                input_payload["image"] = init_image_path
+                input_payload["prompt_strength"] = 0.65
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img with image URL (Full FP16 Precision, 1 API Call)...")
             else:
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image async (1 API Call)...")
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image async (Full FP16 Precision, 1 API Call)...")
 
             pred = client.predictions.create(
                 model="black-forest-labs/flux-dev",
