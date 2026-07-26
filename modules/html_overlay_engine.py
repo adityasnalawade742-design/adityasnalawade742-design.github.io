@@ -80,10 +80,17 @@ def render_html_overlay(
             text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.8); margin-bottom: 20px;
         }
         .price-pill {
-            background: rgba(26, 24, 33, 0.82); border: 2px solid rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(16px); padding: 10px 40px; border-radius: 50px;
-            font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: #ffffff;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, #fffcf7, #f4efe6);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 10px 46px;
+            border-radius: 50px;
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #2c221e;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+            text-shadow: none;
         }
         .feat-card {
             background: rgba(26, 24, 33, 0.65); border: 1px solid rgba(255, 255, 255, 0.3);
@@ -126,10 +133,20 @@ def render_html_overlay(
             text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.8); margin-bottom: 22px;
         }
         .price-pill {
-            background: rgba(26, 24, 33, 0.82); border: 2px solid rgba(255, 183, 3, 0.85);
-            backdrop-filter: blur(16px); padding: 12px 44px; border-radius: 50px;
-            font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; color: #ffb703;
-            box-shadow: 0 10px 32px rgba(0,0,0,0.5); text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, #fb8500, #ffb703);
+            border: 2px solid #ffffff;
+            backdrop-filter: blur(20px);
+            padding: 10px 46px;
+            border-radius: 50px;
+            font-family: 'Playfair Display', serif;
+            font-size: 50px;
+            font-weight: 700;
+            color: #0d0c10;
+            box-shadow: 0 14px 40px rgba(251, 133, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.7);
+            text-shadow: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
         .feat-card {
             background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.3);
