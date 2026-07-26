@@ -17,21 +17,20 @@
 ---
 
 ## 🛍️ Currently Live & Deployed Products (GitHub Pages)
-1. **`B0BZXNSW5K`**: Fenmzee Bedside Table Touch Lamp ($19.99)
+1. **`B0GYDXHF4G`**: Flame Aroma Essential Oil Diffuser Dark Crackle ($35.00)
 2. **`B0BDRSG2BT`**: Tsrarey Sunset Projection Lamp Light ($16.99)
 3. **`B07HP22QTZ`**: Suncatcher Crystal Ball Prism Window Rainbow Maker ($9.99)
-4. **`B0D1FRDFFX`**: Dawnwake Mushroom Touch Table Lamp ($39.98)
-5. **`B0D8P8CSYP`**: Cute Bird Dimmable Touch Night Lamp ($20.56)
-6. **`B0DXKGL1T2`**: Lily of the Valley Flower Table Lamp (£36.38)
+4. **`B0BZXNSW5K`**: Fenmzee Bedside Table Touch Lamp ($19.99)
+5. **`B0D1FRDFFX`**: Dawnwake Mushroom Touch Table Lamp ($39.98)
+6. **`B0D8P8CSYP`**: Cute Bird Dimmable Touch Night Lamp ($20.56)
+7. **`B0DXKGL1T2`**: Lily of the Valley Flower Table Lamp (£36.38)
 
 ---
 
 ## 📋 Verified Candidate Queue for Next Session (Passed All Filters)
-1. **`B0GYDXHF4G`**: Flame Aroma Essential Oil Diffuser (Dark Crackle Edition - $35.00)
-   - *Link*: `https://www.amazon.com/dp/B0GYDXHF4G?tag=smartdeal0358-21`
-2. **`B0FXLYXM32`**: Pocetry 22"x30" White Wavy Wall & Vanity Mirror ($24.99)
+1. **`B0FXLYXM32`**: Pocetry 22"x30" White Wavy Wall & Vanity Mirror ($24.99)
    - *Link*: `https://www.amazon.com/dp/B0FXLYXM32?tag=smartdeal0358-21`
-3. **`B0GT5GWK4B`**: Dreamholder Top-Down Candle Warmer Lamp with Timer ($14.99)
+2. **`B0GT5GWK4B`**: Dreamholder Top-Down Candle Warmer Lamp with Timer ($14.99)
    - *Link*: `https://www.amazon.com/dp/B0GT5GWK4B?tag=smartdeal0358-21`
-4. **`B0CXSRT211`**: IOWER Boho Macrame Woven Wall Hanging Tapestry ($31.50)
+3. **`B0CXSRT211`**: IOWER Boho Macrame Woven Wall Hanging Tapestry ($31.50)
    - *Link*: `https://www.amazon.com/dp/B0CXSRT211?tag=smartdeal0358-21`
