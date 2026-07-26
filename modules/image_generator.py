@@ -185,26 +185,33 @@ def generate_cozy_image(
                 "output_format": "jpg",
                 "output_quality": 98
             }
-            if img_input_uri:
-                input_payload["image"] = img_input_uri
+            if init_image_path:
+                input_payload["image"] = init_image_path
                 input_payload["prompt_strength"] = 0.65
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (1 API Call)...")
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img async (1 API Call)...")
             else:
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image (1 API Call)...")
+                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image async (1 API Call)...")
 
-            output = client.run("black-forest-labs/flux-dev", input=input_payload)
-            img_url = str(output[0]) if isinstance(output, list) and len(output) > 0 else str(output)
+            pred = client.predictions.create(
+                model="black-forest-labs/flux-dev",
+                input=input_payload
+            )
+            print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting for render...")
+            pred.wait()
 
-            if img_url and img_url.startswith("http"):
-                res = requests.get(img_url, timeout=35)
-                if res.status_code == 200 and len(res.content) > 5000:
-                    file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
-                    with open(file_path, "wb") as f:
-                        f.write(res.content)
-                    print(f"[Image Gen - Success] Saved exact product image to: {file_path}")
-                    return str(file_path)
+            if pred.output:
+                img_url = pred.output[0] if isinstance(pred.output, list) else str(pred.output)
+                if img_url and img_url.startswith("http"):
+                    res = requests.get(img_url, timeout=35)
+                    if res.status_code == 200 and len(res.content) > 5000:
+                        file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
+                        with open(file_path, "wb") as f:
+                            f.write(res.content)
+                        print(f"[Image Gen - Success] Saved exact product image to: {file_path}")
+                        return str(file_path)
         except Exception as e:
             print(f"[Image Gen - Error] FLUX API Call Failed: {e}")
+            return ""
 
     # 2. Secondary AI Generator: Free Pollinations FLUX API
     print(f"[Image Gen] Generating AI room photo via Pollinations FLUX...")
