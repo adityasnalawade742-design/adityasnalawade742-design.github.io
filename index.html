@@ -18,6 +18,15 @@
             padding: 40px 20px;
             background-image: radial-gradient(circle at 50% 10%, rgba(251, 133, 0, 0.15), transparent 60%);
         }
+        .header {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
         h1 {
             font-family: 'Playfair Display', serif;
             font-size: 36px;
@@ -30,8 +39,23 @@
             font-size: 14px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 40px;
             text-align: center;
+        }
+        .admin-toggle-btn {
+            margin-top: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #aaa;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .admin-toggle-btn:hover, .admin-toggle-btn.active {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #f87171;
         }
         .grid {
             display: grid;
@@ -39,6 +63,11 @@
             gap: 24px;
             max-width: 1000px;
             width: 100%;
+        }
+        .card-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
         .card {
             background: rgba(26, 24, 33, 0.85);
@@ -52,6 +81,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100%;
         }
         .card:hover {
             transform: translateY(-4px);
@@ -75,24 +105,91 @@
             font-weight: 700;
             font-size: 18px;
         }
+        .delete-btn {
+            display: none;
+            margin-top: 10px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+            width: 100%;
+        }
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+        body.admin-mode .delete-btn {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <h1>Cozy Room Finds</h1>
-    <p class="subtitle">✨ Curated Pinterest Home Decor & Smart Gadgets</p>
-
-    <div class="grid">
-        <a class="card" href="./bridge_B0D1FRDFFX.html">
-            <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=2" alt="Mushroom Touch Lamp">
-            <h2>Dawnwake Mushroom Touch Table Lamp</h2>
-            <div class="price">$39.98</div>
-        </a>
-
-        <a class="card" href="./bridge_B0D8P8CSYP.html">
-            <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=2" alt="Bird Touch Lamp">
-            <h2>2Pack Small Cute Bird Table Lamp</h2>
-            <div class="price">$20.56</div>
-        </a>
+    <div class="header">
+        <h1>Cozy Room Finds</h1>
+        <p class="subtitle">✨ Curated Pinterest Home Decor & Smart Gadgets</p>
+        <button id="adminBtn" class="admin-toggle-btn" onclick="toggleAdminMode()">🔐 Admin Controls</button>
     </div>
+
+    <div class="grid" id="productGrid">
+        <div class="card-wrapper" id="card-B0D1FRDFFX">
+            <a class="card" href="./bridge_B0D1FRDFFX.html">
+                <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=2" alt="Mushroom Touch Lamp">
+                <h2>Dawnwake Mushroom Touch Table Lamp</h2>
+                <div class="price">$39.98</div>
+            </a>
+            <button class="delete-btn" onclick="deleteCard('B0D1FRDFFX', 'card-B0D1FRDFFX')">🗑️ Delete Product</button>
+        </div>
+
+        <div class="card-wrapper" id="card-B0D8P8CSYP">
+            <a class="card" href="./bridge_B0D8P8CSYP.html">
+                <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=2" alt="Bird Touch Lamp">
+                <h2>2Pack Small Cute Bird Table Lamp</h2>
+                <div class="price">$20.56</div>
+            </a>
+            <button class="delete-btn" onclick="deleteCard('B0D8P8CSYP', 'card-B0D8P8CSYP')">🗑️ Delete Product</button>
+        </div>
+    </div>
+
+    <script>
+        // Check if admin mode is requested via URL query string ?admin=true
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('admin') === 'true' || localStorage.getItem('admin_mode') === 'true') {
+            document.body.classList.add('admin-mode');
+            document.getElementById('adminBtn').classList.add('active');
+        }
+
+        function toggleAdminMode() {
+            document.body.classList.toggle('admin-mode');
+            const isActive = document.body.classList.contains('admin-mode');
+            document.getElementById('adminBtn').classList.toggle('active', isActive);
+            localStorage.setItem('admin_mode', isActive ? 'true' : 'false');
+        }
+
+        function deleteCard(asin, elementId) {
+            if (confirm(`Are you sure you want to delete product ${asin} from the homepage?`)) {
+                const el = document.getElementById(elementId);
+                if (el) el.remove();
+                
+                // Store deleted ASINs in local storage
+                let deleted = JSON.parse(localStorage.getItem('deleted_asins') || '[]');
+                if (!deleted.includes(asin)) deleted.push(asin);
+                localStorage.setItem('deleted_asins', JSON.stringify(deleted));
+
+                alert(`Product ${asin} removed from view!\n\nTo purge permanently from GitHub repo, run:\npython delete_product.py ${asin}`);
+            }
+        }
+
+        // Hide deleted items saved in localStorage
+        const deleted = JSON.parse(localStorage.getItem('deleted_asins') || '[]');
+        deleted.forEach(asin => {
+            const el = document.getElementById(`card-${asin}`);
+            if (el) el.remove();
+        });
+    </script>
 </body>
 </html>
