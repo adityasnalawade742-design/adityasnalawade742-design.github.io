@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "name": "pinterest-auto-affiliate-bridge",
+  "builds": [
+    {
+      "src": "output/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/images/(.*)",
+      "dest": "/output/images/$1"
+    },
+    {
+      "src": "/bridge_pages/(.*)",
+      "dest": "/output/bridge_pages/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/output/bridge_pages/$1"
+    }
+  ]
+}

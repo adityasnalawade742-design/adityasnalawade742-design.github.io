@@ -1,0 +1,1 @@
+# Pinterest Auto Affiliate Package
