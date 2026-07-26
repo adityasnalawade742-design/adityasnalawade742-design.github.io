@@ -24,6 +24,35 @@ def enhance_to_max_resolution(image_url: str) -> str:
     high_res = re.sub(r'\._[A-Za-z0-9_,-]+\.', '._AC_SL1500_.', high_res)
     return high_res
 
+def is_lifestyle_photo(image_url: str) -> bool:
+    """
+    Analyzes an Amazon photo URL to detect if it features a real lifestyle background
+    (room interior, ambient light, wood surfaces) vs a plain white studio cutout.
+    Returns True if it has a rich lifestyle background, False if it is a white cutout.
+    """
+    if not image_url:
+        return False
+    try:
+        import io, requests
+        from PIL import Image
+        res = requests.get(image_url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=6)
+        if res.status_code != 200:
+            return False
+        img = Image.open(io.BytesIO(res.content)).convert('RGB')
+        w, h = img.size
+        border_pixels = []
+        for x in range(0, w, max(1, w // 20)):
+            border_pixels.append(img.getpixel((x, 0)))
+            border_pixels.append(img.getpixel((x, h - 1)))
+        for y in range(0, h, max(1, h // 20)):
+            border_pixels.append(img.getpixel((0, y)))
+            border_pixels.append(img.getpixel((w - 1, y)))
+        white_count = sum(1 for r, g, b in border_pixels if r > 240 and g > 240 and b > 240)
+        white_ratio = white_count / len(border_pixels)
+        return white_ratio < 0.60
+    except Exception:
+        return True
+
 def get_product_details_and_photos(url_or_asin: str) -> dict:
     """
     Intelligent Amazon Product & Multi-Photo Extractor.
@@ -65,6 +94,12 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 raw_photos = p.get("thumbnails", []) or [p.get("thumbnail")]
                 photos = [enhance_to_max_resolution(img) for img in raw_photos if img]
                 photos = list(dict.fromkeys(photos)) # Deduplicate while preserving order
+
+                # Sort lifestyle background photos first (Filter out plain white studio cutouts)
+                lifestyle_photos = [img for img in photos if is_lifestyle_photo(img)]
+                cutout_photos = [img for img in photos if img not in lifestyle_photos]
+                sorted_photos = lifestyle_photos + cutout_photos
+                has_lifestyle = len(lifestyle_photos) > 0
                 
                 affiliate_url = f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
                 
@@ -74,7 +109,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 else:
                     features_str = str(features_list)[:200]
 
-                print(f"[Amazon Extractor] Successfully extracted {len(photos)} high-res photos for: {title[:40]}")
+                print(f"[Amazon Extractor] Extracted {len(sorted_photos)} photos ({len(lifestyle_photos)} lifestyle backgrounds) for: {title[:40]}")
                 return {
                     "id": asin,
                     "title": title,
@@ -83,8 +118,9 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                     "rating": rating,
                     "reviews_count": reviews,
                     "affiliate_url": affiliate_url,
-                    "original_image_url": photos[0] if photos else "",
-                    "all_photos": photos,
+                    "original_image_url": sorted_photos[0] if sorted_photos else "",
+                    "all_photos": sorted_photos,
+                    "has_lifestyle_photos": has_lifestyle,
                     "features": features_str or f"High-rated {title} with {rating} stars and {reviews} customer reviews."
                 }
         except Exception as e:
