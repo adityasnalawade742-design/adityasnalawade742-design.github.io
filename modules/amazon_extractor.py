@@ -53,6 +53,24 @@ def is_lifestyle_photo(image_url: str) -> bool:
     except Exception:
         return True
 
+EXCLUDED_KIDS_KEYWORDS = [
+    "for kids", "kids", "children", "child", "toddler", "baby", "toy", "nursery toy",
+    "drawing board for kids", "playroom", "kid gift", "birthday festival"
+]
+
+def is_adult_aesthetic_product(title: str) -> bool:
+    """
+    Filters out children's products, toys, and kids' drawing boards.
+    Returns True if the item is an adult/home decor product, False if it's for kids.
+    """
+    if not title:
+        return True
+    t_lower = title.lower()
+    for kw in EXCLUDED_KIDS_KEYWORDS:
+        if kw in t_lower:
+            return False
+    return True
+
 def get_product_details_and_photos(url_or_asin: str) -> dict:
     """
     Intelligent Amazon Product & Multi-Photo Extractor.
