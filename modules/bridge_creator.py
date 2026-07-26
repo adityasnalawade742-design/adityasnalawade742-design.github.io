@@ -180,9 +180,9 @@ def generate_bridge_page(product: dict, seo: dict, image_path: str) -> str:
     """
     template = Template(BRIDGE_PAGE_TEMPLATE)
     
-    # Calculate relative image path for previewing
+    import time
     image_name = Path(image_path).name
-    relative_image_path = f"../images/{image_name}"
+    relative_image_path = f"{image_name}?v={int(time.time())}"
 
     rendered_html = template.render(
         product=product,
@@ -194,19 +194,17 @@ def generate_bridge_page(product: dict, seo: dict, image_path: str) -> str:
     with open(page_file, "w", encoding="utf-8") as f:
         f.write(rendered_html)
 
-    # Sync to github_pages directory for instant GitHub Pages deployment
-    gh_pages_dir = Path(__file__).resolve().parent.parent / "github_pages"
-    gh_bridge_dir = gh_pages_dir / "bridge_pages"
-    gh_images_dir = gh_pages_dir / "images"
-    gh_bridge_dir.mkdir(parents=True, exist_ok=True)
-    gh_images_dir.mkdir(parents=True, exist_ok=True)
+    # Save directly to project root for 100% reliable GitHub Pages routing
+    project_root = Path(__file__).resolve().parent.parent
+    root_page_file = project_root / f"bridge_{product['id']}.html"
+    root_image_file = project_root / image_name
 
-    with open(gh_bridge_dir / f"bridge_{product['id']}.html", "w", encoding="utf-8") as f:
+    with open(root_page_file, "w", encoding="utf-8") as f:
         f.write(rendered_html)
 
     if Path(image_path).exists():
-        shutil.copy(image_path, gh_images_dir / image_name)
+        shutil.copy(image_path, root_image_file)
 
-    print(f"[Bridge Creator] Created aesthetic bridge page: {page_file} (Synced to github_pages/)")
+    print(f"[Bridge Creator] Created aesthetic bridge page: {page_file} (Synced to root bridge_{product['id']}.html)")
     return str(page_file)
 
