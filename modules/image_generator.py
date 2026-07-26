@@ -187,14 +187,18 @@ def generate_cozy_image(
                 "num_inference_steps": 32,
                 "guidance_scale": 3.5
             }
-            if image_file_obj:
-                input_payload["image"] = image_file_obj
-                input_payload["prompt_strength"] = 0.65
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (Full FP16 Precision, 32 Steps, 1 API Call)...")
-            elif init_image_path:
-                input_payload["image"] = init_image_path
-                input_payload["prompt_strength"] = 0.65
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img with image URL (Full FP16 Precision, 1 API Call)...")
+            if init_image_path:
+                if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
+                    input_payload["image"] = init_image_path
+                    input_payload["prompt_strength"] = 0.65
+                    print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img with Direct HTTP URL ({init_image_path[:50]}...)...")
+                elif Path(init_image_path).exists():
+                    try:
+                        input_payload["image"] = open(init_image_path, "rb")
+                        input_payload["prompt_strength"] = 0.65
+                        print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img with uploaded local file...")
+                    except Exception as e_f:
+                        print(f"[Image Gen - Replicate] Warning opening local file: {e_f}")
             else:
                 print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image async (Full FP16 Precision, 1 API Call)...")
 
