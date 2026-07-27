@@ -46,12 +46,61 @@ def is_lifestyle_photo(image_url: str) -> bool:
             border_pixels.append(img.getpixel((x, h - 1)))
         for y in range(0, h, max(1, h // 20)):
             border_pixels.append(img.getpixel((0, y)))
-            border_pixels.append(img.getpixel((w - 1, y)))
-        white_count = sum(1 for r, g, b in border_pixels if r > 240 and g > 240 and b > 240)
+            white_count = sum(1 for r, g, b in border_pixels if r > 240 and g > 240 and b > 240)
         white_ratio = white_count / len(border_pixels)
         return white_ratio < 0.60
     except Exception:
         return True
+
+def has_text_annotation(image_url: str) -> bool:
+    """
+    Analyzes an Amazon listing photo to detect if it contains seller text/infographic overlays
+    (e.g., dimension arrows, feature badges, promotional text callouts).
+    Uses high-frequency pixel contrast & edge density in upper/lower margins.
+    """
+    if not image_url:
+        return False
+    try:
+        import io, requests
+        from PIL import Image, ImageFilter
+        res = requests.get(image_url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=6)
+        if res.status_code != 200 or len(res.content) < 3000:
+            return False
+        img = Image.open(io.BytesIO(res.content)).convert('L')
+        # Edge detection filter to catch sharp text glyphs and callouts
+        edges = img.filter(ImageFilter.FIND_EDGES)
+        w, h = edges.size
+        # Inspect top 25% margin where sellers place text callouts
+        top_crop = edges.crop((0, 0, w, int(h * 0.25)))
+        top_pixels = list(top_crop.getdata())
+        high_contrast_edges = sum(1 for p in top_pixels if p > 160)
+        edge_density = high_contrast_edges / len(top_pixels)
+        return edge_density > 0.085
+    except Exception:
+        return False
+
+def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
+    """
+    Iterates through Amazon listing photos:
+      1. Filters out photos containing seller text overlays/infographics.
+      2. Returns the first 100% clean photo.
+      3. If ALL photos contain text overlays, returns ("", True) to SKIP the product!
+    """
+    if not photos:
+        return ("", True)
+    
+    clean_photos = []
+    for u in photos:
+        if u and u.startswith("http"):
+            if not has_text_annotation(u):
+                clean_photos.append(u)
+    
+    if clean_photos:
+        return (clean_photos[0], False)
+    
+    # If all extracted photos have text overlays, check if first photo is usable or flag for skip
+    print("[Amazon Extractor] ⚠️ ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
+    return ("", True)
 
 EXCLUDED_KIDS_KEYWORDS = [
     "for kids", "kids", "children", "child", "toddler", "baby", "toy", "nursery toy",
