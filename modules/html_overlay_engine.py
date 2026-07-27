@@ -46,16 +46,16 @@ def render_html_overlay(
     feat_items = "".join([f'<div class="feat-card"><span>{f}</span></div>' for f in features[:4]])
 
     if theme == "floating_cream":
-        # Floating Dark Espresso & Soft Cream Accents (Zero Boxes Blocking Product)
+        # Floating Pearl & High-Fashion Aesthetic Cream Theme
         theme_css = """
         .scrim-top {
-            position: absolute; top: 0; left: 0; width: 100%; height: 32%;
-            background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+            position: absolute; top: 0; left: 0; width: 100%; height: 36%;
+            background: linear-gradient(180deg, rgba(15, 12, 18, 0.75) 0%, rgba(15, 12, 18, 0.25) 65%, rgba(0,0,0,0) 100%);
             z-index: 1;
         }
         .scrim-bottom {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 20%;
-            background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 22%;
+            background: linear-gradient(0deg, rgba(15, 12, 18, 0.75) 0%, rgba(0,0,0,0) 100%);
             z-index: 1;
         }
         .top-container {
@@ -63,38 +63,39 @@ def render_html_overlay(
             width: 100%;
         }
         .badge {
-            background: rgba(255, 251, 245, 0.25); border: 1px solid rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px); color: #ffffff; font-size: 18px; font-weight: 700;
-            padding: 8px 26px; border-radius: 50px; letter-spacing: 2.5px; text-transform: uppercase;
-            margin-bottom: 16px; text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            background: rgba(255, 251, 245, 0.92); border: 2px solid #ffffff;
+            color: #1a1622; font-size: 19px; font-weight: 800;
+            padding: 10px 32px; border-radius: 50px; letter-spacing: 3.5px; text-transform: uppercase;
+            margin-bottom: 18px; box-shadow: 0 8px 25px rgba(0,0,0,0.35);
         }
         .headline {
-            font-family: 'Playfair Display', serif; font-size: 70px; font-weight: 700;
-            line-height: 1.12; color: #ffffff; text-shadow: 0 4px 24px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.9);
-            margin-bottom: 14px; max-width: 1000px;
+            font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-size: 78px; font-weight: 700;
+            line-height: 1.08; color: #ffffff; text-shadow: 0 4px 28px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.95);
+            margin-bottom: 14px; max-width: 1050px; font-style: italic;
         }
-        .divider-line { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent); width: 110px; height: 2px; }
-        .divider-star { color: #ffffff; font-size: 20px; }
+        .divider-line { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent); width: 140px; height: 2px; }
+        .divider-star { color: #fdfbf7; font-size: 22px; }
         .subtitle {
-            font-size: 18px; font-weight: 600; letter-spacing: 4.5px; color: #f8f9fa;
-            text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.8); margin-bottom: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px; font-weight: 700; letter-spacing: 5px; color: #f4efe6;
+            text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,0.9); margin-bottom: 22px;
         }
         .price-pill {
-            background: linear-gradient(135deg, #fffcf7, #f4efe6);
+            background: linear-gradient(135deg, #ffffff, #fdfaf5);
             border: 2px solid rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            padding: 10px 46px;
+            padding: 12px 50px;
             border-radius: 50px;
-            font-family: 'Playfair Display', serif;
-            font-size: 48px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 54px;
             font-weight: 700;
-            color: #2c221e;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+            color: #120f18;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 1);
             text-shadow: none;
         }
         .feat-card {
-            background: rgba(26, 24, 33, 0.65); border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(12px); border-radius: 16px; padding: 14px 10px; text-align: center;
+            background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(14px); border-radius: 16px; padding: 14px 10px; text-align: center;
         }
         .feat-card span { color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-shadow: 0 2px 6px rgba(0,0,0,0.7); }
         """
@@ -160,7 +161,7 @@ def render_html_overlay(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
         body {{
