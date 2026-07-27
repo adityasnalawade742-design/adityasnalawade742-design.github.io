@@ -44,18 +44,26 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         print(json.dumps({"status": "error", "message": f"Could not extract details for ASIN {asin}"}))
         return
 
+    from modules.amazon_extractor import is_lifestyle_photo
+
     photos = prod.get("all_photos", [])
     ref_sheet_path = create_multi_photo_reference_sheet(photos, filename_prefix=f"product_{asin}", max_photos=6)
 
-    # Prompt & AI Image
+    init_photo = photos[0] if photos else ""
+    is_lifestyle = is_lifestyle_photo(init_photo) if init_photo else False
+    is_white_bg = not is_lifestyle
+
+    print(f"[Dual-Prompt Engine] Photo Type: {'❌ White Background Cutout (Activating Room Synthesis)' if is_white_bg else '✅ Existing Lifestyle Photo (Activating Room Enhancement)'}")
+
+    # Dual-Prompt Strategy Generator
     cozy_prompt = generate_cozy_image_prompt(
         product_title=prod['title'],
         category=prod['category'],
         key_features=prod['features'],
-        ref_sheet_path=ref_sheet_path
+        ref_sheet_path=ref_sheet_path,
+        is_white_background=is_white_bg
     )
     
-    init_photo = photos[0] if photos else ""
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,
         filename_prefix=f"focus_product_{asin}",
