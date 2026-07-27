@@ -45,7 +45,104 @@ def render_html_overlay(
     # Build features HTML
     feat_items = "".join([f'<div class="feat-card"><span>{f}</span></div>' for f in features[:4]])
 
-    if theme == "floating_cream":
+    if theme == "sunlight_crystal":
+        # Prismatic Sunlight Crystal Glass Theme (For Suncatchers & Window Decor)
+        theme_css = """
+        .scrim-top {
+            position: absolute; top: 0; left: 0; width: 100%; height: 38%;
+            background: linear-gradient(180deg, rgba(20, 15, 30, 0.72) 0%, rgba(20, 15, 30, 0.2) 65%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+        .scrim-bottom {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 22%;
+            background: linear-gradient(0deg, rgba(20, 15, 30, 0.75) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+        .top-container {
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            width: 100%;
+        }
+        .badge {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.35), rgba(255, 105, 180, 0.35));
+            border: 2px solid rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
+            color: #ffffff; font-size: 19px; font-weight: 800;
+            padding: 10px 34px; border-radius: 50px; letter-spacing: 3.5px; text-transform: uppercase;
+            margin-bottom: 18px; box-shadow: 0 8px 30px rgba(255, 182, 193, 0.4);
+        }
+        .headline {
+            font-family: 'Cormorant Garamond', serif; font-size: 80px; font-weight: 700;
+            line-height: 1.06; color: #ffffff; text-shadow: 0 4px 30px rgba(0,0,0,0.9);
+            margin-bottom: 14px; max-width: 1050px;
+        }
+        .divider-line { background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.95), transparent); width: 150px; height: 2px; }
+        .divider-star { color: #ffd700; font-size: 24px; }
+        .subtitle {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px; font-weight: 700; letter-spacing: 5px; color: #ffe699;
+            text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,0.9); margin-bottom: 22px;
+        }
+        .price-pill {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: 2px solid #ffffff; backdrop-filter: blur(20px);
+            padding: 12px 52px; border-radius: 50px;
+            font-family: 'Cormorant Garamond', serif; font-size: 54px; font-weight: 700;
+            color: #0f0b18; box-shadow: 0 16px 45px rgba(255, 140, 0, 0.55);
+        }
+        .feat-card {
+            background: rgba(255, 255, 255, 0.22); border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(14px); border-radius: 16px; padding: 14px 10px; text-align: center;
+        }
+        .feat-card span { color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 1.5px; }
+        """
+    elif theme == "dark_obsidian_neon":
+        # Dark Obsidian Translucent Glass & Cyber Coral Glow Theme (For Diffusers & LED Boards)
+        theme_css = """
+        .scrim-top {
+            position: absolute; top: 0; left: 0; width: 100%; height: 36%;
+            background: linear-gradient(180deg, rgba(8, 6, 14, 0.85) 0%, rgba(8, 6, 14, 0.3) 65%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+        .scrim-bottom {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 22%;
+            background: linear-gradient(0deg, rgba(8, 6, 14, 0.85) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+        .top-container {
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            width: 100%;
+        }
+        .badge {
+            background: linear-gradient(135deg, #ff0055, #ff5000);
+            border: 2px solid #ffffff; color: #ffffff; font-size: 19px; font-weight: 800;
+            padding: 10px 32px; border-radius: 50px; letter-spacing: 3.5px; text-transform: uppercase;
+            margin-bottom: 18px; box-shadow: 0 8px 30px rgba(255, 0, 85, 0.5);
+        }
+        .headline {
+            font-family: 'Outfit', sans-serif; font-size: 74px; font-weight: 800;
+            line-height: 1.08; color: #ffffff; text-shadow: 0 4px 28px rgba(0,0,0,0.95);
+            margin-bottom: 14px; max-width: 1000px; letter-spacing: -1px;
+        }
+        .divider-line { background: linear-gradient(90deg, transparent, #ff0055, transparent); width: 140px; height: 3px; }
+        .divider-star { color: #ff5000; font-size: 22px; }
+        .subtitle {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px; font-weight: 700; letter-spacing: 5px; color: #ff80a0;
+            text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,0.9); margin-bottom: 22px;
+        }
+        .price-pill {
+            background: linear-gradient(135deg, #ff0055, #7a00ff);
+            border: 2px solid #ffffff; backdrop-filter: blur(20px);
+            padding: 12px 50px; border-radius: 50px;
+            font-family: 'Outfit', sans-serif; font-size: 52px; font-weight: 800;
+            color: #ffffff; box-shadow: 0 16px 45px rgba(255, 0, 85, 0.6);
+        }
+        .feat-card {
+            background: rgba(18, 14, 28, 0.85); border: 1px solid rgba(255, 0, 85, 0.4);
+            backdrop-filter: blur(14px); border-radius: 16px; padding: 14px 10px; text-align: center;
+        }
+        .feat-card span { color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; }
+        """
+    elif theme == "floating_cream":
         # Floating Pearl & High-Fashion Aesthetic Cream Theme
         theme_css = """
         .scrim-top {

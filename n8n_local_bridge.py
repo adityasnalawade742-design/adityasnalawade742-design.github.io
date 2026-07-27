@@ -44,12 +44,18 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         print(json.dumps({"status": "error", "message": f"Could not extract details for ASIN {asin}"}))
         return
 
-    from modules.amazon_extractor import is_lifestyle_photo
+    from modules.amazon_extractor import is_lifestyle_photo, select_clean_photo_or_skip
 
     photos = prod.get("all_photos", [])
-    ref_sheet_path = create_multi_photo_reference_sheet(photos, filename_prefix=f"product_{asin}", max_photos=6)
+    clean_photo, should_skip = select_clean_photo_or_skip(photos)
 
-    init_photo = photos[0] if photos else ""
+    if should_skip:
+        print(f"⚠️ [Text-Free Rule] SKIPPING product {asin} ('{prod['title'][:50]}...') because ALL Amazon listing photos contain seller text/infographic overlays.")
+        save_processed_asin(asin)
+        return {"status": "skipped", "asin": asin, "reason": "All listing photos contain seller text overlays"}
+
+    ref_sheet_path = create_multi_photo_reference_sheet(photos, filename_prefix=f"product_{asin}", max_photos=6)
+    init_photo = clean_photo
     is_lifestyle = is_lifestyle_photo(init_photo) if init_photo else False
     is_white_bg = not is_lifestyle
 
@@ -82,16 +88,17 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     )
     headline = seo_data.get("image_hook") or "Cozy Room Find"
 
-    # Playwright Overlay with Dynamic Vibe & Theme Matching
+    # Playwright Overlay with Dynamic Vibe, Theme Matching, and Product Features
     hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{asin}_hook.jpg"
     render_html_overlay(
         image_path=raw_image_path,
         headline=headline,
-        subtitle=seo_data.get("subtitle_hook") or "ELEVATE YOUR VANITY SPACE",
-        badge_text=seo_data.get("badge_hook") or "VANITY GOALS",
+        subtitle=seo_data.get("subtitle_hook") or "SUNLIGHT WINDOW PRISM MAGIC",
+        badge_text=seo_data.get("badge_hook") or "RAINBOW MAKER",
         price_str=prod['price'],
+        features=seo_data.get("features"),
         output_path=hook_img_path,
-        theme=seo_data.get("theme_style") or "floating_cream"
+        theme=seo_data.get("theme_style") or "sunlight_crystal"
     )
 
     # Bridge Page Generation

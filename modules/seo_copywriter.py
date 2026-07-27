@@ -23,10 +23,11 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
 
     Generate Pinterest SEO metadata for this product. Return JSON with the following keys:
     - "pin_title": A catchy, high-CTR Pinterest title (under 80 chars, with relevant emoji).
-    - "image_hook": A 2-4 word short punchy headline for the image overlay (e.g. "White Wavy Vanity Mirror", "Cozy Touch Bird Light").
-    - "subtitle_hook": A 3-5 word uppercase tagline customized specifically for this product's unique vibe (e.g. "ELEVATE YOUR VANITY SPACE", "FLAMELESS CANDLE LUXURY", "AESTHETIC BEDROOM GLOW").
-    - "badge_hook": A 2-3 word badge customized for this product category (e.g. "VANITY GOALS", "COZY NIGHT VIBES", "ATMOSPHERE FIND").
-    - "theme_style": Choose the best matching visual theme from: "floating_cream" (for mirrors, vanity decor, cream/white aesthetic items) or "floating_luxury" (for glowing lamps, candle warmers, diffusers).
+    - "image_hook": A 2-4 word short punchy headline for the image overlay (e.g. "White Wavy Vanity Mirror", "Crystal Prism Rainbow Maker").
+    - "subtitle_hook": A 3-5 word uppercase tagline customized specifically for this product's unique vibe (e.g. "SUNLIGHT WINDOW PRISM MAGIC", "FLAMELESS CANDLE LUXURY", "ELEVATE YOUR VANITY SPACE").
+    - "badge_hook": A 2-3 word badge customized for this product category (e.g. "RAINBOW MAKER", "VANITY GOALS", "COZY NIGHT VIBES").
+    - "features": A list of exactly 4 short uppercase product-specific features (2-3 words each) tailored to this specific item (e.g. ["K9 CRYSTAL PRISM", "RAINBOW REFLECTIONS", "WINDOW HANGING", "SUNLIGHT MAKER"]).
+    - "theme_style": Choose the single best visual theme: "sunlight_crystal" (for suncatchers, crystals, window decor), "dark_obsidian_neon" (for diffusers, glowing LED boards, flame lamps), "floating_cream" (for mirrors, vanity decor, cream items), or "floating_luxury" (for lamps, candle warmers, vintage decor).
     - "description": A 200-300 character SEO-rich Pinterest description with high-volume search phrases naturally included.
     - "suggested_board": Recommended Pinterest Board Name.
     - "keywords": A list of 5 key search terms.
