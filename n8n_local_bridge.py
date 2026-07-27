@@ -59,8 +59,6 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     is_lifestyle = is_lifestyle_photo(init_photo) if init_photo else False
     is_white_bg = not is_lifestyle
 
-    print(f"[Dual-Prompt Engine] Photo Type: {'❌ White Background Cutout (Activating Room Synthesis)' if is_white_bg else '✅ Existing Lifestyle Photo (Activating Room Enhancement)'}")
-
     # Dual-Prompt Strategy Generator
     cozy_prompt = generate_cozy_image_prompt(
         product_title=prod['title'],
@@ -70,8 +68,8 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         is_white_background=is_white_bg
     )
     
-    # Use prompt_strength=0.82 for white bg / text-heavy seller photos to completely erase seller text annotations
-    strength = 0.82 if is_white_bg or "board" in prod['title'].lower() else 0.76
+    # Use prompt_strength=0.82 for white bg cutouts (Prompt 2) vs prompt_strength=0.48 for existing lifestyle room photos (Prompt 1)
+    strength = 0.82 if is_white_bg else 0.48
 
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,
