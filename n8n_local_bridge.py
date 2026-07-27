@@ -68,8 +68,8 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         is_white_background=is_white_bg
     )
     
-    # Use prompt_strength=0.82 for white bg cutouts (Prompt 2) vs prompt_strength=0.48 for existing lifestyle room photos (Prompt 1)
-    strength = 0.82 if is_white_bg else 0.48
+    # Use prompt_strength=0.82 for white bg cutouts (Prompt 2) vs prompt_strength=0.28 for existing lifestyle room photos (Prompt 1)
+    strength = 0.82 if is_white_bg else 0.28
 
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,

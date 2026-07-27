@@ -1,6 +1,7 @@
 import json
 import sys
 import io
+import shutil
 from pathlib import Path
 
 # Ensure UTF-8 stdout
@@ -15,8 +16,8 @@ from modules.seo_copywriter import generate_pin_seo_data
 from modules.bridge_creator import generate_bridge_page
 from modules.pinterest_publisher import publish_pin_to_pinterest
 
-amazon_url = "https://www.amazon.com/Control-Bird-Cordless-Dimmable-Rechargeable/dp/B0D8P8CSYP"
-print("🚀 [Step 1] Extracting Product Details & Multi-Photos for ASIN B0D8P8CSYP...")
+amazon_url = "https://www.amazon.com/Dawnwake-Mushroom-Nightstand-Dimmable-Aesthetic/dp/B0D1FRDFFX"
+print("🚀 [Step 1] Extracting Product Details & Multi-Photos for Mushroom Lamp (B0D1FRDFFX)...")
 
 prod = get_product_details_and_photos(amazon_url)
 if not prod:
@@ -43,15 +44,15 @@ cozy_prompt = generate_cozy_image_prompt(
 )
 print(f" -> Generated Vision Prompt: {cozy_prompt}")
 
-# Step 4: Replicate FLUX Img2Img & Depth Control Product Render
-print("\n🖼️ [Step 4] Paid Replicate FLUX Img2Img & Depth Control Rendering 8K 3:4 Lifestyle Room Graphic...")
-init_photo = "pinterest reference user/amazon.jpg" if Path("pinterest reference user/amazon.jpg").exists() else (photos[0] if photos else "")
+# Step 4: Replicate FLUX-Dev Img2Img Exact Product Render
+print("\n🖼️ [Step 4] Paid Replicate FLUX-Dev Img2Img Rendering 8K 3:4 Lifestyle Room Graphic...")
+init_photo = photos[0] if photos else ""
 raw_image_path = generate_cozy_image(
     prompt=cozy_prompt,
     filename_prefix=f"focus_product_{prod['id']}",
     init_image_path=init_photo
 )
-print(f" -> FLUX Product Control Render: {raw_image_path}")
+print(f" -> FLUX-Dev Img2Img Exact Product Render: {raw_image_path}")
 
 # Step 5: SEO Data Generator
 print("\n✍️ [Step 5] Writing Pinterest SEO Title & Description...")
@@ -68,8 +69,8 @@ print("\n✨ [Step 6] Overlaying Ultra-Aesthetic Backlit Typography (matching re
 final_image_path = add_hook_text_overlay(
     image_path=raw_image_path,
     hook_text=seo_data['image_hook'],
-    subtitle=seo_data.get('subtitle_hook', 'CORDLESS BEDSIDE LIGHT'),
-    badge_text=seo_data.get('badge_hook', 'AMAZON TOP FIND'),
+    subtitle=seo_data.get('subtitle_hook', 'MID-CENTURY AMBIENCE'),
+    badge_text=seo_data.get('badge_hook', 'MUST-HAVE FIND'),
     price_str=prod['price'],
     style="glowing_neon"
 )
@@ -84,10 +85,16 @@ bridge_page_path = generate_bridge_page(
 )
 print(f" -> Saved Bridge Page: {bridge_page_path}")
 
-bridge_filename = Path(bridge_page_path).name
+# Sync to root for GitHub Pages
 image_filename = Path(final_image_path).name
-live_destination_url = f"{BASE_BRIDGE_URL.rstrip('/')}/bridge_pages/{bridge_filename}"
-live_image_url = f"{BASE_BRIDGE_URL.rstrip('/')}/images/{image_filename}"
+root_bridge_file = f"bridge_{prod['id']}.html"
+root_image_file = image_filename
+
+shutil.copy(bridge_page_path, root_bridge_file)
+shutil.copy(final_image_path, root_image_file)
+
+live_destination_url = f"{BASE_BRIDGE_URL.rstrip('/')}/{root_bridge_file}"
+live_image_url = f"{BASE_BRIDGE_URL.rstrip('/')}/{root_image_file}"
 
 # Step 8: Pinterest Pin Payload
 print("\n📌 [Step 8] Preparing Pinterest Pin Payload...")
@@ -110,12 +117,12 @@ result = {
     "pinterest_pin": pin_result
 }
 
-summary_path = OUTPUT_DIR / "bird_lamp_B0D8P8CSYP_summary.json"
+summary_path = OUTPUT_DIR / f"mushroom_lamp_{prod['id']}_summary.json"
 with open(summary_path, "w", encoding="utf-8") as f:
     json.dump(result, f, indent=2)
 
 print("\n" + "=" * 65)
-print("🎉 CAMPAIGN PROCESSING COMPLETE FOR B0D8P8CSYP!")
+print(f"🎉 CAMPAIGN PROCESSING COMPLETE FOR {prod['id']}!")
 print(f"📸 Reference Sheet: {ref_sheet_path}")
 print(f"🖼️ Pin Graphic: {final_image_path}")
 print(f"🌐 Live Bridge Landing Page: {live_destination_url}")

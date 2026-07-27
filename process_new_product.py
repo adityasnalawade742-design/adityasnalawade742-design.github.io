@@ -16,8 +16,12 @@ from modules.seo_copywriter import generate_pin_seo_data
 from modules.bridge_creator import generate_bridge_page
 from modules.pinterest_publisher import publish_pin_to_pinterest
 
-amazon_url = "https://www.amazon.com/dp/B0BZXNSW5K"
-print("🚀 [Step 1] Extracting Product Details & Multi-Photos for ASIN B0BZXNSW5K...")
+if len(sys.argv) > 1:
+    amazon_url = sys.argv[1]
+else:
+    amazon_url = "https://www.amazon.com/dp/B0BZXNSW5K"
+
+print(f"🚀 [Step 1] Extracting Product Details & Multi-Photos for: {amazon_url}...")
 
 prod = get_product_details_and_photos(amazon_url)
 if not prod:
