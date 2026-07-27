@@ -1,8 +1,14 @@
 import sys
+import io
 import os
 import re
 import subprocess
 from pathlib import Path
+
+# UTF-8 encoding fix for Windows PowerShell
+if hasattr(sys.stdout, "buffer"):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+
 
 def delete_product(product_id: str):
     """
@@ -46,8 +52,9 @@ def delete_product(product_id: str):
         with open(index_file, "r", encoding="utf-8") as f:
             html = f.read()
 
-        card_pattern = rf'<a\s+class="card"[^>]*href="\./bridge_{product_id}\.html"[^>]*>[\s\S]*?</a>\s*'
+        card_pattern = rf'(<!--\s*Card\s+{product_id}\s*-->\s*)?<div\s+class="card-wrapper"\s+id="card-{product_id}">[\s\S]*?</div>\s*</div>\s*'
         updated_html = re.sub(card_pattern, '', html, flags=re.IGNORECASE)
+
 
         if updated_html != html:
             with open(index_file, "w", encoding="utf-8") as f:
@@ -56,11 +63,13 @@ def delete_product(product_id: str):
 
     print("\n🚀 Pushing deletion update to GitHub Pages...")
     try:
-        cmd = f'git add -A; git commit -m "Delete product campaign {product_id}"; git push origin main; git checkout gh-pages; git merge main; git push origin gh-pages; git checkout main'
-        subprocess.run(cmd, shell=True, check=True, cwd=str(project_root))
+        subprocess.run(["git", "add", "-A"], check=True, cwd=str(project_root))
+        subprocess.run(["git", "commit", "-m", f"Delete product campaign {product_id}"], check=False, cwd=str(project_root))
+        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(project_root))
         print(f"\n🎉 SUCCESS: Product {product_id} completely deleted and synced live on GitHub Pages!")
     except Exception as e:
         print(f"⚠️ Git push warning: {e}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
