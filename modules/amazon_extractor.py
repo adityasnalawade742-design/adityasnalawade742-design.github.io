@@ -109,6 +109,34 @@ def is_grid_collage(image_url: str) -> bool:
     except Exception:
         return False
 
+def has_human_presence(image_url: str) -> bool:
+    """
+    Detects photos containing human models, hands, or people.
+    Evaluates skin tone color spectrum ratio.
+    """
+    try:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        raw = requests.get(image_url, headers=headers, timeout=10).content
+        img = Image.open(io.BytesIO(raw)).convert('RGB').resize((100, 100))
+        w, h = img.size
+        
+        skin_pixels = 0
+        total = w * h
+        
+        for x in range(w):
+            for y in range(h):
+                r, g, b = img.getpixel((x, y))
+                if r > 140 and g > 90 and b > 60 and (r > g + 15) and (g > b + 10):
+                    skin_pixels += 1
+        
+        skin_ratio = skin_pixels / total
+        has_human = skin_ratio > 0.10
+        if has_human:
+            print(f"[Human/Model Scanner] ❌ Human Model Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
+        return has_human
+    except Exception:
+        return False
+
 def calculate_cozy_vibe_score(image_url: str) -> float:
     """
     Evaluates cozy room aesthetic score (1.0 to 10.0) based on:
@@ -160,7 +188,7 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
     clean_photos = []
     for u in photos:
         if u and u.startswith("http"):
-            if not has_text_annotation(u) and not is_grid_collage(u):
+            if not has_text_annotation(u) and not is_grid_collage(u) and not has_human_presence(u):
                 clean_photos.append(u)
     
     if clean_photos:
