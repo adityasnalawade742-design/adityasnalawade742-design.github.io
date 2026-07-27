@@ -3,106 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Cozy Room & Desk Decor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Privacy Policy | Cozy Room & Desk Decor Finds</title>
+    <meta name="description" content="Official Privacy Policy and Amazon Affiliate Disclosure for Cozy Room & Desk Decor Finds.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d0b12;
-            --card-bg: rgba(22, 18, 30, 0.75);
-            --border-color: rgba(255, 255, 255, 0.12);
-            --text-primary: #f8f6f0;
-            --text-secondary: #a8a0b5;
-            --accent-gold: #ffd700;
+            --bg-dark: #0a090d;
+            --card-glass: rgba(22, 20, 28, 0.82);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --gold-accent: #ffb703;
+            --gold-glow: #fb8500;
+            --text-light: #f8f9fa;
+            --text-sub: #adb5bd;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
             font-family: 'Outfit', sans-serif;
-            line-height: 1.7;
-            padding: 40px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 80px;
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(251, 133, 0, 0.22), transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(138, 43, 226, 0.08), transparent 50%),
+                radial-gradient(circle at 90% 40%, rgba(255, 183, 3, 0.08), transparent 50%);
+            background-attachment: fixed;
         }
-        .container {
-            max-width: 800px;
+
+        /* Top Brand Navigation Bar */
+        .top-nav {
             width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
         }
-        h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 38px;
+
+        .brand-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
             color: #ffffff;
-            margin-bottom: 8px;
-        }
-        .updated {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-        h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 24px;
-            color: var(--accent-gold);
-            margin-top: 28px;
-            margin-bottom: 12px;
-        }
-        p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-bottom: 16px;
-        }
-        ul {
-            color: var(--text-secondary);
-            margin-left: 20px;
-            margin-bottom: 16px;
-            font-size: 15px;
-        }
-        a {
-            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
         }
-        a:hover { text-decoration: underline; }
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 10px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
+
+        .brand-logo span.sparkle {
+            color: var(--gold-accent);
+        }
+
+        .nav-badge {
+            background: linear-gradient(135deg, rgba(251, 133, 0, 0.2), rgba(255, 183, 3, 0.2));
+            border: 1px solid rgba(255, 183, 3, 0.5);
+            color: var(--gold-accent);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 50px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Main Container Card */
+        .policy-card {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 48px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 30px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            color: var(--gold-accent);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 18px;
+            border-radius: 50px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 700;
             color: #ffffff;
-            font-weight: 500;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .last-updated {
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        /* Policy Section Content */
+        .policy-section {
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold-accent);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        p {
+            color: var(--text-sub);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        ul {
+            color: var(--text-sub);
+            margin-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        a {
+            color: var(--gold-accent);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .highlight-box {
+            background: rgba(255, 183, 3, 0.06);
+            border: 1px solid rgba(255, 183, 3, 0.25);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #fb8500, #ffb703);
+            color: #0d0c10;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 14px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(251, 133, 0, 0.4);
+            margin-top: 20px;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px rgba(251, 133, 0, 0.6);
+            text-decoration: none;
+            color: #0d0c10;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .policy-card { padding: 28px 20px; }
+            h1 { font-size: 32px; }
+            h2 { font-size: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Privacy Policy</h1>
-        <p class="updated">Last Updated: July 2026</p>
 
-        <p>Welcome to <strong>Cozy Room & Desk Decor Finds</strong> ("we", "our", or "us"). We respect your privacy and are committed to protecting any personal information you share with us when visiting our web application located at <a href="https://adityasnalawade742-design.github.io">https://adityasnalawade742-design.github.io</a>.</p>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <a href="index.html" class="brand-logo">
+            <span class="sparkle">✨</span> Cozy Room Finds
+        </a>
+        <div class="nav-badge">Pinterest Partner v5</div>
+    </nav>
 
-        <h2>1. Information We Collect</h2>
-        <p>We do not require users to create an account or provide personally identifiable information (PII) to browse our curated decor catalog. We may collect non-personal analytics data such as standard browser log files, device type, and page view metrics to optimize user experience.</p>
+    <!-- Main Card -->
+    <main class="policy-card">
+        <header class="policy-header">
+            <div class="hero-tag">🔒 Legal & Compliance</div>
+            <h1>Privacy Policy</h1>
+            <p class="last-updated">Last Updated & Verified: July 27, 2026</p>
+        </header>
 
-        <h2>2. Affiliate Disclosure & External Links</h2>
-        <p>Our website contains affiliate links to third-party e-commerce platforms, including Amazon.com. When you click an affiliate link to purchase a product, you are redirected to Amazon. Amazon may use cookies to track referral traffic in accordance with their own privacy policy.</p>
+        <section class="policy-section">
+            <p>Welcome to <strong>Cozy Room & Desk Decor Finds</strong> ("we", "our", or "us"). We respect your privacy and are committed to protecting any information you share with us when visiting our web application located at <a href="https://adityasnalawade742-design.github.io">https://adityasnalawade742-design.github.io</a>.</p>
+        </section>
 
-        <h2>3. Pinterest API Integration</h2>
-        <p>Our platform integrates with the Pinterest API v5 to publish curated product pins. We strictly adhere to the Pinterest Developer Terms of Service and Privacy Policy. We do not store or collect end-user Pinterest account credentials.</p>
+        <div class="highlight-box">
+            <h2>📜 1. Information Collection & Usage</h2>
+            <p>We do not require users to create an account, log in, or provide personally identifiable information (PII) to browse our curated home decor catalog. We may process standard non-personal web analytics logs (e.g. browser type, operating system, timestamp) strictly to optimize page performance and user experience.</p>
+        </div>
 
-        <h2>4. Data Protection & Security</h2>
-        <p>We implement industry-standard security measures to safeguard our web infrastructure and data transmissions. No method of internet transmission is 100% secure, but we take all reasonable precautions to maintain security integrity.</p>
+        <section class="policy-section">
+            <h2>🛍️ 2. Amazon Affiliate Disclosure</h2>
+            <p>Cozy Room Finds is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.</p>
+            <p>When you click an affiliate link to purchase a curated home decor find, you are redirected to Amazon.com. Amazon uses cookies and device tokens to track referral traffic in accordance with their <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=GX7NJ74BRSF7PYEK" target="_blank" rel="noopener">Amazon Privacy Notice</a>.</p>
+        </section>
 
-        <h2>5. Contact Us</h2>
-        <p>If you have any questions or concerns regarding this Privacy Policy, please reach out via our GitHub repository at <a href="https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io">GitHub Workspace</a>.</p>
+        <section class="policy-section">
+            <h2>📌 3. Pinterest API Integration & Data Handling</h2>
+            <p>Our platform integrates directly with the official <strong>Pinterest API v5</strong> to publish curated home aesthetic graphics and high-CTR landing pins. We strictly comply with the <a href="https://policy.pinterest.com/en/privacy-policy" target="_blank" rel="noopener">Pinterest Developer Terms of Service and Privacy Policy</a>.</p>
+            <ul>
+                <li>We do not store or solicit personal end-user Pinterest login credentials.</li>
+                <li>Pinterest user tokens are stored securely in encrypted server environment variables.</li>
+                <li>No Pinterest user profile data is shared, sold, or transmitted to third parties.</li>
+            </ul>
+        </section>
 
-        <a href="index.html" class="back-link">← Return to Home Showcase</a>
-    </div>
+        <section class="policy-section">
+            <h2>🛡️ 4. Data Security & User Rights</h2>
+            <p>We implement modern web security standards, HTTPS TLS encryption, and secure cloud hosting infrastructure to protect data transmissions. You have the right to visit our site without tracking or data profiling.</p>
+        </section>
+
+        <section class="policy-section">
+            <h2>✉️ 5. Contact & Support</h2>
+            <p>If you have any questions or data privacy inquiries, feel free to reach out via our GitHub repository workspace at <a href="https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io">GitHub Repository Support</a>.</p>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="index.html" class="btn-home">← Back to Curated Catalog</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Cozy Room Finds. All Rights Reserved. Powered by Pinterest v5 API Integration.</p>
+    </footer>
+
 </body>
 </html>
