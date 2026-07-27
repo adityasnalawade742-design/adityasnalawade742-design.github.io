@@ -70,21 +70,18 @@ def has_text_annotation(image_url: str) -> bool:
         # Edge detection filter to catch sharp text glyphs, letters, and callouts
         edges = img.filter(ImageFilter.FIND_EDGES)
         w, h = edges.size
-        # Inspect top 30% margin and center region where sellers place text callouts & handwriting
-        top_crop = edges.crop((0, 0, w, int(h * 0.30)))
-        center_crop = edges.crop((int(w * 0.15), int(h * 0.20), int(w * 0.85), int(h * 0.80)))
+        # Inspect top 25% margin specifically for top seller headline text callouts
+        top_crop = edges.crop((0, 0, w, int(h * 0.25)))
+        top_pixels = list(top_crop.get_flattened_data())
+        top_contrast = sum(1 for p in top_pixels if p > 120) / len(top_pixels)
         
-        top_pixels = list(top_crop.getdata())
-        center_pixels = list(center_crop.getdata())
+        full_contrast = sum(1 for p in list(edges.get_flattened_data()) if p > 120) / (w * h)
         
-        top_edge_density = sum(1 for p in top_pixels if p > 150) / len(top_pixels)
-        center_edge_density = sum(1 for p in center_pixels if p > 150) / len(center_pixels)
-        
-        has_txt = (top_edge_density > 0.055) or (center_edge_density > 0.095)
+        has_txt = (top_contrast > 0.008) or (full_contrast > 0.022)
         if has_txt:
-            print(f"[Text Detector] ❌ Text/Glyphs Detected in image (...{image_url[-30:]})")
+            print(f"[Text Detector] ❌ Text/Glyphs Detected in image (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
         else:
-            print(f"[Text Detector] ✅ 100% CLEAN PHOTO (NO TEXT) (...{image_url[-30:]})")
+            print(f"[Text Detector] ✅ 100% CLEAN PHOTO (NO TEXT) (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
         return has_txt
     except Exception:
         return False
@@ -93,8 +90,9 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
     """
     Iterates through Amazon listing photos:
       1. Filters out photos containing seller text overlays/infographics.
-      2. Returns the first 100% clean photo.
-      3. If ALL photos contain text overlays, returns ("", True) to SKIP the product!
+      2. Prioritizes clean LIFESTYLE ROOM photos first (Prompt 1).
+      3. If no clean room photos exist, selects clean WHITE CUTOUT photos (Prompt 2).
+      4. If ALL photos contain text overlays, returns ("", True) to SKIP the product!
     """
     if not photos:
         return ("", True)
@@ -106,9 +104,13 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
                 clean_photos.append(u)
     
     if clean_photos:
+        # Prioritize clean lifestyle room photos first
+        clean_lifestyle = [u for u in clean_photos if is_lifestyle_photo(u)]
+        if clean_lifestyle:
+            return (clean_lifestyle[0], False)
+        # Fallback to clean white studio cutout photo
         return (clean_photos[0], False)
     
-    # If all extracted photos have text overlays, check if first photo is usable or flag for skip
     print("[Amazon Extractor] ⚠️ ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
     return ("", True)
 
@@ -172,11 +174,8 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 photos = [enhance_to_max_resolution(img) for img in raw_photos if img]
                 photos = list(dict.fromkeys(photos)) # Deduplicate while preserving order
 
-                # Sort lifestyle background photos first (Filter out plain white studio cutouts)
-                lifestyle_photos = [img for img in photos if is_lifestyle_photo(img)]
-                cutout_photos = [img for img in photos if img not in lifestyle_photos]
-                sorted_photos = lifestyle_photos + cutout_photos
-                has_lifestyle = len(lifestyle_photos) > 0
+                sorted_photos = photos
+                has_lifestyle = any(is_lifestyle_photo(img) for img in sorted_photos)
                 
                 affiliate_url = f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
                 
@@ -186,7 +185,8 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 else:
                     features_str = str(features_list)[:200]
 
-                print(f"[Amazon Extractor] Extracted {len(sorted_photos)} photos ({len(lifestyle_photos)} lifestyle backgrounds) for: {title[:40]}")
+                lifestyle_cnt = sum(1 for img in sorted_photos if is_lifestyle_photo(img))
+                print(f"[Amazon Extractor] Extracted {len(sorted_photos)} photos ({lifestyle_cnt} lifestyle backgrounds) for: {title[:40]}")
                 return {
                     "id": asin,
                     "title": title,
