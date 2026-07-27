@@ -24,13 +24,12 @@
 5. **`B0D1FRDFFX`**: Dawnwake Mushroom Touch Table Lamp ($39.98)
 6. **`B0D8P8CSYP`**: Cute Bird Dimmable Touch Night Lamp ($20.56)
 7. **`B0DXKGL1T2`**: Lily of the Valley Flower Table Lamp (£36.38)
+8. **`B0FXLYXM32`**: Pocetry 22"x30" White Wavy Wall & Vanity Mirror ($76.49)
 
 ---
 
 ## 📋 Verified Candidate Queue for Next Session (Passed All Filters)
-1. **`B0FXLYXM32`**: Pocetry 22"x30" White Wavy Wall & Vanity Mirror ($24.99)
-   - *Link*: `https://www.amazon.com/dp/B0FXLYXM32?tag=smartdeal0358-21`
-2. **`B0GT5GWK4B`**: Dreamholder Top-Down Candle Warmer Lamp with Timer ($14.99)
+1. **`B0GT5GWK4B`**: Dreamholder Top-Down Candle Warmer Lamp with Timer ($14.99)
    - *Link*: `https://www.amazon.com/dp/B0GT5GWK4B?tag=smartdeal0358-21`
-3. **`B0CXSRT211`**: IOWER Boho Macrame Woven Wall Hanging Tapestry ($31.50)
+2. **`B0CXSRT211`**: IOWER Boho Macrame Woven Wall Hanging Tapestry ($31.50)
    - *Link*: `https://www.amazon.com/dp/B0CXSRT211?tag=smartdeal0358-21`
