@@ -25,6 +25,8 @@
 6. **`B0D8P8CSYP`**: Cute Bird Dimmable Touch Night Lamp ($20.56)
 7. **`B0DXKGL1T2`**: Lily of the Valley Flower Table Lamp (£36.38)
 8. **`B0FXLYXM32`**: Pocetry 22"x30" White Wavy Wall & Vanity Mirror ($76.49)
+9. **`B0C2YLN3H4`**: White Ceramic Donut Vase Set of 2 ($13.49)
+10. **`B0GGHJ1J4L`**: LED Acrylic Glowing Desktop Note Board ($18.99)
 
 ---
 
