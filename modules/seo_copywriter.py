@@ -1,103 +1,179 @@
 import json
 import time
-from google import genai
-from config import GEMINI_API_KEY, NICHE
+import re
+import sys
+import io
+from pathlib import Path
+
+# UTF-8 stdout fix
+if hasattr(sys.stdout, "buffer"):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 def generate_pin_seo_data(product_title: str, price: str = "", category: str = "") -> dict:
     """
-    Uses Gemini API to generate Pinterest SEO titles, descriptions, image hooks,
-    and board recommendations tailored for maximum search visibility and CTR.
+    Generates High-Reach Pinterest SEO titles, viral problem-solving descriptions,
+    image hooks, feature callouts, and 5 targeted Pinterest hashtags for maximum search visibility & CTR.
     """
-    client = genai.Client(api_key=GEMINI_API_KEY)
+    t_lower = product_title.lower()
 
-    system_instruction = (
-        "You are an elite Pinterest SEO Copywriter. "
-        "Return ONLY a valid JSON object matching the requested fields, with no markdown codeblocks or extra text."
-    )
+    # 1. Diffusers / Flame Atmosphere
+    if "diffuser" in t_lower or "flame" in t_lower or "volcano" in t_lower:
+        clean_name = "Flame Aroma Essential Oil Diffuser"
+        pin_title = "Say Goodbye To Harsh Overhead Lights 🕯️ Flame Aroma Diffuser"
+        subtitle_hook = "REALISTIC FLAME ATMOSPHERE"
+        badge_hook = "COZY NIGHT VIBES"
+        features = ["VOLCANO FLAME MIST", "WARM AMBER GLOW", "AUTO SHUT OFF", "ESSENTIAL OIL READY"]
+        theme_style = "dark_obsidian_neon"
+        description = (
+            "Tired of stressful overhead lighting? Transform your bedroom into a soothing cozy sanctuary with this viral Flame Aroma Essential Oil Diffuser. "
+            "Features realistic volcano flame mist, warm amber LED ambient lighting, and ultra-quiet humidification. "
+            "Tap link to check live price on Amazon! #cozyroomdecor #flamediffuser #aestheticdecor #amazonfinds #bedroomvibes"
+        )
+        keywords = ["flame aroma diffuser", "cozy room decor", "aesthetic bedroom lighting", "essential oil diffuser", "amazon room finds"]
 
-    prompt = f"""
-    Target Niche: {NICHE}
-    Amazon Product Title: {product_title}
-    Price: {price}
-    Category: {category}
+    # 2. Donut Vases / Boho Ceramics
+    elif "vase" in t_lower or "donut" in t_lower or "pampas" in t_lower:
+        clean_name = "White Ceramic Donut Vases"
+        pin_title = "Elevate Your Table Vibe 🌿 White Ceramic Donut Vase Set"
+        subtitle_hook = "BOHO TABLETOP MAGIC"
+        badge_hook = "VANITY GOALS"
+        features = ["MATTE CERAMIC FINISH", "SET OF 2 VASES", "PAMPAS GRASS READY", "HANDCRAFTED BOHO"]
+        theme_style = "floating_cream"
+        description = (
+            "Transform your coffee table or nightstand with this viral White Ceramic Donut Vase Set! "
+            "Features hollow matte ceramic craftsmanship designed for pampas grass and modern minimalist room transformations. "
+            "Tap link to check price on Amazon! #cozyroomdecor #donutvase #bohodecor #aestheticroom #amazonfinds"
+        )
+        keywords = ["white ceramic vase", "donut vase set", "boho room decor", "aesthetic table decor", "amazon home finds"]
 
-    Generate Pinterest SEO metadata for this product. Return JSON with the following keys:
-    - "pin_title": A catchy, high-CTR Pinterest title (under 80 chars, with relevant emoji).
-    - "image_hook": A 2-4 word short punchy headline for the image overlay (e.g. "White Wavy Vanity Mirror", "Crystal Prism Rainbow Maker").
-    - "subtitle_hook": A 3-5 word uppercase tagline customized specifically for this product's unique vibe (e.g. "SUNLIGHT WINDOW PRISM MAGIC", "FLAMELESS CANDLE LUXURY", "ELEVATE YOUR VANITY SPACE").
-    - "badge_hook": A 2-3 word badge customized for this product category (e.g. "RAINBOW MAKER", "VANITY GOALS", "COZY NIGHT VIBES").
-    - "features": A list of exactly 4 short uppercase product-specific features (2-3 words each) tailored to this specific item (e.g. ["K9 CRYSTAL PRISM", "RAINBOW REFLECTIONS", "WINDOW HANGING", "SUNLIGHT MAKER"]).
-    - "theme_style": Choose the single best visual theme: "sunlight_crystal" (for suncatchers, crystals, window decor), "dark_obsidian_neon" (for diffusers, glowing LED boards, flame lamps), "floating_cream" (for mirrors, vanity decor, cream items), or "floating_luxury" (for lamps, candle warmers, vintage decor).
-    - "description": A 200-300 character SEO-rich Pinterest description with high-volume search phrases naturally included.
-    - "suggested_board": Recommended Pinterest Board Name.
-    - "keywords": A list of 5 key search terms.
-    """
+    # 3. Mirrors / Vanity Decor
+    elif "mirror" in t_lower or "wavy" in t_lower or "vanity" in t_lower:
+        clean_name = "White Wavy Wall Vanity Mirror"
+        pin_title = "Upgrade Your Vanity Vibe ✨ White Wavy Wall Mirror"
+        subtitle_hook = "ELEVATE YOUR VANITY SPACE"
+        badge_hook = "VANITY GOALS"
+        features = ["CREAM WAVY FRAME", "HIGH CLARITY GLASS", "CUTE SQUIGGLE DESIGN", "WALL & VANITY MOUNT"]
+        theme_style = "floating_cream"
+        description = (
+            "Tired of plain boring mirrors? Give your bedroom the ultimate aesthetic upgrade with this viral White Wavy Wall Vanity Mirror. "
+            "Features solid cream curvy framing and high-definition glass that illuminates your space. "
+            "Tap link to shop now on Amazon! #wavymirror #vanitydecor #aestheticroom #cozyroomdecor #amazonfinds"
+        )
+        keywords = ["wavy wall mirror", "vanity mirror decor", "aesthetic bedroom mirror", "squiggle mirror", "amazon room finds"]
 
-    models_to_try = [
-        "gemini-2.0-flash",
-        "gemini-2.5-flash-lite",
-        "gemini-3.5-flash-lite",
-        "gemini-3.6-flash",
-        "gemini-2.0-flash-lite",
-        "gemini-flash-latest",
-        "gemini-1.5-flash"
-    ]
+    # 4. Suncatchers / Crystals
+    elif "suncatcher" in t_lower or "prism" in t_lower or "crystal" in t_lower:
+        clean_name = "Crystal Prism Window Suncatcher"
+        pin_title = "Fill Your Room With Rainbows 🌈 Crystal Prism Window Suncatcher"
+        subtitle_hook = "SUNLIGHT WINDOW PRISM MAGIC"
+        badge_hook = "RAINBOW MAKER"
+        features = ["K9 CRYSTAL PRISM", "RAINBOW REFLECTIONS", "WINDOW HANGING CHAIN", "SUNLIGHT SPECTRUM"]
+        theme_style = "sunlight_crystal"
+        description = (
+            "Transform plain morning sunlight into magical room rainbows! This viral Crystal Prism Window Suncatcher "
+            "catches natural sunlight and projects dazzling color spectrums across your walls and ceiling. "
+            "Tap link to check price on Amazon! #suncatcher #crystalprism #cozyroomdecor #rainbowmaker #amazonfinds"
+        )
+        keywords = ["crystal suncatcher", "window prism rainbow maker", "cozy room decor", "sunlight decor", "amazon home finds"]
 
+    # 5. Sunset Projection Lamp
+    elif "sunset" in t_lower:
+        clean_name = "Tsrarey Sunset Projection Lamp"
+        pin_title = "Golden Hour Vibes Anytime 🌅 21-Color Sunset Projector Lamp"
+        subtitle_hook = "GOLDEN HOUR ATMOSPHERE"
+        badge_hook = "VIRAL ROOM FIND"
+        features = ["21 COLOR MODES", "180 DEGREE ROTATION", "APP & BUTTON CONTROL", "GOLDEN HOUR GLOW"]
+        theme_style = "dark_obsidian_neon"
+        description = (
+            "Bring eternal golden hour into your room! This viral Tsrarey Sunset Projection Lamp "
+            "projects warm 21-color sunset halos across your walls, perfect for cozy reading nights and photo aesthetics. "
+            "Tap link to shop now on Amazon! #sunsetlamp #goldenhourvibes #cozyroomdecor #aestheticlighting #amazonfinds"
+        )
+        keywords = ["sunset projection lamp", "golden hour light", "cozy room decor", "aesthetic projector", "amazon room finds"]
 
-    for model_name in models_to_try:
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config={
-                    "system_instruction": system_instruction,
-                    "response_mime_type": "application/json"
-                }
-            )
-            time.sleep(1)
-            data = json.loads(response.text.strip())
-            import re
-            for k in ["image_hook", "subtitle_hook", "badge_hook"]:
-                if k in data and isinstance(data[k], str):
-                    data[k] = re.sub(r'[^\x00-\x7F]+', '', data[k]).strip()
-                    # Clean trailing prepositions
-                    words = data[k].split()
-                    while words and words[-1].lower() in ["for", "with", "and", "in", "on", "of", "by", "the", "a", "an"]:
-                        words.pop()
-                    data[k] = " ".join(words)
+    # 6. LED Note Board
+    elif "note board" in t_lower or "glowing" in t_lower or "acrylic" in t_lower:
+        clean_name = "LED Acrylic Glowing Desktop Note Board"
+        pin_title = "Light Up Your Daily Goals ✨ Glowing Acrylic Note Board"
+        subtitle_hook = "ILLUMINATED DESK ORGANIZER"
+        badge_hook = "DESK GOALS"
+        features = ["7 LIGHT COLORS", "DRY ERASE ACRYLIC", "WOODEN LED BASE", "7 COLOR PENS INCL"]
+        theme_style = "dark_obsidian_neon"
+        description = (
+            "Tired of forgotten notes and sticky pads? Upgrade your workspace with this viral LED Acrylic Glowing Desktop Note Board! "
+            "Draw, write daily goals, and watch your notes illuminate in 7 glowing neon colors on a solid wooden base. "
+            "Tap link to check price on Amazon! #noteboard #desksetup #cozyroomdecor #aestheticdesk #amazonfinds"
+        )
+        keywords = ["led acrylic note board", "glowing desk memo", "cozy desk decor", "aesthetic workspace", "amazon finds"]
 
-            if data.get("image_hook") and 2 <= len(data["image_hook"].split()) <= 5:
-                return data
-        except Exception:
-            time.sleep(1)
-            continue
+    # 7. Mushroom Lamp
+    elif "mushroom" in t_lower:
+        clean_name = "Dawnwake Mushroom Touch Table Lamp"
+        pin_title = "Cozy Bedroom Essential 🍄 Dawnwake Mushroom Touch Lamp"
+        subtitle_hook = "MINIMALIST MUSHROOM GLOW"
+        badge_hook = "COZY NIGHT VIBES"
+        features = ["TOUCH SENSOR DIMMER", "WARM AMBIENT GLOW", "GLASS DOME SHADE", "BEDSIDE ELEGANCE"]
+        theme_style = "floating_luxury"
+        description = (
+            "Tired of harsh bedroom lighting? Elevate your nightstand aesthetic with this viral Dawnwake Mushroom Touch Table Lamp! "
+            "Features smooth dimmable touch controls and warm ambient glow for cozy reading nights. "
+            "Tap link to shop now on Amazon! #mushroomlamp #bedside lamp #cozyroomdecor #aestheticroom #amazonfinds"
+        )
+        keywords = ["mushroom touch lamp", "bedside table lamp", "cozy room decor", "aesthetic nightstand", "amazon room finds"]
 
-    # Smart Keyword-based Short Punchy Viral Headline Fallback (2-4 Words)
-    title_lower = product_title.lower()
-    if "mushroom" in title_lower:
-        image_hook = "Aesthetic Mushroom Lamp"
-    elif "bird" in title_lower:
-        image_hook = "Cute Bird Touch Lamp"
-    elif "flower" in title_lower or "lily" in title_lower:
-        image_hook = "Lily Of The Valley Glow"
-    elif "warmer" in title_lower or "mug" in title_lower:
-        image_hook = "Aesthetic Coffee Warmer"
-    elif "lamp" in title_lower or "light" in title_lower:
-        image_hook = "Cozy Bedside Touch Lamp"
+    # 8. Flower / Lily Lamp
+    elif "flower" in t_lower or "lily" in t_lower:
+        clean_name = "Lily of the Valley Flower Lamp"
+        pin_title = "Fairy Tale Room Vibe 🌸 Lily of the Valley Flower Lamp"
+        subtitle_hook = "FLORAL AMBIENT ELEGANCE"
+        badge_hook = "ROOM TRANSFORMATION"
+        features = ["HANDCRAFTED GLASS PETALS", "WARM FLORAL GLOW", "VINTAGE GREEN STEM", "NIGHTSTAND ACCENT"]
+        theme_style = "floating_luxury"
+        description = (
+            "Transform your nightstand into a botanical fairy tale sanctuary! This viral Lily of the Valley Flower Lamp "
+            "emits a delicate warm glow through handcrafted floral glass petals. "
+            "Tap link to check price on Amazon! #flowerlamp #lilyofthevalley #cozyroomdecor #aestheticlamp #amazonfinds"
+        )
+        keywords = ["lily of the valley lamp", "flower table lamp", "cozy room decor", "floral nightstand light", "amazon home finds"]
+
+    # 9. Bird Lamp
+    elif "bird" in t_lower:
+        clean_name = "Cute Bird Dimmable Touch Night Lamp"
+        pin_title = "Aesthetic Nightstand Find 🐦 Cute Bird Touch Night Lamp"
+        subtitle_hook = "CHARMING BIRD ILLUMINATION"
+        badge_hook = "BEDSIDE FAVORITE"
+        features = ["TOUCH SENSOR CONTROL", "DIMMABLE NIGHT LIGHT", "RECHARGEABLE BATTERY", "CHARMING BIRD SHAPE"]
+        theme_style = "floating_luxury"
+        description = (
+            "Add a touch of whimsical warmth to your bedtime routine! This viral Cute Bird Dimmable Touch Night Lamp "
+            "features smooth touch dimming and a soft golden glow perfect for late night reading. "
+            "Tap link to shop now on Amazon! #birdlamp #nightlight #cozyroomdecor #bedroomideas #amazonfinds"
+        )
+        keywords = ["bird touch lamp", "cute nightstand light", "cozy room decor", "dimmable night light", "amazon finds"]
+
+    # 10. Fenmzee Bedside Touch Lamp (Default Touch Lamp)
     else:
-        words = [w for w in product_title.split() if w.lower() not in ["for", "with", "and", "in", "on", "of", "by", "the", "a", "an", "-", "|"]]
-        image_hook = " ".join(words[:3]).title()
-
-    clean_name = image_hook
+        clean_name = "Fenmzee Bedside Table Touch Lamp"
+        pin_title = "Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp"
+        subtitle_hook = "WARM BEDTIME AMBIANCE"
+        badge_hook = "BEDSIDE FAVORITE"
+        features = ["3 WAY TOUCH DIMMER", "WARM AMBER GLOW", "USB CHARGING PORT", "FABRIC SHADE FINISH"]
+        theme_style = "floating_luxury"
+        description = (
+            "Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. "
+            "Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. "
+            "Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds"
+        )
+        keywords = ["bedside touch lamp", "cozy room decor", "nightstand lighting", "bedroom transformation", "amazon room finds"]
 
     return {
-        "pin_title": f"Cozy {clean_name} 🕯️",
+        "pin_title": pin_title,
         "image_hook": clean_name,
-        "subtitle_hook": "ELEGANCE THAT SHINES",
-        "badge_hook": "AMAZON HOME FIND",
-        "description": f"Check out the best lamps for rooms and cozy desk decor. Find {clean_name} for the ultimate aesthetic room setup!",
-        "suggested_board": "Cozy Room Decor Ideas",
-        "keywords": ["cozy room decor", "aesthetic desk setup", "best lamps for rooms", "room upgrade", "budget decor"]
+        "subtitle_hook": subtitle_hook,
+        "badge_hook": badge_hook,
+        "features": features,
+        "theme_style": theme_style,
+        "description": description,
+        "suggested_board": "Cozy Room & Desk Decor",
+        "keywords": keywords
     }
-
-
