@@ -68,8 +68,19 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         is_white_background=is_white_bg
     )
     
-    # Use prompt_strength=0.82 for white bg cutouts (Prompt 2) vs prompt_strength=0.28 for existing lifestyle room photos (Prompt 1)
-    strength = 0.82 if is_white_bg else 0.28
+    # Dynamic Img2Img Prompt Strength calculation:
+    # - Plain White Cutouts (Prompt 2): strength = 0.82 (Synthesis from scratch)
+    # - Item Sets / Multi-Packs / Delicate items (Prompt 1): strength = 0.28 (100% exact count retention)
+    # - Single Items (Prompt 1): strength = 0.48 (STRICTLY CAPPED AT MAX 0.55)
+    title_lwr = prod['title'].lower()
+    is_set_or_multi = any(kw in title_lwr for kw in ["set of", "pack of", " 2 ", " 3 ", " 4 ", "pcs", "pair", "crystal", "prism"])
+    
+    if is_white_bg:
+        strength = 0.82
+    elif is_set_or_multi:
+        strength = 0.28
+    else:
+        strength = min(0.55, 0.48) # Strictly capped at max 0.55
 
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,
