@@ -88,6 +88,27 @@ def has_text_annotation(image_url: str) -> bool:
     except Exception:
         return False
 
+def is_grid_collage(image_url: str) -> bool:
+    """
+    Detects multi-panel split grid collage photos (2-grid, 4-grid collages).
+    Checks for central horizontal/vertical grid seam edge density.
+    """
+    try:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        raw = requests.get(image_url, headers=headers, timeout=10).content
+        img = Image.open(io.BytesIO(raw)).convert('L').resize((200, 200))
+        edges = img.filter(ImageFilter.FIND_EDGES)
+        
+        v_seam = sum(1 for y in range(200) if edges.getpixel((100, y)) > 100) / 200
+        h_seam = sum(1 for x in range(200) if edges.getpixel((x, 100)) > 100) / 200
+        
+        is_collage = (v_seam > 0.20) and (h_seam > 0.20)
+        if is_collage:
+            print(f"[Grid Collage Scanner] ❌ Multi-Panel Collage Detected (...{image_url[-30:]}) [v={v_seam:.2f}, h={h_seam:.2f}]")
+        return is_collage
+    except Exception:
+        return False
+
 def calculate_cozy_vibe_score(image_url: str) -> float:
     """
     Evaluates cozy room aesthetic score (1.0 to 10.0) based on:
@@ -139,7 +160,7 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
     clean_photos = []
     for u in photos:
         if u and u.startswith("http"):
-            if not has_text_annotation(u):
+            if not has_text_annotation(u) and not is_grid_collage(u):
                 clean_photos.append(u)
     
     if clean_photos:
