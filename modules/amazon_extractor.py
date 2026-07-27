@@ -1,6 +1,8 @@
 import re
+import io
 import requests
 from bs4 import BeautifulSoup
+from PIL import Image, ImageFilter
 from config import SERPAPI_KEY, AMAZON_ASSOCIATE_TAG
 
 def extract_asin_from_url(url: str) -> str:
@@ -86,12 +88,49 @@ def has_text_annotation(image_url: str) -> bool:
     except Exception:
         return False
 
+def calculate_cozy_vibe_score(image_url: str) -> float:
+    """
+    Evaluates cozy room aesthetic score (1.0 to 10.0) based on:
+      1. Warmth ratio (amber/gold/wood warm hues vs cold white/grey)
+      2. Soft contrast & ambient lighting depth
+      3. Background richness
+    """
+    try:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+        raw = requests.get(image_url, headers=headers, timeout=10).content
+        img = Image.open(io.BytesIO(raw)).convert('RGB').resize((100, 100))
+        w, h = img.size
+        
+        warm_pixels = 0
+        pure_white_pixels = 0
+        total = w * h
+        
+        for x in range(w):
+            for y in range(h):
+                r, g, b = img.getpixel((x, y))
+                if r > 235 and g > 235 and b > 235:
+                    pure_white_pixels += 1
+                elif r > g + 8 and g >= b and r > 70:
+                    warm_pixels += 1
+        
+        white_ratio = pure_white_pixels / total
+        warm_ratio = warm_pixels / total
+        
+        score = 4.0 + (warm_ratio * 14.0)
+        if white_ratio > 0.35:
+            score -= (white_ratio * 6.0)
+            
+        return max(1.0, min(10.0, round(score, 2)))
+    except Exception as e:
+        print(f"[Cozy Vibe Scorer Error] {e}")
+        return 5.0
+
 def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
     """
     Iterates through Amazon listing photos:
       1. Filters out photos containing seller text overlays/infographics.
-      2. Prioritizes clean LIFESTYLE ROOM photos first (Prompt 1).
-      3. If no clean room photos exist, selects clean WHITE CUTOUT photos (Prompt 2).
+      2. Scores remaining clean photos by Cozy Vibe Aesthetics (warmth, lighting, depth).
+      3. Selects the #1 highest scoring cozy photo!
       4. If ALL photos contain text overlays, returns ("", True) to SKIP the product!
     """
     if not photos:
@@ -104,12 +143,18 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
                 clean_photos.append(u)
     
     if clean_photos:
-        # Prioritize clean lifestyle room photos first
-        clean_lifestyle = [u for u in clean_photos if is_lifestyle_photo(u)]
-        if clean_lifestyle:
-            return (clean_lifestyle[0], False)
-        # Fallback to clean white studio cutout photo
-        return (clean_photos[0], False)
+        # Score each clean photo for cozy room vibes
+        scored_photos = []
+        for u in clean_photos:
+            vibe_score = calculate_cozy_vibe_score(u)
+            scored_photos.append((vibe_score, u))
+            print(f"[Cozy Vibe Scorer] Photo ...{u[-30:]} | Score: {vibe_score:.1f}/10")
+        
+        # Sort descending by Cozy Vibe Score
+        scored_photos.sort(key=lambda x: x[0], reverse=True)
+        best_vibe_score, best_photo = scored_photos[0]
+        print(f"[Cozy Vibe Scorer] 🏆 SELECTED BEST PHOTO: ...{best_photo[-30:]} (Score: {best_vibe_score:.1f}/10)")
+        return (best_photo, False)
     
     print("[Amazon Extractor] ⚠️ ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
     return ("", True)
