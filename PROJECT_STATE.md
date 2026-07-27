@@ -1,5 +1,10 @@
 # PROJECT STATE & CONTINUATION GUIDE: PINTEREST AUTO AFFILIATE MACHINE
 
+## 🎯 Priority Goal for Next Session
+- **Pinterest API Standard Access Approval**: Record and submit the 60-second video demo showing our clean 5-node n8n workflow execution (`Status 201 Created`) in the Pinterest Developer Portal to unlock production Standard Access (`https://api.pinterest.com/v5/pins`).
+
+---
+
 ## 📌 Master Configuration Settings
 - **Amazon Affiliate Store ID**: `smartdeal0358-21` *(100% configured across config.py, .env, and all bridge templates)*
 - **GitHub Pages Domain**: `https://adityasnalawade742-design.github.io`
