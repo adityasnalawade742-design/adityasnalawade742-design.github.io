@@ -5,6 +5,12 @@
 - **GitHub Pages Domain**: `https://adityasnalawade742-design.github.io`
 - **FLUX-Dev Fixed AI Seed**: `591928` *(Master Commercial Prompt with FP16 32-step precision)*
 - **Primary Niche**: `Cozy Room Finds` — 100% Home Decor & Aesthetic Room Transformation ($15 – $45 impulse price range).
+- **Pinterest API Integration**:
+  - **App ID**: `1594896` (`Cozy Room Decor Auto Publisher`)
+  - **Authenticated Account**: `@adityasnalawade0703`
+  - **Target Board ID**: `1092545259543920271` (*Cozy Room & Desk Decor*)
+  - **Local n8n Workflow**: `n8n_pinterest_affiliate_workflow.json` *(100% configured & verified live)*
+  - **Verified Live Pin Execution**: Pin ID `1092545190892597209` successfully created via Pinterest API v5.
 
 ---
 
