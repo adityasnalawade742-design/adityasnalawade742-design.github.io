@@ -55,8 +55,8 @@ def is_lifestyle_photo(image_url: str) -> bool:
 def has_text_annotation(image_url: str) -> bool:
     """
     Analyzes an Amazon listing photo to detect if it contains seller text/infographic overlays
-    (e.g., dimension arrows, feature badges, promotional text callouts).
-    Uses high-frequency pixel contrast & edge density in upper/lower margins.
+    (e.g., dimension arrows, feature badges, promotional text callouts, handwritten text on products).
+    Uses high-frequency pixel contrast & edge density across top and center image regions.
     """
     if not image_url:
         return False
@@ -67,15 +67,25 @@ def has_text_annotation(image_url: str) -> bool:
         if res.status_code != 200 or len(res.content) < 3000:
             return False
         img = Image.open(io.BytesIO(res.content)).convert('L')
-        # Edge detection filter to catch sharp text glyphs and callouts
+        # Edge detection filter to catch sharp text glyphs, letters, and callouts
         edges = img.filter(ImageFilter.FIND_EDGES)
         w, h = edges.size
-        # Inspect top 25% margin where sellers place text callouts
-        top_crop = edges.crop((0, 0, w, int(h * 0.25)))
+        # Inspect top 30% margin and center region where sellers place text callouts & handwriting
+        top_crop = edges.crop((0, 0, w, int(h * 0.30)))
+        center_crop = edges.crop((int(w * 0.15), int(h * 0.20), int(w * 0.85), int(h * 0.80)))
+        
         top_pixels = list(top_crop.getdata())
-        high_contrast_edges = sum(1 for p in top_pixels if p > 160)
-        edge_density = high_contrast_edges / len(top_pixels)
-        return edge_density > 0.085
+        center_pixels = list(center_crop.getdata())
+        
+        top_edge_density = sum(1 for p in top_pixels if p > 150) / len(top_pixels)
+        center_edge_density = sum(1 for p in center_pixels if p > 150) / len(center_pixels)
+        
+        has_txt = (top_edge_density > 0.055) or (center_edge_density > 0.095)
+        if has_txt:
+            print(f"[Text Detector] ❌ Text/Glyphs Detected in image (...{image_url[-30:]})")
+        else:
+            print(f"[Text Detector] ✅ 100% CLEAN PHOTO (NO TEXT) (...{image_url[-30:]})")
+        return has_txt
     except Exception:
         return False
 
