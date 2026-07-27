@@ -64,10 +64,14 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         is_white_background=is_white_bg
     )
     
+    # Use prompt_strength=0.82 for white bg / text-heavy seller photos to completely erase seller text annotations
+    strength = 0.82 if is_white_bg or "board" in prod['title'].lower() else 0.76
+
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,
         filename_prefix=f"focus_product_{asin}",
-        init_image_path=init_photo
+        init_image_path=init_photo,
+        prompt_strength=strength
     )
 
     # SEO Copywriting

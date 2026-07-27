@@ -146,15 +146,16 @@ def generate_cozy_image(
     filename_prefix: str = "pin",
     real_image_url: str = "",
     multi_reference_photos: list = None,
-    init_image_path: str = ""
+    init_image_path: str = "",
+    prompt_strength: float = 0.78
 ) -> str:
     """
     Generates a high-quality vertical 3:4 Pinterest lifestyle graphic using Replicate FLUX.
-    If init_image_path is provided, uses Img2Img / Depth ControlNet to lock onto the exact physical product structure.
+    If init_image_path is provided, uses Img2Img with prompt_strength (default 0.78) to strip any seller text overlays while preserving physical product structure.
     """
     # 1. Primary Commercial AI Generator: Replicate FLUX-Dev Img2Img (1 Single API Call)
     if REPLICATE_API_TOKEN:
-        print(f"[Image Gen - Replicate] Generating commercial 8K photo via Replicate FLUX API (Strict 1 API Call Limit)...")
+        print(f"[Image Gen - Replicate] Generating commercial 8K photo via Replicate FLUX API (prompt_strength={prompt_strength})...")
         os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
         client = replicate.Client(api_token=REPLICATE_API_TOKEN, timeout=120.0)
 
@@ -191,13 +192,13 @@ def generate_cozy_image(
             if init_image_path:
                 if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
                     input_payload["image"] = init_image_path
-                    input_payload["prompt_strength"] = 0.65
-                    print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img with Direct HTTP URL ({init_image_path[:50]}...)...")
+                    input_payload["prompt_strength"] = prompt_strength
+                    print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (strength={prompt_strength}) with Direct HTTP URL...")
                 elif Path(init_image_path).exists():
                     try:
                         input_payload["image"] = open(init_image_path, "rb")
-                        input_payload["prompt_strength"] = 0.65
-                        print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img with uploaded local file...")
+                        input_payload["prompt_strength"] = prompt_strength
+                        print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (strength={prompt_strength}) with local file...")
                     except Exception as e_f:
                         print(f"[Image Gen - Replicate] Warning opening local file: {e_f}")
             else:
