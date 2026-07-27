@@ -79,7 +79,7 @@ def has_text_annotation(image_url: str) -> bool:
         
         full_contrast = sum(1 for p in list(edges.get_flattened_data()) if p > 120) / (w * h)
         
-        has_txt = (top_contrast > 0.008) or (full_contrast > 0.022)
+        has_txt = (top_contrast > 0.035) or (full_contrast > 0.035)
         if has_txt:
             print(f"[Text Detector] ❌ Text/Glyphs Detected in image (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
         else:
