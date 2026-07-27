@@ -44,7 +44,7 @@ def generate_cozy_image_prompt(
             f"Synthesize a brand-new, complete 8K photorealistic 3:4 lifestyle room background from scratch: place the product naturally onto {room_scene}. "
             "Integrate the isolated product seamlessly into this new room setting with realistic contact drop shadows, natural surface reflections, and matching ambient light bleeding. "
             "Preserve the main physical product shape, colors, and textures 100% accurately while rendering a high-end Architectural Digest room scene around it. "
-            "Leave generous clean negative space at the top for headline text."
+            "CRITICAL REQUIREMENT: DO NOT draw, render, or write any text, letters, words, quotes, signage, handwriting, or numbers anywhere inside the image pixels, background walls, or product surfaces. Keep all walls, tables, and surfaces 100% clean, blank, and completely free of any written text. Leave the top 35% of the photo as generous, clean, uncluttered negative space."
         )
 
     else:
@@ -57,7 +57,7 @@ def generate_cozy_image_prompt(
             "The uploaded product is the main subject and must remain visually consistent with the reference image. "
             "Preserve its overall design, proportions, colors, materials, texture, branding, and recognizable features. "
             "Enhance the surrounding room background with warm cinematic lighting, soft shadows, realistic reflections, subtle depth of field, and magazine-quality commercial photography. "
-            "Leave generous clean negative space for headline, logo, pricing, or promotional text."
+            "CRITICAL REQUIREMENT: DO NOT draw, render, or write any text, letters, words, quotes, signage, handwriting, or numbers anywhere inside the image pixels, background walls, or product surfaces. Keep all walls, tables, and surfaces 100% clean, blank, and completely free of any written text. Leave the top 35% of the photo as generous, clean, uncluttered negative space."
         )
 
 
