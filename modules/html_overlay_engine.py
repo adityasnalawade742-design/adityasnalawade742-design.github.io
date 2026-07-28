@@ -269,10 +269,9 @@ def render_html_overlay(
     subtitle_clean = subtitle.strip().upper()
     
     price_clean = str(price_str).strip()
-    if price_clean.startswith("$."):
-        price_clean = f"${price_clean[2:]}"
-    if price_clean and not any(price_clean.startswith(c) for c in ["$", "£", "€"]):
+    if not price_clean.startswith("$") and not price_clean.startswith("£") and not price_clean.startswith("€"):
         price_clean = f"${price_clean}"
+
 
     # Dynamic Font Sizing to PREVENT TEXT OVERLAP
     hlen = len(headline_clean)
