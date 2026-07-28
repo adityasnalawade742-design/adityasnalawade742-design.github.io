@@ -347,8 +347,12 @@
         <a href="./" class="brand-logo">
             <span class="sparkle">✨</span> Cozy Room Finds
         </a>
-        <span class="nav-badge">Pinterest Curated</span>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="admin-toggle-btn" class="nav-badge" style="cursor: pointer;" onclick="toggleAdminMode()">⚡ Admin: OFF</button>
+            <span class="nav-badge">Pinterest Curated</span>
+        </div>
     </nav>
+
 
     <header class="hero">
         <div class="hero-tag">✨ Viral Room Decor & Aesthetic Deals</div>
@@ -578,5 +582,48 @@
         <p>© 2026 Cozy Room Finds. Curated Amazon Associate Partner. As an Amazon Associate, we earn from qualifying purchases.</p>
     </footer>
 
+    <script>
+        function initAdminMode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let isAdmin = localStorage.getItem('isAdmin') === 'true' || urlParams.get('admin') === 'true';
+            if (urlParams.get('admin') === 'true') {
+                localStorage.setItem('isAdmin', 'true');
+            }
+            updateAdminUI(isAdmin);
+        }
+
+        function toggleAdminMode() {
+            let current = localStorage.getItem('isAdmin') === 'true';
+            let next = !current;
+            localStorage.setItem('isAdmin', next.toString());
+            updateAdminUI(next);
+        }
+
+        function updateAdminUI(isAdmin) {
+            const btn = document.getElementById('admin-toggle-btn');
+            if (isAdmin) {
+                document.body.classList.add('is-admin');
+                if (btn) btn.innerHTML = '⚡ Admin: ON';
+                if (btn) btn.style.background = 'rgba(239, 68, 68, 0.35)';
+                if (btn) btn.style.color = '#ff6b6b';
+                if (btn) btn.style.borderColor = '#ef4444';
+            } else {
+                document.body.classList.remove('is-admin');
+                if (btn) btn.innerHTML = '⚡ Admin: OFF';
+                if (btn) btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                if (btn) btn.style.color = 'var(--gold-accent)';
+                if (btn) btn.style.borderColor = 'rgba(255, 183, 3, 0.5)';
+            }
+        }
+
+        function deleteCard(asin, cardId) {
+            if (confirm('Are you sure you want to remove product ' + asin + ' from homepage?')) {
+                const el = document.getElementById(cardId);
+                if (el) el.remove();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initAdminMode);
+    </script>
 </body>
-</html>
+</html>
