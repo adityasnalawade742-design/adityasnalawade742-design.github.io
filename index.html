@@ -595,6 +595,18 @@
     <script>
         const ADMIN_PASSCODE = 'cozyroom2026';
         let logoClickCount = 0;
+        let logoTimer = null;
+
+        function onLogoClick(e) {
+            logoClickCount++;
+            clearTimeout(logoTimer);
+            if (logoClickCount >= 3) {
+                logoClickCount = 0;
+                verifyAdminPassword();
+            } else {
+                logoTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
+            }
+        }
 
         function applyDeletedProducts() {
             let deleted = JSON.parse(localStorage.getItem('deletedASINs') || '[]');
@@ -638,20 +650,8 @@
             } else {
                 updateAdminUI(false);
             }
-
-        let logoTimer = null;
-        function onLogoClick(e) {
-            logoClickCount++;
-            clearTimeout(logoTimer);
-            if (logoClickCount >= 3) {
-                logoClickCount = 0;
-                verifyAdminPassword();
-            } else {
-                logoTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
-            }
         }
 
-        }
 
         function toggleAdminMode() {
             let current = localStorage.getItem('isAdmin') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
