@@ -312,6 +312,14 @@
             transform: translateX(4px);
         }
 
+        /* Secret Admin Controls (Hidden from Public) */
+        #admin-toggle-btn {
+            display: none;
+        }
+        body.admin-unlocked #admin-toggle-btn {
+            display: inline-block;
+        }
+
         .delete-btn {
             position: absolute;
             top: 10px;
@@ -331,6 +339,7 @@
         body.is-admin .delete-btn {
             display: block;
         }
+
 
         footer {
             margin-top: 60px;
@@ -583,6 +592,8 @@
     </footer>
 
     <script>
+        let logoClickCount = 0;
+
         function applyDeletedProducts() {
             let deleted = JSON.parse(localStorage.getItem('deletedASINs') || '[]');
             deleted.forEach(asin => {
@@ -594,12 +605,35 @@
         function initAdminMode() {
             applyDeletedProducts();
             const urlParams = new URLSearchParams(window.location.search);
-            let isAdmin = localStorage.getItem('isAdmin') === 'true' || urlParams.get('admin') === 'true';
-            if (urlParams.get('admin') === 'true') {
+            
+            if (urlParams.get('admin') === 'true' || urlParams.get('admin') === 'secret') {
+                localStorage.setItem('adminUnlocked', 'true');
                 localStorage.setItem('isAdmin', 'true');
             }
+
+            let isUnlocked = localStorage.getItem('adminUnlocked') === 'true';
+            if (isUnlocked) {
+                document.body.classList.add('admin-unlocked');
+            }
+
+            let isAdmin = localStorage.getItem('isAdmin') === 'true';
             updateAdminUI(isAdmin);
+
+            const logo = document.querySelector('.brand-logo');
+            if (logo) {
+                logo.addEventListener('click', function(e) {
+                    logoClickCount++;
+                    if (logoClickCount >= 3) {
+                        e.preventDefault();
+                        localStorage.setItem('adminUnlocked', 'true');
+                        document.body.classList.add('admin-unlocked');
+                        toggleAdminMode();
+                        logoClickCount = 0;
+                    }
+                });
+            }
         }
+
 
         function toggleAdminMode() {
             let current = localStorage.getItem('isAdmin') === 'true';
