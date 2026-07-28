@@ -38,7 +38,7 @@
         /* Top Brand Navigation */
         .top-nav {
             width: 100%;
-            max-width: 1120px;
+            max-width: 1320px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -148,34 +148,17 @@
 
         .filter-pill:hover, .filter-pill.active {
             background: linear-gradient(135deg, var(--gold-glow), var(--gold-accent));
+            border-color: var(--gold-accent);
             color: #0d0c10;
-            border-color: #ffffff;
             box-shadow: 0 6px 20px rgba(251, 133, 0, 0.4);
             transform: translateY(-2px);
         }
 
-        .admin-toggle-btn {
-            display: none;
-            margin-top: 20px;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid #ef4444;
-            color: #f87171;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        body.is-admin .admin-toggle-btn {
-            display: inline-block;
-        }
-
-        /* Uniform 24px Grid Spacing System */
+        /* Clean Uniform 24px CSS Grid (Zero Vertical Stretching) */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            row-gap: 24px;
+            row-gap: 28px;
             column-gap: 24px;
             max-width: 1320px;
             width: 100%;
@@ -185,7 +168,7 @@
         @media (max-width: 1200px) {
             .grid {
                 grid-template-columns: repeat(3, 1fr);
-                row-gap: 20px;
+                row-gap: 24px;
                 column-gap: 20px;
             }
         }
@@ -193,7 +176,7 @@
         @media (max-width: 840px) {
             .grid {
                 grid-template-columns: repeat(2, 1fr);
-                row-gap: 16px;
+                row-gap: 20px;
                 column-gap: 16px;
             }
         }
@@ -230,9 +213,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-
-
-
         .card:hover {
             transform: translateY(-6px) scale(1.01);
             border-color: rgba(255, 183, 3, 0.6);
@@ -245,6 +225,7 @@
             border-radius: 14px;
             overflow: hidden;
             aspect-ratio: 3/4;
+            flex-shrink: 0;
             margin-bottom: 12px;
         }
 
@@ -285,19 +266,14 @@
             color: #ffb703;
             font-size: 12px;
             font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
             z-index: 2;
         }
 
         .card-content {
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
         }
 
         .card h2 {
@@ -314,14 +290,11 @@
             overflow: hidden;
         }
 
-
-
-
         .card-cta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: auto;
+            margin-top: 8px;
             padding-top: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--gold-accent);
@@ -331,147 +304,76 @@
             text-transform: uppercase;
         }
 
-        .card-cta span.arrow {
-            display: inline-block;
-            transition: transform 0.25s ease;
+        .card-cta .arrow {
+            transition: transform 0.2s ease;
         }
 
-        .card:hover .card-cta span.arrow {
-            transform: translateX(5px);
+        .card:hover .card-cta .arrow {
+            transform: translateX(4px);
         }
 
         .delete-btn {
-            display: none;
-            margin-top: 10px;
-            background: #ef4444;
-            color: #fff;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
-            text-align: center;
-            width: 100%;
-        }
-        .delete-btn:hover {
-            background: #dc2626;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
         body.is-admin .delete-btn {
             display: block;
         }
 
-        /* Footer */
         footer {
-            margin-top: 80px;
-            color: #6c757d;
-            font-size: 13px;
+            margin-top: 60px;
             text-align: center;
-        }
-
-        footer a {
-            color: var(--gold-accent);
-            text-decoration: none;
+            color: var(--text-sub);
+            font-size: 13px;
+            max-width: 600px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation -->
-    <div class="top-nav">
-        <a href="#" class="brand-logo">
-            <span class="sparkle">✦</span> COZY ROOM FINDS
+    <nav class="top-nav">
+        <a href="./" class="brand-logo">
+            <span class="sparkle">✨</span> Cozy Room Finds
         </a>
-        <div class="nav-badge">VIRAL AMAZON DECOR</div>
-    </div>
+        <span class="nav-badge">Pinterest Curated</span>
+    </nav>
 
-    <!-- Hero Header -->
-    <div class="hero">
-        <div class="hero-tag">✨ PINTEREST AESTHETIC SELECTION</div>
-        <h1>Elevate Your Space with Cozy Aesthetics</h1>
-        <p>Handpicked viral room lamps, ambient lighting, and aesthetic home finds. Transform your bedroom, living room, or desk into a cozy sanctuary.</p>
+    <header class="hero">
+        <div class="hero-tag">✨ Viral Room Decor & Aesthetic Deals</div>
+        <h1>Upgrade Your Space with Cozy Aesthetics</h1>
+        <p>Hand-picked viral home finds, warm lighting, and aesthetic desk setups trending on Pinterest.</p>
         
         <div class="filter-container">
-            <button class="filter-pill active">✨ All Finds</button>
-            <button class="filter-pill">🕯️ Cozy Lamps</button>
-            <button class="filter-pill">🌿 Room Decor</button>
-            <button class="filter-pill">⚡ Prime Deals</button>
+            <button class="filter-pill active">All Finds</button>
+            <button class="filter-pill">Cozy Lighting</button>
+            <button class="filter-pill">Vases & Decor</button>
+            <button class="filter-pill">Desk Upgrades</button>
         </div>
+    </header>
 
-        <button id="adminBtn" class="admin-toggle-btn" onclick="exitAdminMode()">🔐 Admin Mode Active (Click to Exit)</button>
-    </div>
-
-    <!-- Product Showcase Grid -->
-    <div class="grid" id="productGrid">
-
-        <!-- Card B0GGHJ1J4L -->
-        <div class="card-wrapper" id="card-B0GGHJ1J4L">
-            <a class="card" href="./bridge_B0GGHJ1J4L.html">
-                <div class="card-img-container">
-                    <div class="card-price-tag">$18.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0GGHJ1J4L_hook.jpg?v=3" alt="Led Note Board with Colors Acrylic Set Glowing Desktop Sign Letter Memo Painting Manual Multiple Light Colors Cosmody for Classroom Home Decor Office Gift Decor Cable 7 Color Pens 5.9 * 5.9in">
-                </div>
-                <div class="card-content">
-                    <h2>Led Note Board with Colors Acrylic Set Glowing Des...</h2>
-                    <div class="card-cta">
-                        <span>View Details</span>
-                        <span class="arrow">→</span>
-                    </div>
-                </div>
-            </a>
-            <button class="delete-btn" onclick="deleteCard('B0GGHJ1J4L', 'card-B0GGHJ1J4L')">🗑️ Delete Product</button>
-        </div>
-
-        <!-- Card B0C2YLN3H4 -->
-        <div class="card-wrapper" id="card-B0C2YLN3H4">
-            <a class="card" href="./bridge_B0C2YLN3H4.html">
-                <div class="card-img-container">
-                    <div class="card-price-tag">$13.49</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0C2YLN3H4_exact2vases_hook.jpg" alt="White Ceramic Donut Vase Set of 2, Hollow Matte Pampas Flower Vases for Boho Home Wedding Party Room Dinner Table Shelf Decor.（White）">
-                </div>
-                <div class="card-content">
-                    <h2>White Ceramic Donut Vase Set of 2, Hollow Matte Pa...</h2>
-                    <div class="card-cta">
-                        <span>View Details</span>
-                        <span class="arrow">→</span>
-                    </div>
-                </div>
-            </a>
-            <button class="delete-btn" onclick="deleteCard('B0C2YLN3H4', 'card-B0C2YLN3H4')">🗑️ Delete Product</button>
-        </div>
-
-        <!-- Card B0FXLYXM32 -->
-        <div class="card-wrapper" id="card-B0FXLYXM32">
-            <a class="card" href="./bridge_B0FXLYXM32.html">
-                <div class="card-img-container">
-                    <div class="card-price-tag">$24.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0FXLYXM32_hook.jpg?v=3" alt="22"x30" White Wavy Wall Mirror for Vanity, Cream Solid Wood Irregular Mirror for Bedroom, Cute Squiggle Mirror for Aesthetic Decor, Small Asymmetrical Curvy Frame">
-                </div>
-                <div class="card-content">
-                    <h2>22"x30" White Wavy Wall Mirror for Vanity, Cream S...</h2>
-                    <div class="card-cta">
-                        <span>View Details</span>
-                        <span class="arrow">→</span>
-                    </div>
-                </div>
-            </a>
-            <button class="delete-btn" onclick="deleteCard('B0FXLYXM32', 'card-B0FXLYXM32')">🗑️ Delete Product</button>
-        </div>
-
+    <div class="grid">
         <!-- Card B0GYDXHF4G -->
         <div class="card-wrapper" id="card-B0GYDXHF4G">
             <a class="card" href="./bridge_B0GYDXHF4G.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$29.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0GYDXHF4G_hook.jpg?v=3" alt="Flame Aroma Diffuser, Dark Crackle Design, Flame Effect Humidifier for Home | Auto Shut Off for Bedroom Home Office Decor，Luxury Volcano Fire Essential Oil Diffuser with Realistic Flame Effect">
+                    <div class="card-rating">★ 4.8</div>
+                    <img src="./focus_product_B0GYDXHF4G_hook.jpg?v=3" alt="Flame Aroma Diffuser, Dark Crackle Design">
                 </div>
                 <div class="card-content">
-                    <h2>Flame Aroma Diffuser, Dark Crackle Design, Flame E...</h2>
+                    <h2>Flame Aroma Diffuser, Dark Crackle Design</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -481,16 +383,54 @@
             <button class="delete-btn" onclick="deleteCard('B0GYDXHF4G', 'card-B0GYDXHF4G')">🗑️ Delete Product</button>
         </div>
 
+        <!-- Card B0FXLYXM32 -->
+        <div class="card-wrapper" id="card-B0FXLYXM32">
+            <a class="card" href="./bridge_B0FXLYXM32.html">
+                <div class="card-img-container">
+                    <div class="card-price-tag">$24.99</div>
+                    <div class="card-rating">★ 4.7</div>
+                    <img src="./focus_product_B0FXLYXM32_hook.jpg?v=3" alt="22"x30" White Wavy Wall Mirror for Vanity">
+                </div>
+                <div class="card-content">
+                    <h2>22"x30" White Wavy Wall Mirror for Vanity</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+            <button class="delete-btn" onclick="deleteCard('B0FXLYXM32', 'card-B0FXLYXM32')">🗑️ Delete Product</button>
+        </div>
+
+        <!-- Card B0C2YLN3H4 -->
+        <div class="card-wrapper" id="card-B0C2YLN3H4">
+            <a class="card" href="./bridge_B0C2YLN3H4.html">
+                <div class="card-img-container">
+                    <div class="card-price-tag">$13.49</div>
+                    <div class="card-rating">★ 4.5</div>
+                    <img src="./focus_product_B0C2YLN3H4_exact2vases_hook.jpg" alt="White Ceramic Donut Vase Set of 2, Hollow Matte">
+                </div>
+                <div class="card-content">
+                    <h2>White Ceramic Donut Vase Set of 2, Hollow Matte</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+            <button class="delete-btn" onclick="deleteCard('B0C2YLN3H4', 'card-B0C2YLN3H4')">🗑️ Delete Product</button>
+        </div>
+
         <!-- Card B07HP22QTZ -->
         <div class="card-wrapper" id="card-B07HP22QTZ">
             <a class="card" href="./bridge_B07HP22QTZ.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$9.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B07HP22QTZ_hook.jpg?v=3" alt="Suncatcher Crystals Ball Prism Window Rainbow Maker with Chain for Easy Hanging 40 mm 2 Pack">
+                    <div class="card-rating">★ 4.8</div>
+                    <img src="./focus_product_B07HP22QTZ_hook.jpg?v=3" alt="Suncatcher Crystals Ball Prism Window Rainbow Maker">
                 </div>
                 <div class="card-content">
-                    <h2>Suncatcher Crystals Ball Prism Window Rainbow Make...</h2>
+                    <h2>Suncatcher Crystals Ball Prism Window Rainbow Maker</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -505,11 +445,11 @@
             <a class="card" href="./bridge_B0BDRSG2BT.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$16.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0BDRSG2BT_hook.jpg?v=3" alt="Tsrarey Sunset Lamp Projection, Not Only 21 Colors Sunset Lights, 180 Degree Rotation Led Light, Push Button Switch & APP Control Projector for Party Bedroom Decor">
+                    <div class="card-rating">★ 4.6</div>
+                    <img src="./focus_product_B0BDRSG2BT_hook.jpg?v=3" alt="Tsrarey Sunset Lamp Projection Floor Light">
                 </div>
                 <div class="card-content">
-                    <h2>Tsrarey Sunset Lamp Projection, Not Only 21 Colors...</h2>
+                    <h2>Tsrarey Sunset Lamp Projection Floor Light</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -519,17 +459,35 @@
             <button class="delete-btn" onclick="deleteCard('B0BDRSG2BT', 'card-B0BDRSG2BT')">🗑️ Delete Product</button>
         </div>
 
+        <!-- Card B0GGHJ1J4L -->
+        <div class="card-wrapper" id="card-B0GGHJ1J4L">
+            <a class="card" href="./bridge_B0GGHJ1J4L.html">
+                <div class="card-img-container">
+                    <div class="card-price-tag">$18.99</div>
+                    <div class="card-rating">★ 4.5</div>
+                    <img src="./focus_product_B0GGHJ1J4L_hook.jpg?v=3" alt="Led Note Board with Colors Acrylic Set Glowing">
+                </div>
+                <div class="card-content">
+                    <h2>Led Note Board with Colors Acrylic Set Glowing</h2>
+                    <div class="card-cta">
+                        <span>View Details</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+            <button class="delete-btn" onclick="deleteCard('B0GGHJ1J4L', 'card-B0GGHJ1J4L')">🗑️ Delete Product</button>
+        </div>
 
         <!-- Card B0BZXNSW5K -->
         <div class="card-wrapper" id="card-B0BZXNSW5K">
             <a class="card" href="./bridge_B0BZXNSW5K.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$19.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=3" alt="Fenmzee Bedside Touch Lamp">
+                    <div class="card-rating">★ 4.7</div>
+                    <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=3" alt="Fenmzee Bedside Table Touch Lamp">
                 </div>
                 <div class="card-content">
-                    <h2>Fenmzee Cozy Bedside Touch Lamp</h2>
+                    <h2>Fenmzee Bedside Table Touch Lamp</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -545,7 +503,7 @@
                 <div class="card-img-container">
                     <div class="card-price-tag">$17.99</div>
                     <div class="card-rating">★ 4.8</div>
-                    <img src="./perfect_smart_luminance_pin_v19.jpg" alt="Cozy Flower Table Lamp Green, 5 Lily of The Valley Vintage">
+                    <img src="./perfect_smart_luminance_pin_v19.jpg" alt="Cozy Flower Table Lamp Green, 5 Lily of The Valley">
                 </div>
                 <div class="card-content">
                     <h2>Cozy Flower Table Lamp Green, 5 Lily of The Valley</h2>
@@ -558,14 +516,13 @@
             <button class="delete-btn" onclick="deleteCard('B0DXKGL1T2', 'card-B0DXKGL1T2')">🗑️ Delete Product</button>
         </div>
 
-
         <!-- Card B0D1FRDFFX -->
         <div class="card-wrapper" id="card-B0D1FRDFFX">
             <a class="card" href="./bridge_B0D1FRDFFX.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$39.98</div>
                     <div class="card-rating">★ 4.6</div>
-                    <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=3" alt="Mushroom Touch Lamp">
+                    <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=3" alt="Dawnwake Mushroom Touch Table Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Dawnwake Mushroom Touch Table Lamp</h2>
@@ -584,7 +541,7 @@
                 <div class="card-img-container">
                     <div class="card-price-tag">$20.56</div>
                     <div class="card-rating">★ 4.7</div>
-                    <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=3" alt="Bird Touch Lamp">
+                    <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=3" alt="Cute Bird Dimmable Touch Night Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Cute Bird Dimmable Touch Night Lamp</h2>
@@ -599,12 +556,11 @@
 
         <!-- Card B0DLN5S5K9 -->
         <div class="card-wrapper" id="card-B0DLN5S5K9">
-
             <a class="card" href="./bridge_B0DLN5S5K9.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$39.99</div>
                     <div class="card-rating">★ 4.0</div>
-                    <img src="./focus_product_B0DLN5S5K9_hook.jpg?v=5" alt="WLHBF Vintage Flower Table Lamp">
+                    <img src="./focus_product_B0DLN5S5K9_hook.jpg?v=5" alt="WLHBF Vintage Gooseneck Flower Table Lamp">
                 </div>
                 <div class="card-content">
                     <h2>WLHBF Vintage Gooseneck Flower Table Lamp</h2>
@@ -616,89 +572,11 @@
             </a>
             <button class="delete-btn" onclick="deleteCard('B0DLN5S5K9', 'card-B0DLN5S5K9')">🗑️ Delete Product</button>
         </div>
-
     </div>
-
 
     <footer>
         <p>© 2026 Cozy Room Finds. Curated Amazon Associate Partner. As an Amazon Associate, we earn from qualifying purchases.</p>
-        <p style="margin-top: 10px;">
-            <button id="footerAdminBtn" onclick="toggleAdminMode()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #ffb703; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;">🔐 Admin Mode (Toggle Delete Buttons)</button>
-        </p>
     </footer>
 
-    <script>
-        // Check Admin Status
-        const urlParams = new URLSearchParams(window.location.search);
-        const isAdminRequested = urlParams.get('admin') === 'true';
-
-        if (isAdminRequested) {
-            sessionStorage.setItem('is_admin_session', 'true');
-        }
-
-        if (sessionStorage.getItem('is_admin_session') === 'true') {
-            document.body.classList.add('is-admin');
-            updateAdminBtnState(true);
-        }
-
-        function toggleAdminMode() {
-            const current = sessionStorage.getItem('is_admin_session') === 'true';
-            if (current) {
-                sessionStorage.removeItem('is_admin_session');
-                document.body.classList.remove('is-admin');
-                updateAdminBtnState(false);
-            } else {
-                sessionStorage.setItem('is_admin_session', 'true');
-                document.body.classList.add('is-admin');
-                updateAdminBtnState(true);
-            }
-        }
-
-        function exitAdminMode() {
-            sessionStorage.removeItem('is_admin_session');
-            document.body.classList.remove('is-admin');
-            updateAdminBtnState(false);
-        }
-
-        function updateAdminBtnState(active) {
-            const footerBtn = document.getElementById('footerAdminBtn');
-            const adminBanner = document.getElementById('adminBtn');
-            if (active) {
-                if (footerBtn) footerBtn.innerHTML = '🟢 Admin Active (Click to Hide Delete Buttons)';
-                if (adminBanner) adminBanner.style.display = 'inline-block';
-            } else {
-                if (footerBtn) footerBtn.innerHTML = '🔐 Admin Mode (Toggle Delete Buttons)';
-                if (adminBanner) adminBanner.style.display = 'none';
-            }
-        }
-
-        // Shortcut: Ctrl + Shift + A toggles admin mode
-        window.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
-                toggleAdminMode();
-            }
-        });
-
-        function deleteCard(asin, elementId) {
-            if (confirm(`Are you sure you want to delete product ${asin} from the homepage?`)) {
-                const el = document.getElementById(elementId);
-                if (el) el.remove();
-                
-                // Store deleted ASINs in local storage
-                let deleted = JSON.parse(localStorage.getItem('deleted_asins') || '[]');
-                if (!deleted.includes(asin)) deleted.push(asin);
-                localStorage.setItem('deleted_asins', JSON.stringify(deleted));
-
-                alert(`Product ${asin} removed from view!\n\nTo purge permanently from GitHub repo, run:\npython delete_product.py ${asin}`);
-            }
-        }
-
-        // Hide deleted items saved in localStorage
-        const deleted = JSON.parse(localStorage.getItem('deleted_asins') || '[]');
-        deleted.forEach(asin => {
-            const el = document.getElementById(`card-${asin}`);
-            if (el) el.remove();
-        });
-    </script>
 </body>
 </html>
