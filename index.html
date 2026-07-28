@@ -593,17 +593,25 @@
     </footer>
 
     <script>
-        const ADMIN_PASSCODE = 'adi147';
+        const ADMIN_PASSCODE_HASH = '4a13a6dce402c20160f7df5d6f1cdea1c51baa20d1bc56c6d314ba6a8c0247f4';
 
         let logoClickCount = 0;
         let logoTimer = null;
 
-        function onLogoClick(e) {
+        async function hashPasscode(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str.trim().toLowerCase());
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function onLogoClick(e) {
             logoClickCount++;
             clearTimeout(logoTimer);
             if (logoClickCount >= 3) {
                 logoClickCount = 0;
-                verifyAdminPassword();
+                await verifyAdminPassword();
             } else {
                 logoTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
             }
@@ -617,32 +625,34 @@
             });
         }
 
-        function verifyAdminPassword() {
+        async function verifyAdminPassword() {
             let authenticated = sessionStorage.getItem('adminAuth') === 'true';
             if (authenticated) return true;
             
             let pass = prompt('🔑 Enter Admin Security Passcode:');
-            if (pass !== null && pass.trim().toLowerCase() === ADMIN_PASSCODE.toLowerCase()) {
-                sessionStorage.setItem('adminAuth', 'true');
-                localStorage.setItem('adminUnlocked', 'true');
-                localStorage.setItem('isAdmin', 'true');
-                document.body.classList.add('admin-unlocked');
-                updateAdminUI(true);
-                alert('✅ Passcode Verified! Admin Mode Enabled.');
-                return true;
-            } else if (pass !== null) {
-                alert('❌ Incorrect Security Passcode. Access Denied.');
+            if (pass !== null) {
+                let inputHash = await hashPasscode(pass);
+                if (inputHash === ADMIN_PASSCODE_HASH) {
+                    sessionStorage.setItem('adminAuth', 'true');
+                    localStorage.setItem('adminUnlocked', 'true');
+                    localStorage.setItem('isAdmin', 'true');
+                    document.body.classList.add('admin-unlocked');
+                    updateAdminUI(true);
+                    alert('✅ Passcode Verified! Admin Mode Enabled.');
+                    return true;
+                } else {
+                    alert('❌ Incorrect Security Passcode. Access Denied.');
+                }
             }
             return false;
         }
 
-
-        function initAdminMode() {
+        async function initAdminMode() {
             applyDeletedProducts();
             const urlParams = new URLSearchParams(window.location.search);
             
             if (urlParams.get('admin') === 'true' || urlParams.get('admin') === 'secret') {
-                verifyAdminPassword();
+                await verifyAdminPassword();
             }
 
             let isUnlocked = localStorage.getItem('adminUnlocked') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
@@ -654,11 +664,10 @@
             }
         }
 
-
-        function toggleAdminMode() {
+        async function toggleAdminMode() {
             let current = localStorage.getItem('isAdmin') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
             if (!current) {
-                verifyAdminPassword();
+                await verifyAdminPassword();
             } else {
                 localStorage.setItem('isAdmin', 'false');
                 sessionStorage.setItem('adminAuth', 'false');
