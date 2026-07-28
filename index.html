@@ -622,7 +622,7 @@
             if (authenticated) return true;
             
             let pass = prompt('🔑 Enter Admin Security Passcode:');
-            if (pass === ADMIN_PASSCODE) {
+            if (pass !== null && pass.trim().toLowerCase() === ADMIN_PASSCODE.toLowerCase()) {
                 sessionStorage.setItem('adminAuth', 'true');
                 localStorage.setItem('adminUnlocked', 'true');
                 localStorage.setItem('isAdmin', 'true');
@@ -635,6 +635,7 @@
             }
             return false;
         }
+
 
         function initAdminMode() {
             applyDeletedProducts();
