@@ -171,16 +171,31 @@
             display: inline-block;
         }
 
-        /* Product Showcase Grid */
+        /* Pinterest Multi-Column Masonry Pin Grid */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-            gap: 30px;
+            column-count: 3;
+            column-gap: 24px;
             max-width: 1120px;
             width: 100%;
         }
 
+        @media (max-width: 960px) {
+            .grid {
+                column-count: 2;
+                column-gap: 18px;
+            }
+        }
+
+        @media (max-width: 580px) {
+            .grid {
+                column-count: 1;
+                column-gap: 0;
+            }
+        }
+
         .card-wrapper {
+            break-inside: avoid;
+            margin-bottom: 24px;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -371,13 +386,6 @@
 
     <!-- Product Showcase Grid -->
     <div class="grid" id="productGrid">
-        </a>
-            <button class="delete-btn" onclick="deleteCard('B0D4537YMT', 'card-B0D4537YMT')">🗑️ Delete Product</button>
-        </div>
-
-        </a>
-            <button class="delete-btn" onclick="deleteCard('B01M5CLG3X', 'card-B01M5CLG3X')">🗑️ Delete Product</button>
-        </div>
 
         <!-- Card B0GGHJ1J4L -->
         <div class="card-wrapper" id="card-B0GGHJ1J4L">
