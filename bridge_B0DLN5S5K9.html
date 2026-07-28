@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WLHBF Flower Table Lamp | Cozy Room Finds</title>
+    <meta name="description" content="Discover the WLHBF Vintage Flower Table Lamp with 3 lighting modes and flexible gooseneck for your cozy aesthetic bedroom setup.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a090d;
+            --card-glass: rgba(22, 20, 28, 0.85);
+            --border: rgba(255, 255, 255, 0.12);
+            --accent-warm: #ffb703;
+            --text-main: #f8f9fa;
+            --text-muted: #adb5bd;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 50% -20%, rgba(255, 183, 3, 0.18), transparent 70%);
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: var(--card-glass);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(255, 183, 3, 0.15);
+            color: var(--accent-warm);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .hero-img {
+            width: 100%;
+            border-radius: 16px;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-warm);
+            margin-bottom: 16px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .features h3 {
+            font-size: 13px;
+            color: var(--accent-warm);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .features p {
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .btn-amazon {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #fb8500, #ffb703);
+            color: #0d0c10;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 16px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(251, 133, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-amazon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(251, 133, 0, 0.6);
+        }
+
+        .footer-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <span class="tag">✨ Pinterest Cozy Pick</span>
+        <img class="hero-img" src="focus_product_B0DLN5S5K9_hook.jpg?v=1" alt="WLHBF Flower Table Lamp Vintage Bedside Light">
+        <h1>WLHBF Vintage Flower Table Lamp 🕯️</h1>
+        <div class="price">$39.99</div>
+        <p class="description">Elevate your bedroom or reading nook with the WLHBF Vintage Flower Table Lamp featuring 3 color lighting modes, flexible gooseneck, and delicate lily-shaped glass shade.</p>
+
+        <div class="features">
+            <h3>Key Aesthetic Highlights</h3>
+            <p>Rated 4.0 stars with 107 reviews. Features 3 color temperatures, E27 LED bulb included, and flexible gooseneck positioning for cozy nightstand reading.</p>
+        </div>
+
+        <a id="amazon-btn" class="btn-amazon" href="https://www.amazon.com/dp/B0DLN5S5K9?tag=smartdeal0358-21" target="_blank" rel="noopener">
+            🛒 Check Price & Availability on Amazon ➔
+        </a>
+
+        <p class="footer-note">As an Amazon Associate, we earn from qualifying purchases.</p>
+    </div>
+
+    <script>
+        document.getElementById('amazon-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const directProductUrl = "https://www.amazon.com/dp/B0DLN5S5K9?tag=smartdeal0358-21";
+            window.open(directProductUrl, '_blank');
+        });
+    </script>
+</body>
+</html>
