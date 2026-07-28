@@ -171,41 +171,42 @@
             display: inline-block;
         }
 
-        /* Pinterest Multi-Column Masonry Pin Grid (Compact Feed) */
+        /* Perfectly Aligned Equal-Height Product Grid */
         .grid {
-            column-count: 4;
-            column-gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
             max-width: 1320px;
             width: 100%;
+            align-items: stretch;
         }
 
         @media (max-width: 1200px) {
             .grid {
-                column-count: 3;
-                column-gap: 16px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
             }
         }
 
         @media (max-width: 840px) {
             .grid {
-                column-count: 2;
-                column-gap: 14px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 520px) {
             .grid {
-                column-count: 1;
-                column-gap: 0;
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
         }
 
         .card-wrapper {
-            break-inside: avoid;
-            margin-bottom: 20px;
             position: relative;
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
         .card {
@@ -221,10 +222,12 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             height: 100%;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
+
 
         .card:hover {
             transform: translateY(-6px) scale(1.01);
@@ -300,11 +303,13 @@
             color: #ffffff;
             line-height: 1.35;
             margin-bottom: 8px;
+            height: 44px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
 
         .card-cta {
             display: flex;
