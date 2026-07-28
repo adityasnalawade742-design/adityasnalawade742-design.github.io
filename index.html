@@ -353,14 +353,15 @@
 <body>
 
     <nav class="top-nav">
-        <a href="./" class="brand-logo">
+        <div class="brand-logo" style="cursor: pointer;" onclick="onLogoClick(event)">
             <span class="sparkle">✨</span> Cozy Room Finds
-        </a>
+        </div>
         <div style="display: flex; align-items: center; gap: 12px;">
             <button id="admin-toggle-btn" class="nav-badge" style="cursor: pointer;" onclick="toggleAdminMode()">⚡ Admin: OFF</button>
             <span class="nav-badge">Pinterest Curated</span>
         </div>
     </nav>
+
 
 
     <header class="hero">
@@ -638,17 +639,18 @@
                 updateAdminUI(false);
             }
 
-            const logo = document.querySelector('.brand-logo');
-            if (logo) {
-                logo.addEventListener('click', function(e) {
-                    logoClickCount++;
-                    if (logoClickCount >= 3) {
-                        e.preventDefault();
-                        logoClickCount = 0;
-                        verifyAdminPassword();
-                    }
-                });
+        let logoTimer = null;
+        function onLogoClick(e) {
+            logoClickCount++;
+            clearTimeout(logoTimer);
+            if (logoClickCount >= 3) {
+                logoClickCount = 0;
+                verifyAdminPassword();
+            } else {
+                logoTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
             }
+        }
+
         }
 
         function toggleAdminMode() {
