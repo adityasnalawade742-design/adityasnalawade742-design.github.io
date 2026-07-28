@@ -693,14 +693,50 @@
             }
         }
 
-        function deleteCard(asin, cardId) {
+        async function deleteCard(asin, cardId) {
             if (confirm('Are you sure you want to PERMANENTLY remove product ' + asin + ' from your homepage?')) {
                 const el = document.getElementById(cardId);
                 if (el) el.remove();
+                
                 let deleted = JSON.parse(localStorage.getItem('deletedASINs') || '[]');
                 if (!deleted.includes(asin)) {
                     deleted.push(asin);
                     localStorage.setItem('deletedASINs', JSON.stringify(deleted));
+                }
+
+                let ghToken = localStorage.getItem('ghAdminToken');
+                if (!ghToken) {
+                    ghToken = prompt('🔑 (Optional) Enter your GitHub Access Token to sync deletion live for ALL visitors worldwide:\n\n(Leave blank to keep local only)');
+                    if (ghToken && ghToken.trim()) {
+                        ghToken = ghToken.trim();
+                        localStorage.setItem('ghAdminToken', ghToken);
+                    }
+                }
+
+                if (ghToken) {
+                    try {
+                        let res = await fetch('https://api.github.com/repos/adityasnalawade742-design/adityasnalawade742-design.github.io/dispatches', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Bearer ' + ghToken,
+                                'Accept': 'application/vnd.github+json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                event_type: 'delete_product',
+                                client_payload: { asin: asin }
+                            })
+                        });
+                        if (res.ok || res.status === 204) {
+                            alert('🚀 Live Deletion Triggered!\n\nGitHub Action is deleting product ' + asin + ' and updating your live site for ALL visitors in ~20 seconds.');
+                        } else {
+                            console.error('GitHub API Response:', res.status, await res.text());
+                            alert('⚠️ Card removed locally. GitHub API returned status ' + res.status + '. Verify token permissions.');
+                        }
+                    } catch (e) {
+                        console.error('GitHub Live Sync Error:', e);
+                        alert('⚠️ Local deletion completed. Live GitHub sync error: ' + e.message);
+                    }
                 }
             }
         }

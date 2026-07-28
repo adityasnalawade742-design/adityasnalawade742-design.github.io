@@ -1,0 +1,36 @@
+name: Live Web Delete Product
+
+on:
+  repository_dispatch:
+    types: [delete_product]
+  workflow_dispatch:
+    inputs:
+      asin:
+        description: 'Amazon ASIN to delete'
+        required: true
+        type: string
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name "CozyRoomBot"
+          git config --global user.email "bot@cozyroomfinds.com"
+
+      - name: Execute Product Deletion Script
+        run: |
+          ASIN="${{ github.event.client_payload.asin || inputs.asin }}"
+          echo "Deleting product ASIN: $ASIN"
+          python delete_product.py "$ASIN"
