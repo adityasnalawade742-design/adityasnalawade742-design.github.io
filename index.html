@@ -171,14 +171,16 @@
             display: inline-block;
         }
 
-        /* Compact Natural Pinterest Equal Grid */
+        /* Compact Natural Pinterest Grid - No Vertical Stretching */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 24px;
             max-width: 1320px;
             width: 100%;
+            align-items: start;
         }
+
 
         @media (max-width: 1200px) {
             .grid {
