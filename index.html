@@ -592,6 +592,7 @@
     </footer>
 
     <script>
+        const ADMIN_PASSCODE = 'cozyroom2026';
         let logoClickCount = 0;
 
         function applyDeletedProducts() {
@@ -602,22 +603,40 @@
             });
         }
 
+        function verifyAdminPassword() {
+            let authenticated = sessionStorage.getItem('adminAuth') === 'true';
+            if (authenticated) return true;
+            
+            let pass = prompt('🔑 Enter Admin Security Passcode:');
+            if (pass === ADMIN_PASSCODE) {
+                sessionStorage.setItem('adminAuth', 'true');
+                localStorage.setItem('adminUnlocked', 'true');
+                localStorage.setItem('isAdmin', 'true');
+                document.body.classList.add('admin-unlocked');
+                updateAdminUI(true);
+                alert('✅ Passcode Verified! Admin Mode Enabled.');
+                return true;
+            } else if (pass !== null) {
+                alert('❌ Incorrect Security Passcode. Access Denied.');
+            }
+            return false;
+        }
+
         function initAdminMode() {
             applyDeletedProducts();
             const urlParams = new URLSearchParams(window.location.search);
             
             if (urlParams.get('admin') === 'true' || urlParams.get('admin') === 'secret') {
-                localStorage.setItem('adminUnlocked', 'true');
-                localStorage.setItem('isAdmin', 'true');
+                verifyAdminPassword();
             }
 
-            let isUnlocked = localStorage.getItem('adminUnlocked') === 'true';
+            let isUnlocked = localStorage.getItem('adminUnlocked') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
             if (isUnlocked) {
                 document.body.classList.add('admin-unlocked');
+                updateAdminUI(true);
+            } else {
+                updateAdminUI(false);
             }
-
-            let isAdmin = localStorage.getItem('isAdmin') === 'true';
-            updateAdminUI(isAdmin);
 
             const logo = document.querySelector('.brand-logo');
             if (logo) {
@@ -625,22 +644,24 @@
                     logoClickCount++;
                     if (logoClickCount >= 3) {
                         e.preventDefault();
-                        localStorage.setItem('adminUnlocked', 'true');
-                        document.body.classList.add('admin-unlocked');
-                        toggleAdminMode();
                         logoClickCount = 0;
+                        verifyAdminPassword();
                     }
                 });
             }
         }
 
-
         function toggleAdminMode() {
-            let current = localStorage.getItem('isAdmin') === 'true';
-            let next = !current;
-            localStorage.setItem('isAdmin', next.toString());
-            updateAdminUI(next);
+            let current = localStorage.getItem('isAdmin') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
+            if (!current) {
+                verifyAdminPassword();
+            } else {
+                localStorage.setItem('isAdmin', 'false');
+                sessionStorage.setItem('adminAuth', 'false');
+                updateAdminUI(false);
+            }
         }
+
 
         function updateAdminUI(isAdmin) {
             const btn = document.getElementById('admin-toggle-btn');
