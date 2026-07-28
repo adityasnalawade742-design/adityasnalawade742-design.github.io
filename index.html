@@ -171,40 +171,45 @@
             display: inline-block;
         }
 
-        /* Compact Natural Pinterest Grid - No Vertical Stretching */
+        /* Uniform 24px Grid Spacing System */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            row-gap: 24px;
+            column-gap: 24px;
             max-width: 1320px;
             width: 100%;
             align-items: start;
         }
 
-
         @media (max-width: 1200px) {
             .grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
+                row-gap: 20px;
+                column-gap: 20px;
             }
         }
 
         @media (max-width: 840px) {
             .grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
+                row-gap: 16px;
+                column-gap: 16px;
             }
         }
 
         @media (max-width: 520px) {
             .grid {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                row-gap: 16px;
+                column-gap: 16px;
             }
         }
 
         .card-wrapper {
             position: relative;
+            margin: 0;
+            padding: 0;
         }
 
         .card {
@@ -214,7 +219,8 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 14px;
+            padding: 16px;
+            margin: 0;
             text-decoration: none;
             color: inherit;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -223,6 +229,7 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
+
 
 
 
