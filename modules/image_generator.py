@@ -159,6 +159,9 @@ def generate_cozy_image(
         os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
         client = replicate.Client(api_token=REPLICATE_API_TOKEN, timeout=120.0)
 
+        if not init_image_path and real_image_url:
+            init_image_path = real_image_url
+
         image_file_obj = None
         if init_image_path:
             if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
