@@ -429,9 +429,10 @@ def update_showcase_index_page(product_data: dict, asin: str):
             <button class="delete-btn" onclick="deleteCard('{asin}', '{card_id}')">🗑️ Delete Product</button>
         </div>
 '''
-    grid_tag = '<div class="grid" id="productGrid">'
-    if grid_tag in html:
-        new_html = html.replace(grid_tag, grid_tag + card_html)
-        with open(index_path, "w", encoding="utf-8") as f:
-            f.write(new_html)
-        print(f"[Bridge Creator] Automatically inserted new card {asin} into index.html showcase.")
+    for grid_tag in ['<main class="grid" id="productGrid">', '<div class="grid" id="productGrid">']:
+        if grid_tag in html:
+            new_html = html.replace(grid_tag, grid_tag + card_html)
+            with open(index_path, "w", encoding="utf-8") as f:
+                f.write(new_html)
+            print(f"[Bridge Creator] Automatically inserted new card {asin} into index.html showcase.")
+            break
