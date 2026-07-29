@@ -69,4 +69,11 @@ Every Amazon listing photo suite (5–9 photos) MUST undergo the following 4-lay
     3. Updates `<div class="card-price-tag">` in `index.html`.
     4. Automatically commits and pushes live updates to GitHub Pages with cache-busting query params (`?v={timestamp}`).
 
+---
+
+## 6. 🔒 Cloud Hosting Security & Admin Authentication Requirement
+
+- **Secure Remote Deletion**: When deploying to cloud hosting (AWS EC2 / Lambda / n8n), all remote administrative endpoints (product deletion, manual overrides) MUST be protected by a private `ADMIN_SECRET_KEY` saved in `.env` to prevent unauthorized public execution.
+
+
 

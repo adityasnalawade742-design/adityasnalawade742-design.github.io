@@ -24,6 +24,7 @@
 3. **NO Plain White Cutouts (`is_lifestyle_photo`)**: Automatically checks border pixels. Products MUST have authentic room lifestyle background photos.
 4. **NO Automatic Background Execution**: ALWAYS present product title, price, and affiliate link to the user first, and wait for explicit user approval before running any generation scripts.
 5. **EXACT Amazon Price Sync**: The price rendered inside the graphic price tag (`focus_product_{asin}_hook.jpg`), landing page (`bridge_{asin}.html`), and homepage card (`index.html`) MUST 100% match the exact price extracted directly from the Amazon product page.
+6. **Cloud Hosting Admin Security**: When setting up AWS / n8n cloud hosting, remote admin actions (deletions / manual triggers) must be secured behind an `ADMIN_SECRET_KEY` authentication layer.
 
 ---
 
