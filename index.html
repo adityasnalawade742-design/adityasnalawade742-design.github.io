@@ -814,21 +814,48 @@
             })
             .catch(e => console.log('Using default rates fallback'));
 
-        // Auto-Detect Visitor's Local Country IP
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                const country = (data.country_code || '').toUpperCase();
-                if (countryToCurrencyMap[country]) {
-                    const detectedCurr = countryToCurrencyMap[country];
-                    const sel = document.getElementById('currencySelector');
-                    if (sel) {
-                        sel.value = detectedCurr;
-                        changeGlobalCurrency(detectedCurr);
+        // Auto-Detect Visitor's Local Country IP & Forward ?country= parameter to all card links
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const forcedCountry = urlParams.get('country') || urlParams.get('geo');
+            
+            // Forward ?country= parameter to all bridge links on index.html
+            if (forcedCountry) {
+                document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
+                    const cleanHref = a.getAttribute('href').split('?')[0];
+                    a.setAttribute('href', `${cleanHref}?country=${forcedCountry}`);
+                });
+            }
+
+            fetch('https://api.country.is')
+                .then(res => res.json())
+                .then(data => {
+                    const country = (data.country || '').toUpperCase();
+                    if (countryToCurrencyMap[country]) {
+                        const detectedCurr = countryToCurrencyMap[country];
+                        const sel = document.getElementById('currencySelector');
+                        if (sel) {
+                            sel.value = detectedCurr;
+                            changeGlobalCurrency(detectedCurr);
+                        }
                     }
-                }
-            })
-            .catch(e => console.log('Defaulting currency to USD'));
+                })
+                .catch(e => {
+                    fetch('https://ipapi.co/json/')
+                        .then(res => res.json())
+                        .then(data => {
+                            const country = (data.country_code || '').toUpperCase();
+                            if (countryToCurrencyMap[country]) {
+                                const detectedCurr = countryToCurrencyMap[country];
+                                const sel = document.getElementById('currencySelector');
+                                if (sel) {
+                                    sel.value = detectedCurr;
+                                    changeGlobalCurrency(detectedCurr);
+                                }
+                            }
+                        });
+                });
+        })();
 
         function changeGlobalCurrency(targetCurr) {
             const rate = exchangeRates[targetCurr] || 1.0;
