@@ -370,12 +370,13 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
             raw_images_rel.append(f"./output/images/raw_amazon_{asin}_{i}.jpg")
     
     # Template rendering
+    aff_url = product_data.get("affiliate_url") or f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
     template = Template(BRIDGE_PAGE_TEMPLATE)
     rendered_html = template.render(
         product=product_data,
         seo=seo_data,
         asin=asin,
-        affiliate_url=product_data.get("affiliate_url", "https://amazon.com"),
+        affiliate_url=aff_url,
         hook_image_rel=hook_img_rel,
         raw_images=raw_images_rel
     )
