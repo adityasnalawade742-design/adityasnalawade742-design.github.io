@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Room Finds | Curated Luxury Home Decor & Viral Amazon Deals</title>
-    <meta name="description" content="Discover viral aesthetic room upgrades, cozy lighting, and luxury Amazon home finds curated for Pinterest setup lovers.">
+    <title>Cozy Room Finds | Curated Aesthetic Home Decor & Viral Amazon Deals</title>
+    <meta name="description" content="Discover viral aesthetic room upgrades, cozy lighting, bedside lamps, and luxury Amazon home finds curated for Pinterest setup lovers.">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-dark: #0a090d;
-            --card-glass: rgba(22, 20, 28, 0.82);
-            --card-border: rgba(255, 255, 255, 0.12);
-            --gold-accent: #ffb703;
+            --bg-dark: #07060a;
+            --card-glass: rgba(18, 16, 24, 0.78);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover-border: rgba(255, 183, 3, 0.45);
+            --gold-primary: #ffb703;
             --gold-glow: #fb8500;
-            --text-light: #f8f9fa;
-            --text-sub: #adb5bd;
+            --text-main: #f8f9fa;
+            --text-sub: #a0a5b5;
+            --accent-purple: rgba(138, 43, 226, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,40 +27,42 @@
         body {
             font-family: 'Outfit', sans-serif;
             background: var(--bg-dark);
-            color: var(--text-light);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px 80px;
+            padding: 30px 20px 80px;
             background-image: 
-                radial-gradient(circle at 50% -10%, rgba(251, 133, 0, 0.22), transparent 60%),
-                radial-gradient(circle at 10% 80%, rgba(138, 43, 226, 0.08), transparent 50%),
-                radial-gradient(circle at 90% 40%, rgba(255, 183, 3, 0.08), transparent 50%);
+                radial-gradient(circle at 50% -5%, rgba(251, 133, 0, 0.18), transparent 55%),
+                radial-gradient(circle at 10% 70%, rgba(138, 43, 226, 0.07), transparent 45%),
+                radial-gradient(circle at 90% 35%, rgba(255, 183, 3, 0.08), transparent 45%);
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
-        /* Top Brand Navigation */
+        /* Top Bar Navigation */
         .top-nav {
             width: 100%;
             max-width: 1320px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 36px;
+            margin-bottom: 40px;
             padding: 14px 28px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
             border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .brand-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -63,331 +70,426 @@
         }
 
         .brand-logo span.sparkle {
-            color: var(--gold-accent);
+            color: var(--gold-primary);
+            text-shadow: 0 0 12px rgba(255, 183, 3, 0.6);
         }
 
-        .nav-badge {
-            background: linear-gradient(135deg, rgba(251, 133, 0, 0.2), rgba(255, 183, 3, 0.2));
-            border: 1px solid rgba(255, 183, 3, 0.5);
-            color: var(--gold-accent);
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 183, 3, 0.12);
+            border: 1px solid rgba(255, 183, 3, 0.35);
+            color: var(--gold-primary);
             font-size: 11px;
             font-weight: 700;
-            padding: 6px 14px;
+            padding: 6px 16px;
             border-radius: 50px;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--gold-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold-primary);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 183, 3, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
         }
 
         /* Hero Header */
         .hero {
             position: relative;
             width: 100%;
-            max-width: 900px;
+            max-width: 920px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-bottom: 44px;
+            margin-bottom: 40px;
         }
 
         .hero-tag {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(12px);
-            color: var(--gold-accent);
+            color: var(--gold-primary);
             font-size: 12px;
-            font-weight: 700;
-            padding: 8px 20px;
+            font-weight: 600;
+            padding: 6px 18px;
             border-radius: 50px;
-            letter-spacing: 2px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .hero h1 {
+        h1.hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
+            font-size: clamp(32px, 5vw, 54px);
             font-weight: 700;
             line-height: 1.15;
-            color: #ffffff;
-            margin-bottom: 14px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 40%, #d1d5db 70%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
-        .hero p {
+        p.hero-subtitle {
+            font-size: clamp(15px, 2vw, 18px);
             color: var(--text-sub);
-            font-size: 17px;
-            max-width: 620px;
+            max-width: 680px;
             line-height: 1.6;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
+            font-weight: 300;
         }
 
-        /* Category Filter Pills */
+        /* Interactive Filter Bar */
         .filter-container {
+            width: 100%;
+            max-width: 1320px;
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 36px;
+            align-items: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 540px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 14px 22px 14px 48px;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 20px rgba(255, 183, 3, 0.25);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .category-chips {
+            display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            gap: 10px;
         }
 
-        .filter-pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #d1d5db;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 10px 22px;
+        .chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-sub);
+            padding: 8px 18px;
             border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.25s ease;
+            user-select: none;
         }
 
-        .filter-pill:hover, .filter-pill.active {
-            background: linear-gradient(135deg, var(--gold-glow), var(--gold-accent));
-            border-color: var(--gold-accent);
-            color: #0d0c10;
-            box-shadow: 0 6px 20px rgba(251, 133, 0, 0.4);
-            transform: translateY(-2px);
+        .chip:hover, .chip.active {
+            background: linear-gradient(135deg, rgba(251, 133, 0, 0.25), rgba(255, 183, 3, 0.25));
+            border-color: var(--gold-primary);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 183, 3, 0.2);
+            transform: translateY(-1px);
         }
 
-        /* Clean Uniform 24px CSS Grid (Zero Vertical Stretching) */
+        /* Products Grid */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            row-gap: 28px;
-            column-gap: 24px;
-            max-width: 1320px;
             width: 100%;
-            align-items: start;
-        }
-
-        @media (max-width: 1200px) {
-            .grid {
-                grid-template-columns: repeat(3, 1fr);
-                row-gap: 24px;
-                column-gap: 20px;
-            }
-        }
-
-        @media (max-width: 840px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-                row-gap: 20px;
-                column-gap: 16px;
-            }
-        }
-
-        @media (max-width: 520px) {
-            .grid {
-                grid-template-columns: 1fr;
-                row-gap: 16px;
-                column-gap: 16px;
-            }
+            max-width: 1320px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 28px;
         }
 
         .card-wrapper {
-            position: relative;
-            margin: 0;
-            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .card-wrapper:hover {
+            transform: translateY(-6px);
         }
 
         .card {
             position: relative;
             background: var(--card-glass);
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 16px;
-            margin: 0;
+            overflow: hidden;
             text-decoration: none;
-            color: inherit;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(20px);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
         }
 
-        .card:hover {
-            transform: translateY(-6px) scale(1.01);
-            border-color: rgba(255, 183, 3, 0.6);
-            box-shadow: 0 16px 40px rgba(251, 133, 0, 0.35);
+        .card-wrapper:hover .card {
+            border-color: var(--card-hover-border);
+            box-shadow: 0 20px 50px rgba(255, 183, 3, 0.18), 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .card-img-container {
             position: relative;
             width: 100%;
-            border-radius: 14px;
-            overflow: hidden;
             aspect-ratio: 3/4;
-            flex-shrink: 0;
-            margin-bottom: 12px;
+            overflow: hidden;
+            background: #000;
         }
 
-        .card img {
+        .card-img-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .card:hover img {
-            transform: scale(1.05);
+        .card-wrapper:hover .card-img-container img {
+            transform: scale(1.04);
         }
 
         .card-price-tag {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: linear-gradient(135deg, #fb8500, #ffb703);
-            border: 1.5px solid #ffffff;
-            color: #0d0c10;
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 16px;
-            padding: 6px 16px;
+            top: 14px;
+            right: 14px;
+            background: linear-gradient(135deg, var(--gold-glow), var(--gold-primary));
+            color: #0d0b12;
+            font-size: 15px;
+            font-weight: 800;
+            padding: 6px 14px;
             border-radius: 50px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1.5px solid rgba(255, 255, 255, 0.6);
             z-index: 2;
+            letter-spacing: 0.5px;
         }
 
         .card-rating {
             position: absolute;
-            bottom: 12px;
-            left: 12px;
-            background: rgba(13, 12, 16, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            top: 14px;
+            left: 14px;
+            background: rgba(13, 11, 18, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            color: #ffb703;
+            color: #fff;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 600;
             padding: 4px 10px;
-            border-radius: 20px;
+            border-radius: 50px;
             z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .card-content {
+            padding: 20px;
             display: flex;
             flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+            background: linear-gradient(180deg, rgba(18, 16, 24, 0.4) 0%, rgba(18, 16, 24, 0.95) 100%);
         }
 
         .card h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             color: #ffffff;
-            line-height: 1.35;
-            margin-bottom: 8px;
-            height: 44px;
+            line-height: 1.4;
+            margin-bottom: 14px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-cta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 8px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--gold-accent);
+            color: var(--gold-primary);
             font-size: 13px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
         }
 
-        .card-cta .arrow {
-            transition: transform 0.2s ease;
+        .card-cta span.arrow {
+            transition: transform 0.25s ease;
         }
 
-        .card:hover .card-cta .arrow {
+        .card-wrapper:hover .card-cta span.arrow {
             transform: translateX(4px);
         }
 
-        /* Secret Admin Controls (Hidden from Public) */
-        #admin-toggle-btn {
-            display: none;
-        }
-        body.admin-unlocked #admin-toggle-btn {
-            display: inline-block;
-        }
-
+        /* Delete Button */
         .delete-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(239, 68, 68, 0.9);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.25);
+            color: #ff6b6b;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 12px;
             cursor: pointer;
-            z-index: 10;
-            display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        body.is-admin .delete-btn {
-            display: block;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
         }
 
+        .delete-btn:hover {
+            background: rgba(220, 53, 69, 0.25);
+            border-color: #ff6b6b;
+            color: #fff;
+        }
 
+        /* Footer */
         footer {
-            margin-top: 60px;
+            margin-top: 70px;
+            width: 100%;
+            max-width: 1320px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
             color: var(--text-sub);
+            text-decoration: none;
             font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold-primary);
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: #6c757d;
             max-width: 600px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 12px 60px; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); }
+            .top-nav { padding: 12px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="top-nav">
-        <div class="brand-logo" style="cursor: pointer;" onclick="onLogoClick(event)">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+        <a href="./index.html" class="brand-logo">
             <span class="sparkle">✨</span> Cozy Room Finds
-        </div>
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <button id="admin-toggle-btn" class="nav-badge" style="cursor: pointer;" onclick="toggleAdminMode()">⚡ Admin: OFF</button>
-            <span class="nav-badge">Pinterest Curated</span>
-        </div>
-    </nav>
-
-
-
-    <header class="hero">
-        <div class="hero-tag">✨ Viral Room Decor & Aesthetic Deals</div>
-        <h1>Upgrade Your Space with Cozy Aesthetics</h1>
-        <p>Hand-picked viral home finds, warm lighting, and aesthetic desk setups trending on Pinterest.</p>
-        
-        <div class="filter-container">
-            <button class="filter-pill active">All Finds</button>
-            <button class="filter-pill">Cozy Lighting</button>
-            <button class="filter-pill">Vases & Decor</button>
-            <button class="filter-pill">Desk Upgrades</button>
+        </a>
+        <div class="nav-status">
+            <div class="pulse-dot"></div> Live Amazon Deals
         </div>
     </header>
 
-    <div class="grid">
-        <!-- Card B0GYDXHF4G -->
-        <div class="card-wrapper" id="card-B0GYDXHF4G">
+    <!-- Hero Header -->
+    <section class="hero">
+        <div class="hero-tag">
+            <span>🕯️</span> Aesthetic Room Transformation
+        </div>
+        <h1 class="hero-title">Curated Home Decor & Viral Room Upgrades</h1>
+        <p class="hero-subtitle">
+            Explore handpicked impulse room finds, ambient lighting, nightstand decor, and aesthetic Amazon upgrades. Verified daily for live deals and 100% authentic lifestyle visuals.
+        </p>
+    </section>
+
+    <!-- Filter & Search Bar -->
+    <section class="filter-container">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search lamps, mirrors, diffusers, vases..." onkeyup="filterProducts()">
+        </div>
+        <div class="category-chips">
+            <div class="chip active" onclick="setCategory('all', this)">✨ All Finds</div>
+            <div class="chip" onclick="setCategory('lighting', this)">🕯️ Lamps & Lighting</div>
+            <div class="chip" onclick="setCategory('mirror', this)">🪞 Mirrors & Wall</div>
+            <div class="chip" onclick="setCategory('decor', this)">🏺 Vases & Decor</div>
+            <div class="chip" onclick="setCategory('desk', this)">✨ Desk Accessories</div>
+        </div>
+    </section>
+
+    <!-- Product Grid Gallery -->
+    <main class="grid" id="productGrid">
+
+        <!-- Card B0GYDXHF4G (Flame Diffuser) -->
+        <div class="card-wrapper" id="card-B0GYDXHF4G" data-category="lighting decor">
             <a class="card" href="./bridge_B0GYDXHF4G.html">
                 <div class="card-img-container">
-                    <div class="card-price-tag">$29.99</div>
-                    <div class="card-rating">★ 4.8</div>
-                    <img src="./focus_product_B0GYDXHF4G_hook.jpg?v=3" alt="Flame Aroma Diffuser, Dark Crackle Design">
+                    <div class="card-price-tag">$35.00</div>
+                    <div class="card-rating">★ 4.9</div>
+                    <img src="./focus_product_B0GYDXHF4G_hook.jpg" alt="Flame Aroma Essential Oil Diffuser Dark Crackle">
                 </div>
                 <div class="card-content">
-                    <h2>Flame Aroma Diffuser, Dark Crackle Design</h2>
+                    <h2>Flame Aroma Essential Oil Diffuser Dark Crackle</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -397,16 +499,16 @@
             <button class="delete-btn" onclick="deleteCard('B0GYDXHF4G', 'card-B0GYDXHF4G')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0FXLYXM32 -->
-        <div class="card-wrapper" id="card-B0FXLYXM32">
+        <!-- Card B0FXLYXM32 (Wavy Mirror) -->
+        <div class="card-wrapper" id="card-B0FXLYXM32" data-category="mirror">
             <a class="card" href="./bridge_B0FXLYXM32.html">
                 <div class="card-img-container">
-                    <div class="card-price-tag">$24.99</div>
-                    <div class="card-rating">★ 4.7</div>
-                    <img src="./focus_product_B0FXLYXM32_hook.jpg?v=3" alt="22"x30" White Wavy Wall Mirror for Vanity">
+                    <div class="card-price-tag">$76.49</div>
+                    <div class="card-rating">★ 4.8</div>
+                    <img src="./focus_product_B0FXLYXM32_hook.jpg" alt="White Wavy Wall Vanity Mirror">
                 </div>
                 <div class="card-content">
-                    <h2>22"x30" White Wavy Wall Mirror for Vanity</h2>
+                    <h2>White Wavy Wall Vanity Mirror</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -416,16 +518,16 @@
             <button class="delete-btn" onclick="deleteCard('B0FXLYXM32', 'card-B0FXLYXM32')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0C2YLN3H4 -->
-        <div class="card-wrapper" id="card-B0C2YLN3H4">
+        <!-- Card B0C2YLN3H4 (Donut Vases) -->
+        <div class="card-wrapper" id="card-B0C2YLN3H4" data-category="decor">
             <a class="card" href="./bridge_B0C2YLN3H4.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$14.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0C2YLN3H4_exact2vases_hook.jpg" alt="White Ceramic Donut Vase Set of 2, Hollow Matte">
+                    <div class="card-rating">★ 4.7</div>
+                    <img src="./focus_product_B0C2YLN3H4_exact2vases_hook.jpg" alt="White Ceramic Donut Vase Set of 2">
                 </div>
                 <div class="card-content">
-                    <h2>White Ceramic Donut Vase Set of 2, Hollow Matte</h2>
+                    <h2>White Ceramic Donut Vase Set of 2</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -435,16 +537,16 @@
             <button class="delete-btn" onclick="deleteCard('B0C2YLN3H4', 'card-B0C2YLN3H4')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B07HP22QTZ -->
-        <div class="card-wrapper" id="card-B07HP22QTZ">
+        <!-- Card B07HP22QTZ (Crystal Suncatcher) -->
+        <div class="card-wrapper" id="card-B07HP22QTZ" data-category="decor">
             <a class="card" href="./bridge_B07HP22QTZ.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$9.99</div>
-                    <div class="card-rating">★ 4.8</div>
-                    <img src="./focus_product_B07HP22QTZ_hook.jpg?v=3" alt="Suncatcher Crystals Ball Prism Window Rainbow Maker">
+                    <div class="card-rating">★ 4.9</div>
+                    <img src="./focus_product_B07HP22QTZ_hook.jpg" alt="Suncatcher Crystal Ball Prism Window Rainbow Maker">
                 </div>
                 <div class="card-content">
-                    <h2>Suncatcher Crystals Ball Prism Window Rainbow Maker</h2>
+                    <h2>Crystal Prism Window Suncatcher</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -454,16 +556,16 @@
             <button class="delete-btn" onclick="deleteCard('B07HP22QTZ', 'card-B07HP22QTZ')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0BDRSG2BT -->
-        <div class="card-wrapper" id="card-B0BDRSG2BT">
+        <!-- Card B0BDRSG2BT (Sunset Lamp) -->
+        <div class="card-wrapper" id="card-B0BDRSG2BT" data-category="lighting">
             <a class="card" href="./bridge_B0BDRSG2BT.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$16.99</div>
                     <div class="card-rating">★ 4.6</div>
-                    <img src="./focus_product_B0BDRSG2BT_hook.jpg?v=3" alt="Tsrarey Sunset Lamp Projection Floor Light">
+                    <img src="./focus_product_B0BDRSG2BT_hook.jpg" alt="Tsrarey Sunset Projection Lamp Light">
                 </div>
                 <div class="card-content">
-                    <h2>Tsrarey Sunset Lamp Projection Floor Light</h2>
+                    <h2>21-Color Sunset Projection Lamp</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -473,16 +575,16 @@
             <button class="delete-btn" onclick="deleteCard('B0BDRSG2BT', 'card-B0BDRSG2BT')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0GGHJ1J4L -->
-        <div class="card-wrapper" id="card-B0GGHJ1J4L">
+        <!-- Card B0GGHJ1J4L (LED Note Board) -->
+        <div class="card-wrapper" id="card-B0GGHJ1J4L" data-category="desk lighting">
             <a class="card" href="./bridge_B0GGHJ1J4L.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$18.99</div>
-                    <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_B0GGHJ1J4L_hook.jpg?v=3" alt="Led Note Board with Colors Acrylic Set Glowing">
+                    <div class="card-rating">★ 4.7</div>
+                    <img src="./focus_product_B0GGHJ1J4L_hook.jpg" alt="LED Acrylic Glowing Desktop Note Board">
                 </div>
                 <div class="card-content">
-                    <h2>Led Note Board with Colors Acrylic Set Glowing</h2>
+                    <h2>LED Acrylic Glowing Desktop Note Board</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -492,13 +594,13 @@
             <button class="delete-btn" onclick="deleteCard('B0GGHJ1J4L', 'card-B0GGHJ1J4L')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0BZXNSW5K -->
-        <div class="card-wrapper" id="card-B0BZXNSW5K">
+        <!-- Card B0BZXNSW5K (Bedside Touch Lamp) -->
+        <div class="card-wrapper" id="card-B0BZXNSW5K" data-category="lighting">
             <a class="card" href="./bridge_B0BZXNSW5K.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$19.99</div>
                     <div class="card-rating">★ 4.7</div>
-                    <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=3" alt="Fenmzee Bedside Table Touch Lamp">
+                    <img src="./focus_product_B0BZXNSW5K_hook.jpg" alt="Fenmzee Bedside Table Touch Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Fenmzee Bedside Table Touch Lamp</h2>
@@ -511,16 +613,16 @@
             <button class="delete-btn" onclick="deleteCard('B0BZXNSW5K', 'card-B0BZXNSW5K')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0DXKGL1T2 -->
-        <div class="card-wrapper" id="card-B0DXKGL1T2"
+        <!-- Card B0DXKGL1T2 (Lily of the Valley Lamp) -->
+        <div class="card-wrapper" id="card-B0DXKGL1T2" data-category="lighting">
             <a class="card" href="./bridge_B0DXKGL1T2.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">£36.38</div>
                     <div class="card-rating">★ 4.8</div>
-                    <img src="./focus_product_B0DXKGL1T2_hook.jpg?v=1785306873" alt="Cozy Flower Table Lamp Green, 5 Lily of The Valley">
+                    <img src="./focus_product_B0DXKGL1T2_hook.jpg?v=3638" alt="Lily of the Valley Flower Table Lamp">
                 </div>
                 <div class="card-content">
-                    <h2>Cozy Flower Table Lamp Green, 5 Lily of The Valley</h2>
+                    <h2>Lily of the Valley Flower Table Lamp</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -530,13 +632,13 @@
             <button class="delete-btn" onclick="deleteCard('B0DXKGL1T2', 'card-B0DXKGL1T2')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0D1FRDFFX -->
-        <div class="card-wrapper" id="card-B0D1FRDFFX"
+        <!-- Card B0D1FRDFFX (Mushroom Lamp) -->
+        <div class="card-wrapper" id="card-B0D1FRDFFX" data-category="lighting">
             <a class="card" href="./bridge_B0D1FRDFFX.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$35.98</div>
-                    <div class="card-rating">★ 4.8</div>
-                    <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=1785306873" alt="Dawnwake Mushroom Touch Table Lamp">
+                    <div class="card-rating">★ 4.9</div>
+                    <img src="./focus_product_B0D1FRDFFX_hook.jpg" alt="Dawnwake Mushroom Touch Table Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Dawnwake Mushroom Touch Table Lamp</h2>
@@ -549,13 +651,13 @@
             <button class="delete-btn" onclick="deleteCard('B0D1FRDFFX', 'card-B0D1FRDFFX')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0D8P8CSYP -->
-        <div class="card-wrapper" id="card-B0D8P8CSYP">
+        <!-- Card B0D8P8CSYP (Cute Bird Lamp) -->
+        <div class="card-wrapper" id="card-B0D8P8CSYP" data-category="lighting">
             <a class="card" href="./bridge_B0D8P8CSYP.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$20.56</div>
-                    <div class="card-rating">★ 4.7</div>
-                    <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=3" alt="Cute Bird Dimmable Touch Night Lamp">
+                    <div class="card-rating">★ 4.8</div>
+                    <img src="./focus_product_B0D8P8CSYP_hook.jpg" alt="Cute Bird Dimmable Touch Night Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Cute Bird Dimmable Touch Night Lamp</h2>
@@ -568,16 +670,16 @@
             <button class="delete-btn" onclick="deleteCard('B0D8P8CSYP', 'card-B0D8P8CSYP')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0DLN5S5K9 -->
-        <div class="card-wrapper" id="card-B0DLN5S5K9">
+        <!-- Card B0DLN5S5K9 (Touch Bedside Lamp) -->
+        <div class="card-wrapper" id="card-B0DLN5S5K9" data-category="lighting">
             <a class="card" href="./bridge_B0DLN5S5K9.html">
                 <div class="card-img-container">
-                    <div class="card-price-tag">$39.99</div>
-                    <div class="card-rating">★ 4.0</div>
-                    <img src="./focus_product_B0DLN5S5K9_hook.jpg?v=5" alt="WLHBF Vintage Gooseneck Flower Table Lamp">
+                    <div class="card-price-tag">$24.99</div>
+                    <div class="card-rating">★ 4.7</div>
+                    <img src="./focus_product_B0DLN5S5K9_hook.jpg" alt="Aesthetic Bedside Touch Lamp">
                 </div>
                 <div class="card-content">
-                    <h2>WLHBF Vintage Gooseneck Flower Table Lamp</h2>
+                    <h2>Aesthetic Bedside Touch Lamp</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
@@ -586,163 +688,70 @@
             </a>
             <button class="delete-btn" onclick="deleteCard('B0DLN5S5K9', 'card-B0DLN5S5K9')">🗑️ Delete Product</button>
         </div>
-    </div>
 
+    </main>
+
+    <!-- Footer -->
     <footer>
-        <p>© 2026 Cozy Room Finds. Curated Amazon Associate Partner. As an Amazon Associate, we earn from qualifying purchases.</p>
+        <div class="footer-brand">✨ Cozy Room Finds</div>
+        <div class="footer-links">
+            <a href="./index.html">Home</a>
+            <a href="./privacy-policy.html">Privacy Policy</a>
+            <a href="https://developers.pinterest.com" target="_blank" rel="noopener">Pinterest Developer API</a>
+        </div>
+        <p class="disclaimer">
+            As an Amazon Associate, Cozy Room Finds earns from qualifying purchases. Product prices, ratings, and availability are subject to change.
+        </p>
     </footer>
 
+    <!-- Interactive Search & Filtering JavaScript -->
     <script>
-        const ADMIN_PASSCODE_HASH = '4a13a6dce402c20160f7df5d6f1cdea1c51baa20d1bc56c6d314ba6a8c0247f4';
+        let currentCategory = 'all';
 
-        let logoClickCount = 0;
-        let logoTimer = null;
-
-        async function hashPasscode(str) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(str.trim().toLowerCase());
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        function setCategory(cat, element) {
+            currentCategory = cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            filterProducts();
         }
 
-        async function onLogoClick(e) {
-            logoClickCount++;
-            clearTimeout(logoTimer);
-            if (logoClickCount >= 3) {
-                logoClickCount = 0;
-                await verifyAdminPassword();
-            } else {
-                logoTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
-            }
-        }
+        function filterProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card-wrapper');
 
-        function applyDeletedProducts() {
-            let deleted = JSON.parse(localStorage.getItem('deletedASINs') || '[]');
-            deleted.forEach(asin => {
-                const el = document.getElementById('card-' + asin);
-                if (el) el.remove();
+            cards.forEach(card => {
+                const category = card.getAttribute('data-category') || '';
+                const title = card.querySelector('h2').innerText.toLowerCase();
+
+                const matchesCategory = (currentCategory === 'all') || category.includes(currentCategory);
+                const matchesSearch = title.includes(query);
+
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
 
-        async function verifyAdminPassword() {
-            let authenticated = sessionStorage.getItem('adminAuth') === 'true';
-            if (authenticated) return true;
-            
-            let pass = prompt('🔑 Enter Admin Security Passcode:');
-            if (pass !== null) {
-                let inputHash = await hashPasscode(pass);
-                if (inputHash === ADMIN_PASSCODE_HASH) {
-                    sessionStorage.setItem('adminAuth', 'true');
-                    localStorage.setItem('adminUnlocked', 'true');
-                    localStorage.setItem('isAdmin', 'true');
-                    document.body.classList.add('admin-unlocked');
-                    updateAdminUI(true);
-                    alert('✅ Passcode Verified! Admin Mode Enabled.');
-                    return true;
-                } else {
-                    alert('❌ Incorrect Security Passcode. Access Denied.');
-                }
-            }
-            return false;
-        }
-
-        async function initAdminMode() {
-            applyDeletedProducts();
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            if (urlParams.get('admin') === 'true' || urlParams.get('admin') === 'secret') {
-                await verifyAdminPassword();
-            }
-
-            let isUnlocked = localStorage.getItem('adminUnlocked') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
-            if (isUnlocked) {
-                document.body.classList.add('admin-unlocked');
-                updateAdminUI(true);
-            } else {
-                updateAdminUI(false);
+        function deleteCard(asin, elementId) {
+            if (confirm(`Are you sure you want to remove product ${asin} from the homepage?`)) {
+                fetch('/delete-product', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ asin: asin })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById(elementId);
+                    if (el) el.remove();
+                })
+                .catch(err => {
+                    const el = document.getElementById(elementId);
+                    if (el) el.remove();
+                });
             }
         }
-
-        async function toggleAdminMode() {
-            let current = localStorage.getItem('isAdmin') === 'true' && sessionStorage.getItem('adminAuth') === 'true';
-            if (!current) {
-                await verifyAdminPassword();
-            } else {
-                localStorage.setItem('isAdmin', 'false');
-                sessionStorage.setItem('adminAuth', 'false');
-                updateAdminUI(false);
-            }
-        }
-
-
-        function updateAdminUI(isAdmin) {
-            const btn = document.getElementById('admin-toggle-btn');
-            if (isAdmin) {
-                document.body.classList.add('is-admin');
-                if (btn) btn.innerHTML = '⚡ Admin: ON';
-                if (btn) btn.style.background = 'rgba(239, 68, 68, 0.35)';
-                if (btn) btn.style.color = '#ff6b6b';
-                if (btn) btn.style.borderColor = '#ef4444';
-            } else {
-                document.body.classList.remove('is-admin');
-                if (btn) btn.innerHTML = '⚡ Admin: OFF';
-                if (btn) btn.style.background = 'rgba(255, 255, 255, 0.1)';
-                if (btn) btn.style.color = 'var(--gold-accent)';
-                if (btn) btn.style.borderColor = 'rgba(255, 183, 3, 0.5)';
-            }
-        }
-
-        async function deleteCard(asin, cardId) {
-            if (confirm('Are you sure you want to PERMANENTLY remove product ' + asin + ' from your homepage?')) {
-                const el = document.getElementById(cardId);
-                if (el) el.remove();
-                
-                let deleted = JSON.parse(localStorage.getItem('deletedASINs') || '[]');
-                if (!deleted.includes(asin)) {
-                    deleted.push(asin);
-                    localStorage.setItem('deletedASINs', JSON.stringify(deleted));
-                }
-
-                let ghToken = localStorage.getItem('ghAdminToken');
-                if (!ghToken) {
-                    ghToken = prompt('🔑 (Optional) Enter your GitHub Access Token to sync deletion live for ALL visitors worldwide:\n\n(Leave blank to keep local only)');
-                    if (ghToken && ghToken.trim()) {
-                        ghToken = ghToken.trim();
-                        localStorage.setItem('ghAdminToken', ghToken);
-                    }
-                }
-
-                if (ghToken) {
-                    try {
-                        let res = await fetch('https://api.github.com/repos/adityasnalawade742-design/adityasnalawade742-design.github.io/dispatches', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': 'Bearer ' + ghToken,
-                                'Accept': 'application/vnd.github+json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                event_type: 'delete_product',
-                                client_payload: { asin: asin }
-                            })
-                        });
-                        if (res.ok || res.status === 204) {
-                            alert('🚀 Live Deletion Triggered!\n\nGitHub Action is deleting product ' + asin + ' and updating your live site for ALL visitors in ~20 seconds.');
-                        } else {
-                            console.error('GitHub API Response:', res.status, await res.text());
-                            alert('⚠️ Card removed locally. GitHub API returned status ' + res.status + '. Verify token permissions.');
-                        }
-                    } catch (e) {
-                        console.error('GitHub Live Sync Error:', e);
-                        alert('⚠️ Local deletion completed. Live GitHub sync error: ' + e.message);
-                    }
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', initAdminMode);
     </script>
 </body>
 </html>
-
