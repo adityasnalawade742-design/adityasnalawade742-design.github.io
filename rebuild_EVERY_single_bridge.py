@@ -108,6 +108,7 @@ master_catalog = {
         "category": "lighting",
         "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
         "direct_regions": ["US", "UK", "DE", "SE", "CA", "JP"],
+        "target_asin": "B0DDTPCDLB",
         "affiliate_url": "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21"
     },
     "B0DDTPCDLB": {

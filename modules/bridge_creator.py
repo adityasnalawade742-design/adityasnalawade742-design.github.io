@@ -427,7 +427,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             };
 
             {% set clean_words = product.title.split()[:4] | join(' ') %}
-            const currentAsin = "{{ asin }}";
+            const currentAsin = "{{ product.get('target_asin', asin) }}";
             const prodKeywords = encodeURIComponent("{{ clean_words }}");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
 
