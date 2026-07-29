@@ -453,6 +453,16 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 }
             }
 
+            // ⚡ Phase 0: Instant URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN)
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const forcedCountry = urlParams.get('country') || urlParams.get('geo');
+                if (forcedCountry) {
+                    applyGeoRedirect(forcedCountry.toUpperCase());
+                    return;
+                }
+            } catch(e) {}
+
             // ⚡ Phase 1: INSTANT Offline Fallback (0ms - Timezone & Browser Language Check)
             try {
                 const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
