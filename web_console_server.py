@@ -1,13 +1,13 @@
 """
 Local Web Console Server for Product & Image Verification
-Serves admin_console.html on http://localhost:5000
-Provides API endpoints for extracting Amazon photos and launching campaign generation.
+Provides non-blocking background campaign generation & real-time polling API endpoints.
 """
 import sys
 import os
 import json
 import urllib.parse
 import subprocess
+import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
@@ -22,6 +22,91 @@ from modules.amazon_extractor import (
 
 PORT = 5000
 WORKSPACE_DIR = Path("G:/CLI/pinterest-auto-affiliate")
+TASK_STATUS_MAP = {}
+
+def run_async_generation(asin, selected_photo, title_clean, price_clean, prompt_strength):
+    global TASK_STATUS_MAP
+    TASK_STATUS_MAP[asin] = {
+        'status': 'processing',
+        'step': 'Rendering 8K FLUX AI Image (Replicate API)...',
+        'message': 'Calling FLUX-Dev model...'
+    }
+
+    script_code = f"""
+import sys
+from modules.automated_product_selector import save_processed_asin
+from modules.amazon_extractor import get_product_details_and_photos
+from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
+from modules.html_overlay_engine import render_html_overlay
+from modules.vision_prompt import generate_cozy_image_prompt
+from modules.seo_copywriter import generate_pin_seo_data
+from modules.bridge_creator import generate_bridge_page
+
+asin = "{asin}"
+prod = {{
+    'title': "{title_clean}",
+    'price': "{price_clean}",
+    'rating': "4.5",
+    'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
+}}
+
+ref_sheet_path = create_multi_photo_reference_sheet(["{selected_photo}"], filename_prefix=f"product_{{asin}}", max_photos=1)
+cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Lighting", prod['features'], ref_sheet_path, is_white_background=False)
+raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{{asin}}", init_image_path="{selected_photo}", prompt_strength={prompt_strength})
+
+seo_data = {{
+    "pin_title": prod['title'],
+    "image_hook": prod['title'][:30],
+    "subtitle_hook": "",
+    "badge_hook": "VIRAL ROOM FIND",
+    "description": "Transform your space with this viral room upgrade find.",
+    "suggested_board": "Cozy Room Decor",
+    "keywords": ["room decor", "lighting"]
+}}
+
+hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{{asin}}_hook.jpg"
+render_html_overlay(raw_image_path, seo_data['image_hook'], "", seo_data['badge_hook'], prod['price'], hook_img_path)
+generate_bridge_page(prod, seo_data, asin)
+save_processed_asin(asin)
+
+import subprocess
+subprocess.run(["git", "add", "-A"], check=True)
+subprocess.run(["git", "commit", "-m", f"publish {{asin}} from Web Console"], check=True)
+subprocess.run(["git", "push", "origin", "main"], check=True)
+print("SUCCESS")
+"""
+    temp_script = WORKSPACE_DIR / f"run_console_{asin}.py"
+    with open(temp_script, "w", encoding="utf-8") as f:
+        f.write(script_code)
+
+    try:
+        res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180)
+        stdout_str = res.stdout or ""
+        stderr_str = res.stderr or ""
+        if res.returncode == 0 and "SUCCESS" in stdout_str:
+            bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
+            TASK_STATUS_MAP[asin] = {
+                'status': 'success',
+                'bridge_url': bridge_url,
+                'message': 'Campaign generated and deployed live to GitHub Pages!'
+            }
+        else:
+            TASK_STATUS_MAP[asin] = {
+                'status': 'error',
+                'message': stderr_str or stdout_str or 'Execution failed.'
+            }
+    except Exception as e:
+        TASK_STATUS_MAP[asin] = {
+            'status': 'error',
+            'message': str(e)
+        }
+    finally:
+        if temp_script.exists():
+            try:
+                os.remove(temp_script)
+            except Exception:
+                pass
+
 
 class WebConsoleHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -35,6 +120,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif parsed.path == '/api/extract':
             self.handle_api_extract(parsed.query)
             return
+        elif parsed.path == '/api/task_status':
+            self.handle_api_status(parsed.query)
+            return
         else:
             return super().do_GET()
 
@@ -44,6 +132,12 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             return
         else:
             self.send_error(404, "Endpoint not found")
+
+    def handle_api_status(self, query_str):
+        params = urllib.parse.parse_qs(query_str)
+        asin = params.get('asin', [''])[0].strip()
+        status_info = TASK_STATUS_MAP.get(asin, {'status': 'not_found'})
+        self.send_json(status_info)
 
     def handle_api_extract(self, query_str):
         params = urllib.parse.parse_qs(query_str)
@@ -115,68 +209,19 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         title_clean = title.replace('"', '\\"').replace("'", "\\'")
         price_clean = price.replace('"', '\\"')
 
-        # Run campaign generation script
-        script_code = f"""
-import sys
-from modules.automated_product_selector import save_processed_asin
-from modules.amazon_extractor import get_product_details_and_photos
-from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
-from modules.html_overlay_engine import render_html_overlay
-from modules.vision_prompt import generate_cozy_image_prompt
-from modules.seo_copywriter import generate_pin_seo_data
-from modules.bridge_creator import generate_bridge_page
+        # Launch background thread
+        t = threading.Thread(
+            target=run_async_generation,
+            args=(asin, selected_photo, title_clean, price_clean, prompt_strength),
+            daemon=True
+        )
+        t.start()
 
-asin = "{asin}"
-prod = {{
-    'title': "{title_clean}",
-    'price': "{price_clean}",
-    'rating': "4.5",
-    'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
-}}
-
-ref_sheet_path = create_multi_photo_reference_sheet(["{selected_photo}"], filename_prefix=f"product_{{asin}}", max_photos=1)
-cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Lighting", prod['features'], ref_sheet_path, is_white_background=False)
-raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{{asin}}", init_image_path="{selected_photo}", prompt_strength={prompt_strength})
-
-seo_data = {{
-    "pin_title": prod['title'],
-    "image_hook": prod['title'][:30],
-    "subtitle_hook": "",
-    "badge_hook": "VIRAL ROOM FIND",
-    "description": "Transform your space with this viral room upgrade find.",
-    "suggested_board": "Cozy Room Decor",
-    "keywords": ["room decor", "lighting"]
-}}
-
-hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{{asin}}_hook.jpg"
-render_html_overlay(raw_image_path, seo_data['image_hook'], "", seo_data['badge_hook'], prod['price'], hook_img_path)
-generate_bridge_page(prod, seo_data, asin)
-save_processed_asin(asin)
-
-import subprocess
-subprocess.run(["git", "add", "-A"], check=True)
-subprocess.run(["git", "commit", "-m", f"publish {{asin}} from Web Console"], check=True)
-subprocess.run(["git", "push", "origin", "main"], check=True)
-print("SUCCESS")
-"""
-        temp_script = WORKSPACE_DIR / f"run_console_{asin}.py"
-        with open(temp_script, "w", encoding="utf-8") as f:
-            f.write(script_code)
-
-        try:
-            res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
-            stdout_str = res.stdout or ""
-            stderr_str = res.stderr or ""
-            if res.returncode == 0 and "SUCCESS" in stdout_str:
-                bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
-                self.send_json({'status': 'success', 'bridge_url': bridge_url})
-            else:
-                self.send_json({'status': 'error', 'message': stderr_str or stdout_str or "Execution failed."})
-        except Exception as e:
-            self.send_json({'status': 'error', 'message': str(e)})
-        finally:
-            if temp_script.exists():
-                os.remove(temp_script)
+        self.send_json({
+            'status': 'processing',
+            'asin': asin,
+            'message': 'Campaign generation started in background process.'
+        })
 
     def send_json(self, data):
         body = json.dumps(data).encode('utf-8')

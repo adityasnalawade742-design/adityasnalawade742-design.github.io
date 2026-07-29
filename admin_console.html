@@ -574,20 +574,44 @@
             })
             .then(res => res.json())
             .then(data => {
-                document.getElementById('publishSpinner').style.display = 'none';
-                if (data.status === 'success') {
-                    showToast("Campaign approved and published live to GitHub Pages!", "🚀");
-                    setTimeout(() => {
-                        window.open(data.bridge_url, '_blank');
-                    }, 1500);
-                } else {
-                    alert("Error generating campaign: " + data.message);
+                if (data.status === 'processing') {
+                    showToast("Rendering 8K FLUX Image in background...", "⏳");
+                    pollCampaignStatus(currentProductData.asin);
+                } else if (data.status === 'error') {
+                    document.getElementById('publishSpinner').style.display = 'none';
+                    alert("Error launching campaign: " + data.message);
                 }
             })
             .catch(err => {
                 document.getElementById('publishSpinner').style.display = 'none';
                 alert("Error communicating with server.");
             });
+        }
+
+        function pollCampaignStatus(asin) {
+            const interval = setInterval(() => {
+                fetch(`/api/task_status?asin=${encodeURIComponent(asin)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            clearInterval(interval);
+                            document.getElementById('publishSpinner').style.display = 'none';
+                            showToast("Campaign generated and published live to GitHub Pages!", "🚀");
+                            setTimeout(() => {
+                                window.open(data.bridge_url, '_blank');
+                            }, 1500);
+                        } else if (data.status === 'error') {
+                            clearInterval(interval);
+                            document.getElementById('publishSpinner').style.display = 'none';
+                            alert("Campaign generation error: " + (data.message || "Execution failed."));
+                        } else if (data.status === 'processing') {
+                            showToast(data.step || "Rendering 8K FLUX Image (Replicate API)...", "🎨");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Polling error:", err);
+                    });
+            }, 3000);
         }
     </script>
 
