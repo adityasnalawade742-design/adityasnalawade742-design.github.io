@@ -303,17 +303,13 @@ def render_html_overlay(
 
 
 
-    # Check for user-provided custom price tag image
-    custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
-
-
     tag_accent_hex = ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900"
-
+    custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
     if custom_tag_path.exists():
         stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
         price_pill_html = f"""
-        <div class="custom-price-container" style="position: relative; width: 320px; height: 240px; display: flex; align-items: center; justify-content: center; transform: rotate(-5deg); filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.6));">
+        <div class="custom-price-container" style="position: relative; width: 360px; height: 270px; display: flex; align-items: center; justify-content: center; transform: rotate(-6deg); filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75));">
             <img src="{tag_abs_url}" style="width: 100%; height: 100%; object-fit: contain;" />
         </div>
         """
