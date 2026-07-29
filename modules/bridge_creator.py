@@ -373,7 +373,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             btn.classList.add('active');
         }
 
-        // Bulletproof Multi-Fallback Global Amazon Geo-Redirector
+        // Bulletproof 2-Phase Global Amazon Geo-Redirector (Instant Offline + Network Upgrade)
         (function() {
             const countryMap = {
                 "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
@@ -399,21 +399,17 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "SE": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" }
             };
 
-            const asin = "{{ asin }}";
             const prodKeywords = encodeURIComponent("{{ product.title[:40] }}");
 
             function applyGeoRedirect(cc) {
                 if (!cc || cc === 'US') return;
                 
-                // Smart Asian & Global Fallback Router
                 let targetCC = cc;
                 if (!countryMap[targetCC]) {
                     const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                    if (tz.includes('asia') || ['SG', 'IN', 'TH', 'VN', 'PH', 'MY', 'ID', 'HK', 'TW'].includes(cc)) {
-                        targetCC = 'IN'; // Fallback to Amazon India for Asian regions without native stores
-                    } else {
-                        return; // Default US
-                    }
+                    if (tz.includes('asia')) targetCC = 'IN';
+                    else if (tz.includes('europe')) targetCC = 'GB';
+                    else return;
                 }
 
                 const target = countryMap[targetCC];
@@ -421,7 +417,6 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                // Route to valid local search deals on regional Amazon store (prevents 404 errors)
                 if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
                 if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                 
@@ -434,38 +429,35 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 }
             }
 
-            // Method 1: Try api.country.is (Open CORS, Fast)
+            // ⚡ Phase 1: INSTANT Offline Fallback (0ms - Bypasses Opera AdBlocker & VPN blocks)
+            try {
+                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                const lang = (navigator.language || '').toLowerCase();
+                if (tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia') || lang.includes('in')) {
+                    applyGeoRedirect('IN');
+                } else if (tz.includes('stockholm') || lang.includes('se')) {
+                    applyGeoRedirect('SE');
+                } else if (tz.includes('london') || lang.includes('gb')) {
+                    applyGeoRedirect('GB');
+                } else if (tz.includes('berlin') || tz.includes('paris') || lang.includes('de')) {
+                    applyGeoRedirect('DE');
+                }
+            } catch(e) {}
+
+            // ⚡ Phase 2: Asynchronous Network Precision Check (If allowed by browser)
             fetch('https://api.country.is')
                 .then(r => r.json())
-                .then(d => {
-                    if (d && d.country) applyGeoRedirect(d.country);
-                    else throw new Error("No country");
-                })
+                .then(d => { if (d && d.country) applyGeoRedirect(d.country); })
                 .catch(err => {
-                    // Method 2: Try ipapi.co
                     fetch('https://ipapi.co/json/')
                         .then(r => r.json())
-                        .then(d => {
-                            if (d && d.country_code) applyGeoRedirect(d.country_code);
-                            else throw new Error("No country code");
-                        })
-                        .catch(err2 => {
-                            // Method 3: Browser Timezone Fallback
-                            try {
-                                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-                                if (tz.includes('Stockholm')) applyGeoRedirect('SE');
-                                else if (tz.includes('Kolkata') || tz.includes('Calcutta')) applyGeoRedirect('IN');
-                                else if (tz.includes('London')) applyGeoRedirect('GB');
-                                else if (tz.includes('Berlin') || tz.includes('Paris')) applyGeoRedirect('DE');
-                                else if (tz.includes('Tokyo')) applyGeoRedirect('JP');
-                            } catch(e) {}
-                        });
+                        .then(d => { if (d && d.country_code) applyGeoRedirect(d.country_code); })
+                        .catch(e => {});
                 });
         })();
     </script>
 
 </body>
-</html>
 """
 
 def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
