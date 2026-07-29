@@ -47,12 +47,12 @@ master_catalog = {
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0C2YLN3H4": {
-        "title": "White Ceramic Donut Vase Set of 2 Modern Aesthetic Decor",
-        "price": "$14.99",
-        "rating": "4.7",
-        "features": ["MATTE CERAMIC FINISH", "DONUT HOLLOW CENTER", "MINIMALIST NORDIC STYLE", "SET OF 2 MATCHING VASES"],
-        "category": "decor",
-        "description": "Minimalist matte white ceramic donut vase set of 2 for aesthetic pampas grass, shelf styling, coffee table and mantle room decor.",
+        "title": "White Ceramic Donut Vase Set of 2 Modern Nordic Home Decor",
+        "price": "$28.99",
+        "rating": "4.9",
+        "features": ["MATTE CERAMIC FINISH", "SET OF 2 HALLOW VASES", "NORDIC MINIMALIST DESIGN", "PERFECT GIFT BOX"],
+        "category": "vases",
+        "description": "Handcrafted white ceramic donut vases for pampas grass and modern minimalist home decor.",
         "direct_regions": ["US", "IN", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0GYDXHF4G": {

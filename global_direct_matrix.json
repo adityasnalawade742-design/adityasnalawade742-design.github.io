@@ -1,10 +1,7 @@
 {
   "B0DZD1X83N": [
     "US",
-    "DE",
-    "SE",
-    "CA",
-    "JP"
+    "CA"
   ],
   "B0BZXNSW5K": [
     "US",
@@ -12,8 +9,7 @@
     "UK",
     "DE",
     "SE",
-    "CA",
-    "JP"
+    "CA"
   ],
   "B0D1FRDFFX": [
     "US",
@@ -22,9 +18,7 @@
     "DE",
     "SE",
     "SG",
-    "CA",
-    "AU",
-    "JP"
+    "AU"
   ],
   "B0C2YLN3H4": [
     "US",
@@ -37,18 +31,13 @@
     "JP"
   ],
   "B0GYDXHF4G": [
-    "US",
-    "DE",
-    "SE",
-    "CA",
-    "JP"
+    "US"
   ],
   "B0FXLYXM32": [
     "US",
     "IN",
     "UK",
     "DE",
-    "SE",
     "SG",
     "CA",
     "AU",
@@ -72,22 +61,15 @@
     "DE",
     "SE",
     "SG",
-    "CA",
     "AU",
     "JP"
   ],
   "B0DLN5S5K9": [
     "UK",
-    "DE",
     "SE",
-    "CA",
     "JP"
   ],
   "B0DXKGL1T2": [
-    "UK",
-    "DE",
-    "SE",
-    "CA",
-    "JP"
+    "UK"
   ]
 }
