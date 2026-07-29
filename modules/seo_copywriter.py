@@ -20,7 +20,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     if "diffuser" in t_lower or "flame" in t_lower or "volcano" in t_lower:
         clean_name = "Flame Aroma Essential Oil Diffuser"
         pin_title = "Say Goodbye To Harsh Overhead Lights 🕯️ Flame Aroma Diffuser"
-        subtitle_hook = "REALISTIC FLAME ATMOSPHERE"
+        subtitle_hook = ""
         badge_hook = "COZY NIGHT VIBES"
         features = ["VOLCANO FLAME MIST", "WARM AMBER GLOW", "AUTO SHUT OFF", "ESSENTIAL OIL READY"]
         theme_style = "dark_obsidian_neon"
@@ -35,7 +35,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "vase" in t_lower or "donut" in t_lower or "pampas" in t_lower:
         clean_name = "White Ceramic Donut Vases"
         pin_title = "Elevate Your Table Vibe 🌿 White Ceramic Donut Vase Set"
-        subtitle_hook = "BOHO TABLETOP MAGIC"
+        subtitle_hook = ""
         badge_hook = "VANITY GOALS"
         features = ["MATTE CERAMIC FINISH", "SET OF 2 VASES", "PAMPAS GRASS READY", "HANDCRAFTED BOHO"]
         theme_style = "floating_cream"
@@ -50,7 +50,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "mirror" in t_lower or "wavy" in t_lower or "vanity" in t_lower:
         clean_name = "White Wavy Wall Vanity Mirror"
         pin_title = "Upgrade Your Vanity Vibe ✨ White Wavy Wall Mirror"
-        subtitle_hook = "ELEVATE YOUR VANITY SPACE"
+        subtitle_hook = ""
         badge_hook = "VANITY GOALS"
         features = ["CREAM WAVY FRAME", "HIGH CLARITY GLASS", "CUTE SQUIGGLE DESIGN", "WALL & VANITY MOUNT"]
         theme_style = "floating_cream"
@@ -65,7 +65,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "suncatcher" in t_lower or "prism" in t_lower or "crystal" in t_lower:
         clean_name = "Crystal Prism Window Suncatcher"
         pin_title = "Fill Your Room With Rainbows 🌈 Crystal Prism Window Suncatcher"
-        subtitle_hook = "SUNLIGHT WINDOW PRISM MAGIC"
+        subtitle_hook = ""
         badge_hook = "RAINBOW MAKER"
         features = ["K9 CRYSTAL PRISM", "RAINBOW REFLECTIONS", "WINDOW HANGING CHAIN", "SUNLIGHT SPECTRUM"]
         theme_style = "sunlight_crystal"
@@ -80,7 +80,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "sunset" in t_lower:
         clean_name = "Tsrarey Sunset Projection Lamp"
         pin_title = "Golden Hour Vibes Anytime 🌅 21-Color Sunset Projector Lamp"
-        subtitle_hook = "GOLDEN HOUR ATMOSPHERE"
+        subtitle_hook = ""
         badge_hook = "VIRAL ROOM FIND"
         features = ["21 COLOR MODES", "180 DEGREE ROTATION", "APP & BUTTON CONTROL", "GOLDEN HOUR GLOW"]
         theme_style = "dark_obsidian_neon"
@@ -95,7 +95,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "note board" in t_lower or "glowing" in t_lower or "acrylic" in t_lower:
         clean_name = "LED Acrylic Glowing Desktop Note Board"
         pin_title = "Light Up Your Daily Goals ✨ Glowing Acrylic Note Board"
-        subtitle_hook = "ILLUMINATED DESK ORGANIZER"
+        subtitle_hook = ""
         badge_hook = "DESK GOALS"
         features = ["7 LIGHT COLORS", "DRY ERASE ACRYLIC", "WOODEN LED BASE", "7 COLOR PENS INCL"]
         theme_style = "dark_obsidian_neon"
@@ -110,7 +110,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "mushroom" in t_lower:
         clean_name = "Dawnwake Mushroom Touch Table Lamp"
         pin_title = "Cozy Bedroom Essential 🍄 Dawnwake Mushroom Touch Lamp"
-        subtitle_hook = "MINIMALIST MUSHROOM GLOW"
+        subtitle_hook = ""
         badge_hook = "COZY NIGHT VIBES"
         features = ["TOUCH SENSOR DIMMER", "WARM AMBIENT GLOW", "GLASS DOME SHADE", "BEDSIDE ELEGANCE"]
         theme_style = "floating_luxury"

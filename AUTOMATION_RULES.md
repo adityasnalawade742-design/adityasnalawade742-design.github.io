@@ -71,9 +71,11 @@ Every Amazon listing photo suite (5–9 photos) MUST undergo the following 4-lay
 
 ---
 
-## 6. 🔒 Cloud Hosting Security & Admin Authentication Requirement
+## 6. 🔒 Cloud Hosting Admin Authentication Security
+- **Cloud Remote Admin Security**: Remote actions (deletions, manual campaign runs) on AWS or n8n cloud hosting MUST be secured behind an `ADMIN_SECRET_KEY` authentication layer.
 
-- **Secure Remote Deletion**: When deploying to cloud hosting (AWS EC2 / Lambda / n8n), all remote administrative endpoints (product deletion, manual overrides) MUST be protected by a private `ADMIN_SECRET_KEY` saved in `.env` to prevent unauthorized public execution.
+---
 
-
-
+## 7. 🚫 No Fluff / Generic Subtitles Rule
+- **Clean Graphic Subtitles**: NEVER add generic marketing fluff subtitles like `"ELEVATE YOUR VANITY SPACE"`, `"VINTAGE FLORAL GLOW"`, or arbitrary taglines to Playwright graphic overlays (`focus_product_{asin}_hook.jpg`).
+- **Default Subtitle Policy**: Subtitles MUST be left empty (`""`) unless explicitly requested by the user.
