@@ -155,12 +155,29 @@
     </div>
 
     <script>
-        // Direct Amazon Product Page Redirection
-        document.getElementById('amazon-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            const directProductUrl = "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21";
-            window.open(directProductUrl, '_blank', 'noopener,noreferrer');
-        });
+        // Automatic Geo-IP Location Smart Router
+        // UK visitors -> Amazon UK; US/Global visitors -> Amazon US
+        (function() {
+            const ukUrl = "https://www.amazon.co.uk/dp/B0DXKGL1T2?tag=smartdeal0358-21";
+            const usUrl = "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21";
+
+            fetch('https://ipapi.co/json/')
+                .then(res => res.json())
+                .then(data => {
+                    const btn = document.getElementById('amazon-btn');
+                    if (data.country_code === 'GB' || data.country_code === 'UK') {
+                        if (btn) btn.href = ukUrl;
+                    } else {
+                        if (btn) btn.href = usUrl;
+                    }
+                })
+                .catch(err => console.log('Geo-IP fallback active'));
+
+            document.getElementById('amazon-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open(this.href, '_blank', 'noopener,noreferrer');
+            });
+        })();
     </script>
 </body>
 
