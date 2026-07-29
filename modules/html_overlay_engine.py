@@ -313,7 +313,7 @@ def render_html_overlay(
         stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
         price_pill_html = f"""
-        <div class="custom-price-container" style="position: relative; width: 340px; height: 450px; display: flex; align-items: center; justify-content: center; transform: rotate(-8deg); filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.5));">
+        <div class="custom-price-container" style="position: relative; width: 220px; height: 160px; display: flex; align-items: center; justify-content: center; transform: rotate(-5deg); filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));">
             <img src="{tag_abs_url}" style="width: 100%; height: 100%; object-fit: contain;" />
         </div>
         """
@@ -625,9 +625,11 @@ def render_html_overlay(
         }}
 
         .bottom-container {{
-            position: relative;
+            position: absolute;
+            bottom: 40px;
+            left: 45px;
+            right: 45px;
             z-index: 10;
-            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
