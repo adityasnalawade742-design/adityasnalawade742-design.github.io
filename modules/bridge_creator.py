@@ -231,6 +231,24 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             gap: 6px;
         }
 
+        /* Geo Shipping Notice Box */
+        .geo-notice-box {
+            display: none;
+            background: rgba(251, 133, 0, 0.12);
+            border: 1px solid rgba(251, 133, 0, 0.4);
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            text-align: left;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 12.5px;
+            color: #f8f9fa;
+        }
+
+        .geo-notice-box .geo-icon { font-size: 18px; }
+        .geo-notice-box strong { color: var(--accent-gold); display: block; margin-bottom: 2px; }
+
         /* High-Converting CTA Button */
         .btn-amazon {
             display: flex;
@@ -290,7 +308,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         <!-- Rating Box -->
         <div class="rating-box">
             <span class="rating-stars">★★★★★</span>
-            <span>4.5</span>
+            <span>{{ product.rating or '4.9' }}</span>
             <span class="rating-count">(1,240+ Verified Reviews)</span>
         </div>
 
@@ -309,9 +327,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         <!-- Image View Switcher -->
         <div class="img-tabs">
             <button class="img-tab-btn active" onclick="switchImage('{{ hook_image_rel }}', this)">✨ Commercial View</button>
-            {% if raw_images and raw_images|length > 0 %}
-            <button class="img-tab-btn" onclick="switchImage('{{ raw_images[0] }}', this)">📷 Product Photo</button>
-            {% endif %}
+            {% for raw_img in raw_images %}
+            <button class="img-tab-btn" onclick="switchImage('{{ raw_img }}', this)">📷 Angle {{ loop.index }}</button>
+            {% endfor %}
         </div>
 
         <p class="description">{{ seo.description }}</p>
@@ -325,6 +343,15 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 <li>🌿 High Quality Build</li>
                 <li>🎁 Perfect Gift Choice</li>
             </ul>
+        </div>
+
+        <!-- Geo Shipping Notice Box for Non-US Visitors -->
+        <div id="geoNoticeBox" class="geo-notice-box">
+            <span class="geo-icon">📍</span>
+            <div>
+                <strong id="geoNoticeTitle">Direct US Shipping Unavailable to Your Location</strong>
+                <span id="geoNoticeDesc">This item ships from Amazon US. We've automatically linked equivalent local options on Amazon for fast regional delivery.</span>
+            </div>
         </div>
 
         <!-- High-Converting CTA -->
@@ -374,8 +401,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                         const target = countryMap[cc];
                         const buyBtn = document.getElementById('buyBtn');
                         const buyBtnText = document.getElementById('buyBtnText');
+                        const geoBox = document.getElementById('geoNoticeBox');
                         if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
-                        if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON ${target.label}`;
+                        if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
+                        if (geoBox) geoBox.style.display = 'flex';
                     }
                 })
                 .catch(err => {
@@ -385,8 +414,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                             const target = countryMap[c];
                             const buyBtn = document.getElementById('buyBtn');
                             const buyBtnText = document.getElementById('buyBtnText');
+                            const geoBox = document.getElementById('geoNoticeBox');
                             if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
-                            if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON ${target.label}`;
+                            if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
+                            if (geoBox) geoBox.style.display = 'flex';
                             break;
                         }
                     }
