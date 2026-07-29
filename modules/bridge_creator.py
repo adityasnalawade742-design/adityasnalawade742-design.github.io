@@ -328,8 +328,8 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <!-- High-Converting CTA -->
-        <a href="{{ affiliate_url }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span>CHECK DEAL ON AMAZON</span>
+        <a id="buyBtn" href="{{ affiliate_url }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">CHECK DEAL ON AMAZON</span>
             <span>➔</span>
         </a>
 
@@ -345,6 +345,33 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             document.querySelectorAll('.img-tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
+
+        // Smart Amazon India (IN) & Global Geo-Redirector
+        (function() {
+            const prodKeywords = encodeURIComponent("{{ product.title[:40] }}");
+            fetch('https://ipapi.co/json/', { timeout: 3000 })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.country_code === 'IN') {
+                        const buyBtn = document.getElementById('buyBtn');
+                        const buyBtnText = document.getElementById('buyBtnText');
+                        if (buyBtn) {
+                            buyBtn.href = `https://www.amazon.in/s?k=${prodKeywords}`;
+                            if (buyBtnText) buyBtnText.innerText = "CHECK DEAL ON AMAZON INDIA (₹)";
+                        }
+                    }
+                })
+                .catch(err => {
+                    if (navigator.language && navigator.language.includes('IN')) {
+                        const buyBtn = document.getElementById('buyBtn');
+                        const buyBtnText = document.getElementById('buyBtnText');
+                        if (buyBtn) {
+                            buyBtn.href = `https://www.amazon.in/s?k=${prodKeywords}`;
+                            if (buyBtnText) buyBtnText.innerText = "CHECK DEAL ON AMAZON INDIA (₹)";
+                        }
+                    }
+                });
+        })();
     </script>
 
 </body>
