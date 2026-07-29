@@ -469,12 +469,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 
                 if (directRegions.includes(targetCC)) {
                     // Direct product page link for countries where ASIN is directly listed
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=smartdeal0358-21`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
                     // Unlisted in region -> Local Search Fallback & Notice Box (prevents 404)
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=smartdeal0358-21`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
                         const titleEl = document.getElementById('geoNoticeTitle');
