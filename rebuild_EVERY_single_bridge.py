@@ -107,7 +107,18 @@ master_catalog = {
         "features": ["HAND-CRAFTED FLOWER GLASS SHADE", "WARM AMBIENT NIGHTLIGHT", "MINIMALIST BEDROOM DECOR", "PERFECT GIFT CHOICE"],
         "category": "lighting",
         "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
-        "direct_regions": ["UK", "DE", "SE", "CA", "JP"]
+        "direct_regions": ["US", "UK", "DE", "SE", "CA", "JP"],
+        "affiliate_url": "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21"
+    },
+    "B0DDTPCDLB": {
+        "title": "Lily of the Valley Flower Table Lamp Glass Nightlight",
+        "price": "$38.57",
+        "rating": "4.8",
+        "features": ["HAND-CRAFTED FLOWER GLASS SHADE", "WARM AMBIENT NIGHTLIGHT", "MINIMALIST BEDROOM DECOR", "PERFECT GIFT CHOICE"],
+        "category": "lighting",
+        "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
+        "direct_regions": ["US", "UK", "DE", "SE", "CA", "JP"],
+        "affiliate_url": "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21"
     }
 }
 
