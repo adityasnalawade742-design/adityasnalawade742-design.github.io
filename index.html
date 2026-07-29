@@ -369,8 +369,9 @@
             transform: translateX(4px);
         }
 
-        /* Delete Button */
+        /* Delete Button - Hidden by default for public visitors, active only in ?admin=true mode */
         .delete-btn {
+            display: none;
             background: rgba(220, 53, 69, 0.1);
             border: 1px solid rgba(220, 53, 69, 0.25);
             color: #ff6b6b;
@@ -380,11 +381,14 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             width: 100%;
+        }
+
+        body.admin-mode .delete-btn {
+            display: flex;
         }
 
         .delete-btn:hover {
@@ -712,6 +716,11 @@
 
     <!-- Interactive Search & Filtering JavaScript -->
     <script>
+        // Check for ?admin=true parameter to reveal admin management buttons
+        if (window.location.search.includes('admin=true')) {
+            document.body.classList.add('admin-mode');
+        }
+
         let currentCategory = 'all';
 
         function setCategory(cat, element) {
