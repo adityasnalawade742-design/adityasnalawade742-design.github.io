@@ -58,5 +58,15 @@ Every Amazon listing photo suite (5–9 photos) MUST undergo the following 4-lay
   1. The graphic price tag (`focus_product_{asin}_hook.jpg`),
   2. The mobile bridge landing page (`bridge_{asin}.html`),
   3. The homepage gallery card (`index.html`),
-  MUST automatically match the exact live price extracted directly from the Amazon product listing page. No generic fallback prices (like $14.99 or $17.99) are allowed when an exact Amazon price is available.
+  MUST automatically match the exact live price extracted directly from the Amazon product listing page.
+
+- **Daily Automated Price Synchronization Engine (`daily_price_updater.py`)**:
+  - **Raw Image Archiving**: Clean, text-free AI generated room photos are preserved in `raw_images/raw_{asin}.jpg`.
+  - **Product Registry (`product_price_registry.json`)**: Tracks ASIN, Amazon URL, current price, headline, raw image path, hook image path, and bridge landing page URL.
+  - **Automated Price Check**: Runs daily scraping live Amazon prices. If a price change is detected:
+    1. Re-renders the Playwright graphic overlay onto `raw_images/raw_{asin}.jpg` with the new price tag.
+    2. Updates `<div class="price">` in `bridge_{asin}.html`.
+    3. Updates `<div class="card-price-tag">` in `index.html`.
+    4. Automatically commits and pushes live updates to GitHub Pages with cache-busting query params (`?v={timestamp}`).
+
 
