@@ -369,23 +369,7 @@
             transform: translateX(4px);
         }
 
-        /* Delete Button - Hidden by default for public visitors, active only in ?admin=true mode */
-        .delete-btn {
-            display: none;
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.25);
-            color: #ff6b6b;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            width: 100%;
-        }
+        
 
         body.admin-mode .delete-btn {
             display: flex;
@@ -506,7 +490,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0GYDXHF4G', 'card-B0GYDXHF4G')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0FXLYXM32 (Wavy Mirror) -->
@@ -525,7 +508,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0FXLYXM32', 'card-B0FXLYXM32')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0C2YLN3H4 (Donut Vases) -->
@@ -544,7 +526,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0C2YLN3H4', 'card-B0C2YLN3H4')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B07HP22QTZ (Crystal Suncatcher) -->
@@ -563,7 +544,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B07HP22QTZ', 'card-B07HP22QTZ')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0BDRSG2BT (Sunset Lamp) -->
@@ -582,7 +562,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0BDRSG2BT', 'card-B0BDRSG2BT')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0GGHJ1J4L (LED Note Board) -->
@@ -601,7 +580,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0GGHJ1J4L', 'card-B0GGHJ1J4L')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0BZXNSW5K (Bedside Touch Lamp) -->
@@ -620,7 +598,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0BZXNSW5K', 'card-B0BZXNSW5K')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0DXKGL1T2 (Lily of the Valley Lamp) -->
@@ -639,7 +616,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0DXKGL1T2', 'card-B0DXKGL1T2')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0D1FRDFFX (Mushroom Lamp) -->
@@ -658,7 +634,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0D1FRDFFX', 'card-B0D1FRDFFX')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0D8P8CSYP (Cute Bird Lamp) -->
@@ -677,7 +652,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0D8P8CSYP', 'card-B0D8P8CSYP')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0DLN5S5K9 (Touch Bedside Lamp) -->
@@ -696,7 +670,6 @@
                     </div>
                 </div>
             </a>
-            <button class="delete-btn" onclick="deleteCard('B0DLN5S5K9', 'card-B0DLN5S5K9')">🗑️ Delete Product</button>
         </div>
 
     </main>
@@ -749,13 +722,7 @@
             });
         }
 
-        function deleteCard(asin, elementId) {
-            if (confirm(`Are you sure you want to remove product ${asin} from the homepage?`)) {
-                fetch('/delete-product', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ asin: asin })
-                })
+        )
                 .then(res => res.json())
                 .then(data => {
                     const el = document.getElementById(elementId);

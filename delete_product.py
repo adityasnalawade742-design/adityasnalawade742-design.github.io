@@ -61,6 +61,34 @@ def delete_product(product_id: str):
                 f.write(updated_html)
             print(f"  ✓ Removed product card from index.html!")
 
+    # Remove from product_price_registry.json
+    registry_file = project_root / "product_price_registry.json"
+    if registry_file.exists():
+        try:
+            with open(registry_file, "r", encoding="utf-8") as f:
+                reg = json.load(f)
+            if product_id in reg:
+                del reg[product_id]
+                with open(registry_file, "w", encoding="utf-8") as f:
+                    json.dump(reg, f, indent=2)
+                print(f"  ✓ Removed {product_id} from product_price_registry.json!")
+        except Exception as e:
+            print(f"  ⚠️ Registry update error: {e}")
+
+    # Remove from processed_asins.json
+    processed_file = project_root / "processed_asins.json"
+    if processed_file.exists():
+        try:
+            with open(processed_file, "r", encoding="utf-8") as f:
+                proc = json.load(f)
+            if product_id in proc:
+                proc.remove(product_id)
+                with open(processed_file, "w", encoding="utf-8") as f:
+                    json.dump(proc, f, indent=2)
+                print(f"  ✓ Removed {product_id} from processed_asins.json!")
+        except Exception as e:
+            print(f"  ⚠️ Processed history update error: {e}")
+
     print("\n🚀 Pushing deletion update to GitHub Pages...")
     try:
         subprocess.run(["git", "add", "-A"], check=True, cwd=str(project_root))
