@@ -26,7 +26,7 @@ master_catalog = {
         "features": ["MINIMALIST WOOD BASE", "CREAM FABRIC LAMPSHADE", "WARM AMBIENT GLOW", "INLINE CONTROL SWITCH"],
         "category": "lighting",
         "description": "Transform your nightstand setup with this aesthetic minimalist wood base table lamp. Warm ambient glow perfect for cozy reading and bedroom decor.",
-        "direct_regions": ["US", "CA"]
+        "direct_regions": ["US", "DE", "SE", "CA", "JP"]
     },
     "B0BZXNSW5K": {
         "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
@@ -35,7 +35,7 @@ master_catalog = {
         "features": ["DIMMABLE TOUCH CONTROL", "DUAL USB A+C CHARGING PORTS", "BUILT-IN AC OUTLET", "LED BULB INCLUDED"],
         "category": "lighting",
         "description": "Upgrade your nightstand setup with this 3-way dimmable touch control bedside lamp featuring USB A+C charging ports and AC outlet.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SE", "CA"]
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "CA", "JP"]
     },
     "B0D1FRDFFX": {
         "title": "Glass Mushroom Lamp Ambient Table Nightstand Light",
@@ -44,7 +44,7 @@ master_catalog = {
         "features": ["HAND-BLOWN STRIPED GLASS", "WARM AMBIENT GLOW", "VINTAGE MUSHROOM DESIGN", "EASY ON/OFF SWITCH"],
         "category": "lighting",
         "description": "Add a cozy retro aesthetic to your space with this hand-blown striped glass mushroom lamp. Soft ambient glow for nightstands, desks, and shelves.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "AU"]
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0C2YLN3H4": {
         "title": "White Ceramic Donut Vase Set of 2 Modern Aesthetic Decor",
@@ -53,7 +53,7 @@ master_catalog = {
         "features": ["MATTE CERAMIC FINISH", "DONUT HOLLOW CENTER", "MINIMALIST NORDIC STYLE", "SET OF 2 MATCHING VASES"],
         "category": "decor",
         "description": "Minimalist matte white ceramic donut vase set of 2 for aesthetic pampas grass, shelf styling, coffee table and mantle room decor.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
+        "direct_regions": ["US", "IN", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0GYDXHF4G": {
         "title": "Flame Aroma Essential Oil Diffuser Dark Crackle Flame Effect",
@@ -62,7 +62,7 @@ master_catalog = {
         "features": ["REALISTIC FLAME EFFECT", "ULTRASONIC MIST HUMIDIFIER", "SILENT SLEEP OPERATION", "AUTO SHUTOFF SAFETY"],
         "category": "lighting decor",
         "description": "Cozy ambient flame effect humidifier and essential oil diffuser in dark crackle finish. Realistic flame glow for bedroom relaxation.",
-        "direct_regions": ["US"]
+        "direct_regions": ["US", "DE", "SE", "CA", "JP"]
     },
     "B0FXLYXM32": {
         "title": "White Wavy Wall Vanity Mirror Aesthetic Squiggle Mirror",
@@ -71,7 +71,7 @@ master_catalog = {
         "features": ["SQUIGGLE WAVY FRAME", "HIGH DEFINITION GLASS", "WALL MOUNT OR TABLETOP", "VIRAL DORM DECOR"],
         "category": "mirror",
         "description": "Trendy white wavy squiggle vanity mirror for bedroom desk, wall decor, and viral aesthetic room transformation.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SG", "CA", "AU", "JP"]
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B07HP22QTZ": {
         "title": "Suncatcher Crystal Prism Window Rainbow Maker Hanging Light Catcher",
@@ -89,7 +89,7 @@ master_catalog = {
         "features": ["SUNSET PROJECTION GLOW", "360 DEGREE ROTATION", "USB POWERED", "PHOTO BACKGROUND LIGHT"],
         "category": "lighting",
         "description": "Create warm romantic room vibes with this viral sunset projection lamp.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "AU", "JP"]
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0DLN5S5K9": {
         "title": "Minimalist Ceramic Table Lamp Neutral Bedside Glow",
@@ -98,7 +98,7 @@ master_catalog = {
         "features": ["CERAMIC TEXTURED BASE", "LINEN SHADE", "WARM LIGHT BULB", "BEDSIDE ACCENT"],
         "category": "lighting",
         "description": "Neutral minimalist ceramic table lamp for bedroom and living room accent lighting.",
-        "direct_regions": ["UK", "SE", "JP"]
+        "direct_regions": ["UK", "DE", "SE", "CA", "JP"]
     },
     "B0DXKGL1T2": {
         "title": "Lily of the Valley Flower Table Lamp Glass Nightlight",
@@ -107,7 +107,7 @@ master_catalog = {
         "features": ["HAND-CRAFTED FLOWER GLASS SHADE", "WARM AMBIENT NIGHTLIGHT", "MINIMALIST BEDROOM DECOR", "PERFECT GIFT CHOICE"],
         "category": "lighting",
         "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
-        "direct_regions": ["UK"]
+        "direct_regions": ["UK", "DE", "SE", "CA", "JP"]
     }
 }
 
