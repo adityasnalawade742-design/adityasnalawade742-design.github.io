@@ -411,6 +411,7 @@
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
+            const currentAsin = "B0D1FRDFFX";
             const prodKeywords = encodeURIComponent("Glass Mushroom Lamp Ambient Table Nights");
 
             function applyGeoRedirect(cc) {
@@ -421,7 +422,7 @@
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
-                    if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${asin}?tag=smartdeal0358-21`;
+                    if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
                     if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
                     if (geoBox) geoBox.style.display = 'none';
                     return;

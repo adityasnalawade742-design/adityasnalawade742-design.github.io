@@ -417,6 +417,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
+            const currentAsin = "{{ asin }}";
             const prodKeywords = encodeURIComponent("{{ product.title[:40] }}");
 
             function applyGeoRedirect(cc) {
@@ -427,7 +428,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
-                    if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${asin}?tag=smartdeal0358-21`;
+                    if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
                     if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
                     if (geoBox) geoBox.style.display = 'none';
                     return;
