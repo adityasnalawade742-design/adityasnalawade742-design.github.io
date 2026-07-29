@@ -11,13 +11,15 @@ from modules.automated_product_selector import is_asin_published_on_homepage
 from modules.amazon_extractor import is_adult_aesthetic_product, select_clean_photo_or_skip, get_product_details_and_photos
 
 TRENDING_PINTEREST_KEYWORDS = [
-    "aesthetic room decor lamp",
-    "cozy bedside ambient light",
-    "flame aroma essential oil diffuser",
-    "white ceramic donut vase boho decor",
-    "crystal prism window suncatcher",
-    "glowing led memo note board desk",
-    "wavy vanity wall mirror aesthetic"
+    "aesthetic glass mushroom table lamp",
+    "lily of the valley flower lamp bedside",
+    "sunset lamp projection light golden hour",
+    "flameless candle warmer lamp timer",
+    "white ceramic donut vase pampas grass set",
+    "abstract thinker statue bookshelf decor",
+    "wavy vanity wall mirror aesthetic cream",
+    "framed neutral botanical print set black frame",
+    "water hyacinth storage basket set natural"
 ]
 
 def parse_price_float(price_str: str) -> float:
