@@ -23,12 +23,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Stage Static Web Assets
+        run: |
+          mkdir _site
+          cp -r index.html bridge_*.html focus_product_*.jpg images/ fonts/ "price tags"/ privacy-policy.html privacy.html .nojekyll _site/ 2>/dev/null || true
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
