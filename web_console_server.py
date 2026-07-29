@@ -231,7 +231,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     meta = reg_data.get(asin, {})
                     
                     title = meta.get('title') or f"Product {asin}"
-                    price = meta.get('price') or "$19.99"
+                    price = meta.get('current_price') or meta.get('price') or "$19.99"
                     image = f"./focus_product_{asin}_hook.jpg"
 
                     products.append({
