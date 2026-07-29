@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinterest Auto-Affiliate | Batch Selection & Image Verification Console</title>
+    <title>Pinterest Auto-Affiliate | Master Web Console</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -37,7 +37,7 @@
 
         .header {
             width: 100%;
-            max-width: 1320px;
+            max-width: 1340px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -61,10 +61,9 @@
 
         .brand-title span.sparkle { color: var(--gold-primary); }
 
-        /* Mode Switcher Tabs */
         .mode-tabs {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             background: rgba(255, 255, 255, 0.04);
             padding: 6px;
             border-radius: 50px;
@@ -78,7 +77,7 @@
             font-family: 'Outfit', sans-serif;
             font-size: 13px;
             font-weight: 700;
-            padding: 8px 22px;
+            padding: 8px 20px;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -92,13 +91,12 @@
 
         .container {
             width: 100%;
-            max-width: 1320px;
+            max-width: 1340px;
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
 
-        /* Step Progress Bar */
         .step-bar {
             display: flex;
             justify-content: space-between;
@@ -118,9 +116,7 @@
             color: var(--text-sub);
         }
 
-        .step-item.active {
-            color: var(--gold-primary);
-        }
+        .step-item.active { color: var(--gold-primary); }
 
         .step-num {
             width: 28px;
@@ -133,12 +129,8 @@
             font-size: 13px;
         }
 
-        .step-item.active .step-num {
-            background: var(--gold-primary);
-            color: #0b0a0f;
-        }
+        .step-item.active .step-num { background: var(--gold-primary); color: #0b0a0f; }
 
-        /* Generic Control Box */
         .card-box {
             background: var(--card-glass);
             border: 1px solid var(--card-border);
@@ -160,10 +152,7 @@
             justify-content: space-between;
         }
 
-        .input-group {
-            display: flex;
-            gap: 14px;
-        }
+        .input-group { display: flex; gap: 14px; }
 
         .input-field {
             flex: 1;
@@ -220,12 +209,9 @@
             box-shadow: 0 14px 35px rgba(251, 133, 0, 0.6);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-color: #ffffff;
-        }
+        .btn-success { background: linear-gradient(135deg, #10b981, #059669); border-color: #ffffff; }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; border-color: #fff; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4); }
 
-        /* Products Grid */
         .discover-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -249,9 +235,7 @@
             box-shadow: 0 0 25px rgba(255, 183, 3, 0.25);
         }
 
-        .discover-card.published {
-            opacity: 0.65;
-        }
+        .discover-card.published { opacity: 0.65; }
 
         .discover-thumb {
             width: 100%;
@@ -313,7 +297,6 @@
             cursor: pointer;
         }
 
-        /* Batch Photo Verification Board */
         .batch-product-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -324,12 +307,7 @@
             gap: 14px;
         }
 
-        .batch-prod-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        .batch-prod-header { display: flex; justify-content: space-between; align-items: center; }
         .batch-prod-title { font-size: 16px; font-weight: 700; }
 
         .photos-row {
@@ -356,11 +334,7 @@
             box-shadow: 0 0 20px rgba(255, 183, 3, 0.35);
         }
 
-        .photo-pill-img {
-            width: 100%;
-            height: 170px;
-            object-fit: cover;
-        }
+        .photo-pill-img { width: 100%; height: 170px; object-fit: cover; }
 
         .photo-pill-badge {
             position: absolute;
@@ -377,7 +351,6 @@
         .photo-pill-badge.clean { background: var(--green-success); color: #fff; }
         .photo-pill-badge.discarded { background: var(--red-danger); color: #fff; }
 
-        /* Preview Gallery Cards */
         .preview-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -432,6 +405,31 @@
             gap: 12px;
             z-index: 1000;
         }
+
+        /* Modal Overlay Preview */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--card-glass);
+            border: 1px solid var(--gold-primary);
+            border-radius: 24px;
+            padding: 24px;
+            max-width: 480px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -441,8 +439,9 @@
             <span class="sparkle">✨</span> Pinterest Auto-Affiliate Console
         </div>
         <div class="mode-tabs">
-            <button class="tab-btn active" id="tabBatch" onclick="switchMode('batch')">📦 10-Product Batch Selector</button>
-            <button class="tab-btn" id="tabSingle" onclick="switchMode('single')">🔍 Single ASIN Extractor</button>
+            <button class="tab-btn active" id="tabBatch" onclick="switchMode('batch')">📦 10-Product Selector</button>
+            <button class="tab-btn" id="tabHomepage" onclick="switchMode('homepage')">🏠 Homepage Manager</button>
+            <button class="tab-btn" id="tabSingle" onclick="switchMode('single')">🔍 Single ASIN Quick Inspector</button>
         </div>
     </header>
 
@@ -453,7 +452,6 @@
         <!-- ========================================================================= -->
         <div id="modeBatch">
 
-            <!-- Step Progress Bar -->
             <div class="step-bar">
                 <div class="step-item active" id="stepIndicator1">
                     <div class="step-num">1</div>
@@ -461,7 +459,7 @@
                 </div>
                 <div class="step-item" id="stepIndicator2">
                     <div class="step-num">2</div>
-                    <span>Multi-Photo Verification & System Winner Selection</span>
+                    <span>Multi-Photo Verification & Headline Editor</span>
                 </div>
                 <div class="step-item" id="stepIndicator3">
                     <div class="step-num">3</div>
@@ -473,7 +471,7 @@
             <div class="card-box" id="panelStep1">
                 <div class="card-header-title">
                     <span>🔍 Step 1: Discover & Select Products for Processing</span>
-                    <span style="font-size: 13px; color: var(--text-sub); font-weight: 400;">Searches live Amazon catalog across Pinterest trending keywords</span>
+                    <span style="font-size: 13px; color: var(--text-sub); font-weight: 400;">Live Amazon search across Pinterest trend categories</span>
                 </div>
                 <div class="input-group">
                     <select id="trendCategorySelect" class="select-field" onchange="onTrendCategoryChange(this.value)">
@@ -494,28 +492,24 @@
                     </button>
                 </div>
 
-                <div class="discover-grid" id="discoverGrid">
-                    <!-- Discovered candidate product cards -->
-                </div>
+                <div class="discover-grid" id="discoverGrid"></div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                     <div id="selectionCounter" style="font-weight: 700; color: var(--gold-primary);">0 Products Selected</div>
                     <button class="btn-action btn-success" onclick="proceedToStep2PhotoVerification()">
-                        <span>Proceed to Step 2: Photo Verification ➔</span>
+                        <span>Proceed to Step 2: Photo & Headline Editor ➔</span>
                     </button>
                 </div>
             </div>
 
-            <!-- STEP 2: MULTI-PHOTO VERIFICATION & OVERRIDE BOARD -->
+            <!-- STEP 2: MULTI-PHOTO VERIFICATION & HEADLINE EDITOR -->
             <div class="card-box" id="panelStep2" style="display: none;">
                 <div class="card-header-title">
-                    <span>📸 Step 2: Multi-Photo Verification & System Recommended Winner Selection</span>
-                    <span style="font-size: 13px; color: var(--text-sub); font-weight: 400;">Review extracted photo suite per product. Gold border shows AI-chosen winner.</span>
+                    <span>📸 Step 2: Multi-Photo Verification, Winner Selection & Custom Badge Editor</span>
+                    <span style="font-size: 13px; color: var(--text-sub); font-weight: 400;">Gold border indicates AI-chosen winner. Customize headlines & badges below.</span>
                 </div>
 
-                <div id="batchPhotoBoards" style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Dynamically populated photo inspection rows per product -->
-                </div>
+                <div id="batchPhotoBoards" style="display: flex; flex-direction: column; gap: 20px;"></div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                     <button class="btn-action" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" onclick="backToStep1()">
@@ -539,16 +533,33 @@
                     Initializing batch campaign generation engine...
                 </div>
 
-                <div class="preview-grid" id="previewGrid">
-                    <!-- Rendered 1200x1600 Pinterest Graphic Overlay Pin Previews -->
-                </div>
+                <div class="preview-grid" id="previewGrid"></div>
             </div>
 
         </div>
 
+        <!-- ========================================================================= -->
+        <!-- MODE C: LIVE HOMEPAGE SHOWCASE MANAGER & 1-CLICK DELETE -->
+        <!-- ========================================================================= -->
+        <div id="modeHomepage" style="display: none;">
+            <div class="card-box">
+                <div class="card-header-title">
+                    <span>🏠 Live Homepage Showcase Manager</span>
+                    <button class="btn-action" style="padding: 8px 18px; font-size: 13px;" onclick="runPriceSync()">
+                        <div class="spinner" id="syncSpinner"></div>
+                        <span>🔄 1-Click Daily Price Synchronizer</span>
+                    </button>
+                </div>
+                <div style="font-size: 14px; color: var(--text-sub);">
+                    Manage all products currently published on your live showcase ([index.html](file:///G:/CLI/pinterest-auto-affiliate/index.html)). Clicking delete unblocks the product and updates GitHub Pages live!
+                </div>
+
+                <div class="preview-grid" id="homepageProductsGrid"></div>
+            </div>
+        </div>
 
         <!-- ========================================================================= -->
-        <!-- MODE A: SINGLE ASIN QUICK EXTRACTOR (ORIGINAL SINGLE WORKFLOW) -->
+        <!-- MODE A: SINGLE ASIN QUICK EXTRACTOR -->
         <!-- ========================================================================= -->
         <div id="modeSingle" style="display: none;">
             <div class="card-box">
@@ -564,7 +575,6 @@
                 </div>
             </div>
 
-            <!-- Product Meta Panel -->
             <div class="card-box" id="productMetaPanel" style="display: none; grid-template-columns: 2fr 1fr 1fr; align-items: center;">
                 <div>
                     <h2 id="metaTitle" style="font-family: 'Playfair Display', serif; font-size: 20px;">Title...</h2>
@@ -585,6 +595,15 @@
 
     </div>
 
+    <!-- Live Graphic Overlay Preview Modal -->
+    <div class="modal" id="overlayModal">
+        <div class="modal-content">
+            <h3 style="color: var(--gold-primary);">🖼️ Live Playwright Graphic Overlay Preview</h3>
+            <img id="overlayModalImg" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 16px;" src="" alt="Overlay Preview">
+            <button class="btn-action" style="width: 100%;" onclick="closeOverlayModal()">Close Preview</button>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div class="toast" id="toast">
         <span id="toastIcon">✨</span>
@@ -595,7 +614,8 @@
         let discoveredItems = [];
         let selectedAsins = new Set();
         let extractedBatchDetails = [];
-        let batchSelectedPhotos = {}; // asin -> selected photo url
+        let batchSelectedPhotos = {};
+        let batchCustomData = {}; // asin -> {title, badge, price}
         let currentBatchId = null;
 
         function showToast(msg, icon = '✨') {
@@ -607,16 +627,16 @@
         }
 
         function switchMode(mode) {
-            if (mode === 'batch') {
-                document.getElementById('modeBatch').style.display = 'block';
-                document.getElementById('modeSingle').style.display = 'none';
-                document.getElementById('tabBatch').classList.add('active');
-                document.getElementById('tabSingle').classList.remove('active');
-            } else {
-                document.getElementById('modeBatch').style.display = 'none';
-                document.getElementById('modeSingle').style.display = 'block';
-                document.getElementById('tabSingle').classList.add('active');
-                document.getElementById('tabBatch').classList.remove('active');
+            document.getElementById('modeBatch').style.display = mode === 'batch' ? 'block' : 'none';
+            document.getElementById('modeHomepage').style.display = mode === 'homepage' ? 'block' : 'none';
+            document.getElementById('modeSingle').style.display = mode === 'single' ? 'block' : 'none';
+
+            document.getElementById('tabBatch').classList.toggle('active', mode === 'batch');
+            document.getElementById('tabHomepage').classList.toggle('active', mode === 'homepage');
+            document.getElementById('tabSingle').classList.toggle('active', mode === 'single');
+
+            if (mode === 'homepage') {
+                loadHomepageProducts();
             }
         }
 
@@ -624,9 +644,6 @@
             document.getElementById('customSearchInput').value = '';
         }
 
-        // =========================================================================
-        // STEP 1: DISCOVER 10 PRODUCTS
-        // =========================================================================
         function discoverProducts() {
             const customKw = document.getElementById('customSearchInput').value.trim();
             const categoryKw = document.getElementById('trendCategorySelect').value;
@@ -638,11 +655,7 @@
                 .then(r => r.json())
                 .then(data => {
                     document.getElementById('discoverSpinner').style.display = 'none';
-                    if (data.status === 'error') {
-                        alert("Error discovering products: " + data.message);
-                        return;
-                    }
-
+                    if (data.status === 'error') { alert("Error discovering products: " + data.message); return; }
                     discoveredItems = data.items || [];
                     renderDiscoverGrid(discoveredItems);
                     showToast(`Discovered ${discoveredItems.length} candidate products!`, "🔍");
@@ -658,14 +671,12 @@
             grid.innerHTML = '';
             selectedAsins.clear();
 
-            items.forEach((item, idx) => {
+            items.forEach((item) => {
                 const isPub = item.is_already_published;
                 const card = document.createElement('div');
                 card.className = `discover-card ${isPub ? 'published' : 'selected'}`;
 
-                if (!isPub) {
-                    selectedAsins.add(item.asin);
-                }
+                if (!isPub) selectedAsins.add(item.asin);
 
                 card.innerHTML = `
                     ${isPub ? '<div class="pub-badge">ALREADY ON HOMEPAGE</div>' : ''}
@@ -681,18 +692,12 @@
                 `;
                 grid.appendChild(card);
             });
-
             updateCounter();
         }
 
         function toggleProductSelection(asin, isChecked, cardElement) {
-            if (isChecked) {
-                selectedAsins.add(asin);
-                cardElement.classList.add('selected');
-            } else {
-                selectedAsins.delete(asin);
-                cardElement.classList.remove('selected');
-            }
+            if (isChecked) { selectedAsins.add(asin); cardElement.classList.add('selected'); }
+            else { selectedAsins.delete(asin); cardElement.classList.remove('selected'); }
             updateCounter();
         }
 
@@ -700,18 +705,11 @@
             document.getElementById('selectionCounter').innerText = `${selectedAsins.size} Products Selected`;
         }
 
-        // =========================================================================
-        // STEP 2: PROCEED TO PHOTO VERIFICATION
-        // =========================================================================
         function proceedToStep2PhotoVerification() {
-            if (selectedAsins.size === 0) {
-                alert("Please select at least 1 product to proceed.");
-                return;
-            }
+            if (selectedAsins.size === 0) { alert("Please select at least 1 product."); return; }
 
             document.getElementById('panelStep1').style.display = 'none';
             document.getElementById('panelStep2').style.display = 'flex';
-            
             document.getElementById('stepIndicator1').classList.remove('active');
             document.getElementById('stepIndicator2').classList.add('active');
 
@@ -728,21 +726,24 @@
                 if (data.status === 'success') {
                     extractedBatchDetails = data.items || [];
                     renderBatchPhotoBoards(extractedBatchDetails);
-                } else {
-                    alert("Error extracting batch photos: " + data.message);
-                }
-            })
-            .catch(err => alert("Error communicating with server backend."));
+                } else { alert("Error extracting batch photos: " + data.message); }
+            });
         }
 
         function renderBatchPhotoBoards(items) {
             const container = document.getElementById('batchPhotoBoards');
             container.innerHTML = '';
             batchSelectedPhotos = {};
+            batchCustomData = {};
 
             items.forEach((item, pIdx) => {
                 const systemWinner = item.winner_photo || (item.photos[0] ? item.photos[0].url : '');
                 batchSelectedPhotos[item.asin] = systemWinner;
+                batchCustomData[item.asin] = {
+                    title: item.title,
+                    price: item.price,
+                    badge: "VIRAL ROOM FIND"
+                };
 
                 const box = document.createElement('div');
                 box.className = 'batch-product-box';
@@ -750,15 +751,8 @@
                 let photosHtml = '';
                 item.photos.forEach((p, idx) => {
                     const isWinner = p.url === systemWinner;
-                    let badgeClass = 'clean';
-                    let badgeText = p.status || 'Clean Photo';
-
-                    if (isWinner) {
-                        badgeClass = 'winner';
-                        badgeText = '🏆 #1 AI Winner';
-                    } else if (p.status && p.status.includes('DISCARDED')) {
-                        badgeClass = 'discarded';
-                    }
+                    let badgeClass = isWinner ? 'winner' : (p.status && p.status.includes('DISCARDED') ? 'discarded' : 'clean');
+                    let badgeText = isWinner ? '🏆 #1 AI Winner' : (p.status || 'Clean Photo');
 
                     photosHtml += `
                         <div class="photo-pill-card ${isWinner ? 'selected' : ''}" id="pill-${item.asin}-${idx}" onclick="selectBatchPhoto('${item.asin}', '${p.url}', ${idx}, this.parentNode)">
@@ -770,18 +764,58 @@
 
                 box.innerHTML = `
                     <div class="batch-prod-header">
-                        <div class="batch-prod-title">[Product #${pIdx+1}] ${item.title}</div>
+                        <div class="batch-prod-title">[Product #${pIdx+1}] ${item.title[:65]}</div>
                         <div style="font-weight: 800; color: var(--gold-primary);">${item.price}</div>
                     </div>
-                    <div style="font-size: 13px; color: var(--text-sub);">
-                        Click any image card below to override photo selection (Gold border indicates selected photo):
-                    </div>
-                    <div class="photos-row">
-                        ${photosHtml}
+                    <div class="photos-row">${photosHtml}</div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-top: 8px;">
+                        <input type="text" class="input-field" style="padding: 10px 16px; font-size: 13px;" value="${item.title}" onchange="updateCustomData('${item.asin}', 'title', this.value)" placeholder="Custom Title / Image Hook">
+                        <select class="select-field" style="padding: 10px; font-size: 13px;" onchange="updateCustomData('${item.asin}', 'badge', this.value)">
+                            <option value="VIRAL ROOM FIND">✨ VIRAL ROOM FIND</option>
+                            <option value="HOT DECOR FIND">🔥 HOT DECOR FIND</option>
+                            <option value="BESTSELLER">🏆 BESTSELLER</option>
+                            <option value="MUST HAVE">⭐ MUST HAVE</option>
+                        </select>
+                        <button class="btn-action" style="padding: 10px 16px; font-size: 13px; background: rgba(255,255,255,0.1);" onclick="previewOverlayLive('${item.asin}')">
+                            👁️ Preview Overlay
+                        </button>
                     </div>
                 `;
                 container.appendChild(box);
             });
+        }
+
+        function updateCustomData(asin, key, value) {
+            if (!batchCustomData[asin]) batchCustomData[asin] = {};
+            batchCustomData[asin][key] = value;
+        }
+
+        function previewOverlayLive(asin) {
+            const photo = batchSelectedPhotos[asin];
+            const custom = batchCustomData[asin] || {};
+
+            showToast("Rendering 1200x1600 Graphic Overlay Preview...", "🎨");
+            fetch('/api/preview_overlay', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    image_url: photo,
+                    title: custom.title || "VIRAL ROOM FIND",
+                    badge: custom.badge || "VIRAL ROOM FIND",
+                    price: custom.price || "$19.99"
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('overlayModalImg').src = data.preview_url;
+                    document.getElementById('overlayModal').style.display = 'flex';
+                } else { alert("Overlay preview error: " + data.message); }
+            });
+        }
+
+        function closeOverlayModal() {
+            document.getElementById('overlayModal').style.display = 'none';
         }
 
         function selectBatchPhoto(asin, photoUrl, cardIdx, rowContainer) {
@@ -799,27 +833,20 @@
             document.getElementById('stepIndicator1').classList.add('active');
         }
 
-        // =========================================================================
-        // STEP 3: LAUNCH BATCH GENERATION & LIVE GRAPHIC OVERLAY PREVIEW
-        // =========================================================================
         function launchBatchGeneration() {
             const itemsToRun = extractedBatchDetails.map(item => ({
                 asin: item.asin,
-                title: item.title,
-                price: item.price,
+                title: batchCustomData[item.asin]?.title || item.title,
+                price: batchCustomData[item.asin]?.price || item.price,
                 selected_photo: batchSelectedPhotos[item.asin] || item.winner_photo,
                 prompt_strength: 0.35
             }));
 
-            if (itemsToRun.length === 0) {
-                alert("No items selected for batch run.");
-                return;
-            }
+            if (itemsToRun.length === 0) return;
 
             document.getElementById('batchLaunchSpinner').style.display = 'inline-block';
             document.getElementById('panelStep2').style.display = 'none';
             document.getElementById('panelStep3').style.display = 'flex';
-
             document.getElementById('stepIndicator2').classList.remove('active');
             document.getElementById('stepIndicator3').classList.add('active');
 
@@ -834,12 +861,8 @@
                     currentBatchId = data.batch_id;
                     showToast("Batch generation launched in background!", "⏳");
                     pollBatchStatus(currentBatchId);
-                } else {
-                    document.getElementById('batchLaunchSpinner').style.display = 'none';
-                    alert("Error launching batch: " + data.message);
-                }
-            })
-            .catch(err => alert("Error connecting to server backend."));
+                } else { alert("Error: " + data.message); }
+            });
         }
 
         function pollBatchStatus(batchId) {
@@ -850,35 +873,26 @@
                         if (data.status === 'processing') {
                             document.getElementById('batchProgressBadge').innerText = `Processing ${data.current_index} of ${data.total}...`;
                             document.getElementById('batchStatusText').innerText = data.step || "Processing batch products...";
-                            if (data.completed_items) {
-                                renderBatchPreviews(data.completed_items);
-                            }
+                            if (data.completed_items) renderBatchPreviews(data.completed_items);
                         } else if (data.status === 'success') {
                             clearInterval(interval);
                             document.getElementById('batchProgressBadge').innerText = `✅ Batch Complete (${data.completed_items ? data.completed_items.length : 0} Products Published)`;
                             document.getElementById('batchStatusText').innerText = data.step || "Batch run completed!";
-                            showToast("All selected products published live with graphic overlays!", "🚀");
-                            if (data.completed_items) {
-                                renderBatchPreviews(data.completed_items);
-                            }
-                        } else if (data.status === 'error') {
-                            clearInterval(interval);
-                            alert("Batch processing error: " + (data.message || "Execution failed."));
+                            showToast("All selected products published live to GitHub Pages!", "🚀");
+                            if (data.completed_items) renderBatchPreviews(data.completed_items);
                         }
-                    })
-                    .catch(err => console.error("Polling batch error:", err));
+                    });
             }, 3000);
         }
 
         function renderBatchPreviews(completedItems) {
             const grid = document.getElementById('previewGrid');
             grid.innerHTML = '';
-
             completedItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'preview-card';
                 card.innerHTML = `
-                    <div style="font-weight: 800; font-size: 15px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${item.title}</div>
+                    <div style="font-weight: 800; font-size: 15px;">${item.title}</div>
                     <img class="preview-img" src="${item.hook_image}?v=${Date.now()}" alt="${item.title}" />
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-weight: 800; color: var(--gold-primary); font-size: 16px;">${item.price}</span>
@@ -892,7 +906,73 @@
         }
 
         // =========================================================================
-        // MODE A SINGLE ASIN EXTRACTION HELPERS
+        // MODE C: HOMEPAGE SHOWCASE MANAGER & 1-CLICK DELETE
+        // =========================================================================
+        function loadHomepageProducts() {
+            fetch('/api/homepage_products')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        renderHomepageGrid(data.products || []);
+                    }
+                });
+        }
+
+        function renderHomepageGrid(products) {
+            const grid = document.getElementById('homepageProductsGrid');
+            grid.innerHTML = '';
+
+            products.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'preview-card';
+                card.id = `hp-card-${p.asin}`;
+                card.innerHTML = `
+                    <div style="font-weight: 800; font-size: 14px;">${p.title}</div>
+                    <img class="preview-img" src="${p.image}" alt="${p.title}" />
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 800; color: var(--gold-primary);">${p.price}</span>
+                        <a href="${p.bridge_url}" target="_blank" style="color: var(--gold-primary); font-size: 12px; text-decoration: none;">🔗 Open Page</a>
+                    </div>
+                    <button class="btn-action btn-danger" style="padding: 8px; font-size: 12px; width: 100%;" onclick="deleteHomepageProduct('${p.asin}')">
+                        🗑️ Delete Product from Homepage
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function deleteHomepageProduct(asin) {
+            if (!confirm(`Are you sure you want to delete Product ASIN ${asin} from your homepage showcase?`)) return;
+
+            showToast(`Deleting product ${asin} from homepage...`, "🗑️");
+            fetch('/api/delete_homepage_product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ asin: asin })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const card = document.getElementById(`hp-card-${asin}`);
+                    if (card) card.remove();
+                    showToast(`Product ${asin} deleted and unblocked successfully!`, "✅");
+                } else { alert("Delete error: " + data.message); }
+            });
+        }
+
+        function runPriceSync() {
+            document.getElementById('syncSpinner').style.display = 'inline-block';
+            fetch('/api/sync_prices', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('syncSpinner').style.display = 'none';
+                    showToast("Daily prices synchronized live across 9 storefronts!", "🔄");
+                    loadHomepageProducts();
+                });
+        }
+
+        // =========================================================================
+        // MODE A SINGLE ASIN EXTRACTION
         // =========================================================================
         function fetchSingleProductSuite() {
             const input = document.getElementById('targetInput').value.trim();
@@ -913,7 +993,6 @@
                 });
         }
 
-        // Auto-discover top 10 products on initial page load
         window.onload = function() {
             discoverProducts();
         };

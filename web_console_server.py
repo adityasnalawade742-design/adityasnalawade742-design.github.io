@@ -201,6 +201,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         if parsed.path == '/' or parsed.path == '/console':
             self.path = '/admin_console.html'
             return super().do_GET()
+        elif parsed.path == '/api/homepage_products':
+            self.handle_api_homepage_products()
+            return
         elif parsed.path == '/api/extract':
             self.handle_api_extract(parsed.query)
             return
@@ -226,8 +229,96 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path == '/api/batch_generate':
             self.handle_api_batch_generate()
             return
+        elif self.path == '/api/delete_homepage_product':
+            self.handle_api_delete_homepage_product()
+            return
+        elif self.path == '/api/preview_overlay':
+            self.handle_api_preview_overlay()
+            return
+        elif self.path == '/api/sync_prices':
+            self.handle_api_sync_prices()
+            return
         else:
             self.send_error(404, "Endpoint not found")
+
+    def handle_api_homepage_products(self):
+        try:
+            index_path = WORKSPACE_DIR / "index.html"
+            reg_path = WORKSPACE_DIR / "product_price_registry.json"
+            
+            reg_data = {}
+            if reg_path.exists():
+                try: reg_data = json.loads(reg_path.read_text(encoding="utf-8"))
+                except Exception: pass
+
+            products = []
+            if index_path.exists():
+                html = index_path.read_text(encoding="utf-8")
+                card_matches = re.findall(r'id="card-([A-Z0-9]{10})"', html)
+                for asin in card_matches:
+                    meta = reg_data.get(asin, {})
+                    title_match = re.search(rf'id="card-{asin}"[\s\S]*?<h3[^>]*>(.*?)</h3>', html)
+                    img_match = re.search(rf'id="card-{asin}"[\s\S]*?<img[^>]+src="([^"]+)"', html)
+                    price_match = re.search(rf'id="card-{asin}"[\s\S]*?<div class="price-tag"[^>]*>(.*?)</div>', html)
+                    
+                    products.append({
+                        'asin': asin,
+                        'title': title_match.group(1).strip() if title_match else meta.get('title', f'Product {asin}'),
+                        'price': price_match.group(1).strip() if price_match else meta.get('price', '$19.99'),
+                        'image': img_match.group(1).strip() if img_match else f"./focus_product_{asin}_hook.jpg",
+                        'bridge_url': f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
+                    })
+
+            self.send_json({'status': 'success', 'count': len(products), 'products': products})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_delete_homepage_product(self):
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+        asin = data.get('asin', '').strip()
+
+        if not asin:
+            self.send_json({'status': 'error', 'message': 'Missing ASIN'})
+            return
+
+        try:
+            from delete_product import delete_product
+            delete_product(asin)
+            self.send_json({'status': 'success', 'message': f'Product {asin} deleted and updated live on homepage!'})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_preview_overlay(self):
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+
+        image_url = data.get('image_url', '')
+        title = data.get('title', 'VIRAL ROOM FIND')
+        subtitle = data.get('subtitle', '')
+        badge = data.get('badge', 'VIRAL ROOM FIND')
+        price = data.get('price', '$19.99')
+
+        try:
+            from modules.html_overlay_engine import render_html_overlay
+            scratch_dir = WORKSPACE_DIR / "scratch"
+            scratch_dir.mkdir(parents=True, exist_ok=True)
+            preview_img = scratch_dir / "preview_overlay.jpg"
+            
+            # Render temporary preview
+            render_html_overlay(image_url, title, subtitle, badge, price, str(preview_img))
+            self.send_json({'status': 'success', 'preview_url': f"/scratch/preview_overlay.jpg?v={int(time.time())}"})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_sync_prices(self):
+        try:
+            res = subprocess.run([sys.executable, "sync_exact_amazon_prices.py"], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+            self.send_json({'status': 'success', 'message': 'Price synchronization complete!', 'output': res.stdout[:200]})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
 
     def handle_api_status(self, query_str):
         params = urllib.parse.parse_qs(query_str)
