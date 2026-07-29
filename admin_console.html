@@ -618,6 +618,19 @@
         let batchCustomData = {}; // asin -> {title, badge, price}
         let currentBatchId = null;
 
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeOverlayModal();
+            }
+        });
+
         function showToast(msg, icon = '✨') {
             const toast = document.getElementById('toast');
             document.getElementById('toastMsg').innerText = msg;

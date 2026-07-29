@@ -4,6 +4,7 @@ Provides non-blocking background campaign generation & real-time polling API end
 """
 import sys
 import os
+import re
 import json
 import time
 import urllib.parse
@@ -29,156 +30,115 @@ from modules.automated_product_selector import is_asin_published_on_homepage, sa
 PORT = 5000
 WORKSPACE_DIR = Path("G:/CLI/pinterest-auto-affiliate")
 TASK_STATUS_MAP = {}
+status_lock = threading.Lock()
+
+def update_task_status(key, data):
+    with status_lock:
+        TASK_STATUS_MAP[key] = data
+
+def get_task_status(key):
+    with status_lock:
+        return TASK_STATUS_MAP.get(key, {'status': 'not_found'})
+
+def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt_strength=0.35):
+    from modules.automated_product_selector import save_processed_asin
+    from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
+    from modules.html_overlay_engine import render_html_overlay
+    from modules.vision_prompt import generate_cozy_image_prompt
+    from modules.seo_copywriter import generate_pin_seo_data
+    from modules.bridge_creator import generate_bridge_page
+
+    prod = {
+        'title': title,
+        'price': price,
+        'rating': "4.6",
+        'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
+    }
+
+    ref_sheet_path = create_multi_photo_reference_sheet([selected_photo], filename_prefix=f"product_{asin}", max_photos=1)
+    cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Decor", prod['features'], ref_sheet_path, is_white_background=False)
+    raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{asin}", init_image_path=selected_photo, prompt_strength=prompt_strength)
+
+    seo_data = generate_pin_seo_data(prod['title'], prod['price'])
+    hook_img_path = str(WORKSPACE_DIR / f"focus_product_{asin}_hook.jpg")
+    render_html_overlay(raw_image_path, seo_data.get('image_hook', prod['title'][:30]), "", seo_data.get('badge_hook', "VIRAL ROOM FIND"), prod['price'], hook_img_path)
+    generate_bridge_page(prod, seo_data, asin)
+    save_processed_asin(asin)
 
 def run_async_generation(asin, selected_photo, title_clean, price_clean, prompt_strength):
-    global TASK_STATUS_MAP
-    TASK_STATUS_MAP[asin] = {
+    update_task_status(asin, {
         'status': 'processing',
         'step': 'Rendering 8K FLUX AI Image (Replicate API)...',
         'message': 'Calling FLUX-Dev model...'
-    }
-
-    script_code = f"""
-import sys
-from modules.automated_product_selector import save_processed_asin
-from modules.amazon_extractor import get_product_details_and_photos
-from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
-from modules.html_overlay_engine import render_html_overlay
-from modules.vision_prompt import generate_cozy_image_prompt
-from modules.seo_copywriter import generate_pin_seo_data
-from modules.bridge_creator import generate_bridge_page
-
-asin = "{asin}"
-prod = {{
-    'title': "{title_clean}",
-    'price': "{price_clean}",
-    'rating': "4.5",
-    'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
-}}
-
-ref_sheet_path = create_multi_photo_reference_sheet(["{selected_photo}"], filename_prefix=f"product_{{asin}}", max_photos=1)
-cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Lighting", prod['features'], ref_sheet_path, is_white_background=False)
-raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{{asin}}", init_image_path="{selected_photo}", prompt_strength={prompt_strength})
-
-seo_data = generate_pin_seo_data(prod['title'], prod['price'])
-hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{{asin}}_hook.jpg"
-render_html_overlay(raw_image_path, seo_data.get('image_hook', prod['title'][:30]), "", seo_data.get('badge_hook', "VIRAL ROOM FIND"), prod['price'], hook_img_path)
-generate_bridge_page(prod, seo_data, asin)
-save_processed_asin(asin)
-
-import subprocess
-subprocess.run(["git", "add", "-A"], check=True)
-subprocess.run(["git", "commit", "-m", f"publish {{asin}} from Web Console"], check=True)
-subprocess.run(["git", "push", "origin", "main"], check=True)
-print("SUCCESS")
-"""
-    temp_script = WORKSPACE_DIR / f"run_console_{asin}.py"
-    with open(temp_script, "w", encoding="utf-8") as f:
-        f.write(script_code)
+    })
 
     try:
-        res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180)
-        stdout_str = res.stdout or ""
-        stderr_str = res.stderr or ""
-        if res.returncode == 0 and "SUCCESS" in stdout_str:
-            bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
-            TASK_STATUS_MAP[asin] = {
-                'status': 'success',
-                'bridge_url': bridge_url,
-                'message': 'Campaign generated and deployed live to GitHub Pages!'
-            }
-        else:
-            TASK_STATUS_MAP[asin] = {
-                'status': 'error',
-                'message': stderr_str or stdout_str or 'Execution failed.'
-            }
+        process_single_campaign_in_memory(asin, selected_photo, title_clean, price_clean, prompt_strength)
+        
+        # Git commit & push update
+        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR))
+        subprocess.run(["git", "commit", "-m", f"publish {asin} from Web Console"], check=False, cwd=str(WORKSPACE_DIR))
+        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR))
+
+        bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
+        update_task_status(asin, {
+            'status': 'success',
+            'bridge_url': bridge_url,
+            'message': 'Campaign generated and deployed live to GitHub Pages!'
+        })
     except Exception as e:
-        TASK_STATUS_MAP[asin] = {
+        update_task_status(asin, {
             'status': 'error',
             'message': str(e)
-        }
-    finally:
-        if temp_script.exists():
-            try:
-                os.remove(temp_script)
-            except Exception:
-                pass
-
+        })
 
 def run_async_batch_generation(batch_id, items):
-    global TASK_STATUS_MAP
     total = len(items)
     completed = []
     
-    TASK_STATUS_MAP[batch_id] = {
+    update_task_status(batch_id, {
         'status': 'processing',
         'current_index': 0,
         'total': total,
         'step': f'Starting batch generation for {total} selected products...',
         'completed_items': []
-    }
+    })
     
     for idx, item in enumerate(items, 1):
         asin = item.get('asin')
         selected_photo = item.get('selected_photo')
-        title_clean = item.get('title', '').replace('"', '\\"').replace("'", "\\'")
-        price_clean = item.get('price', '$19.99').replace('"', '\\"')
+        title = item.get('title', f'Product {asin}')
+        price = item.get('price', '$19.99')
         prompt_strength = item.get('prompt_strength', 0.35)
         
-        TASK_STATUS_MAP[batch_id]['current_index'] = idx
-        TASK_STATUS_MAP[batch_id]['current_asin'] = asin
-        TASK_STATUS_MAP[batch_id]['step'] = f"[{idx}/{total}] Processing ASIN {asin} - '{item.get('title', '')[:35]}...'"
+        update_task_status(batch_id, {
+            'status': 'processing',
+            'current_index': idx,
+            'total': total,
+            'current_asin': asin,
+            'step': f"[{idx}/{total}] Processing ASIN {asin} - '{title[:35]}...'",
+            'completed_items': completed
+        })
         
-        script_code = f"""
-import sys
-from modules.automated_product_selector import save_processed_asin
-from modules.amazon_extractor import get_product_details_and_photos
-from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
-from modules.html_overlay_engine import render_html_overlay
-from modules.vision_prompt import generate_cozy_image_prompt
-from modules.seo_copywriter import generate_pin_seo_data
-from modules.bridge_creator import generate_bridge_page
-
-asin = "{asin}"
-prod = {{
-    'title': "{title_clean}",
-    'price': "{price_clean}",
-    'rating': "4.6",
-    'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
-}}
-
-ref_sheet_path = create_multi_photo_reference_sheet(["{selected_photo}"], filename_prefix=f"product_{{asin}}", max_photos=1)
-cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Decor", prod['features'], ref_sheet_path, is_white_background=False)
-raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{{asin}}", init_image_path="{selected_photo}", prompt_strength={prompt_strength})
-
-seo_data = generate_pin_seo_data(prod['title'], prod['price'])
-hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{{asin}}_hook.jpg"
-render_html_overlay(raw_image_path, seo_data.get('image_hook', prod['title'][:30]), "", seo_data.get('badge_hook', "VIRAL ROOM FIND"), prod['price'], hook_img_path)
-generate_bridge_page(prod, seo_data, asin)
-save_processed_asin(asin)
-print("SUCCESS")
-"""
-        temp_script = WORKSPACE_DIR / f"run_batch_{batch_id}_{asin}.py"
-        with open(temp_script, "w", encoding="utf-8") as f:
-            f.write(script_code)
-            
         try:
-            res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180)
-            if res.returncode == 0 and "SUCCESS" in res.stdout:
-                completed.append({
-                    'asin': asin,
-                    'title': item.get('title'),
-                    'price': price_clean,
-                    'hook_image': f"./focus_product_{asin}_hook.jpg",
-                    'bridge_url': f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
-                })
-                TASK_STATUS_MAP[batch_id]['completed_items'] = completed
+            process_single_campaign_in_memory(asin, selected_photo, title, price, prompt_strength)
+            completed.append({
+                'asin': asin,
+                'title': title,
+                'price': price,
+                'hook_image': f"./focus_product_{asin}_hook.jpg",
+                'bridge_url': f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
+            })
+            update_task_status(batch_id, {
+                'status': 'processing',
+                'current_index': idx,
+                'total': total,
+                'current_asin': asin,
+                'step': f"[{idx}/{total}] Completed ASIN {asin}",
+                'completed_items': completed
+            })
         except Exception as e:
             print(f"[Batch Generator Error] Failed ASIN {asin}: {e}")
-        finally:
-            if temp_script.exists():
-                try: os.remove(temp_script)
-                except Exception: pass
 
     # Git commit & push all batch updates to GitHub Pages
     try:
@@ -187,6 +147,14 @@ print("SUCCESS")
         subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR))
     except Exception as e_git:
         print(f"[Batch Generator Git Push Warning] {e_git}")
+
+    update_task_status(batch_id, {
+        'status': 'success',
+        'current_index': total,
+        'total': total,
+        'step': f'Batch complete! {len(completed)} products published live.',
+        'completed_items': completed
+    })
 
     TASK_STATUS_MAP[batch_id]['status'] = 'success'
     TASK_STATUS_MAP[batch_id]['step'] = f"Successfully generated and published {len(completed)} products live to GitHub Pages!"
@@ -252,20 +220,25 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 except Exception: pass
 
             products = []
+            seen = set()
             if index_path.exists():
                 html = index_path.read_text(encoding="utf-8")
-                card_matches = re.findall(r'id="card-([A-Z0-9]{10})"', html)
+                card_matches = re.findall(r'id="card-([A-Za-z0-9_]{5,15})"', html)
                 for asin in card_matches:
+                    if asin in seen:
+                        continue
+                    seen.add(asin)
                     meta = reg_data.get(asin, {})
-                    title_match = re.search(rf'id="card-{asin}"[\s\S]*?<h3[^>]*>(.*?)</h3>', html)
-                    img_match = re.search(rf'id="card-{asin}"[\s\S]*?<img[^>]+src="([^"]+)"', html)
-                    price_match = re.search(rf'id="card-{asin}"[\s\S]*?<div class="price-tag"[^>]*>(.*?)</div>', html)
                     
+                    title = meta.get('title') or f"Product {asin}"
+                    price = meta.get('price') or "$19.99"
+                    image = f"./focus_product_{asin}_hook.jpg"
+
                     products.append({
                         'asin': asin,
-                        'title': title_match.group(1).strip() if title_match else meta.get('title', f'Product {asin}'),
-                        'price': price_match.group(1).strip() if price_match else meta.get('price', '$19.99'),
-                        'image': img_match.group(1).strip() if img_match else f"./focus_product_{asin}_hook.jpg",
+                        'title': title,
+                        'price': price,
+                        'image': image,
                         'bridge_url': f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
                     })
 
@@ -323,13 +296,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_status(self, query_str):
         params = urllib.parse.parse_qs(query_str)
         asin = params.get('asin', [''])[0].strip()
-        status_info = TASK_STATUS_MAP.get(asin, {'status': 'not_found'})
+        status_info = get_task_status(asin)
         self.send_json(status_info)
 
     def handle_api_batch_status(self, query_str):
         params = urllib.parse.parse_qs(query_str)
         batch_id = params.get('batch_id', [''])[0].strip()
-        status_info = TASK_STATUS_MAP.get(batch_id, {'status': 'not_found'})
+        status_info = get_task_status(batch_id)
         self.send_json(status_info)
 
     def handle_api_discover(self, query_str):
