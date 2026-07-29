@@ -356,8 +356,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <!-- High-Converting CTA -->
+        {% set clean_words = product.title.split()[:4] | join(' ') %}
         {% if not is_in_direct %}
-        <a id="buyBtn" href="https://www.amazon.in/s?k={{ product.title[:40]|urlencode }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
+        <a id="buyBtn" href="https://www.amazon.in/s?k={{ clean_words|urlencode }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
             <span id="buyBtnText">SEARCH LOCAL DEALS ON AMAZON INDIA (₹)</span>
             <span>➔</span>
         </a>
@@ -425,8 +426,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
+            {% set clean_words = product.title.split()[:4] | join(' ') %}
             const currentAsin = "{{ asin }}";
-            const prodKeywords = encodeURIComponent("{{ product.title[:40] }}");
+            const prodKeywords = encodeURIComponent("{{ clean_words }}");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
 
             function applyGeoRedirect(cc) {
