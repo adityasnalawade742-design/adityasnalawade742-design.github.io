@@ -341,7 +341,7 @@
 
         <!-- Geo Shipping Notice Box -->
         
-        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: none;">
             <span class="geo-icon">📍</span>
             <div>
                 <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
@@ -352,8 +352,8 @@
         <!-- High-Converting CTA -->
         
         
-        <a id="buyBtn" href="https://www.amazon.in/s?k=Aesthetic%20Sunset%20Lamp%20Projection" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">SEARCH LOCAL DEALS ON AMAZON INDIA (₹)</span>
+        <a id="buyBtn" href="https://www.amazon.in/dp/B0D8P8CSYP" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">BUY ON AMAZON INDIA (₹)</span>
             <span>➔</span>
         </a>
         
@@ -418,7 +418,7 @@
             
             const currentAsin = "B0D8P8CSYP";
             const prodKeywords = encodeURIComponent("Aesthetic Sunset Lamp Projection");
-            const directRegions = ["US"];
+            const directRegions = ["US", "IN"];
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();

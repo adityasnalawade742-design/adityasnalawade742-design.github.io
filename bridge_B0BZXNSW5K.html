@@ -341,7 +341,7 @@
 
         <!-- Geo Shipping Notice Box -->
         
-        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: none;">
             <span class="geo-icon">📍</span>
             <div>
                 <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
@@ -352,8 +352,8 @@
         <!-- High-Converting CTA -->
         
         
-        <a id="buyBtn" href="https://www.amazon.in/s?k=Bedside%20Table%20Lamp%20for" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">SEARCH LOCAL DEALS ON AMAZON INDIA (₹)</span>
+        <a id="buyBtn" href="https://www.amazon.in/dp/B0BZXNSW5K" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">BUY ON AMAZON INDIA (₹)</span>
             <span>➔</span>
         </a>
         
@@ -418,7 +418,7 @@
             
             const currentAsin = "B0BZXNSW5K";
             const prodKeywords = encodeURIComponent("Bedside Table Lamp for");
-            const directRegions = ["US"];
+            const directRegions = ["US", "IN"];
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
