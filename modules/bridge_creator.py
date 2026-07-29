@@ -422,17 +422,26 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
                 
-                // Check if US flag is a VPN proxy result for non-US browser/timezone
-                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                const lang = (navigator.language || '').toLowerCase();
-                
-                if (targetCC === 'US' || !countryMap[targetCC]) {
-                    if (tz.includes('europe') || tz.includes('amsterdam') || tz.includes('london') || tz.includes('berlin') || tz.includes('paris') || tz.includes('stockholm') || lang.includes('gb') || lang.includes('de') || lang.includes('fr') || lang.includes('sv')) {
-                        targetCC = 'DE'; // Fallback to Amazon Germany (€) for Europe
-                    } else if (tz.includes('asia') || tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('singapore') || lang.includes('in') || lang.includes('hi')) {
-                        targetCC = 'IN'; // Fallback to Amazon India (₹) for Asia
+                // Explicit US Visitor Handling
+                if (targetCC === 'US') {
+                    const buyBtn = document.getElementById('buyBtn');
+                    const buyBtnText = document.getElementById('buyBtnText');
+                    const geoBox = document.getElementById('geoNoticeBox');
+                    if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${asin}?tag=smartdeal0358-21`;
+                    if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
+                    if (geoBox) geoBox.style.display = 'none';
+                    return;
+                }
+
+                if (!countryMap[targetCC]) {
+                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                    const lang = (navigator.language || '').toLowerCase();
+                    if (tz.includes('asia') || lang.includes('in') || lang.includes('hi')) {
+                        targetCC = 'IN';
+                    } else if (tz.includes('europe') || lang.includes('gb') || lang.includes('de') || lang.includes('fr')) {
+                        targetCC = 'DE';
                     } else {
-                        return; // Genuine US Visitor
+                        return;
                     }
                 }
 
