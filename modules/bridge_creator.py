@@ -345,18 +345,18 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             </ul>
         </div>
 
-        <!-- Geo Shipping Notice Box for Non-US Visitors -->
-        <div id="geoNoticeBox" class="geo-notice-box">
+        <!-- Geo Shipping Notice Box (Revealed by default for international/Indian visitors) -->
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
             <span class="geo-icon">📍</span>
             <div>
-                <strong id="geoNoticeTitle">Direct US Shipping Unavailable to Your Location</strong>
-                <span id="geoNoticeDesc">This item ships from Amazon US. We've automatically linked equivalent local options on Amazon for fast regional delivery.</span>
+                <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
+                <span id="geoNoticeDesc">This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on amazon.in for fast delivery.</span>
             </div>
         </div>
 
-        <!-- High-Converting CTA -->
-        <a id="buyBtn" href="{{ affiliate_url }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">CHECK DEAL ON AMAZON</span>
+        <!-- High-Converting CTA (Defaults to amazon.in for Indian & Global Visitors) -->
+        <a id="buyBtn" href="https://www.amazon.in/s?k={{ product.title[:40]|urlencode }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">SEARCH LOCAL DEALS ON AMAZON INDIA (₹)</span>
             <span>➔</span>
         </a>
 
