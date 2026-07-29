@@ -91,15 +91,6 @@ master_catalog = {
         "description": "Create warm romantic room vibes with this viral sunset projection lamp.",
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
-    "B0DLN5S5K9": {
-        "title": "Minimalist Ceramic Table Lamp Neutral Bedside Glow",
-        "price": "$29.99",
-        "rating": "4.7",
-        "features": ["CERAMIC TEXTURED BASE", "LINEN SHADE", "WARM LIGHT BULB", "BEDSIDE ACCENT"],
-        "category": "lighting",
-        "description": "Neutral minimalist ceramic table lamp for bedroom and living room accent lighting.",
-        "direct_regions": ["UK", "DE", "SE", "CA", "JP"]
-    },
     "B0DXKGL1T2": {
         "title": "Lily of the Valley Flower Table Lamp Glass Nightlight",
         "price": "$38.57",
