@@ -764,7 +764,7 @@
 
                 box.innerHTML = `
                     <div class="batch-prod-header">
-                        <div class="batch-prod-title">[Product #${pIdx+1}] ${item.title[:65]}</div>
+                        <div class="batch-prod-title">[Product #${pIdx+1}] ${item.title.substring(0, 65)}...</div>
                         <div style="font-weight: 800; color: var(--gold-primary);">${item.price}</div>
                     </div>
                     <div class="photos-row">${photosHtml}</div>
@@ -909,18 +909,28 @@
         // MODE C: HOMEPAGE SHOWCASE MANAGER & 1-CLICK DELETE
         // =========================================================================
         function loadHomepageProducts() {
+            showToast("Loading active homepage products...", "🏠");
             fetch('/api/homepage_products')
                 .then(r => r.json())
                 .then(data => {
                     if (data.status === 'success') {
                         renderHomepageGrid(data.products || []);
+                        showToast(`Loaded ${data.count || 0} homepage products!`, "✨");
+                    } else {
+                        alert("Error loading homepage products: " + (data.message || "Unknown error"));
                     }
-                });
+                })
+                .catch(err => alert("Error communicating with local server backend."));
         }
 
         function renderHomepageGrid(products) {
             const grid = document.getElementById('homepageProductsGrid');
             grid.innerHTML = '';
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-sub); background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.15);">📦 No products currently published on your homepage.<br><br>Use <b>Step 1 & Step 2</b> above to discover winning products and publish them live!</div>';
+                return;
+            }
 
             products.forEach(p => {
                 const card = document.createElement('div');
