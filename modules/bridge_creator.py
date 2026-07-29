@@ -462,48 +462,51 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 }
             }
 
-            // ⚡ Phase 0: Instant URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN)
+            // ⚡ Phase 0: Instant URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN, ?country=US)
+            let isGeoOverridden = false;
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const forcedCountry = urlParams.get('country') || urlParams.get('geo');
                 if (forcedCountry) {
                     applyGeoRedirect(forcedCountry.toUpperCase());
-                    return;
+                    isGeoOverridden = true;
                 }
             } catch(e) {}
 
-            // ⚡ Phase 1: INSTANT Offline Fallback (0ms - Timezone & Browser Language Check)
-            try {
-                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                const lang = (navigator.language || '').toLowerCase();
-                
-                if (tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia') || lang.includes('in') || lang.includes('hi')) {
-                    applyGeoRedirect('IN');
-                } else if (tz.includes('singapore') || lang.includes('sg')) {
-                    applyGeoRedirect('SG');
-                } else if (tz.includes('stockholm') || lang.includes('sv') || lang.includes('se')) {
-                    applyGeoRedirect('SE');
-                } else if (tz.includes('london') || lang.includes('en-gb')) {
-                    applyGeoRedirect('GB');
-                } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
-                    applyGeoRedirect('DE');
-                } else if (tz.includes('tokyo') || lang.includes('ja') || lang.includes('jp')) {
-                    applyGeoRedirect('JP');
-                } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('en-au')) {
-                    applyGeoRedirect('AU');
-                }
-            } catch(e) {}
+            if (!isGeoOverridden) {
+                // ⚡ Phase 1: INSTANT Offline Fallback (0ms - Timezone & Browser Language Check)
+                try {
+                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                    const lang = (navigator.language || '').toLowerCase();
+                    
+                    if (tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia') || lang.includes('in') || lang.includes('hi')) {
+                        applyGeoRedirect('IN');
+                    } else if (tz.includes('singapore') || lang.includes('sg')) {
+                        applyGeoRedirect('SG');
+                    } else if (tz.includes('stockholm') || lang.includes('sv') || lang.includes('se')) {
+                        applyGeoRedirect('SE');
+                    } else if (tz.includes('london') || lang.includes('en-gb')) {
+                        applyGeoRedirect('GB');
+                    } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
+                        applyGeoRedirect('DE');
+                    } else if (tz.includes('tokyo') || lang.includes('ja') || lang.includes('jp')) {
+                        applyGeoRedirect('JP');
+                    } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('en-au')) {
+                        applyGeoRedirect('AU');
+                    }
+                } catch(e) {}
 
-            // ⚡ Phase 2: Asynchronous Precision Network Check
-            fetch('https://api.country.is')
-                .then(r => r.json())
-                .then(d => { if (d && d.country) applyGeoRedirect(d.country); })
-                .catch(err => {
-                    fetch('https://ipapi.co/json/')
-                        .then(r => r.json())
-                        .then(d => { if (d && d.country_code) applyGeoRedirect(d.country_code); })
-                        .catch(e => {});
-                });
+                // ⚡ Phase 2: Asynchronous Precision Network Check
+                fetch('https://api.country.is')
+                    .then(r => r.json())
+                    .then(d => { if (d && d.country) applyGeoRedirect(d.country); })
+                    .catch(err => {
+                        fetch('https://ipapi.co/json/')
+                            .then(r => r.json())
+                            .then(d => { if (d && d.country_code) applyGeoRedirect(d.country_code); })
+                            .catch(e => {});
+                    });
+            }
         })();
     </script>
 
