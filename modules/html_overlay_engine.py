@@ -229,7 +229,7 @@ def render_html_overlay(
 
     image_path: str,
     headline: str,
-    subtitle: str = "ELEGANCE THAT SHINES",
+    subtitle: str = "",
     badge_text: str = "AMAZON HOME FIND",
     price_str: str = "$19.99",
     features: list = None,
@@ -667,8 +667,7 @@ def render_html_overlay(
     </div>
 
     <div class="bottom-container">
-        <div class="bottom-meta">
-            <div class="subtitle">{subtitle_clean}</div>
+        <div class="bottom-meta" style="justify-content: flex-end;">
             {price_pill_html}
         </div>
         <div class="features-grid">
