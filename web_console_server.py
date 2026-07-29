@@ -164,12 +164,14 @@ print("SUCCESS")
             f.write(script_code)
 
         try:
-            res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, timeout=120)
-            if res.returncode == 0 and "SUCCESS" in res.stdout:
+            res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
+            stdout_str = res.stdout or ""
+            stderr_str = res.stderr or ""
+            if res.returncode == 0 and "SUCCESS" in stdout_str:
                 bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
                 self.send_json({'status': 'success', 'bridge_url': bridge_url})
             else:
-                self.send_json({'status': 'error', 'message': res.stderr or res.stdout})
+                self.send_json({'status': 'error', 'message': stderr_str or stdout_str or "Execution failed."})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
         finally:
