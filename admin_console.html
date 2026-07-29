@@ -971,15 +971,20 @@
                 card.className = 'preview-card';
                 card.id = `hp-card-${p.asin}`;
                 card.innerHTML = `
-                    <div style="font-weight: 800; font-size: 14px;">${p.title}</div>
-                    <img class="preview-img" src="${p.image}" alt="${p.title}" />
+                    <div style="font-weight: 800; font-size: 14px;">${escapeHTML(p.title)}</div>
+                    <img class="preview-img" id="hp-img-${p.asin}" src="${p.image}" alt="${escapeHTML(p.title)}" />
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-weight: 800; color: var(--gold-primary);">${p.price}</span>
                         <a href="${p.bridge_url}" target="_blank" style="color: var(--gold-primary); font-size: 12px; text-decoration: none;">🔗 Open Page</a>
                     </div>
-                    <button class="btn-action btn-danger" style="padding: 8px; font-size: 12px; width: 100%;" onclick="deleteHomepageProduct('${p.asin}')">
-                        🗑️ Delete Product from Homepage
-                    </button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-action" style="padding: 8px; font-size: 12px; flex: 1;" onclick="openTagEditorModal('${p.asin}', '${escapeHTML(p.title).replace(/'/g, "\\'")}', '${p.price}')">
+                            🏷️ Edit Price Tag Size
+                        </button>
+                        <button class="btn-action btn-danger" style="padding: 8px; font-size: 12px; width: 42px;" onclick="deleteHomepageProduct('${p.asin}')">
+                            🗑️
+                        </button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -1035,6 +1040,65 @@
                     document.getElementById('productMetaPanel').style.display = 'grid';
                     showToast("Extracted single product photos!", "📸");
                 });
+        }
+
+        let activeTagAsin = null;
+
+        function openTagEditorModal(asin, title, price) {
+            activeTagAsin = asin;
+            document.getElementById('overlayModalImg').src = `./focus_product_${asin}_hook.jpg?t=${Date.now()}`;
+            document.getElementById('overlayModal').classList.add('active');
+            
+            // Set save button inside modal
+            let saveBtn = document.getElementById('saveTagBtn');
+            if (!saveBtn) {
+                const modalContent = document.querySelector('#overlayModal .modal-content');
+                saveBtn = document.createElement('button');
+                saveBtn.id = 'saveTagBtn';
+                saveBtn.className = 'btn-action btn-success';
+                saveBtn.style.width = '100%';
+                saveBtn.style.marginBottom = '10px';
+                saveBtn.innerHTML = '<div class="spinner" id="tagSaveSpinner"></div><span>🚀 Re-Render & Save Tag Live</span>';
+                saveBtn.onclick = saveTagCustomization;
+                modalContent.appendChild(saveBtn);
+            }
+        }
+
+        function saveTagCustomization() {
+            if (!activeTagAsin) return;
+            const scaleVal = document.getElementById('tagScaleSelect').value; // e.g. 380x285
+            const [w, h] = scaleVal.split('x').map(Number);
+            const rot = parseInt(document.getElementById('tagRotationRange').value || '-6');
+
+            document.getElementById('tagSaveSpinner').style.display = 'inline-block';
+            showToast(`Re-rendering tag (${w}x${h}px, ${rot}°) live...`, "🏷️");
+
+            fetch('/api/customize_tag', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    asin: activeTagAsin,
+                    tag_width: w,
+                    tag_height: h,
+                    tag_rotation: rot
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('tagSaveSpinner').style.display = 'none';
+                if (data.status === 'success') {
+                    document.getElementById('overlayModalImg').src = `${data.image}&t=${Date.now()}`;
+                    const hpImg = document.getElementById(`hp-img-${activeTagAsin}`);
+                    if (hpImg) hpImg.src = `${data.image}&t=${Date.now()}`;
+                    showToast("Price tag updated live!", "✨");
+                } else {
+                    alert("Error customizing tag: " + data.message);
+                }
+            })
+            .catch(e => {
+                document.getElementById('tagSaveSpinner').style.display = 'none';
+                alert("Error communicating with server.");
+            });
         }
 
         window.onload = function() {

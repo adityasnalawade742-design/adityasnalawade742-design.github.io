@@ -206,6 +206,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path == '/api/sync_prices':
             self.handle_api_sync_prices()
             return
+        elif self.path == '/api/customize_tag':
+            self.handle_api_customize_tag()
+            return
         else:
             self.send_error(404, "Endpoint not found")
 
@@ -479,11 +482,60 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         )
         t.start()
 
-        self.send_json({
-            'status': 'processing',
-            'batch_id': batch_id,
-            'message': f'Started batch generation for {len(items)} items.'
-        })
+    def handle_api_customize_tag(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8'))
+
+            asin = data.get('asin')
+            tag_width = int(data.get('tag_width', 380))
+            tag_height = int(data.get('tag_height', 285))
+            tag_rotation = int(data.get('tag_rotation', -6))
+
+            reg_path = WORKSPACE_DIR / "product_price_registry.json"
+            reg = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
+            meta = reg.get(asin, {})
+
+            raw_img = meta.get('raw_image') or f"raw_images/raw_{asin}.jpg"
+            raw_full = WORKSPACE_DIR / raw_img
+            if not raw_full.exists():
+                raw_img = "raw_images/birds_cute.jpg" if asin == "B0D8P8CSYP" else "raw_images/raw_B0BZXNSW5K.jpg"
+
+            output_img = meta.get('hook_image') or f"focus_product_{asin}_hook.jpg"
+
+            from modules.html_overlay_engine import render_html_overlay
+            render_html_overlay(
+                image_path=str(WORKSPACE_DIR / raw_img),
+                headline=meta.get('headline', meta.get('title', 'Luxury Room Product')),
+                subtitle="",
+                badge_text=meta.get('badge', 'VIRAL FIND'),
+                price_str=meta.get('current_price', '$19.99'),
+                features=meta.get('features', []),
+                output_path=str(WORKSPACE_DIR / output_img),
+                tag_width_px=tag_width,
+                tag_height_px=tag_height,
+                tag_rotation_deg=tag_rotation
+            )
+
+            # Update cache-busted v param in bridge page and index.html
+            v_tag = f"v={int(time.time())}"
+            bridge_file = WORKSPACE_DIR / f"bridge_{asin}.html"
+            if bridge_file.exists():
+                txt = bridge_file.read_text(encoding="utf-8")
+                txt = re.sub(r"focus_product_" + asin + r"_hook\.jpg(\?v=[^\"]*)?", f"focus_product_{asin}_hook.jpg?{v_tag}", txt)
+                bridge_file.write_text(txt, encoding="utf-8")
+
+            index_file = WORKSPACE_DIR / "index.html"
+            if index_file.exists():
+                txt = index_file.read_text(encoding="utf-8")
+                txt = re.sub(r"focus_product_" + asin + r"_hook\.jpg(\?v=[^\"]*)?", f"focus_product_{asin}_hook.jpg?{v_tag}", txt)
+                index_file.write_text(txt, encoding="utf-8")
+
+            self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}"})
+        except Exception as e:
+            print(f"[Customize Tag Error] {e}")
+            self.send_json({'status': 'error', 'message': str(e)})
 
     def send_json(self, data):
         body = json.dumps(data).encode('utf-8')
