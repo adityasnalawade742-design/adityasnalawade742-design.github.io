@@ -978,7 +978,7 @@
                         <a href="${p.bridge_url}" target="_blank" style="color: var(--gold-primary); font-size: 12px; text-decoration: none;">🔗 Open Page</a>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn-action" style="padding: 8px; font-size: 12px; flex: 1;" onclick="openTagEditorModal('${p.asin}', '${escapeHTML(p.title).replace(/'/g, "\\'")}', '${p.price}')">
+                        <button class="btn-action" style="padding: 8px; font-size: 12px; flex: 1;" onclick="openTagEditorModal('${p.asin}')">
                             🏷️ Edit Price Tag Size
                         </button>
                         <button class="btn-action btn-danger" style="padding: 8px; font-size: 12px; width: 42px;" onclick="deleteHomepageProduct('${p.asin}')">
@@ -1047,7 +1047,7 @@
         function openTagEditorModal(asin, title, price) {
             activeTagAsin = asin;
             document.getElementById('overlayModalImg').src = `./focus_product_${asin}_hook.jpg?t=${Date.now()}`;
-            document.getElementById('overlayModal').classList.add('active');
+            document.getElementById('overlayModal').style.display = 'flex';
             
             // Set save button inside modal
             let saveBtn = document.getElementById('saveTagBtn');
