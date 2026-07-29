@@ -135,7 +135,7 @@ def has_human_presence(image_url: str) -> bool:
                     skin_pixels += 1
         
         skin_ratio = skin_pixels / total
-        has_human = skin_ratio > 0.03
+        has_human = skin_ratio > 0.18
         if has_human:
             print(f"[Human/Model Scanner] DISCARDING Human Model/Hand Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
         return has_human
@@ -210,7 +210,7 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
         print(f"[Cozy Vibe Scorer] SELECTED BEST PHOTO: ...{best_photo[-30:]} (Score: {best_vibe_score:.1f}/10)")
         return (best_photo, False)
     
-    print("[Amazon Extractor] ⚠️ ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
+    print("[Amazon Extractor] [WARNING] ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
     return ("", True)
 
 EXCLUDED_KIDS_KEYWORDS = [
