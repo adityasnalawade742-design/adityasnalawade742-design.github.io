@@ -38,16 +38,17 @@ print("\n[Step 2] Creating Multi-Angle Composite Reference Sheet...")
 ref_sheet_path = create_multi_photo_reference_sheet(photos, filename_prefix=f"product_{asin}", max_photos=6)
 
 # Step 3: Vision Master Prompt
-print("\n[Step 3] Generating Vision Master Commercial Prompt...")
+print("\n[Step 3] Generating Vision Master Commercial Prompt (Preserving Natural Nature/Window Background)...")
 cozy_prompt = generate_cozy_image_prompt(
     product_title=prod['title'],
     category="Sunlight Window & Crystal Rainbow Decor",
     key_features=prod['features'],
-    ref_sheet_path=ref_sheet_path
+    ref_sheet_path=ref_sheet_path,
+    is_white_background=False
 )
 
-# Step 4: FLUX-Dev Paid Img2Img AI Render (Seed 591928, FP16 32-step)
-print("\n[Step 4] Paid Replicate FLUX-Dev Img2Img Rendering 8K Commercial Graphic...")
+# Step 4: FLUX-Dev Paid Img2Img AI Render (Seed 591928, FP16 32-step, strength=0.30)
+print("\n[Step 4] Paid Replicate FLUX-Dev Img2Img Rendering 8K Commercial Graphic (strength=0.30)...")
 from modules.amazon_extractor import select_clean_photo_or_skip
 winner_photo, skip = select_clean_photo_or_skip(photos)
 init_photo = winner_photo if winner_photo else (photos[0] if photos else "")
@@ -56,7 +57,8 @@ print(f" -> Using Winner Photo Input: {init_photo}")
 raw_image_path = generate_cozy_image(
     prompt=cozy_prompt,
     filename_prefix=f"focus_product_{asin}",
-    init_image_path=init_photo
+    init_image_path=init_photo,
+    prompt_strength=0.30
 )
 
 # Step 5: SEO Copywriter
