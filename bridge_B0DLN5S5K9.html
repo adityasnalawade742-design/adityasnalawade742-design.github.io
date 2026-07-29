@@ -413,6 +413,7 @@
 
             const currentAsin = "B0DLN5S5K9";
             const prodKeywords = encodeURIComponent("Minimalist Ceramic Table Lamp Neutral Be");
+            const directRegions = ["US", "IN"];
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
@@ -445,10 +446,23 @@
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                // Direct regional product page link (e.g. amazon.in/dp/ASIN, amazon.co.uk/dp/ASIN)
-                if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}`;
-                if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
-                if (geoBox) geoBox.style.display = 'none';
+                if (directRegions.includes(targetCC)) {
+                    // Direct product page link for countries where ASIN is directly listed
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}`;
+                    if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
+                    if (geoBox) geoBox.style.display = 'none';
+                } else {
+                    // Unlisted in region -> Local Search Fallback & Notice Box (prevents 404)
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                    if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
+                    if (geoBox) {
+                        const titleEl = document.getElementById('geoNoticeTitle');
+                        const descEl = document.getElementById('geoNoticeDesc');
+                        if (titleEl) titleEl.innerText = `Item Ships from Amazon US (Not Directly Listed on ${target.domain})`;
+                        if (descEl) descEl.innerText = `This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on ${target.domain} for fast delivery.`;
+                        geoBox.style.display = 'flex';
+                    }
+                }
             }
 
             // ⚡ Phase 0: Instant URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN, ?country=US)

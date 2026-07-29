@@ -25,7 +25,8 @@ master_catalog = {
         "rating": "4.6",
         "features": ["MINIMALIST WOOD BASE", "CREAM FABRIC LAMPSHADE", "WARM AMBIENT GLOW", "INLINE CONTROL SWITCH"],
         "category": "lighting",
-        "description": "Transform your nightstand setup with this aesthetic minimalist wood base table lamp. Warm ambient glow perfect for cozy reading and bedroom decor."
+        "description": "Transform your nightstand setup with this aesthetic minimalist wood base table lamp. Warm ambient glow perfect for cozy reading and bedroom decor.",
+        "direct_regions": ["US"]
     },
     "B0BZXNSW5K": {
         "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
@@ -33,7 +34,8 @@ master_catalog = {
         "rating": "4.5",
         "features": ["DIMMABLE TOUCH CONTROL", "DUAL USB A+C CHARGING PORTS", "BUILT-IN AC OUTLET", "LED BULB INCLUDED"],
         "category": "lighting",
-        "description": "Upgrade your nightstand setup with this 3-way dimmable touch control bedside lamp featuring USB A+C charging ports and AC outlet."
+        "description": "Upgrade your nightstand setup with this 3-way dimmable touch control bedside lamp featuring USB A+C charging ports and AC outlet.",
+        "direct_regions": ["US"]
     },
     "B0D1FRDFFX": {
         "title": "Glass Mushroom Lamp Ambient Table Nightstand Light",
@@ -41,7 +43,8 @@ master_catalog = {
         "rating": "4.8",
         "features": ["HAND-BLOWN STRIPED GLASS", "WARM AMBIENT GLOW", "VINTAGE MUSHROOM DESIGN", "EASY ON/OFF SWITCH"],
         "category": "lighting",
-        "description": "Add a cozy retro aesthetic to your space with this hand-blown striped glass mushroom lamp. Soft ambient glow for nightstands, desks, and shelves."
+        "description": "Add a cozy retro aesthetic to your space with this hand-blown striped glass mushroom lamp. Soft ambient glow for nightstands, desks, and shelves.",
+        "direct_regions": ["US", "IN"]
     },
     "B0C2YLN3H4": {
         "title": "White Ceramic Donut Vase Set of 2 Modern Aesthetic Decor",
@@ -49,7 +52,8 @@ master_catalog = {
         "rating": "4.7",
         "features": ["MATTE CERAMIC FINISH", "DONUT HOLLOW CENTER", "MINIMALIST NORDIC STYLE", "SET OF 2 MATCHING VASES"],
         "category": "decor",
-        "description": "Minimalist matte white ceramic donut vase set of 2 for aesthetic pampas grass, shelf styling, coffee table and mantle room decor."
+        "description": "Minimalist matte white ceramic donut vase set of 2 for aesthetic pampas grass, shelf styling, coffee table and mantle room decor.",
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "NL"]
     },
     "B0GYDXHF4G": {
         "title": "Flame Aroma Essential Oil Diffuser Dark Crackle Flame Effect",
@@ -57,7 +61,8 @@ master_catalog = {
         "rating": "4.9",
         "features": ["REALISTIC FLAME EFFECT", "ULTRASONIC MIST HUMIDIFIER", "SILENT SLEEP OPERATION", "AUTO SHUTOFF SAFETY"],
         "category": "lighting decor",
-        "description": "Cozy ambient flame effect humidifier and essential oil diffuser in dark crackle finish. Realistic flame glow for bedroom relaxation."
+        "description": "Cozy ambient flame effect humidifier and essential oil diffuser in dark crackle finish. Realistic flame glow for bedroom relaxation.",
+        "direct_regions": ["US", "IN"]
     },
     "B0FXLYXM32": {
         "title": "White Wavy Wall Vanity Mirror Aesthetic Squiggle Mirror",
