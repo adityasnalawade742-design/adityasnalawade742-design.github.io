@@ -156,8 +156,9 @@
 
     <script>
         // Automatic Geo-IP Location Smart Router
-        // UK visitors -> Amazon UK; US/Global visitors -> Amazon US
+        // India -> Amazon.in | UK -> Amazon.co.uk | US/Global -> Amazon.com
         (function() {
+            const inUrl = "https://www.amazon.in/dp/B0DDTPCDLB?tag=smartdeal0358-21";
             const ukUrl = "https://www.amazon.co.uk/dp/B0DXKGL1T2?tag=smartdeal0358-21";
             const usUrl = "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21";
 
@@ -165,7 +166,9 @@
                 .then(res => res.json())
                 .then(data => {
                     const btn = document.getElementById('amazon-btn');
-                    if (data.country_code === 'GB' || data.country_code === 'UK') {
+                    if (data.country_code === 'IN') {
+                        if (btn) btn.href = inUrl;
+                    } else if (data.country_code === 'GB' || data.country_code === 'UK') {
                         if (btn) btn.href = ukUrl;
                     } else {
                         if (btn) btn.href = usUrl;
