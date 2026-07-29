@@ -12,6 +12,9 @@ import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(line_buffering=True, encoding="utf-8")
+
 sys.path.append("G:/CLI/pinterest-auto-affiliate")
 from modules.amazon_extractor import (
     get_product_details_and_photos,
