@@ -44,7 +44,7 @@ master_catalog = {
         "features": ["HAND-BLOWN STRIPED GLASS", "WARM AMBIENT GLOW", "VINTAGE MUSHROOM DESIGN", "EASY ON/OFF SWITCH"],
         "category": "lighting",
         "description": "Add a cozy retro aesthetic to your space with this hand-blown striped glass mushroom lamp. Soft ambient glow for nightstands, desks, and shelves.",
-        "direct_regions": ["US", "IN"]
+        "direct_regions": ["US"]
     },
     "B0C2YLN3H4": {
         "title": "White Ceramic Donut Vase Set of 2 Modern Aesthetic Decor",
@@ -62,7 +62,7 @@ master_catalog = {
         "features": ["REALISTIC FLAME EFFECT", "ULTRASONIC MIST HUMIDIFIER", "SILENT SLEEP OPERATION", "AUTO SHUTOFF SAFETY"],
         "category": "lighting decor",
         "description": "Cozy ambient flame effect humidifier and essential oil diffuser in dark crackle finish. Realistic flame glow for bedroom relaxation.",
-        "direct_regions": ["US", "IN"]
+        "direct_regions": ["US"]
     },
     "B0FXLYXM32": {
         "title": "White Wavy Wall Vanity Mirror Aesthetic Squiggle Mirror",
@@ -70,7 +70,8 @@ master_catalog = {
         "rating": "4.8",
         "features": ["SQUIGGLE WAVY FRAME", "HIGH DEFINITION GLASS", "WALL MOUNT OR TABLETOP", "VIRAL DORM DECOR"],
         "category": "mirror",
-        "description": "Trendy white wavy squiggle vanity mirror for bedroom desk, wall decor, and viral aesthetic room transformation."
+        "description": "Trendy white wavy squiggle vanity mirror for bedroom desk, wall decor, and viral aesthetic room transformation.",
+        "direct_regions": ["US"]
     },
     "B07HP22QTZ": {
         "title": "Suncatcher Crystal Prism Window Rainbow Maker Hanging Light Catcher",
