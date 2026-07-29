@@ -8,23 +8,75 @@
 ## 📌 Master Configuration Settings
 - **Amazon Affiliate Store ID**: `smartdeal0358-21` *(100% configured across config.py, .env, and all bridge templates)*
 - **GitHub Pages Domain**: `https://adityasnalawade742-design.github.io`
-- **FLUX-Dev Fixed AI Seed**: `591928` *(Master Commercial Prompt with FP16 32-step precision)*
-- **Primary Niche**: `Cozy Room Finds` — 100% Home Decor & Aesthetic Room Transformation ($15 – $45 impulse price range).
-- **Pinterest API Integration**:
-  - **App ID**: `1594896` (`Cozy Room Decor Auto Publisher`)
-  - **Authenticated Account**: `@adityasnalawade0703`
-  - **Target Board ID**: `1092545259543920271` (*Cozy Room & Desk Decor*)
-  - **Campaign Tracking File**: `pinterest_campaign_tracker.json`
+## 📌 Master Project State: Pinterest Auto-Affiliate Automation Pipeline
+
+## 1. System Overview & Core Architecture
+- **Primary Affiliate Tag**: `smartdeal0358-21` (Amazon Associates US, UK & India)
+- **Pinterest Integration**: OAuth 2.0 API Sandbox (`pina_...`) & Production API (`https://api.pinterest.com/v5/pins`)
+- **Master Price Synchronization Engine (`daily_price_updater.py`)**: Daily automated scraping of live Amazon prices. Automatically re-stamps prices onto clean raw room photos (`raw_images/raw_{asin}.jpg`), updates `bridge_{asin}.html` and `index.html`, and auto-pushes live to GitHub Pages.
+- **Graphic Overlay Engine (`modules/html_overlay_engine.py`)**: Headless Playwright Chromium 1200x1600 3:4 vertical graphic renderer with glassmorphism cards, price tags, top badges, and 4 feature highlights.
+- **Live Deployment**:
+  - **URL**: [https://adityasnalawade742-design.github.io](https://adityasnalawade742-design.github.io)
+  - **Repo**: `adityasnalawade742-design/adityasnalawade742-design.github.io` (`main` branch)
 
 ---
 
-## 🎨 Strict Product Selection Rules & Filters
-1. **100% Home Decor Focus**: Target room atmosphere, lighting, wall accents, nightstand decor, and cozy living room items.
-2. **NO Kids / Children Items (`is_adult_aesthetic_product`)**: Automatically excludes items with keywords `kids`, `children`, `toy`, `drawing board for kids`, `birthday festival gift`.
-3. **NO Plain White Cutouts (`is_lifestyle_photo`)**: Automatically checks border pixels. Products MUST have authentic room lifestyle background photos.
-4. **NO Automatic Background Execution**: ALWAYS present product title, price, and affiliate link to the user first, and wait for explicit user approval before running any generation scripts.
-5. **EXACT Amazon Price Sync**: The price rendered inside the graphic price tag (`focus_product_{asin}_hook.jpg`), landing page (`bridge_{asin}.html`), and homepage card (`index.html`) MUST 100% match the exact price extracted directly from the Amazon product page.
-6. **Cloud Hosting Admin Security**: When setting up AWS / n8n cloud hosting, remote admin actions (deletions / manual triggers) must be secured behind an `ADMIN_SECRET_KEY` authentication layer.
+## 2. Homepage Design & Layout Architecture (`index.html`)
+- **Dark Mode Glassmorphism**: Obsidian dark background (`#07060a`) with warm gold radial glows (`#ffb703` ➔ `#fb8500`).
+- **Responsive Card Grid**: Card width capped at `290px` (`grid-template-columns: repeat(auto-fill, minmax(250px, 290px))` with `justify-content: center`).
+- **Image Container**: `aspect-ratio: 3/4`, `object-fit: contain` on `#0b0a0f` container to ensure zero cropping/zoom on vertical Pinterest pin graphics.
+- **Interactive Controls**: Real-time search bar + 5 category filter chips (`✨ All Finds`, `🕯️ Lamps & Lighting`, `🪞 Mirrors & Wall`, `🏺 Vases & Decor`, `✨ Desk Accessories`).
+- **Public Security**: Delete buttons (`.delete-btn`) are hidden by default for public visitors.
+
+---
+
+## 3. Global Multi-Currency Engine (160+ World Currencies)
+- **Auto Geolocation**: IP API (`ipapi.co/json`) detects visitor's country and maps it to official currency (e.g. India ➔ `INR ₹`, UK ➔ `GBP £`, Eurozone ➔ `EUR €`, Canada ➔ `CAD CA$`, Australia ➔ `AUD A$`, Japan ➔ `JPY ¥`).
+- **Live Rates API**: Fetches daily exchange rates from `https://open.er-api.com/v6/latest/USD`.
+- **Top Bar Selector**: Dropdown menu allows manual currency switching across 160+ world currencies.
+- **Card Data Attribute**: Each card wrapper tracks `data-base-usd="{price}"` for instant dynamic conversion.
+
+---
+
+## 4. International Smart Geo-IP Location Router (`bridge_*.html`)
+- **3-Way Routing Matrix**:
+  - **India (`IN`)**: Routes button to `Amazon.in` with affiliate tag `smartdeal0358-21` (Badge: `⚡ Delivered via Amazon India`).
+  - **UK & Europe (`GB`, `UK`, `NL`, `DE`, `FR`, `IT`, `ES`, etc.)**: Routes button to `Amazon.co.uk` (Badge: `⚡ Delivered via Amazon UK & Europe`).
+  - **US & Rest of World**: Routes button to `Amazon.com` (Badge: `✈️ Ships Internationally via Amazon Global`).
+- **Testing Override Parameter**: Append `?geo=uk`, `?geo=in`, or `?geo=us` to any landing page URL to force regional routing without a VPN.
+
+---
+
+## 5. Master Dual-Prompt AI Vision Strategy (`modules/vision_prompt.py`)
+- **Prompt 1 (`is_white_background=False`)**: For listing photos with existing room backgrounds. Commercial room enhancement while preserving physical product geometry (Img2Img `prompt_strength = 0.40 max`).
+- **Prompt 2 (`is_white_background=True`)**: For white studio cutouts with no background. Photorealistic 3:4 room background synthesis from scratch (Img2Img `prompt_strength = 0.78`) tailored to product category (Vases, Diffusers, Lamps, Mirrors, Suncatchers).
+- **Photo Selection Engine (`select_clean_photo_or_skip`)**: 4-layer quality filter evaluating border pixels, edge density, luminance, and color richness (`Cozy Vibe Score`).
+
+---
+
+## 6. Permanent Product Deletion Workflow (`delete_product.py`)
+To permanently remove any product campaign from local files, registries, and GitHub Pages:
+```powershell
+python delete_product.py <ASIN>
+```
+*Actions Executed*:
+1. Unlinks `bridge_{asin}.html` and `focus_product_{asin}_hook.jpg`.
+2. Strips `<div class="card-wrapper" id="card-{asin}"...>` from `index.html`.
+3. Removes ASIN entry from `product_price_registry.json` and `processed_asins.json`.
+4. Runs `git add -A`, commits, and pushes live to GitHub Pages.
+
+---
+
+## 7. Active Homepage Products Registry
+1. `B0GYDXHF4G` - Flame Aroma Essential Oil Diffuser ($35.00)
+2. `B0FXLYXM32` - White Wavy Wall Vanity Mirror ($76.49)
+3. `B0C2YLN3H4` - White Ceramic Donut Vase Set of 2 ($14.99)
+4. `B07HP22QTZ` - Crystal Prism Window Suncatcher ($9.99)
+5. `B0BZXNSW5K` - Fenmzee Bedside Table Touch Lamp ($19.99)
+6. `B0DXKGL1T2` - Lily of the Valley Flower Lamp ($38.57) *(Exempt from bulk regen)*
+7. `B0D1FRDFFX` - Dawnwake Mushroom Touch Table Lamp ($35.98)
+8. `B0D8P8CSYP` - Cute Bird Dimmable Touch Night Lamp ($20.56)
+9. `B0DLN5S5K9` - WLHBF Vintage Flower Table Lamp ($24.99) *(Exempt from bulk regen)*
 
 ---
 
