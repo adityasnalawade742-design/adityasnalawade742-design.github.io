@@ -150,122 +150,68 @@ def generate_cozy_image(
     prompt_strength: float = 0.78
 ) -> str:
     """
-    Generates a high-quality vertical 3:4 Pinterest lifestyle graphic using Replicate FLUX.
-    If init_image_path is provided, uses Img2Img with prompt_strength (default 0.78) to strip any seller text overlays while preserving physical product structure.
+    Generates a high-quality vertical 3:4 Pinterest lifestyle graphic using Replicate FLUX-Dev ONLY.
+    STRICT: Zero silent fallbacks. Must render via Replicate black-forest-labs/flux-dev.
     """
-    # 1. Primary Commercial AI Generator: Replicate FLUX-Dev Img2Img (1 Single API Call)
-    if REPLICATE_API_TOKEN:
-        print(f"[Image Gen - Replicate] Generating commercial 8K photo via Replicate FLUX API (prompt_strength={prompt_strength})...")
-        os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
-        client = replicate.Client(api_token=REPLICATE_API_TOKEN, timeout=120.0)
+    token = os.getenv("REPLICATE_API_TOKEN", "")
+    if not token and hasattr(config, "REPLICATE_API_TOKEN"):
+        token = config.REPLICATE_API_TOKEN
 
-        if not init_image_path and real_image_url:
-            init_image_path = real_image_url
+    if not token:
+        raise ValueError("REPLICATE_API_TOKEN is missing! Set REPLICATE_API_TOKEN in your .env file.")
 
-        image_file_obj = None
-        if init_image_path:
-            if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
-                try:
-                    res_img = requests.get(init_image_path, timeout=20)
-                    if res_img.status_code == 200 and len(res_img.content) > 1000:
-                        image_file_obj = io.BytesIO(res_img.content)
-                        image_file_obj.name = "product.jpg"
-                        print(f"[Image Gen - Img2Img] Downloaded Amazon photo ({len(res_img.content)} bytes) into BytesIO file object for Replicate upload")
-                except Exception as e_dl:
-                    print(f"[Image Gen - Img2Img] Warning downloading listing image: {e_dl}")
-            elif Path(init_image_path).exists():
-                try:
-                    image_file_obj = open(init_image_path, "rb")
-                    print(f"[Image Gen - Img2Img] Opened local file ({init_image_path}) for Replicate upload")
-                except Exception as e_f:
-                    print(f"[Image Gen - Img2Img] Warning opening local file: {e_f}")
+    os.environ["REPLICATE_API_TOKEN"] = token
+    print(f"[Image Gen - Replicate] Generating 8K commercial photo via Replicate FLUX-Dev API (prompt_strength={prompt_strength})...")
+    client = replicate.Client(api_token=token, timeout=180.0)
 
-        # Call #1 (and ONLY call): black-forest-labs/flux-dev (Full FP16 Precision, Seed 591928, 32 Steps)
-        try:
-            input_payload = {
-                "prompt": prompt,
-                "aspect_ratio": "3:4",
-                "output_format": "jpg",
-                "output_quality": 100,
-                "go_fast": False,
-                "num_inference_steps": 32,
-                "guidance_scale": 3.5,
-                "seed": 591928
-            }
-            if init_image_path:
-                if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
-                    input_payload["image"] = init_image_path
-                    input_payload["prompt_strength"] = prompt_strength
-                    print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (strength={prompt_strength}) with Direct HTTP URL...")
-                elif Path(init_image_path).exists():
-                    try:
-                        input_payload["image"] = open(init_image_path, "rb")
-                        input_payload["prompt_strength"] = prompt_strength
-                        print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (strength={prompt_strength}) with local file...")
-                    except Exception as e_f:
-                        print(f"[Image Gen - Replicate] Warning opening local file: {e_f}")
-            else:
-                print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image async (Full FP16 Precision, 1 API Call)...")
+    if not init_image_path and real_image_url:
+        init_image_path = real_image_url
 
-            pred = client.predictions.create(
-                model="black-forest-labs/flux-dev",
-                input=input_payload
-            )
-            print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting for render...")
-            pred.wait()
+    input_payload = {
+        "prompt": prompt,
+        "aspect_ratio": "3:4",
+        "output_format": "jpg",
+        "output_quality": 100,
+        "go_fast": False,
+        "num_inference_steps": 32,
+        "guidance_scale": 3.5,
+        "seed": 591928
+    }
 
-            if pred.output:
-                img_url = pred.output[0] if isinstance(pred.output, list) else str(pred.output)
-                if img_url and img_url.startswith("http"):
-                    res = requests.get(img_url, timeout=35)
-                    if res.status_code == 200 and len(res.content) > 5000:
-                        file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
-                        with open(file_path, "wb") as f:
-                            f.write(res.content)
-                        print(f"[Image Gen - Success] Saved exact product image to: {file_path}")
-                        return str(file_path)
-        except Exception as e:
-            print(f"[Image Gen - Error] FLUX API Call Failed: {e}")
-            return ""
+    if init_image_path:
+        if init_image_path.startswith("http://") or init_image_path.startswith("https://"):
+            input_payload["image"] = init_image_path
+            input_payload["prompt_strength"] = prompt_strength
+            print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (strength={prompt_strength}) with URL: {init_image_path[-35:]}")
+        elif Path(init_image_path).exists():
+            input_payload["image"] = open(init_image_path, "rb")
+            input_payload["prompt_strength"] = prompt_strength
+            print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Img2Img (strength={prompt_strength}) with local file...")
+    else:
+        print(f"[Image Gen - Replicate] Calling black-forest-labs/flux-dev Text-to-Image...")
 
-    # 2. Secondary AI Generator: Free Pollinations FLUX API
-    print(f"[Image Gen] Generating AI room photo via Pollinations FLUX...")
-    import urllib.parse
-    import random
+    pred = client.predictions.create(
+        model="black-forest-labs/flux-dev",
+        input=input_payload
+    )
+    print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting for render...")
+    pred.wait()
 
-    clean_prompt = prompt.strip()
-    if len(clean_prompt) > 200:
-        clean_prompt = clean_prompt[:200].rsplit(' ', 1)[0]
-    
-    quality_prompt = f"{clean_prompt}, sharp product focus, clean geometry, 8k resolution, professional photography, studio lighting"
-    encoded_prompt = urllib.parse.quote(quality_prompt)
-    
-    random_seed = random.randint(1000, 999999)
-    pollination_urls = [
-        f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=900&height=1200&model=flux&nologo=true&seed={random_seed}&enhance=true",
-        f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=900&height=1200&model=turbo&nologo=true&seed={random_seed}"
-    ]
+    if pred.status != "succeeded":
+        raise RuntimeError(f"Replicate FLUX-Dev prediction failed with status '{pred.status}': {pred.error}")
 
-    for p_url in pollination_urls:
-        try:
-            res = requests.get(p_url, timeout=40)
+    if pred.output:
+        img_url = pred.output[0] if isinstance(pred.output, list) else str(pred.output)
+        if img_url and img_url.startswith("http"):
+            res = requests.get(img_url, timeout=45)
             if res.status_code == 200 and len(res.content) > 5000:
                 file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
                 with open(file_path, "wb") as f:
                     f.write(res.content)
-                print(f"[Image Gen] Saved Pollinations AI image to: {file_path}")
+                print(f"[Image Gen - SUCCESS] Saved authentic Replicate FLUX-Dev image ({len(res.content)} bytes) to: {file_path}")
                 return str(file_path)
-        except Exception as e:
-            print(f"[Image Gen] Pollinations.ai attempt error: {e}")
 
-    # 3. Method 1 Composite Fallback if real image URL available
-    if real_image_url:
-        comp_path = generate_method1_composite_image(real_image_url, filename_prefix)
-        if comp_path:
-            return comp_path
-
-    print("[Image Gen] Creating aesthetic ambient cozy render fallback...")
-    return _create_fallback_aesthetic_image(prompt, filename_prefix)
+    raise RuntimeError("Replicate FLUX-Dev returned empty output!")
 
 def get_adaptive_vibe_colors(img, top_crop_ratio=0.35):
     """
