@@ -49,3 +49,14 @@ Every Amazon listing photo suite (5–9 photos) MUST undergo the following 4-lay
 - **Target Board ID**: `1092545259543920271` (*Cozy Room & Desk Decor*)
 - **Required Scopes**: `boards:read`, `boards:write`, `pins:read`, `pins:write`
 - **Privacy Policy**: [https://adityasnalawade742-design.github.io/privacy-policy.html](https://adityasnalawade742-design.github.io/privacy-policy.html)
+
+---
+
+## 5. 🏷️ Strict Price Synchronization Rule
+
+- **100% Exact Amazon Price Sync**: Whenever creating or processing any new product, the price text rendered inside:
+  1. The graphic price tag (`focus_product_{asin}_hook.jpg`),
+  2. The mobile bridge landing page (`bridge_{asin}.html`),
+  3. The homepage gallery card (`index.html`),
+  MUST automatically match the exact live price extracted directly from the Amazon product listing page. No generic fallback prices (like $14.99 or $17.99) are allowed when an exact Amazon price is available.
+
