@@ -79,7 +79,8 @@ master_catalog = {
         "rating": "4.9",
         "features": ["K9 CRYSTAL PRISM", "RAINBOW LIGHT REFLECTION", "WINDOW HANGING CHAIN", "GIFT BOX INCLUDED"],
         "category": "decor",
-        "description": "Sparkling crystal prism suncatcher window hanging. Casts vibrant rainbow light patterns across room when sunlight shines through."
+        "description": "Sparkling crystal prism suncatcher window hanging. Casts vibrant rainbow light patterns across room when sunlight shines through.",
+        "direct_regions": ["US"]
     },
     "B0D8P8CSYP": {
         "title": "Aesthetic Sunset Lamp Projection Light Ambient Glow",
@@ -87,7 +88,8 @@ master_catalog = {
         "rating": "4.6",
         "features": ["SUNSET PROJECTION GLOW", "360 DEGREE ROTATION", "USB POWERED", "PHOTO BACKGROUND LIGHT"],
         "category": "lighting",
-        "description": "Create warm romantic room vibes with this viral sunset projection lamp."
+        "description": "Create warm romantic room vibes with this viral sunset projection lamp.",
+        "direct_regions": ["US"]
     },
     "B0DLN5S5K9": {
         "title": "Minimalist Ceramic Table Lamp Neutral Bedside Glow",
@@ -104,7 +106,8 @@ master_catalog = {
         "rating": "4.8",
         "features": ["WAVE MIST GLOW", "ESSENTIAL OIL COMPATIBLE", "QUIET NIGHT LIGHT", "AUTO OFF"],
         "category": "lighting decor",
-        "description": "Aesthetic wave mist aromatherapy diffuser for cozy room atmosphere."
+        "description": "Aesthetic wave mist aromatherapy diffuser for cozy room atmosphere.",
+        "direct_regions": ["US"]
     }
 }
 
