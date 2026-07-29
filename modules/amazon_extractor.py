@@ -99,10 +99,10 @@ def is_grid_collage(image_url: str) -> bool:
         img = Image.open(io.BytesIO(raw)).convert('L').resize((200, 200))
         edges = img.filter(ImageFilter.FIND_EDGES)
         
-        v_seam = sum(1 for y in range(200) if edges.getpixel((100, y)) > 100) / 200
-        h_seam = sum(1 for x in range(200) if edges.getpixel((x, 100)) > 100) / 200
+        v_seam = sum(1 for y in range(200) if edges.getpixel((100, y)) > 60) / 200
+        h_seam = sum(1 for x in range(200) if edges.getpixel((x, 100)) > 60) / 200
         
-        is_collage = (v_seam > 0.20) and (h_seam > 0.20)
+        is_collage = (v_seam > 0.15) and (h_seam > 0.15)
         if is_collage:
             print(f"[Grid Collage Scanner] ❌ Multi-Panel Collage Detected (...{image_url[-30:]}) [v={v_seam:.2f}, h={h_seam:.2f}]")
         return is_collage
@@ -130,9 +130,9 @@ def has_human_presence(image_url: str) -> bool:
                     skin_pixels += 1
         
         skin_ratio = skin_pixels / total
-        has_human = skin_ratio > 0.10
+        has_human = skin_ratio > 0.03
         if has_human:
-            print(f"[Human/Model Scanner] ❌ Human Model Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
+            print(f"[Human/Model Scanner] ❌ Human Model/Hand Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
         return has_human
     except Exception:
         return False
@@ -202,7 +202,7 @@ def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
         # Sort descending by Cozy Vibe Score
         scored_photos.sort(key=lambda x: x[0], reverse=True)
         best_vibe_score, best_photo = scored_photos[0]
-        print(f"[Cozy Vibe Scorer] 🏆 SELECTED BEST PHOTO: ...{best_photo[-30:]} (Score: {best_vibe_score:.1f}/10)")
+        print(f"[Cozy Vibe Scorer] SELECTED BEST PHOTO: ...{best_photo[-30:]} (Score: {best_vibe_score:.1f}/10)")
         return (best_photo, False)
     
     print("[Amazon Extractor] ⚠️ ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
