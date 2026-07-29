@@ -10,7 +10,23 @@ load_dotenv(BASE_DIR / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 AMAZON_ASSOCIATE_TAG = os.getenv("AMAZON_ASSOCIATE_TAG", "smartdeal0358-21")
-SERPAPI_KEY = os.getenv("SERPAPI_KEY", "")
+
+# Multi-Key SerpAPI Support (comma-separated or SERPAPI_KEY_2, SERPAPI_KEY_3)
+raw_serp_key = os.getenv("SERPAPI_KEY", "")
+raw_serp_keys = os.getenv("SERPAPI_KEYS", "")
+SERPAPI_KEYS = []
+
+if raw_serp_keys:
+    SERPAPI_KEYS = [k.strip() for k in raw_serp_keys.split(",") if k.strip()]
+elif raw_serp_key:
+    SERPAPI_KEYS = [k.strip() for k in raw_serp_key.split(",") if k.strip()]
+
+for i in range(2, 10):
+    k_extra = os.getenv(f"SERPAPI_KEY_{i}", "").strip()
+    if k_extra and k_extra not in SERPAPI_KEYS:
+        SERPAPI_KEYS.append(k_extra)
+
+SERPAPI_KEY = SERPAPI_KEYS[0] if SERPAPI_KEYS else ""
 RAINFOREST_API_KEY = os.getenv("RAINFOREST_API_KEY", "")
 REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN", "")
 PINTEREST_ACCESS_TOKEN = os.getenv("PINTEREST_ACCESS_TOKEN", "")

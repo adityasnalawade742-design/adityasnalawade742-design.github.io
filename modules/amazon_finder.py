@@ -103,6 +103,7 @@ def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: fl
     return fetch_sample_amazon_products()
 
 def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_price: float = 10.0, max_price: float = 50.0):
+    from config import SERPAPI_KEYS
     cache = load_serp_cache()
     query_key = query.lower().strip()
 
@@ -112,37 +113,50 @@ def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_pric
         raw_results = cache[query_key]
         return _parse_raw_serp_results(raw_results, num_results, min_price, max_price)
 
-    if not SERPAPI_KEY:
-        print("[SerpAPI Warning] No SERPAPI_KEY configured.")
+    keys_to_try = SERPAPI_KEYS if SERPAPI_KEYS else ([SERPAPI_KEY] if SERPAPI_KEY else [])
+    if not keys_to_try:
+        print("[SerpAPI Warning] No SERPAPI_KEYS configured.")
         return None
 
     url = "https://serpapi.com/search.json"
-    params = {
-        "engine": "amazon",
-        "k": query,
-        "q": query,
-        "api_key": SERPAPI_KEY,
-        "amazon_domain": "amazon.com"
-    }
     
-    try:
-        print(f"[SerpAPI Request] 🌐 Calling SerpAPI live API for: '{query}'...")
-        response = requests.get(url, params=params, timeout=12)
-        if response.status_code == 200:
-            data = response.json()
-            results = data.get("amazon_results") or data.get("organic_results") or []
-            
-            # Save raw results to local cache to preserve credits for future searches
-            cache[query_key] = results
-            save_serp_cache(cache)
-            print(f"[SerpAPI Cache] 💾 Saved {len(results)} search results to local disk cache!")
-            
-            return _parse_raw_serp_results(results, num_results, min_price, max_price)
-        else:
-            print(f"[SerpAPI HTTP Error {response.status_code}] Response: {response.text[:100]}")
-    except Exception as e:
-        print(f"[Amazon Finder] Exception querying SerpAPI: {e}")
+    for key_idx, current_key in enumerate(keys_to_try, 1):
+        params = {
+            "engine": "amazon",
+            "k": query,
+            "q": query,
+            "api_key": current_key,
+            "amazon_domain": "amazon.com"
+        }
         
+        try:
+            print(f"[SerpAPI Request] 🌐 Calling SerpAPI (Key #{key_idx}/{len(keys_to_try)}) for: '{query}'...")
+            response = requests.get(url, params=params, timeout=12)
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Check if SerpAPI error payload indicates quota reached
+                if "error" in data and ("search" in data["error"].lower() or "credit" in data["error"].lower() or "quota" in data["error"].lower()):
+                    print(f"[SerpAPI Quota Alert] Key #{key_idx} out of credits: {data['error']}")
+                    continue
+
+                results = data.get("amazon_results") or data.get("organic_results") or []
+                
+                # Save raw results to local cache to preserve credits for future searches
+                cache[query_key] = results
+                save_serp_cache(cache)
+                print(f"[SerpAPI Cache] 💾 Saved {len(results)} search results to local disk cache!")
+                
+                return _parse_raw_serp_results(results, num_results, min_price, max_price)
+            else:
+                print(f"[SerpAPI Key #{key_idx} Error {response.status_code}] {response.text[:100]}")
+                # Try next API key on 429 (rate limit) or 401/403 (quota exceeded)
+                if response.status_code in [401, 403, 429]:
+                    print(f"[SerpAPI Key Switch] Key #{key_idx} quota exceeded. Switching to Key #{key_idx + 1}...")
+                    continue
+        except Exception as e:
+            print(f"[SerpAPI Exception Key #{key_idx}] Error: {e}")
+
     return None
 
 def _parse_raw_serp_results(results, num_results: int, min_price: float, max_price: float):
