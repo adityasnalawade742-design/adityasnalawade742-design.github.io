@@ -5,6 +5,7 @@ Provides non-blocking background campaign generation & real-time polling API end
 import sys
 import os
 import json
+import time
 import urllib.parse
 import subprocess
 import threading
@@ -19,6 +20,8 @@ from modules.amazon_extractor import (
     is_grid_collage,
     has_human_presence
 )
+from modules.amazon_finder import fetch_amazon_products, TRENDING_PINTEREST_KEYWORDS
+from modules.automated_product_selector import is_asin_published_on_homepage, save_processed_asin
 
 PORT = 5000
 WORKSPACE_DIR = Path("G:/CLI/pinterest-auto-affiliate")
@@ -54,18 +57,9 @@ ref_sheet_path = create_multi_photo_reference_sheet(["{selected_photo}"], filena
 cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Lighting", prod['features'], ref_sheet_path, is_white_background=False)
 raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{{asin}}", init_image_path="{selected_photo}", prompt_strength={prompt_strength})
 
-seo_data = {{
-    "pin_title": prod['title'],
-    "image_hook": prod['title'][:30],
-    "subtitle_hook": "",
-    "badge_hook": "VIRAL ROOM FIND",
-    "description": "Transform your space with this viral room upgrade find.",
-    "suggested_board": "Cozy Room Decor",
-    "keywords": ["room decor", "lighting"]
-}}
-
+seo_data = generate_pin_seo_data(prod['title'], prod['price'])
 hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{{asin}}_hook.jpg"
-render_html_overlay(raw_image_path, seo_data['image_hook'], "", seo_data['badge_hook'], prod['price'], hook_img_path)
+render_html_overlay(raw_image_path, seo_data.get('image_hook', prod['title'][:30]), "", seo_data.get('badge_hook', "VIRAL ROOM FIND"), prod['price'], hook_img_path)
 generate_bridge_page(prod, seo_data, asin)
 save_processed_asin(asin)
 
@@ -108,6 +102,93 @@ print("SUCCESS")
                 pass
 
 
+def run_async_batch_generation(batch_id, items):
+    global TASK_STATUS_MAP
+    total = len(items)
+    completed = []
+    
+    TASK_STATUS_MAP[batch_id] = {
+        'status': 'processing',
+        'current_index': 0,
+        'total': total,
+        'step': f'Starting batch generation for {total} selected products...',
+        'completed_items': []
+    }
+    
+    for idx, item in enumerate(items, 1):
+        asin = item.get('asin')
+        selected_photo = item.get('selected_photo')
+        title_clean = item.get('title', '').replace('"', '\\"').replace("'", "\\'")
+        price_clean = item.get('price', '$19.99').replace('"', '\\"')
+        prompt_strength = item.get('prompt_strength', 0.35)
+        
+        TASK_STATUS_MAP[batch_id]['current_index'] = idx
+        TASK_STATUS_MAP[batch_id]['current_asin'] = asin
+        TASK_STATUS_MAP[batch_id]['step'] = f"[{idx}/{total}] Processing ASIN {asin} - '{item.get('title', '')[:35]}...'"
+        
+        script_code = f"""
+import sys
+from modules.automated_product_selector import save_processed_asin
+from modules.amazon_extractor import get_product_details_and_photos
+from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
+from modules.html_overlay_engine import render_html_overlay
+from modules.vision_prompt import generate_cozy_image_prompt
+from modules.seo_copywriter import generate_pin_seo_data
+from modules.bridge_creator import generate_bridge_page
+
+asin = "{asin}"
+prod = {{
+    'title': "{title_clean}",
+    'price': "{price_clean}",
+    'rating': "4.6",
+    'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
+}}
+
+ref_sheet_path = create_multi_photo_reference_sheet(["{selected_photo}"], filename_prefix=f"product_{{asin}}", max_photos=1)
+cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Decor", prod['features'], ref_sheet_path, is_white_background=False)
+raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{{asin}}", init_image_path="{selected_photo}", prompt_strength={prompt_strength})
+
+seo_data = generate_pin_seo_data(prod['title'], prod['price'])
+hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{{asin}}_hook.jpg"
+render_html_overlay(raw_image_path, seo_data.get('image_hook', prod['title'][:30]), "", seo_data.get('badge_hook', "VIRAL ROOM FIND"), prod['price'], hook_img_path)
+generate_bridge_page(prod, seo_data, asin)
+save_processed_asin(asin)
+print("SUCCESS")
+"""
+        temp_script = WORKSPACE_DIR / f"run_batch_{batch_id}_{asin}.py"
+        with open(temp_script, "w", encoding="utf-8") as f:
+            f.write(script_code)
+            
+        try:
+            res = subprocess.run([sys.executable, str(temp_script)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180)
+            if res.returncode == 0 and "SUCCESS" in res.stdout:
+                completed.append({
+                    'asin': asin,
+                    'title': item.get('title'),
+                    'price': price_clean,
+                    'hook_image': f"./focus_product_{asin}_hook.jpg",
+                    'bridge_url': f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
+                })
+                TASK_STATUS_MAP[batch_id]['completed_items'] = completed
+        except Exception as e:
+            print(f"[Batch Generator Error] Failed ASIN {asin}: {e}")
+        finally:
+            if temp_script.exists():
+                try: os.remove(temp_script)
+                except Exception: pass
+
+    # Git commit & push all batch updates to GitHub Pages
+    try:
+        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR))
+        subprocess.run(["git", "commit", "-m", f"publish batch {batch_id} from Web Console ({len(completed)} products)"], check=False, cwd=str(WORKSPACE_DIR))
+        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR))
+    except Exception as e_git:
+        print(f"[Batch Generator Git Push Warning] {e_git}")
+
+    TASK_STATUS_MAP[batch_id]['status'] = 'success'
+    TASK_STATUS_MAP[batch_id]['step'] = f"Successfully generated and published {len(completed)} products live to GitHub Pages!"
+
+
 class WebConsoleHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(WORKSPACE_DIR), **kwargs)
@@ -120,8 +201,14 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif parsed.path == '/api/extract':
             self.handle_api_extract(parsed.query)
             return
+        elif parsed.path == '/api/discover':
+            self.handle_api_discover(parsed.query)
+            return
         elif parsed.path == '/api/task_status':
             self.handle_api_status(parsed.query)
+            return
+        elif parsed.path == '/api/batch_status':
+            self.handle_api_batch_status(parsed.query)
             return
         else:
             return super().do_GET()
@@ -129,6 +216,12 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path == '/api/generate':
             self.handle_api_generate()
+            return
+        elif self.path == '/api/batch_extract':
+            self.handle_api_batch_extract()
+            return
+        elif self.path == '/api/batch_generate':
+            self.handle_api_batch_generate()
             return
         else:
             self.send_error(404, "Endpoint not found")
@@ -138,6 +231,37 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         asin = params.get('asin', [''])[0].strip()
         status_info = TASK_STATUS_MAP.get(asin, {'status': 'not_found'})
         self.send_json(status_info)
+
+    def handle_api_batch_status(self, query_str):
+        params = urllib.parse.parse_qs(query_str)
+        batch_id = params.get('batch_id', [''])[0].strip()
+        status_info = TASK_STATUS_MAP.get(batch_id, {'status': 'not_found'})
+        self.send_json(status_info)
+
+    def handle_api_discover(self, query_str):
+        params = urllib.parse.parse_qs(query_str)
+        kw = params.get('query', [''])[0].strip() or "aesthetic room decor lamp"
+        count = int(params.get('count', [10])[0])
+
+        print(f"[Web Console] Discovering live items for query: '{kw}'...")
+        try:
+            raw_items = fetch_amazon_products(query=kw, num_results=count)
+            items = []
+            for item in raw_items:
+                asin = item.get('id')
+                already_pub = is_asin_published_on_homepage(asin)
+                items.append({
+                    'asin': asin,
+                    'title': item.get('title'),
+                    'price': item.get('price'),
+                    'rating': item.get('rating'),
+                    'reviews_count': item.get('reviews_count', 100),
+                    'thumbnail': item.get('original_image_url'),
+                    'is_already_published': already_pub
+                })
+            self.send_json({'status': 'success', 'query': kw, 'items': items})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
 
     def handle_api_extract(self, query_str):
         params = urllib.parse.parse_qs(query_str)
@@ -181,7 +305,6 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     'is_clean': len(status_list) == 0
                 })
 
-            from modules.automated_product_selector import is_asin_published_on_homepage
             already_published = is_asin_published_on_homepage(asin)
 
             response = {
@@ -199,6 +322,54 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
+    def handle_api_batch_extract(self):
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+        asins = data.get('asins', [])
+
+        extracted_batch = []
+        for asin in asins:
+            amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
+            try:
+                prod = get_product_details_and_photos(amazon_url)
+                if not prod:
+                    continue
+                photos = prod.get('all_photos', [])
+                winner_photo, skip = select_clean_photo_or_skip(photos)
+
+                photo_data = []
+                for p in photos:
+                    has_txt = has_text_annotation(p)
+                    has_grid = is_grid_collage(p)
+                    has_human = has_human_presence(p)
+
+                    status_list = []
+                    if has_txt: status_list.append("Text Overlay")
+                    if has_grid: status_list.append("Split Collage")
+                    if has_human: status_list.append("Human/Hand")
+
+                    status_str = f"DISCARDED ({', '.join(status_list)})" if status_list else "CLEAN"
+                    photo_data.append({
+                        'url': p,
+                        'status': status_str,
+                        'is_clean': len(status_list) == 0
+                    })
+
+                extracted_batch.append({
+                    'asin': asin,
+                    'title': prod.get('title'),
+                    'price': prod.get('price', '$19.99'),
+                    'rating': prod.get('rating', '4.5'),
+                    'winner_photo': winner_photo or (photos[0] if photos else ''),
+                    'should_skip': skip,
+                    'photos': photo_data
+                })
+            except Exception as e:
+                print(f"[Batch Extract Error] Failed {asin}: {e}")
+
+        self.send_json({'status': 'success', 'items': extracted_batch})
+
     def handle_api_generate(self):
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length)
@@ -213,7 +384,6 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         title_clean = title.replace('"', '\\"').replace("'", "\\'")
         price_clean = price.replace('"', '\\"')
 
-        # Launch background thread
         t = threading.Thread(
             target=run_async_generation,
             args=(asin, selected_photo, title_clean, price_clean, prompt_strength),
@@ -225,6 +395,27 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             'status': 'processing',
             'asin': asin,
             'message': 'Campaign generation started in background process.'
+        })
+
+    def handle_api_batch_generate(self):
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+        items = data.get('items', [])
+
+        batch_id = f"batch_{int(time.time())}"
+
+        t = threading.Thread(
+            target=run_async_batch_generation,
+            args=(batch_id, items),
+            daemon=True
+        )
+        t.start()
+
+        self.send_json({
+            'status': 'processing',
+            'batch_id': batch_id,
+            'message': f'Started batch generation for {len(items)} items.'
         })
 
     def send_json(self, data):
@@ -243,3 +434,4 @@ def run_server():
 
 if __name__ == '__main__':
     run_server()
+
