@@ -101,13 +101,13 @@ master_catalog = {
         "direct_regions": ["US"]
     },
     "B0DXKGL1T2": {
-        "title": "Aesthetic Wave Diffuser Ambient Mist Maker",
-        "price": "$24.99",
+        "title": "Lily of the Valley Flower Table Lamp Glass Nightlight",
+        "price": "$38.57",
         "rating": "4.8",
-        "features": ["WAVE MIST GLOW", "ESSENTIAL OIL COMPATIBLE", "QUIET NIGHT LIGHT", "AUTO OFF"],
-        "category": "lighting decor",
-        "description": "Aesthetic wave mist aromatherapy diffuser for cozy room atmosphere.",
-        "direct_regions": []
+        "features": ["HAND-CRAFTED FLOWER GLASS SHADE", "WARM AMBIENT NIGHTLIGHT", "MINIMALIST BEDROOM DECOR", "PERFECT GIFT CHOICE"],
+        "category": "lighting",
+        "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
+        "direct_regions": ["US"]
     }
 }
 
