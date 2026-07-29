@@ -3,9 +3,8 @@ import io
 import json
 from pathlib import Path
 
-# Ensure UTF-8 stdout
-if hasattr(sys.stdout, "buffer"):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from modules.automated_product_selector import save_processed_asin
 from modules.amazon_extractor import get_product_details_and_photos
@@ -49,7 +48,11 @@ cozy_prompt = generate_cozy_image_prompt(
 
 # Step 4: FLUX-Dev Paid Img2Img AI Render (Seed 591928, FP16 32-step)
 print("\n[Step 4] Paid Replicate FLUX-Dev Img2Img Rendering 8K Commercial Graphic...")
-init_photo = photos[0] if photos else ""
+from modules.amazon_extractor import select_clean_photo_or_skip
+winner_photo, skip = select_clean_photo_or_skip(photos)
+init_photo = winner_photo if winner_photo else (photos[0] if photos else "")
+print(f" -> Using Winner Photo Input: {init_photo}")
+
 raw_image_path = generate_cozy_image(
     prompt=cozy_prompt,
     filename_prefix=f"focus_product_{asin}",
@@ -61,7 +64,7 @@ print("\n[Step 5] Writing SEO Title & Viral Hook Headline...")
 seo_data = {
     "pin_title": "Crystal Prism Window Suncatcher for Bedroom Decor",
     "image_hook": "Crystal Prism Suncatcher",
-    "subtitle_hook": "RAINBOW WINDOW AMBIENCE",
+    "subtitle_hook": "",
     "badge_hook": "VIRAL ROOM FIND",
     "description": "Cast magical rainbow prisms across your bedroom walls in natural sunlight with this hanging crystal glass suncatcher. Perfect aesthetic window decor for cozy room lovers.",
     "suggested_board": "Aesthetic Window & Room Decor",
@@ -77,7 +80,7 @@ hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{asin}_hook.jpg"
 render_html_overlay(
     image_path=raw_image_path,
     headline=headline,
-    subtitle=seo_data["subtitle_hook"],
+    subtitle="",
     badge_text=seo_data["badge_hook"],
     price_str=prod['price'],
     output_path=hook_img_path
@@ -88,4 +91,16 @@ print("\n[Step 7] Generating Luxury Bridge Page & Syncing Homepage Gallery...")
 generate_bridge_page(prod, seo_data, asin)
 
 save_processed_asin(asin)
+
+# Step 8: Deploy Live to GitHub Pages
+print("\n[Step 8] Deploying Updates Live to GitHub Pages...")
+import subprocess
+try:
+    subprocess.run(["git", "add", "-A"], check=True)
+    subprocess.run(["git", "commit", "-m", f"re-publish B07HP22QTZ crystal suncatcher campaign"], check=True)
+    subprocess.run(["git", "push", "origin", "main"], check=True)
+    print(" ✅ Git Commit & Push Successful!")
+except Exception as e:
+    print(f" ⚠️ Git Push Warning: {e}")
+
 print(f"\nSUCCESS! Fully processed and deployed selected product: {asin}")

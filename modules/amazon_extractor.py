@@ -81,9 +81,9 @@ def has_text_annotation(image_url: str) -> bool:
         
         has_txt = (top_contrast > 0.035) or (full_contrast > 0.035)
         if has_txt:
-            print(f"[Text Detector] ❌ Text/Glyphs Detected in image (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
+            print(f"[Text Detector] DISCARDING Text/Glyphs Detected in image (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
         else:
-            print(f"[Text Detector] ✅ 100% CLEAN PHOTO (NO TEXT) (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
+            print(f"[Text Detector] CLEAN PHOTO (NO TEXT) (...{image_url[-30:]}) [top={top_contrast:.4f}, full={full_contrast:.4f}]")
         return has_txt
     except Exception:
         return False
@@ -91,22 +91,27 @@ def has_text_annotation(image_url: str) -> bool:
 def is_grid_collage(image_url: str) -> bool:
     """
     Detects multi-panel split grid collage photos (2-grid, 4-grid collages).
-    Checks for central horizontal/vertical grid seam edge density.
+    Scans central horizontal/vertical coordinate bands for seam lines and white dividers.
     """
     try:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
         raw = requests.get(image_url, headers=headers, timeout=10).content
-        img = Image.open(io.BytesIO(raw)).convert('L').resize((200, 200))
-        edges = img.filter(ImageFilter.FIND_EDGES)
+        img = Image.open(io.BytesIO(raw)).convert('RGB').resize((200, 200))
+        gray = img.convert('L')
+        edges = gray.filter(ImageFilter.FIND_EDGES)
         
-        v_seam = sum(1 for y in range(200) if edges.getpixel((100, y)) > 60) / 200
-        h_seam = sum(1 for x in range(200) if edges.getpixel((x, 100)) > 60) / 200
+        max_v_white = max((sum(1 for y in range(200) if gray.getpixel((x, y)) > 240) / 200 for x in range(90, 110)), default=0)
+        max_h_white = max((sum(1 for x in range(200) if gray.getpixel((x, y)) > 240) / 200 for y in range(90, 110)), default=0)
         
-        is_collage = (v_seam > 0.15) and (h_seam > 0.15)
+        max_v_edge = max((sum(1 for y in range(200) if edges.getpixel((x, y)) > 40) / 200 for x in range(90, 110)), default=0)
+        max_h_edge = max((sum(1 for x in range(200) if edges.getpixel((x, y)) > 40) / 200 for y in range(90, 110)), default=0)
+        
+        is_collage = (max_v_white > 0.60 or max_v_edge > 0.60) and (max_h_white > 0.60 or max_h_edge > 0.60)
         if is_collage:
-            print(f"[Grid Collage Scanner] ❌ Multi-Panel Collage Detected (...{image_url[-30:]}) [v={v_seam:.2f}, h={h_seam:.2f}]")
+            print(f"[Grid Collage Scanner] DISCARDING Multi-Panel Collage (...{image_url[-30:]}) [v_w={max_v_white:.2f}, h_w={max_h_white:.2f}]")
         return is_collage
-    except Exception:
+    except Exception as e:
+        print(f"[is_grid_collage Error] {e}")
         return False
 
 def has_human_presence(image_url: str) -> bool:
@@ -132,7 +137,7 @@ def has_human_presence(image_url: str) -> bool:
         skin_ratio = skin_pixels / total
         has_human = skin_ratio > 0.03
         if has_human:
-            print(f"[Human/Model Scanner] ❌ Human Model/Hand Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
+            print(f"[Human/Model Scanner] DISCARDING Human Model/Hand Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
         return has_human
     except Exception:
         return False
