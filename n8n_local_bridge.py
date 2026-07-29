@@ -27,6 +27,14 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     if asin and not amazon_url:
         amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
     
+    from modules.automated_product_selector import is_asin_published_on_homepage, get_next_automated_product, save_processed_asin
+
+    if asin and is_asin_published_on_homepage(asin):
+        msg = f"⚠️ ASIN {asin} is already published on the homepage. Skipping generation until it is deleted from the homepage."
+        print(msg)
+        print(json.dumps({"status": "already_published", "asin": asin, "message": msg}))
+        return {"status": "already_published", "asin": asin, "message": msg}
+
     if not amazon_url:
         item = get_next_automated_product()
         if not item:

@@ -181,6 +181,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     'is_clean': len(status_list) == 0
                 })
 
+            from modules.automated_product_selector import is_asin_published_on_homepage
+            already_published = is_asin_published_on_homepage(asin)
+
             response = {
                 'status': 'success',
                 'asin': asin,
@@ -189,6 +192,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 'rating': prod.get('rating', '4.5'),
                 'winner_photo': winner_photo or (photos[0] if photos else ''),
                 'should_skip': skip,
+                'is_already_published': already_published,
                 'photos': photo_data
             }
             self.send_json(response)

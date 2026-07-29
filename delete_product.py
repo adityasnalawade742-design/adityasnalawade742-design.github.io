@@ -77,18 +77,12 @@ def delete_product(product_id: str):
             print(f"  ⚠️ Registry update error: {e}")
 
     # Remove from processed_asins.json
-    processed_file = project_root / "processed_asins.json"
-    if processed_file.exists():
-        try:
-            with open(processed_file, "r", encoding="utf-8") as f:
-                proc = json.load(f)
-            if product_id in proc:
-                proc.remove(product_id)
-                with open(processed_file, "w", encoding="utf-8") as f:
-                    json.dump(proc, f, indent=2)
-                print(f"  ✓ Removed {product_id} from processed_asins.json!")
-        except Exception as e:
-            print(f"  ⚠️ Processed history update error: {e}")
+    try:
+        from modules.automated_product_selector import remove_processed_asin
+        remove_processed_asin(product_id)
+        print(f"  ✓ Unblocked {product_id} from processed history.")
+    except Exception as e:
+        print(f"  ⚠️ Processed history update error: {e}")
 
     print("\n🚀 Pushing deletion update to GitHub Pages...")
     try:
