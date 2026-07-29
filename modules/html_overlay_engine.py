@@ -255,6 +255,16 @@ def render_html_overlay(
         features = ["PREMIUM MATERIALS", "WARM AMBIENT GLOW", "STYLISH DECOR", "PERFECT GIFT"]
 
 
+    # Download image if remote URL
+    if str(image_path).startswith("http://") or str(image_path).startswith("https://"):
+        try:
+            local_tmp_path = WORKSPACE_DIR / f"tmp_remote_{int(time.time())}.jpg" if 'WORKSPACE_DIR' in globals() else Path("G:/CLI/pinterest-auto-affiliate") / f"tmp_remote_{int(time.time())}.jpg"
+            r_img = requests.get(image_path, timeout=15)
+            local_tmp_path.write_bytes(r_img.content)
+            image_path = str(local_tmp_path)
+        except Exception as e_dl:
+            print(f"[HTML Overlay Engine] ⚠️ Failed to download remote image: {e_dl}")
+
     if output_path is None:
         output_path = image_path
 
