@@ -74,13 +74,13 @@ master_catalog = {
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B07HP22QTZ": {
-        "title": "Suncatcher Crystal Prism Window Rainbow Maker Hanging Light Catcher",
-        "price": "$9.99",
-        "rating": "4.9",
-        "features": ["K9 CRYSTAL PRISM", "RAINBOW LIGHT REFLECTION", "WINDOW HANGING CHAIN", "GIFT BOX INCLUDED"],
+        "title": "Crystal Prism Window Suncatcher Rainbow Maker Hanging Ornament",
+        "price": "$12.99",
+        "rating": "4.8",
+        "features": ["K9 CRYSTAL PRISMS", "RAINBOW MAKER REFLECTIONS", "GOLD HANGING CHAIN", "WINDOW & GARDEN ACCENT"],
         "category": "decor",
-        "description": "Sparkling crystal prism suncatcher window hanging. Casts vibrant rainbow light patterns across room when sunlight shines through.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
+        "description": "Transform sunlight into vibrant room rainbows with these handcrafted K9 crystal suncatchers.",
+        "direct_regions": ["US", "IN", "GB", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0D8P8CSYP": {
         "title": "Aesthetic Sunset Lamp Projection Light Ambient Glow",
