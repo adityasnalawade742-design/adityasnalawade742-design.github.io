@@ -599,14 +599,21 @@
     <div class="modal" id="overlayModal">
         <div class="modal-content" style="max-width: 540px;">
             <h3 style="color: var(--gold-primary); margin-bottom: 12px;">🖼️ Live Playwright Graphic Overlay Preview</h3>
-            <img id="overlayModalImg" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 16px; margin-bottom: 14px;" src="" alt="Overlay Preview">
+            
+            <!-- Real-Time Interactive Preview Container -->
+            <div style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover;" src="" alt="Overlay Preview">
+                <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 32%; transform: rotate(-6deg); transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.7));">
+                    <img id="liveTagImg" src="./price tags/tag 1.png" style="width: 100%; height: auto; object-fit: contain;">
+                </div>
+            </div>
             
             <!-- Price Tag Customizer Panel -->
             <div style="background: rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="color: var(--gold-primary); font-size: 13.5px; font-weight: 700; margin-bottom: 10px;">🏷️ Price Tag Graphic Customizer</div>
+                <div style="color: var(--gold-primary); font-size: 13.5px; font-weight: 700; margin-bottom: 10px;">🏷️ Price Tag Graphic Customizer (Real-Time 60fps Preview)</div>
                 <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
                     <label style="font-size: 13px; min-width: 110px; color: #cbd5e1;">Tag Size Scale:</label>
-                    <select id="tagScaleSelect" class="input-field" style="padding: 6px 12px; font-size: 13px; flex: 1;">
+                    <select id="tagScaleSelect" class="input-field" style="padding: 6px 12px; font-size: 13px; flex: 1;" onchange="updateLiveTagPreview()">
                         <option value="260x195">Small (260px × 195px)</option>
                         <option value="320x240">Medium (320px × 240px)</option>
                         <option value="380x285" selected>Large (380px × 285px) [Default]</option>
@@ -616,7 +623,7 @@
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                     <label style="font-size: 13px; min-width: 110px; color: #cbd5e1;">Tag Rotation:</label>
-                    <input type="range" id="tagRotationRange" min="-15" max="15" value="-6" style="flex: 1;" oninput="document.getElementById('tagRotationVal').innerText = this.value + '°'">
+                    <input type="range" id="tagRotationRange" min="-15" max="15" value="-6" style="flex: 1;" oninput="updateLiveTagPreview()">
                     <span id="tagRotationVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 700; width: 35px;">-6°</span>
                 </div>
             </div>
@@ -1044,10 +1051,27 @@
 
         let activeTagAsin = null;
 
+        function updateLiveTagPreview() {
+            const scaleVal = document.getElementById('tagScaleSelect').value; // e.g. 380x285
+            const [w, h] = scaleVal.split('x').map(Number);
+            const rot = parseInt(document.getElementById('tagRotationRange').value || '-6');
+
+            document.getElementById('tagRotationVal').innerText = `${rot}°`;
+
+            // Calculate width percentage relative to 1200px master canvas
+            const widthPct = (w / 1200) * 100;
+            const liveTag = document.getElementById('liveTagOverlay');
+            if (liveTag) {
+                liveTag.style.width = `${widthPct}%`;
+                liveTag.style.transform = `rotate(${rot}deg)`;
+            }
+        }
+
         function openTagEditorModal(asin, title, price) {
             activeTagAsin = asin;
             document.getElementById('overlayModalImg').src = `./focus_product_${asin}_hook.jpg?t=${Date.now()}`;
             document.getElementById('overlayModal').style.display = 'flex';
+            updateLiveTagPreview();
             
             // Set save button inside modal
             let saveBtn = document.getElementById('saveTagBtn');
