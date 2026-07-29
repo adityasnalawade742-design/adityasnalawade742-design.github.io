@@ -377,6 +377,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         (function() {
             const countryMap = {
                 "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
+                "SG": { domain: "amazon.sg", label: "AMAZON SINGAPORE (SG$)" },
+                "AE": { domain: "amazon.ae", label: "AMAZON UAE (AED)" },
+                "SA": { domain: "amazon.sa", label: "AMAZON SAUDI ARABIA (SAR)" },
+                "TR": { domain: "amazon.com.tr", label: "AMAZON TURKEY (TRY)" },
+                "EG": { domain: "amazon.eg", label: "AMAZON EGYPT (EGP)" },
+                "PL": { domain: "amazon.pl", label: "AMAZON POLAND (PLN)" },
+                "BE": { domain: "amazon.com.be", label: "AMAZON BELGIUM (€)" },
                 "GB": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
                 "UK": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
                 "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
@@ -396,8 +403,20 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             const prodKeywords = encodeURIComponent("{{ product.title[:40] }}");
 
             function applyGeoRedirect(cc) {
-                if (!cc || !countryMap[cc] || cc === 'US') return;
-                const target = countryMap[cc];
+                if (!cc || cc === 'US') return;
+                
+                // Smart Asian & Global Fallback Router
+                let targetCC = cc;
+                if (!countryMap[targetCC]) {
+                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                    if (tz.includes('asia') || ['SG', 'IN', 'TH', 'VN', 'PH', 'MY', 'ID', 'HK', 'TW'].includes(cc)) {
+                        targetCC = 'IN'; // Fallback to Amazon India for Asian regions without native stores
+                    } else {
+                        return; // Default US
+                    }
+                }
+
+                const target = countryMap[targetCC];
                 const buyBtn = document.getElementById('buyBtn');
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
