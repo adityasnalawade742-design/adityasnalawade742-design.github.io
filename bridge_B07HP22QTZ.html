@@ -339,18 +339,18 @@
             </ul>
         </div>
 
-        <!-- Geo Shipping Notice Box (Revealed by default for international/Indian visitors) -->
-        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
+        <!-- Geo Shipping Notice Box (Hidden by default) -->
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: none;">
             <span class="geo-icon">📍</span>
             <div>
-                <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
-                <span id="geoNoticeDesc">This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on amazon.in for fast delivery.</span>
+                <strong id="geoNoticeTitle">Item Ships from Amazon US</strong>
+                <span id="geoNoticeDesc">We've automatically linked local options on Amazon for fast regional delivery.</span>
             </div>
         </div>
 
-        <!-- High-Converting CTA (Defaults to amazon.in for Indian & Global Visitors) -->
-        <a id="buyBtn" href="https://www.amazon.in/s?k=Suncatcher%20Crystal%20Prism%20Window%20Rainbow%20" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">SEARCH LOCAL DEALS ON AMAZON INDIA (₹)</span>
+        <!-- High-Converting CTA (Defaults to Direct Amazon India Product Page) -->
+        <a id="buyBtn" href="https://www.amazon.in/dp/B07HP22QTZ" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">BUY ON AMAZON INDIA (₹)</span>
             <span>➔</span>
         </a>
 
@@ -445,16 +445,10 @@
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
-                if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
-                
-                if (geoBox) {
-                    const titleEl = document.getElementById('geoNoticeTitle');
-                    const descEl = document.getElementById('geoNoticeDesc');
-                    if (titleEl) titleEl.innerText = `Item Ships from Amazon US (Not Directly Listed on ${target.domain})`;
-                    if (descEl) descEl.innerText = `This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on ${target.domain} for fast delivery.`;
-                    geoBox.style.display = 'flex';
-                }
+                // Direct regional product page link (e.g. amazon.in/dp/ASIN, amazon.co.uk/dp/ASIN)
+                if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}`;
+                if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
+                if (geoBox) geoBox.style.display = 'none';
             }
 
             // ⚡ Phase 0: Instant URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN, ?country=US)
