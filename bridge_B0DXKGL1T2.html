@@ -139,6 +139,7 @@
         <img class="hero-img" src="focus_product_B0DXKGL1T2_hook.jpg?v=3638" alt="Cozy Flower Table Lamp Green, 5 Lily of The Valley Vintage Bedside Lamp">
         <h1>Cozy Flower Table Lamp Green, 5 Lily of The Valley Vintage 🕯️</h1>
         <div class="price">$38.57</div>
+        <div id="shipping-note" style="font-size: 11.5px; color: #9ca3af; margin-top: -10px; margin-bottom: 16px; font-weight: 500;"></div>
 
         <p class="description">Check out the best lamps for rooms and cozy desk decor. Find Flower Table Lamp Green, 5 Lily of The Valley Vintage Bedside Lamps | 3 Colours Modes, G4 LED Bulbs, Night Light for Bedroom, Living Room, Office, Nightstand, Home Decoration for the ultimate aesthetic room setup!</p>
 
@@ -163,6 +164,7 @@
             const usUrl = "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21";
 
             const btn = document.getElementById('amazon-btn');
+            const shipNote = document.getElementById('shipping-note');
             const urlParams = new URLSearchParams(window.location.search);
             const geoOverride = urlParams.get('geo');
 
@@ -188,10 +190,15 @@
                     const country = (data.country_code || '').toUpperCase();
                     if (country === 'IN') {
                         if (btn) btn.href = inUrl;
+                        if (shipNote) shipNote.innerText = "⚡ Delivered via Amazon India";
                     } else if (euCountries.includes(country)) {
                         if (btn) btn.href = ukUrl;
+                        if (shipNote) shipNote.innerText = "⚡ Delivered via Amazon UK & Europe";
                     } else {
                         if (btn) btn.href = usUrl;
+                        if (country !== 'US' && shipNote) {
+                            shipNote.innerText = "✈️ Ships Internationally via Amazon Global";
+                        }
                     }
                 })
                 .catch(err => console.log('Geo-IP fallback active'));
