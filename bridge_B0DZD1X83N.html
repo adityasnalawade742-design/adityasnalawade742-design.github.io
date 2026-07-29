@@ -390,33 +390,23 @@
             const prodKeywords = encodeURIComponent("Minimalist Wood Base Cream Shade Bedside");
 
             function applyGeoRedirect(cc) {
-                if (!cc || !countryMap[cc]) return;
+                if (!cc || !countryMap[cc] || cc === 'US') return;
                 const target = countryMap[cc];
                 const buyBtn = document.getElementById('buyBtn');
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                // Direct product page link on regional Amazon storefront (e.g. amazon.in/dp/ASIN)
-                const directLocalUrl = `https://www.${target.domain}/dp/${asin}`;
+                // Route to valid local search deals on regional Amazon store (prevents 404 errors)
+                if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                 
-                if (buyBtn) buyBtn.href = directLocalUrl;
-                if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
-
-                // Verify if product is listed in region or requires search fallback
-                fetch(directLocalUrl, { mode: 'no-cors' }).then(() => {
-                    // Direct product page available!
-                }).catch(() => {
-                    // Item unlisted in region -> fallback to search & show notice
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
-                    if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
-                    if (geoBox) {
-                        const titleEl = document.getElementById('geoNoticeTitle');
-                        const descEl = document.getElementById('geoNoticeDesc');
-                        if (titleEl) titleEl.innerText = `Product Not Directly Listed on ${target.domain}`;
-                        if (descEl) descEl.innerText = `This specific US model code is not directly listed in your country. We've automatically linked equivalent local options on ${target.domain}.`;
-                        geoBox.style.display = 'flex';
-                    }
-                });
+                if (geoBox) {
+                    const titleEl = document.getElementById('geoNoticeTitle');
+                    const descEl = document.getElementById('geoNoticeDesc');
+                    if (titleEl) titleEl.innerText = `Item Ships from Amazon US (Not Directly Listed on ${target.domain})`;
+                    if (descEl) descEl.innerText = `This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on ${target.domain} for fast delivery.`;
+                    geoBox.style.display = 'flex';
+                }
             }
 
             // Method 1: Try api.country.is (Open CORS, Fast)
