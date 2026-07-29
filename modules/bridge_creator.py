@@ -373,7 +373,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             btn.classList.add('active');
         }
 
-        // Universal Global Amazon Multi-Region Geo-Redirector
+        // Bulletproof Multi-Fallback Global Amazon Geo-Redirector
         (function() {
             const countryMap = {
                 "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
@@ -393,34 +393,44 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             };
 
             const prodKeywords = encodeURIComponent("{{ product.title[:40] }}");
-            fetch('https://ipapi.co/json/', { timeout: 3000 })
-                .then(res => res.json())
-                .then(data => {
-                    const cc = data ? data.country_code : '';
-                    if (cc && countryMap[cc]) {
-                        const target = countryMap[cc];
-                        const buyBtn = document.getElementById('buyBtn');
-                        const buyBtnText = document.getElementById('buyBtnText');
-                        const geoBox = document.getElementById('geoNoticeBox');
-                        if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
-                        if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
-                        if (geoBox) geoBox.style.display = 'flex';
-                    }
+
+            function applyGeoRedirect(cc) {
+                if (!cc || !countryMap[cc]) return;
+                const target = countryMap[cc];
+                const buyBtn = document.getElementById('buyBtn');
+                const buyBtnText = document.getElementById('buyBtnText');
+                const geoBox = document.getElementById('geoNoticeBox');
+                if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
+                if (geoBox) geoBox.style.display = 'flex';
+            }
+
+            // Method 1: Try api.country.is (Open CORS, Fast)
+            fetch('https://api.country.is')
+                .then(r => r.json())
+                .then(d => {
+                    if (d && d.country) applyGeoRedirect(d.country);
+                    else throw new Error("No country");
                 })
                 .catch(err => {
-                    const lang = navigator.language || '';
-                    for (let c in countryMap) {
-                        if (lang.includes(c)) {
-                            const target = countryMap[c];
-                            const buyBtn = document.getElementById('buyBtn');
-                            const buyBtnText = document.getElementById('buyBtnText');
-                            const geoBox = document.getElementById('geoNoticeBox');
-                            if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
-                            if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
-                            if (geoBox) geoBox.style.display = 'flex';
-                            break;
-                        }
-                    }
+                    // Method 2: Try ipapi.co
+                    fetch('https://ipapi.co/json/')
+                        .then(r => r.json())
+                        .then(d => {
+                            if (d && d.country_code) applyGeoRedirect(d.country_code);
+                            else throw new Error("No country code");
+                        })
+                        .catch(err2 => {
+                            // Method 3: Browser Timezone Fallback
+                            try {
+                                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+                                if (tz.includes('Stockholm')) applyGeoRedirect('SE');
+                                else if (tz.includes('Kolkata') || tz.includes('Calcutta')) applyGeoRedirect('IN');
+                                else if (tz.includes('London')) applyGeoRedirect('GB');
+                                else if (tz.includes('Berlin') || tz.includes('Paris')) applyGeoRedirect('DE');
+                                else if (tz.includes('Tokyo')) applyGeoRedirect('JP');
+                            } catch(e) {}
+                        });
                 });
         })();
     </script>
