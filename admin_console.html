@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest Auto-Affiliate | Product & Image Verification Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07060a;
+            --card-glass: rgba(18, 16, 26, 0.85);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --gold-primary: #ffb703;
+            --gold-glow: #fb8500;
+            --green-success: #10b981;
+            --red-danger: #ef4444;
+            --text-main: #f8f9fa;
+            --text-sub: #a0a5b5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(251, 133, 0, 0.15), transparent 60%),
+                radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.08), transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px);
+            border-radius: 50px;
+            margin-bottom: 30px;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-title span.sparkle { color: var(--gold-primary); }
+
+        .badge-live {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--green-success);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot-green {
+            width: 8px;
+            height: 8px;
+            background: var(--green-success);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--green-success);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Extraction Control Box */
+        .extract-card {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .extract-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 14px;
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 14px 24px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 20px rgba(255, 183, 3, 0.2);
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--gold-glow), var(--gold-primary));
+            border: 1.5px solid #ffffff;
+            color: #0b0a0f;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 15px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 25px rgba(251, 133, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 35px rgba(251, 133, 0, 0.6);
+        }
+
+        /* Product Overview Panel */
+        .product-meta-panel {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 24px;
+            display: none;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .meta-info h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .meta-info p {
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        .meta-badge {
+            background: rgba(255, 183, 3, 0.15);
+            border: 1px solid rgba(255, 183, 3, 0.4);
+            color: var(--gold-primary);
+            font-size: 18px;
+            font-weight: 800;
+            padding: 12px 24px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        /* Photo Grid Inspection Board */
+        .photo-section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-card {
+            background: var(--card-glass);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .photo-card.selected {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 30px rgba(255, 183, 3, 0.4);
+        }
+
+        .photo-thumb {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            background: #0b0a0f;
+        }
+
+        .photo-meta {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(12, 10, 18, 0.9);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+        }
+
+        .status-badge.winner {
+            background: linear-gradient(135deg, var(--gold-glow), var(--gold-primary));
+            color: #0b0a0f;
+            border: 1px solid #ffffff;
+        }
+
+        .status-badge.clean {
+            background: rgba(16, 185, 129, 0.85);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .status-badge.discarded {
+            background: rgba(239, 68, 68, 0.85);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .select-check {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #fff;
+            transition: all 0.25s ease;
+        }
+
+        .photo-card.selected .select-check {
+            background: var(--gold-primary);
+            color: #0b0a0f;
+            border-color: #ffffff;
+        }
+
+        /* Settings Bar */
+        .config-bar {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .slider-group label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .slider-group input[type="range"] {
+            flex: 1;
+            accent-color: var(--gold-primary);
+            cursor: pointer;
+        }
+
+        .val-display {
+            background: rgba(255, 183, 3, 0.2);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(18, 16, 26, 0.95);
+            border: 1.5px solid var(--gold-primary);
+            color: #fff;
+            padding: 16px 28px;
+            border-radius: 16px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="brand-title">
+            <span class="sparkle">✨</span> Pinterest Auto-Affiliate Console
+        </div>
+        <div class="badge-live">
+            <div class="dot-green"></div> Image Verification Engine Active
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- ASIN / URL Input Panel -->
+        <div class="extract-card">
+            <div class="extract-title">
+                <span>🔍</span> Amazon Product & Image Extractor
+            </div>
+            <div class="input-group">
+                <input type="text" id="targetInput" class="input-field" placeholder="Enter Amazon ASIN (e.g. B0DZD1X83N) or full product URL..." value="B0DZD1X83N">
+                <button class="btn-action" onclick="fetchProductSuite()">
+                    <div class="spinner" id="extractSpinner"></div>
+                    <span>Extract & Inspect Photos</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Product Meta Overview Panel -->
+        <div class="product-meta-panel" id="productMetaPanel">
+            <div class="meta-info">
+                <h2 id="metaTitle">Product Title Loading...</h2>
+                <p id="metaAsin">ASIN: -- | Category: Room Lighting</p>
+            </div>
+            <div class="meta-badge" id="metaPrice">$12.99</div>
+            <div class="meta-badge" id="metaRating">★ 4.6</div>
+        </div>
+
+        <!-- Photo Inspection Board -->
+        <div id="photosSection" style="display: none; flex-direction: column; gap: 16px;">
+            <div class="photo-section-title">
+                <span>📸 Select Winner Photo for AI Generation</span>
+                <span style="font-size: 14px; color: var(--text-sub); font-weight: 400;">Click any image card below to choose your preferred photo</span>
+            </div>
+            
+            <div class="photos-grid" id="photosGrid">
+                <!-- Dynamically populated photo cards -->
+            </div>
+
+            <!-- Configuration & Approval Bar -->
+            <div class="config-bar">
+                <div class="slider-group">
+                    <label>AI Prompt Strength:</label>
+                    <input type="range" id="strengthSlider" min="0.20" max="0.80" step="0.05" value="0.30" oninput="updateSliderVal(this.value)">
+                    <span class="val-display" id="strengthVal">0.30</span>
+                </div>
+
+                <button class="btn-action" onclick="approveAndPublishCampaign()" style="background: linear-gradient(135deg, #10b981, #059669); border-color: #ffffff;">
+                    <div class="spinner" id="publishSpinner"></div>
+                    <span>🚀 Approve & Generate Campaign Live</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <span id="toastIcon">✨</span>
+        <span id="toastMsg">Operation successful!</span>
+    </div>
+
+    <script>
+        let currentProductData = null;
+        let selectedPhotoUrl = "";
+
+        function updateSliderVal(val) {
+            document.getElementById('strengthVal').innerText = parseFloat(val).toFixed(2);
+        }
+
+        function showToast(msg, icon = '✨') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
+        }
+
+        function fetchProductSuite() {
+            const input = document.getElementById('targetInput').value.trim();
+            if (!input) {
+                alert("Please enter a valid Amazon ASIN or product URL.");
+                return;
+            }
+
+            document.getElementById('extractSpinner').style.display = 'inline-block';
+
+            fetch(`/api/extract?target=${encodeURIComponent(input)}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('extractSpinner').style.display = 'none';
+                    if (data.status === 'error') {
+                        alert(data.message || "Failed to extract product photos.");
+                        return;
+                    }
+
+                    currentProductData = data;
+                    renderProductMeta(data);
+                    renderPhotosGrid(data.photos, data.winner_photo);
+                    showToast("Photos extracted and inspected successfully!", "📸");
+                })
+                .catch(err => {
+                    document.getElementById('extractSpinner').style.display = 'none';
+                    alert("Error communicating with local server backend.");
+                });
+        }
+
+        function renderProductMeta(data) {
+            document.getElementById('metaTitle').innerText = data.title;
+            document.getElementById('metaAsin').innerText = `ASIN: ${data.asin} | Rating: ${data.rating} ★`;
+            document.getElementById('metaPrice').innerText = data.price;
+            document.getElementById('metaRating').innerText = `★ ${data.rating}`;
+            document.getElementById('productMetaPanel').style.display = 'grid';
+        }
+
+        function renderPhotosGrid(photos, recommendedWinner) {
+            const grid = document.getElementById('photosGrid');
+            grid.innerHTML = '';
+            selectedPhotoUrl = recommendedWinner || (photos[0] ? photos[0].url : '');
+
+            photos.forEach((p, idx) => {
+                const isSelected = p.url === selectedPhotoUrl;
+                const isWinner = p.url === recommendedWinner;
+
+                let badgeClass = "clean";
+                let badgeText = p.status || "Clean Photo";
+
+                if (isWinner) {
+                    badgeClass = "winner";
+                    badgeText = "🏆 #1 AI Winner";
+                } else if (p.status && p.status.includes("DISCARDED")) {
+                    badgeClass = "discarded";
+                }
+
+                const card = document.createElement('div');
+                card.className = `photo-card ${isSelected ? 'selected' : ''}`;
+                card.onclick = () => selectPhotoCard(card, p.url);
+
+                card.innerHTML = `
+                    <div class="status-badge ${badgeClass}">${badgeText}</div>
+                    <div class="select-check">${isSelected ? '✓' : idx + 1}</div>
+                    <img class="photo-thumb" src="${p.url}" alt="Photo ${idx + 1}" />
+                    <div class="photo-meta">
+                        <div style="font-weight: 700; font-size: 13px;">Photo #${idx + 1}</div>
+                        <div style="font-size: 12px; color: var(--text-sub); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                            <a href="${p.url}" target="_blank" style="color: var(--gold-primary); text-decoration: none;" onclick="event.stopPropagation();">🔗 Open HD Image</a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('photosSection').style.display = 'flex';
+        }
+
+        function selectPhotoCard(cardElement, photoUrl) {
+            document.querySelectorAll('.photo-card').forEach(c => {
+                c.classList.remove('selected');
+                c.querySelector('.select-check').innerText = Array.from(c.parentNode.children).indexOf(c) + 1;
+            });
+
+            cardElement.classList.add('selected');
+            cardElement.querySelector('.select-check').innerText = '✓';
+            selectedPhotoUrl = photoUrl;
+            showToast("Photo selected for generation!", "🖼️");
+        }
+
+        function approveAndPublishCampaign() {
+            if (!currentProductData || !selectedPhotoUrl) {
+                alert("Please select a photo first.");
+                return;
+            }
+
+            const strength = document.getElementById('strengthSlider').value;
+            document.getElementById('publishSpinner').style.display = 'inline-block';
+
+            const payload = {
+                asin: currentProductData.asin,
+                selected_photo: selectedPhotoUrl,
+                title: currentProductData.title,
+                price: currentProductData.price,
+                prompt_strength: parseFloat(strength)
+            };
+
+            fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('publishSpinner').style.display = 'none';
+                if (data.status === 'success') {
+                    showToast("Campaign approved and published live to GitHub Pages!", "🚀");
+                    setTimeout(() => {
+                        window.open(data.bridge_url, '_blank');
+                    }, 1500);
+                } else {
+                    alert("Error generating campaign: " + data.message);
+                }
+            })
+            .catch(err => {
+                document.getElementById('publishSpinner').style.display = 'none';
+                alert("Error communicating with server.");
+            });
+        }
+    </script>
+
+</body>
+</html>
