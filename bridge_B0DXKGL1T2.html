@@ -156,19 +156,39 @@
 
     <script>
         // Automatic Geo-IP Location Smart Router
-        // India -> Amazon.in | UK -> Amazon.co.uk | US/Global -> Amazon.com
+        // India -> Amazon.in | UK & Europe -> Amazon.co.uk | US/Global -> Amazon.com
         (function() {
             const inUrl = "https://www.amazon.in/dp/B0DDTPCDLB?tag=smartdeal0358-21";
             const ukUrl = "https://www.amazon.co.uk/dp/B0DXKGL1T2?tag=smartdeal0358-21";
             const usUrl = "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21";
 
+            const btn = document.getElementById('amazon-btn');
+            const urlParams = new URLSearchParams(window.location.search);
+            const geoOverride = urlParams.get('geo');
+
+            // 1. Check for manual URL override (?geo=uk, ?geo=in, ?geo=us)
+            if (geoOverride === 'uk') {
+                if (btn) btn.href = ukUrl;
+                return;
+            } else if (geoOverride === 'in') {
+                if (btn) btn.href = inUrl;
+                return;
+            } else if (geoOverride === 'us') {
+                if (btn) btn.href = usUrl;
+                return;
+            }
+
+            // 2. European country codes mapping to Amazon UK (.co.uk)
+            const euCountries = ['GB', 'UK', 'NL', 'DE', 'FR', 'IT', 'ES', 'EU', 'SE', 'NO', 'FI', 'IE', 'BE', 'AT', 'CH', 'PL', 'DK'];
+
+            // 3. Auto IP Geolocation Check
             fetch('https://ipapi.co/json/')
                 .then(res => res.json())
                 .then(data => {
-                    const btn = document.getElementById('amazon-btn');
-                    if (data.country_code === 'IN') {
+                    const country = (data.country_code || '').toUpperCase();
+                    if (country === 'IN') {
                         if (btn) btn.href = inUrl;
-                    } else if (data.country_code === 'GB' || data.country_code === 'UK') {
+                    } else if (euCountries.includes(country)) {
                         if (btn) btn.href = ukUrl;
                     } else {
                         if (btn) btn.href = usUrl;
