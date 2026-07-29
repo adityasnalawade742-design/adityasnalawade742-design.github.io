@@ -95,7 +95,8 @@ master_catalog = {
         "rating": "4.7",
         "features": ["CERAMIC TEXTURED BASE", "LINEN SHADE", "WARM LIGHT BULB", "BEDSIDE ACCENT"],
         "category": "lighting",
-        "description": "Neutral minimalist ceramic table lamp for bedroom and living room accent lighting."
+        "description": "Neutral minimalist ceramic table lamp for bedroom and living room accent lighting.",
+        "direct_regions": ["US"]
     },
     "B0DXKGL1T2": {
         "title": "Aesthetic Wave Diffuser Ambient Mist Maker",
