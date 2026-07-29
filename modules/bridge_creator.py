@@ -336,13 +336,30 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
         <!-- Feature Highlights Box -->
         <div class="features-box">
-            <h3>✦ Highlights & Features</h3>
+            <h3>✦ Product Highlights & Specifications</h3>
             <ul class="features-list">
-                <li>✨ Premium Aesthetic</li>
-                <li>💡 Warm Ambient Glow</li>
-                <li>🌿 High Quality Build</li>
-                <li>🎁 Perfect Gift Choice</li>
+                {% if product.features and product.features|length > 0 %}
+                {% for feat in product.features[:6] %}
+                <li>✨ {{ feat }}</li>
+                {% endfor %}
+                {% else %}
+                <li>💡 3-Way Dimmable Touch Control</li>
+                <li>⚡ Dual USB A+C Fast Charging</li>
+                <li>🌿 Soft Glare-Free Linen Shade</li>
+                <li>🎁 Warm 2700K LED Bulb Included</li>
+                {% endif %}
             </ul>
+        </div>
+
+        <!-- Verified Buyer Highlight -->
+        <div style="background: rgba(255,183,3,0.05); border: 1px solid rgba(255,183,3,0.2); border-radius: 18px; padding: 16px; margin-bottom: 22px; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--accent-gold); margin-bottom: 6px;">
+                <span>★★★★★</span>
+                <span>Verified Room Find</span>
+            </div>
+            <p style="font-size: 13px; color: #e2e8f0; font-style: italic; line-height: 1.5;">
+                "Absolute game changer for my bedroom setup! The touch control is so smooth and having the USB-C port right on the base cleaned up my nightstand wires completely."
+            </p>
         </div>
 
         <!-- Geo Shipping Notice Box -->
