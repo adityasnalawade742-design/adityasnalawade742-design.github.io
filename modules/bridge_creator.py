@@ -439,8 +439,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
-                    if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
-                    if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
+                    if (directRegions.includes('US')) {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
+                        if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
+                    } else {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                        if (buyBtnText) buyBtnText.innerText = `SEARCH DEALS ON AMAZON US`;
+                    }
                     if (geoBox) geoBox.style.display = 'none';
                     return;
                 }

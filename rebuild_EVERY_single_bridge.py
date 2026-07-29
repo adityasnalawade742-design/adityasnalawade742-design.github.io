@@ -107,7 +107,7 @@ master_catalog = {
         "features": ["WAVE MIST GLOW", "ESSENTIAL OIL COMPATIBLE", "QUIET NIGHT LIGHT", "AUTO OFF"],
         "category": "lighting decor",
         "description": "Aesthetic wave mist aromatherapy diffuser for cozy room atmosphere.",
-        "direct_regions": ["US"]
+        "direct_regions": []
     }
 }
 
