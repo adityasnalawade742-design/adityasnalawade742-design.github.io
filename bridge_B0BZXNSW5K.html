@@ -227,6 +227,24 @@
             gap: 6px;
         }
 
+        /* Geo Shipping Notice Box */
+        .geo-notice-box {
+            display: none;
+            background: rgba(251, 133, 0, 0.12);
+            border: 1px solid rgba(251, 133, 0, 0.4);
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            text-align: left;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 12.5px;
+            color: #f8f9fa;
+        }
+
+        .geo-notice-box .geo-icon { font-size: 18px; }
+        .geo-notice-box strong { color: var(--accent-gold); display: block; margin-bottom: 2px; }
+
         /* High-Converting CTA Button */
         .btn-amazon {
             display: flex;
@@ -321,9 +339,18 @@
             </ul>
         </div>
 
+        <!-- Geo Shipping Notice Box for Non-US Visitors -->
+        <div id="geoNoticeBox" class="geo-notice-box">
+            <span class="geo-icon">📍</span>
+            <div>
+                <strong id="geoNoticeTitle">Direct US Shipping Unavailable to Your Location</strong>
+                <span id="geoNoticeDesc">This item ships from Amazon US. We've automatically linked equivalent local options on Amazon for fast regional delivery.</span>
+            </div>
+        </div>
+
         <!-- High-Converting CTA -->
-        <a href="https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-21" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span>CHECK DEAL ON AMAZON</span>
+        <a id="buyBtn" href="https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-21" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">CHECK DEAL ON AMAZON</span>
             <span>➔</span>
         </a>
 
@@ -339,6 +366,87 @@
             document.querySelectorAll('.img-tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
+
+        // Bulletproof Multi-Fallback Global Amazon Geo-Redirector
+        (function() {
+            const countryMap = {
+                "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
+                "GB": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
+                "UK": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
+                "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
+                "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
+                "DE": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+                "FR": { domain: "amazon.fr", label: "AMAZON FRANCE (€)" },
+                "ES": { domain: "amazon.es", label: "AMAZON SPAIN (€)" },
+                "IT": { domain: "amazon.it", label: "AMAZON ITALY (€)" },
+                "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
+                "MX": { domain: "amazon.com.mx", label: "AMAZON MEXICO (Mex$)" },
+                "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" },
+                "NL": { domain: "amazon.nl", label: "AMAZON NETHERLANDS (€)" },
+                "SE": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" }
+            };
+
+            const asin = "B0BZXNSW5K";
+            const prodKeywords = encodeURIComponent("Bedside Table Lamp for Bedroom - Dimmabl");
+
+            function applyGeoRedirect(cc) {
+                if (!cc || !countryMap[cc]) return;
+                const target = countryMap[cc];
+                const buyBtn = document.getElementById('buyBtn');
+                const buyBtnText = document.getElementById('buyBtnText');
+                const geoBox = document.getElementById('geoNoticeBox');
+                
+                // Direct product page link on regional Amazon storefront (e.g. amazon.in/dp/ASIN)
+                const directLocalUrl = `https://www.${target.domain}/dp/${asin}`;
+                
+                if (buyBtn) buyBtn.href = directLocalUrl;
+                if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
+
+                // Verify if product is listed in region or requires search fallback
+                fetch(directLocalUrl, { mode: 'no-cors' }).then(() => {
+                    // Direct product page available!
+                }).catch(() => {
+                    // Item unlisted in region -> fallback to search & show notice
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                    if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
+                    if (geoBox) {
+                        const titleEl = document.getElementById('geoNoticeTitle');
+                        const descEl = document.getElementById('geoNoticeDesc');
+                        if (titleEl) titleEl.innerText = `Product Not Directly Listed on ${target.domain}`;
+                        if (descEl) descEl.innerText = `This specific US model code is not directly listed in your country. We've automatically linked equivalent local options on ${target.domain}.`;
+                        geoBox.style.display = 'flex';
+                    }
+                });
+            }
+
+            // Method 1: Try api.country.is (Open CORS, Fast)
+            fetch('https://api.country.is')
+                .then(r => r.json())
+                .then(d => {
+                    if (d && d.country) applyGeoRedirect(d.country);
+                    else throw new Error("No country");
+                })
+                .catch(err => {
+                    // Method 2: Try ipapi.co
+                    fetch('https://ipapi.co/json/')
+                        .then(r => r.json())
+                        .then(d => {
+                            if (d && d.country_code) applyGeoRedirect(d.country_code);
+                            else throw new Error("No country code");
+                        })
+                        .catch(err2 => {
+                            // Method 3: Browser Timezone Fallback
+                            try {
+                                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+                                if (tz.includes('Stockholm')) applyGeoRedirect('SE');
+                                else if (tz.includes('Kolkata') || tz.includes('Calcutta')) applyGeoRedirect('IN');
+                                else if (tz.includes('London')) applyGeoRedirect('GB');
+                                else if (tz.includes('Berlin') || tz.includes('Paris')) applyGeoRedirect('DE');
+                                else if (tz.includes('Tokyo')) applyGeoRedirect('JP');
+                            } catch(e) {}
+                        });
+                });
+        })();
     </script>
 
 </body>
