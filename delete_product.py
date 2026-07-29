@@ -53,7 +53,7 @@ def delete_product(product_id: str):
         with open(index_file, "r", encoding="utf-8") as f:
             html = f.read()
 
-        card_pattern = rf'(<!--\s*Card\s+{product_id}\s*-->\s*)?<div\s+class="card-wrapper"\s+id="card-{product_id}">[\s\S]*?</div>\s*</div>\s*'
+        card_pattern = rf'(<!--\s*Card\s+{product_id}[\s\S]*?-->\s*)?<div\s+class="card-wrapper"[^>]*id="card-{product_id}"[^>]*>[\s\S]*?</div>\s*</div>\s*'
         updated_html = re.sub(card_pattern, '', html, flags=re.IGNORECASE)
 
 
