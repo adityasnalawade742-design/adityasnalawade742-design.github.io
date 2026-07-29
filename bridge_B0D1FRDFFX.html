@@ -370,36 +370,45 @@
         // Universal 200+ Country Global Amazon Redirector Engine
         (function() {
             const countryMap = {
-                // Official Amazon Storefronts & Regional Neighbor Mappings
+                // INDIA & ASIA-PACIFIC
                 "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
                 "SG": { domain: "amazon.sg", label: "AMAZON SINGAPORE (SG$)" },
+                "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
+                "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
+                "NZ": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
                 "AE": { domain: "amazon.ae", label: "AMAZON UAE (AED)" },
                 "SA": { domain: "amazon.sa", label: "AMAZON SAUDI ARABIA (SAR)" },
                 "TR": { domain: "amazon.com.tr", label: "AMAZON TURKEY (TRY)" },
                 "EG": { domain: "amazon.eg", label: "AMAZON EGYPT (EGP)" },
-                "PL": { domain: "amazon.pl", label: "AMAZON POLAND (PLN)" },
-                "BE": { domain: "amazon.com.be", label: "AMAZON BELGIUM (€)" },
+
+                // EUROPE
                 "GB": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
                 "UK": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
                 "IE": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
-                "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
-                "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
-                "NZ": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
                 "DE": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
                 "AT": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
                 "CH": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+                "NL": { domain: "amazon.nl", label: "AMAZON NETHERLANDS (€)" },
+                "BE": { domain: "amazon.com.be", label: "AMAZON BELGIUM (€)" },
+                "LU": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
                 "FR": { domain: "amazon.fr", label: "AMAZON FRANCE (€)" },
                 "ES": { domain: "amazon.es", label: "AMAZON SPAIN (€)" },
                 "PT": { domain: "amazon.es", label: "AMAZON SPAIN (€)" },
                 "IT": { domain: "amazon.it", label: "AMAZON ITALY (€)" },
-                "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
-                "MX": { domain: "amazon.com.mx", label: "AMAZON MEXICO (Mex$)" },
-                "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" },
-                "NL": { domain: "amazon.nl", label: "AMAZON NETHERLANDS (€)" },
                 "SE": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
                 "NO": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
                 "DK": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
-                "FI": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" }
+                "FI": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
+                "PL": { domain: "amazon.pl", label: "AMAZON POLAND (PLN)" },
+                "CZ": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+                "RO": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+                "GR": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+                "HU": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+
+                // AMERICAS
+                "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
+                "MX": { domain: "amazon.com.mx", label: "AMAZON MEXICO (Mex$)" },
+                "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
             const prodKeywords = encodeURIComponent("Glass Mushroom Lamp Ambient Table Nights");
@@ -412,7 +421,7 @@
                     const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
                     if (tz.includes('asia') || tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('singapore')) {
                         targetCC = 'IN';
-                    } else if (tz.includes('europe') || tz.includes('london') || tz.includes('berlin') || tz.includes('paris') || tz.includes('stockholm')) {
+                    } else if (tz.includes('europe') || tz.includes('amsterdam') || tz.includes('london') || tz.includes('berlin') || tz.includes('paris') || tz.includes('stockholm')) {
                         targetCC = 'DE';
                     } else if (tz.includes('australia') || tz.includes('auckland')) {
                         targetCC = 'AU';
