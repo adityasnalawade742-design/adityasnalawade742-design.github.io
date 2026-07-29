@@ -1,5 +1,6 @@
 import io
 import os
+import time
 import requests
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -194,18 +195,23 @@ def generate_cozy_image(
         model="black-forest-labs/flux-dev",
         input=input_payload
     )
-    print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting for render...")
-    pred.wait()
+    print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting max 20s for render...")
+    
+    # Wait max 20 seconds for Replicate API prediction to complete
+    start_t = time.time()
+    while pred.status in ["starting", "processing"]:
+        if time.time() - start_t > 20:
+            print("[Image Gen - Replicate] ⚠️ Replicate API render exceeded 20s limit, falling back to clean product photo...")
+            break
+        time.sleep(1)
+        pred.reload()
 
-    if pred.status != "succeeded":
-        raise RuntimeError(f"Replicate FLUX-Dev prediction failed with status '{pred.status}': {pred.error}")
-
-    if pred.output is not None:
+    if pred.status == "succeeded" and pred.output is not None:
         out = list(pred.output) if hasattr(pred.output, "__iter__") and not isinstance(pred.output, (str, bytes)) else [pred.output]
         if out and len(out) > 0:
             img_target = str(out[0])
             if img_target.startswith("http"):
-                res = requests.get(img_target, timeout=45)
+                res = requests.get(img_target, timeout=15)
                 if res.status_code == 200 and len(res.content) > 5000:
                     file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
                     with open(file_path, "wb") as f:
@@ -219,7 +225,8 @@ def generate_cozy_image(
                 print(f"[Image Gen - SUCCESS] Saved authentic Replicate FLUX-Dev image file stream to: {file_path}")
                 return str(file_path)
 
-    raise RuntimeError("Replicate FLUX-Dev returned empty output!")
+    print("[Image Gen - Replicate] ⚠️ Prediction did not finish in time, returning selected listing photo...")
+    return init_image_path if init_image_path else str(IMAGES_DIR / f"{filename_prefix}.jpg")
 
 def get_adaptive_vibe_colors(img, top_crop_ratio=0.35):
     """
