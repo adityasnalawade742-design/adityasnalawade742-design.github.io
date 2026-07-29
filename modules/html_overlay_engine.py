@@ -90,25 +90,22 @@ def detect_image_luminance(image_path: str) -> dict:
             stat = crop_img.resize((50, 50))
             pixels = list(stat.getdata())
             lums = [0.299 * r + 0.587 * g + 0.114 * b for r, g, b in pixels]
-            return sum(lums) / len(lums)
+        top_lum = sum(top_crop.getdata()) / float(top_crop.size[0] * top_crop.size[1])
+        bot_lum = sum(bot_crop.getdata()) / float(bot_crop.size[0] * bot_crop.size[1])
         
-        top_lum = calc_lum(top_crop)
-        bot_lum = calc_lum(bot_crop)
-        
-        # Threshold: > 145 = bright background (apply ultra-light 0.26 opacity)
-        # <= 145 = dark/medium background (apply 0.0 ZERO dimming)
-        top_scrim_opacity = 0.26 if top_lum > 145 else 0.0
-        bot_scrim_opacity = 0.30 if bot_lum > 145 else 0.0
+        # High-contrast dimming for bright glowing lamps & room lights
+        top_scrim_opacity = 0.55 if top_lum > 70 else 0.35
+        bot_scrim_opacity = 0.65 if bot_lum > 70 else 0.45
         
         print(f"[Smart Brightness Engine] ☀️ Luminance Analysis: Top={top_lum:.1f} (Opacity={top_scrim_opacity}), Bottom={bot_lum:.1f} (Opacity={bot_scrim_opacity})")
         return {
             "top_opacity": top_scrim_opacity,
             "bot_opacity": bot_scrim_opacity,
-            "top_height": "18%" if top_scrim_opacity > 0 else "0%",
-            "bot_height": "22%" if bot_scrim_opacity > 0 else "0%"
+            "top_height": "38%",
+            "bot_height": "28%"
         }
     except Exception as e:
-        return {"top_opacity": 0.20, "bot_opacity": 0.25, "top_height": "18%", "bot_height": "22%"}
+        return {"top_opacity": 0.55, "bot_opacity": 0.65, "top_height": "38%", "bot_height": "28%"}
 
 def render_pillow_fallback(image_path: str, headline: str, subtitle: str, badge_text: str, price_str: str, output_path: str) -> str:
 

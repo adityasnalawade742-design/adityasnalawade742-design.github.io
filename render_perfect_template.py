@@ -11,7 +11,7 @@ from modules.html_overlay_engine import render_html_overlay
 
 asin = "B0BZXNSW5K"
 raw_img_path = Path("G:/CLI/pinterest-auto-affiliate/b9e65w6bf9rn80cznt1tap5v28.jpg")
-overlay_filename = "b9e65w6bf9rn80cznt1tap5v28_overlay.jpg"
+overlay_filename = "b9e65w6bf9rn80cznt1tap5v28_dimmed_v2.jpg"
 overlay_img_path = Path(f"G:/CLI/pinterest-auto-affiliate/{overlay_filename}")
 
 title_hook = "Bedside Table Touch Lamp"
