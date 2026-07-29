@@ -4,3 +4,5 @@ requests
 pillow
 beautifulsoup4
 jinja2
+playwright
+

@@ -44,8 +44,11 @@ def check_single(args):
     url = f"https://www.{domain}/dp/{asin}"
     
     try:
-        r = requests.get(url, headers=headers, timeout=4)
-        is_active = (r.status_code == 200 and "Looking for something?" not in r.text and "Page Not Found" not in r.text and "Robot Check" not in r.text)
+        r = requests.get(url, headers=headers, timeout=8)
+        # Foolproof check: An active listing MUST have the productTitle element in HTML
+        has_title = ("productTitle" in r.text) or ("title" in r.text and "dp-title" in r.text)
+        has_404 = ("Looking for something" in r.text) or ("not a functioning page" in r.text) or ("Page Not Found" in r.text) or ("Dogs of Amazon" in r.text)
+        is_active = (r.status_code == 200) and has_title and not has_404
     except Exception:
         is_active = False
         
