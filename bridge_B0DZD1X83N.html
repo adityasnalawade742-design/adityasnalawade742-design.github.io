@@ -340,28 +340,48 @@
             btn.classList.add('active');
         }
 
-        // Smart Amazon India (IN) & Global Geo-Redirector
+        // Universal Global Amazon Multi-Region Geo-Redirector
         (function() {
+            const countryMap = {
+                "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
+                "GB": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
+                "UK": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
+                "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
+                "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
+                "DE": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+                "FR": { domain: "amazon.fr", label: "AMAZON FRANCE (€)" },
+                "ES": { domain: "amazon.es", label: "AMAZON SPAIN (€)" },
+                "IT": { domain: "amazon.it", label: "AMAZON ITALY (€)" },
+                "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
+                "MX": { domain: "amazon.com.mx", label: "AMAZON MEXICO (Mex$)" },
+                "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" },
+                "NL": { domain: "amazon.nl", label: "AMAZON NETHERLANDS (€)" },
+                "SE": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" }
+            };
+
             const prodKeywords = encodeURIComponent("Minimalist Wood Base Cream Shade Bedside");
             fetch('https://ipapi.co/json/', { timeout: 3000 })
                 .then(res => res.json())
                 .then(data => {
-                    if (data && data.country_code === 'IN') {
+                    const cc = data ? data.country_code : '';
+                    if (cc && countryMap[cc]) {
+                        const target = countryMap[cc];
                         const buyBtn = document.getElementById('buyBtn');
                         const buyBtnText = document.getElementById('buyBtnText');
-                        if (buyBtn) {
-                            buyBtn.href = `https://www.amazon.in/s?k=${prodKeywords}`;
-                            if (buyBtnText) buyBtnText.innerText = "CHECK DEAL ON AMAZON INDIA (₹)";
-                        }
+                        if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                        if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON ${target.label}`;
                     }
                 })
                 .catch(err => {
-                    if (navigator.language && navigator.language.includes('IN')) {
-                        const buyBtn = document.getElementById('buyBtn');
-                        const buyBtnText = document.getElementById('buyBtnText');
-                        if (buyBtn) {
-                            buyBtn.href = `https://www.amazon.in/s?k=${prodKeywords}`;
-                            if (buyBtnText) buyBtnText.innerText = "CHECK DEAL ON AMAZON INDIA (₹)";
+                    const lang = navigator.language || '';
+                    for (let c in countryMap) {
+                        if (lang.includes(c)) {
+                            const target = countryMap[c];
+                            const buyBtn = document.getElementById('buyBtn');
+                            const buyBtnText = document.getElementById('buyBtnText');
+                            if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}`;
+                            if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON ${target.label}`;
+                            break;
                         }
                     }
                 });
