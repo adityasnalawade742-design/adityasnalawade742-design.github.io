@@ -600,17 +600,23 @@
         <div class="modal-content" style="max-width: 540px;">
             <h3 style="color: var(--gold-primary); margin-bottom: 12px;">🖼️ Live Playwright Graphic Overlay Preview</h3>
             
-            <!-- Real-Time Interactive Preview Container -->
-            <div style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover;" src="" alt="Overlay Preview">
-                <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 32%; transform: rotate(-6deg); transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.7));">
-                    <img id="liveTagImg" src="./price tags/tag 1.png" style="width: 100%; height: auto; object-fit: contain;">
+            <!-- Real-Time Interactive Drag-and-Drop Preview Container -->
+            <div id="previewCanvasContainer" style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); user-select: none;">
+                <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" src="" alt="Overlay Preview">
+                
+                <!-- Draggable Price Tag Graphic -->
+                <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 32%; transform: rotate(-6deg); cursor: grab; pointer-events: auto; z-index: 30; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.75)); border: 2px dashed rgba(255, 183, 3, 0.6); border-radius: 12px; padding: 4px; background: rgba(0,0,0,0.2);">
+                    <img id="liveTagImg" src="./price tags/tag 1.png" style="width: 100%; height: auto; object-fit: contain; pointer-events: none;">
+                    <div style="position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: #fb8500; color: #000; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px; white-space: nowrap; pointer-events: none;">🖐️ DRAG ME</div>
                 </div>
             </div>
             
             <!-- Price Tag Customizer Panel -->
             <div style="background: rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="color: var(--gold-primary); font-size: 13.5px; font-weight: 700; margin-bottom: 10px;">🏷️ Price Tag Graphic Customizer (Real-Time 60fps Preview)</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="color: var(--gold-primary); font-size: 13.5px; font-weight: 700;">🏷️ Drag-and-Drop Price Tag Customizer</div>
+                    <span id="dragPosBadge" style="font-size: 11px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 3px 10px; border-radius: 20px; font-weight: 700;">📍 Position: Default</span>
+                </div>
                 <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
                     <label style="font-size: 13px; min-width: 110px; color: #cbd5e1;">Tag Size Scale:</label>
                     <select id="tagScaleSelect" class="input-field" style="padding: 6px 12px; font-size: 13px; flex: 1;" onchange="updateLiveTagPreview()">
@@ -1050,6 +1056,10 @@
         }
 
         let activeTagAsin = null;
+        let currentTagPosX = null; // percentage left 0-100
+        let currentTagPosY = null; // percentage top 0-100
+        let isDraggingTag = false;
+        let dragStartX, dragStartY, initialTagLeft, initialTagTop;
 
         function updateLiveTagPreview() {
             const scaleVal = document.getElementById('tagScaleSelect').value; // e.g. 380x285
@@ -1067,11 +1077,87 @@
             }
         }
 
+        function initDragAndDrop() {
+            const tag = document.getElementById('liveTagOverlay');
+            const container = document.getElementById('previewCanvasContainer');
+            if (!tag || !container) return;
+
+            function startDrag(e) {
+                isDraggingTag = true;
+                tag.style.cursor = 'grabbing';
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                dragStartX = clientX;
+                dragStartY = clientY;
+
+                const cRect = container.getBoundingClientRect();
+                const tRect = tag.getBoundingClientRect();
+
+                initialTagLeft = ((tRect.left - cRect.left) / cRect.width) * 100;
+                initialTagTop = ((tRect.top - cRect.top) / cRect.height) * 100;
+            }
+
+            function moveDrag(e) {
+                if (!isDraggingTag) return;
+                e.preventDefault();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                const cRect = container.getBoundingClientRect();
+                const deltaX = ((clientX - dragStartX) / cRect.width) * 100;
+                const deltaY = ((clientY - dragStartY) / cRect.height) * 100;
+
+                let newLeft = Math.max(0, Math.min(75, initialTagLeft + deltaX));
+                let newTop = Math.max(0, Math.min(85, initialTagTop + deltaY));
+
+                currentTagPosX = parseFloat(newLeft.toFixed(1));
+                currentTagPosY = parseFloat(newTop.toFixed(1));
+
+                tag.style.left = `${currentTagPosX}%`;
+                tag.style.top = `${currentTagPosY}%`;
+                tag.style.right = 'auto';
+                tag.style.bottom = 'auto';
+
+                document.getElementById('dragPosBadge').innerText = `📍 Position: X=${currentTagPosX}%, Y=${currentTagPosY}%`;
+            }
+
+            function endDrag() {
+                if (isDraggingTag) {
+                    isDraggingTag = false;
+                    tag.style.cursor = 'grab';
+                    showToast(`Placed tag at X=${currentTagPosX}%, Y=${currentTagPosY}%`, "📍");
+                }
+            }
+
+            tag.onmousedown = startDrag;
+            tag.ontouchstart = startDrag;
+
+            window.onmousemove = moveDrag;
+            window.ontouchmove = moveDrag;
+
+            window.onmouseup = endDrag;
+            window.ontouchend = endDrag;
+        }
+
         function openTagEditorModal(asin, title, price) {
             activeTagAsin = asin;
+            currentTagPosX = null;
+            currentTagPosY = null;
+            document.getElementById('dragPosBadge').innerText = "📍 Position: Default";
+
+            const tag = document.getElementById('liveTagOverlay');
+            if (tag) {
+                tag.style.left = 'auto';
+                tag.style.top = 'auto';
+                tag.style.right = '5%';
+                tag.style.bottom = '8%';
+            }
+
             document.getElementById('overlayModalImg').src = `./focus_product_${asin}_hook.jpg?t=${Date.now()}`;
             document.getElementById('overlayModal').style.display = 'flex';
             updateLiveTagPreview();
+            setTimeout(initDragAndDrop, 100);
             
             // Set save button inside modal
             let saveBtn = document.getElementById('saveTagBtn');
@@ -1104,7 +1190,9 @@
                     asin: activeTagAsin,
                     tag_width: w,
                     tag_height: h,
-                    tag_rotation: rot
+                    tag_rotation: rot,
+                    tag_pos_x: currentTagPosX,
+                    tag_pos_y: currentTagPosY
                 })
             })
             .then(r => r.json())

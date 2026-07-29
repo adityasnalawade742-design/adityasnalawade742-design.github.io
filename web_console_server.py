@@ -492,6 +492,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             tag_width = int(data.get('tag_width', 380))
             tag_height = int(data.get('tag_height', 285))
             tag_rotation = int(data.get('tag_rotation', -6))
+            tag_pos_x = float(data['tag_pos_x']) if 'tag_pos_x' in data and data['tag_pos_x'] is not None else None
+            tag_pos_y = float(data['tag_pos_y']) if 'tag_pos_y' in data and data['tag_pos_y'] is not None else None
 
             reg_path = WORKSPACE_DIR / "product_price_registry.json"
             reg = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
@@ -515,7 +517,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 output_path=str(WORKSPACE_DIR / output_img),
                 tag_width_px=tag_width,
                 tag_height_px=tag_height,
-                tag_rotation_deg=tag_rotation
+                tag_rotation_deg=tag_rotation,
+                tag_pos_x=tag_pos_x,
+                tag_pos_y=tag_pos_y
             )
 
             # Update cache-busted v param in bridge page and index.html
