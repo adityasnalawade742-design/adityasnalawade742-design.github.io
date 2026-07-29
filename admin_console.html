@@ -597,9 +597,30 @@
 
     <!-- Live Graphic Overlay Preview Modal -->
     <div class="modal" id="overlayModal">
-        <div class="modal-content">
-            <h3 style="color: var(--gold-primary);">🖼️ Live Playwright Graphic Overlay Preview</h3>
-            <img id="overlayModalImg" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 16px;" src="" alt="Overlay Preview">
+        <div class="modal-content" style="max-width: 540px;">
+            <h3 style="color: var(--gold-primary); margin-bottom: 12px;">🖼️ Live Playwright Graphic Overlay Preview</h3>
+            <img id="overlayModalImg" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 16px; margin-bottom: 14px;" src="" alt="Overlay Preview">
+            
+            <!-- Price Tag Customizer Panel -->
+            <div style="background: rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="color: var(--gold-primary); font-size: 13.5px; font-weight: 700; margin-bottom: 10px;">🏷️ Price Tag Graphic Customizer</div>
+                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+                    <label style="font-size: 13px; min-width: 110px; color: #cbd5e1;">Tag Size Scale:</label>
+                    <select id="tagScaleSelect" class="input-field" style="padding: 6px 12px; font-size: 13px; flex: 1;">
+                        <option value="260x195">Small (260px × 195px)</option>
+                        <option value="320x240">Medium (320px × 240px)</option>
+                        <option value="380x285" selected>Large (380px × 285px) [Default]</option>
+                        <option value="450x337">Extra Large (450px × 337px)</option>
+                        <option value="520x390">Jumbo Bold (520px × 390px)</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <label style="font-size: 13px; min-width: 110px; color: #cbd5e1;">Tag Rotation:</label>
+                    <input type="range" id="tagRotationRange" min="-15" max="15" value="-6" style="flex: 1;" oninput="document.getElementById('tagRotationVal').innerText = this.value + '°'">
+                    <span id="tagRotationVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 700; width: 35px;">-6°</span>
+                </div>
+            </div>
+
             <button class="btn-action" style="width: 100%;" onclick="closeOverlayModal()">Close Preview</button>
         </div>
     </div>

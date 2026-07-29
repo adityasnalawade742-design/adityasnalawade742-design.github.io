@@ -235,7 +235,10 @@ def render_html_overlay(
     features: list = None,
     output_path: str = None,
     theme: str = "floating_luxury",
-    enable_ai_designer: bool = True
+    enable_ai_designer: bool = True,
+    tag_width_px: int = 360,
+    tag_height_px: int = 270,
+    tag_rotation_deg: int = -6
 ) -> str:
     """
     Renders Canva-quality Pinterest graphic using Playwright & dynamic HTML/CSS templates.
@@ -309,7 +312,7 @@ def render_html_overlay(
         stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
         price_pill_html = f"""
-        <div class="custom-price-container" style="position: relative; width: 360px; height: 270px; display: flex; align-items: center; justify-content: center; transform: rotate(-6deg); filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75));">
+        <div class="custom-price-container" style="position: relative; width: {tag_width_px}px; height: {tag_height_px}px; display: flex; align-items: center; justify-content: center; transform: rotate({tag_rotation_deg}deg); filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75));">
             <img src="{tag_abs_url}" style="width: 100%; height: 100%; object-fit: contain;" />
         </div>
         """
