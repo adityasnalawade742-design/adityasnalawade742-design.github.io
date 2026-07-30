@@ -497,7 +497,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
                 const regPrice = regionalMatrix[regKey];
                 const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
-                const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au'];
+                const explicitScrapedRegions = ['us', 'in', 'uk', 'de', 'ca', 'jp', 'au'];
 
                 if (explicitScrapedRegions.includes(regKey) && regPrice === 'Not Available') {
                     priceTags.forEach(el => {
@@ -521,7 +521,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("{{ product.current_price }}".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("{{ product.get('current_price', product.get('price', '$19.99')) }}".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
