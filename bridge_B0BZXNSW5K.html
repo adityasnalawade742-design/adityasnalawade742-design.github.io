@@ -419,13 +419,9 @@
 
     <script>
         function switchImage(src, btn) {
-            var mainImg = document.getElementById('mainImage');
-            if (mainImg) {
-                var cleanSrc = src.split('?')[0];
-                mainImg.src = cleanSrc + '?t=' + Date.now();
-            }
+            document.getElementById('mainImage').src = src;
             document.querySelectorAll('.img-tab-btn').forEach(b => b.classList.remove('active'));
-            if (btn && btn.classList) btn.classList.add('active');
+            btn.classList.add('active');
         }
 
         // Universal 200+ Country Global Amazon Redirector Engine
