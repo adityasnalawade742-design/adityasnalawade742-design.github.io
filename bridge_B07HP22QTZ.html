@@ -472,12 +472,18 @@
             const currentAsin = "B07HP22QTZ";
             const prodKeywords = encodeURIComponent("Crystal Ball Prism Window Suncatcher");
             const directRegions = ["US", "IN", "GB", "UK", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {"au": "A$14.37", "ca": "CA$14.05", "de": "\u20ac8.75", "in": "\u20b92,762.75", "jp": "\u00a51,634", "uk": "\u00a37.50", "us": "$9.99"};
+            const regionalMatrix = {};
+
+            
+            const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
+            const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "SGD": "S$", "NZD": "NZ$", "CHF": "CHF ", "SEK": "kr ", "AED": "AED ", "SAR": "SAR ", "KRW": "₩" };
+            const countryToCurrencyMap = { "US": "USD", "GB": "GBP", "UK": "GBP", "IN": "INR", "CA": "CAD", "AU": "AUD", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "BE": "EUR", "AT": "EUR", "FI": "EUR", "IE": "EUR", "JP": "JPY", "BR": "BRL", "MX": "MXN", "SG": "SGD", "NZ": "NZD", "CH": "CHF", "SE": "SEK", "AE": "AED", "SA": "SAR", "KR": "KRW" };
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
                 
-                // 🏷️ Dynamic Regional Price Tag Update
+                // 🏷️ Universal Dynamic Price Tag Update for EVERY Country
+                const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
                 const regPrice = regionalMatrix[regKey];
                 const priceTags = document.querySelectorAll('.tag, .hero-price, .cta-price, #heroPriceTag');
@@ -493,6 +499,32 @@
                             el.innerText = 'Not Available';
                         }
                     });
+                } else if (regPrice && regKey !== 'us') {
+                    priceTags.forEach(el => {
+                        if (el.classList.contains('tag')) {
+                            el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
+                        } else {
+                            el.innerText = regPrice;
+                        }
+                    });
+                } else {
+                    const rate = exchangeRates[targetCurr] || 1.0;
+                    const sym = currencySymbols[targetCurr] || (targetCurr + " ");
+                    const baseUsd = parseFloat("".replace(/[^0-9.]/g, '') || '20.00');
+                    const converted = (baseUsd * rate).toLocaleString(undefined, {
+                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
+                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
+                    });
+                    const finalDisplayPrice = `${sym}${converted}`;
+
+                    priceTags.forEach(el => {
+                        if (el.classList.contains('tag')) {
+                            el.innerText = `✨ VERIFIED DEAL • ${finalDisplayPrice}`;
+                        } else {
+                            el.innerText = finalDisplayPrice;
+                        }
+                    });
+                });
                 } else if (regPrice) {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
