@@ -1,111 +1,47 @@
 {
-  "B0DZD1X83N": [
-    "US",
-    "CA"
-  ],
-  "B0BZXNSW5K": [
-    "US",
-    "IN",
+  "B0GYDXHF4G": [],
+  "B0FXLYXM32": [
     "UK",
-    "DE",
-    "SE",
-    "CA",
-    "NL",
-    "FR",
-    "IT",
-    "ES",
-    "BE",
-    "PL"
-  ],
-  "B0D1FRDFFX": [
-    "US",
     "IN",
-    "UK",
     "DE",
-    "SE",
-    "SG",
     "AU",
-    "NL",
-    "FR",
-    "IT",
-    "ES",
-    "BE",
-    "PL"
+    "JP"
   ],
   "B0C2YLN3H4": [
-    "US",
     "IN",
     "DE",
-    "SE",
-    "SG",
-    "CA",
     "AU",
-    "JP",
-    "NL",
-    "FR",
-    "IT",
-    "ES",
-    "BE",
-    "PL"
-  ],
-  "B0GYDXHF4G": [
-    "US"
-  ],
-  "B0FXLYXM32": [
-    "US",
-    "IN",
-    "UK",
-    "DE",
-    "SG",
-    "CA",
-    "AU",
-    "JP",
-    "NL",
-    "FR",
-    "IT",
-    "ES",
-    "BE",
-    "PL"
+    "JP"
   ],
   "B07HP22QTZ": [
-    "US",
+    "UK",
     "IN",
-    "UK",
     "DE",
-    "SE",
-    "SG",
-    "CA",
     "AU",
-    "JP",
-    "NL",
-    "FR",
-    "IT",
-    "ES",
-    "BE",
-    "PL"
-  ],
-  "B0D8P8CSYP": [
-    "US",
-    "IN",
-    "UK",
-    "DE",
-    "SE",
-    "SG",
-    "AU",
-    "JP",
-    "NL",
-    "FR",
-    "IT",
-    "ES",
-    "BE",
-    "PL"
-  ],
-  "B0DLN5S5K9": [
-    "UK",
-    "SE",
     "JP"
+  ],
+  "B0BZXNSW5K": [
+    "UK",
+    "IN",
+    "DE"
   ],
   "B0DXKGL1T2": [
     "UK"
+  ],
+  "B0D1FRDFFX": [
+    "UK",
+    "IN",
+    "DE",
+    "AU"
+  ],
+  "B0D8P8CSYP": [
+    "UK",
+    "IN",
+    "DE",
+    "AU",
+    "JP"
+  ],
+  "B0DZD1X83N": [
+    "US"
   ]
 }
