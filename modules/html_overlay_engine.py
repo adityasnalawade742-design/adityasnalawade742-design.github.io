@@ -330,16 +330,18 @@ def render_html_overlay(
     top_op = scrim["top_opacity"]
     bot_op = scrim["bot_opacity"]
     # Load system-wide saved layout defaults if present
+    # Load system-wide saved layout defaults if present
     defaults_file = Path("G:/CLI/pinterest-auto-affiliate/global_tag_defaults.json")
     if defaults_file.exists():
         try:
             g_def = json.loads(defaults_file.read_text(encoding="utf-8"))
-            if tag_width_px == 380: tag_width_px = int(g_def.get("tag_width", 380))
-            if tag_rotation_deg == -6: tag_rotation_deg = int(g_def.get("tag_rotation", -6))
-            if tag_pos_x is None: tag_pos_x = float(g_def.get("tag_pos_x", 61.0))
-            if tag_pos_y is None: tag_pos_y = float(g_def.get("tag_pos_y", 75.0))
-            if tag_bg_hex is None: tag_bg_hex = g_def.get("tag_color", None)
-            if price_text_color is None: price_text_color = g_def.get("price_text_color", None)
+            if tag_width_px == 380 and "tag_width" in g_def: tag_width_px = int(g_def["tag_width"])
+            if tag_rotation_deg == -6 and "tag_rotation" in g_def: tag_rotation_deg = int(g_def["tag_rotation"])
+            if (tag_pos_x is None or tag_pos_x == 61.0) and "tag_pos_x" in g_def: tag_pos_x = float(g_def["tag_pos_x"])
+            if (tag_pos_y is None or tag_pos_y == 75.0) and "tag_pos_y" in g_def: tag_pos_y = float(g_def["tag_pos_y"])
+            if tag_bg_hex is None and "tag_color" in g_def: tag_bg_hex = g_def["tag_color"]
+            if price_text_color is None and "price_text_color" in g_def: price_text_color = g_def["price_text_color"]
+            if (price_font_scale is None or price_font_scale == 0.38) and "price_font_scale" in g_def: price_font_scale = float(g_def["price_font_scale"])
             if price_text_pos_x is None and "price_text_pos_x" in g_def: price_text_pos_x = float(g_def["price_text_pos_x"])
             if price_text_pos_y is None and "price_text_pos_y" in g_def: price_text_pos_y = float(g_def["price_text_pos_y"])
         except Exception as e_def:
