@@ -509,7 +509,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                             el.innerText = 'Not Available';
                         }
                     });
-                } else if (regPrice && regKey !== 'us') {
+                } else if (regPrice) {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
@@ -585,7 +585,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     }
                 }
             });
-                } else if (regPrice && regKey !== 'us') {
+                } else if (regPrice) {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;

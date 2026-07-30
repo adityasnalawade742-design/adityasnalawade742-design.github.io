@@ -472,7 +472,7 @@
             const currentAsin = "B07HP22QTZ";
             const prodKeywords = encodeURIComponent("Crystal Ball Prism Window Suncatcher");
             const directRegions = ["US", "IN", "GB", "UK", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {"au": "A$14.37", "ca": "CA$14.05", "de": "\u20ac8.75", "in": "\u20b92,762.75", "jp": "\u00a51,634", "uk": "\u00a37.50", "us": "$9.99"};
+            const regionalMatrix = {};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -499,7 +499,7 @@
                             el.innerText = 'Not Available';
                         }
                     });
-                } else if (regPrice && regKey !== 'us') {
+                } else if (regPrice) {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
@@ -575,7 +575,7 @@
                     }
                 }
             });
-                } else if (regPrice && regKey !== 'us') {
+                } else if (regPrice) {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
