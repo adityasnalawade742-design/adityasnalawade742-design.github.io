@@ -56,6 +56,19 @@
             overflow-x: hidden;
         }
 
+        
+        /* Keyboard Focus Navigation Rings (WCAG 2.1 AA) */
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .chip:focus-visible {
+            outline: 2px solid var(--gold-primary) !important;
+            outline-offset: 4px !important;
+            box-shadow: 0 0 16px rgba(255, 183, 3, 0.6) !important;
+        }
+
+        .chip {
+            cursor: pointer;
+            user-select: none;
+        }
+
         /* Top Bar Navigation */
         .top-nav {
             width: 100%;
@@ -518,6 +531,28 @@
             .top-nav { padding: 12px 20px; }
         }
     </style>
+    <!-- Google & Pinterest Rich Snippet Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Cozy Room Finds - Curated Aesthetic Home Decor",
+      "description": "Discover viral aesthetic room upgrades, cozy lighting, bedside lamps, and luxury Amazon home finds.",
+      "url": "https://adityasnalawade742-design.github.io/index.html",
+      "numberOfItems": 9,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Minimalist Wood Base Bedside Table Lamp", "url": "https://adityasnalawade742-design.github.io/bridge_B0DZD1X83N.html" },
+        { "@type": "ListItem", "position": 2, "name": "Flame Aroma Essential Oil Diffuser", "url": "https://adityasnalawade742-design.github.io/bridge_B0GYDXHF4G.html" },
+        { "@type": "ListItem", "position": 3, "name": "White Wavy Wall Vanity Mirror", "url": "https://adityasnalawade742-design.github.io/bridge_B0FXLYXM32.html" },
+        { "@type": "ListItem", "position": 4, "name": "White Ceramic Donut Vase Set of 2", "url": "https://adityasnalawade742-design.github.io/bridge_B0C2YLN3H4.html" },
+        { "@type": "ListItem", "position": 5, "name": "Crystal Prism Window Suncatcher", "url": "https://adityasnalawade742-design.github.io/bridge_B07HP22QTZ.html" },
+        { "@type": "ListItem", "position": 6, "name": "Fenmzee Touch Bedside Table Lamp", "url": "https://adityasnalawade742-design.github.io/bridge_B0BZXNSW5K.html" },
+        { "@type": "ListItem", "position": 7, "name": "Lily of the Valley Flower Table Lamp", "url": "https://adityasnalawade742-design.github.io/bridge_B0DXKGL1T2.html" },
+        { "@type": "ListItem", "position": 8, "name": "Glass Mushroom Table Lamp", "url": "https://adityasnalawade742-design.github.io/bridge_B0D1FRDFFX.html" },
+        { "@type": "ListItem", "position": 9, "name": "Cute Bird Dimmable Touch Night Lamp", "url": "https://adityasnalawade742-design.github.io/bridge_B0D8P8CSYP.html" }
+      ]
+    }
+    </script>
 </head>
 <body>
 
@@ -569,12 +604,12 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Search lamps, mirrors, diffusers, vases..." oninput="filterProducts()">
             <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" style="display:none;">✕</button>
         </div>
-        <div class="category-chips">
-            <div class="chip active" onclick="setCategory('all', this)">✨ All Finds</div>
-            <div class="chip" onclick="setCategory('lighting', this)">🕯️ Lamps & Lighting</div>
-            <div class="chip" onclick="setCategory('mirror', this)">🪞 Mirrors & Wall</div>
-            <div class="chip" onclick="setCategory('vases', this)">🏺 Vases</div>
-            <div class="chip" onclick="setCategory('decor', this)">🌿 Home Decor</div>
+                        <div class="category-chips" role="tablist" aria-label="Product Category Filters">
+            <div class="chip active" tabindex="0" role="tab" aria-selected="true" aria-label="Filter all products" onclick="setCategory('all', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('all', this);event.preventDefault();}">✨ All Finds</div>
+            <div class="chip" tabindex="0" role="tab" aria-selected="false" aria-label="Filter lamps and lighting" onclick="setCategory('lighting', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('lighting', this);event.preventDefault();}">🕯️ Lamps & Lighting</div>
+            <div class="chip" tabindex="0" role="tab" aria-selected="false" aria-label="Filter mirrors and wall decor" onclick="setCategory('mirror', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('mirror', this);event.preventDefault();}">🪞 Mirrors & Wall</div>
+            <div class="chip" tabindex="0" role="tab" aria-selected="false" aria-label="Filter vases" onclick="setCategory('vases', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('vases', this);event.preventDefault();}">🏺 Vases</div>
+            <div class="chip" tabindex="0" role="tab" aria-selected="false" aria-label="Filter home decor" onclick="setCategory('decor', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('decor', this);event.preventDefault();}">🌿 Home Decor</div>
         </div>
         <div id="productCounter" style="color: var(--text-sub); font-size: 13px; font-weight: 600; text-align: center; margin-top: 4px;">
             Showing <span id="visibleCount" style="color: var(--gold-primary); font-weight: 800;">9</span> Curated Finds
@@ -786,10 +821,18 @@
 
         let currentCategory = 'all';
 
-        function setCategory(cat, element) {
+                        function setCategory(cat, element) {
             currentCategory = cat;
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.chip').forEach(c => {
+                c.classList.remove('active');
+                c.setAttribute('aria-selected', 'false');
+            });
             element.classList.add('active');
+            element.setAttribute('aria-selected', 'true');
+            filterProducts();
+        });
+            element.classList.add('active');
+            element.setAttribute('aria-selected', 'true');
             filterProducts();
         }
 
