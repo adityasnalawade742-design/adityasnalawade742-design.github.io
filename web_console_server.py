@@ -188,25 +188,25 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             return super().do_GET()
 
     def do_POST(self):
-        if self.path == '/api/generate':
+        if self.path.startswith('/api/generate'):
             self.handle_api_generate()
             return
-        elif self.path == '/api/batch_extract':
+        elif self.path.startswith('/api/batch_extract'):
             self.handle_api_batch_extract()
             return
-        elif self.path == '/api/batch_generate':
+        elif self.path.startswith('/api/batch_generate'):
             self.handle_api_batch_generate()
             return
-        elif self.path == '/api/delete_homepage_product':
+        elif self.path.startswith('/api/delete_homepage_product'):
             self.handle_api_delete_homepage_product()
             return
-        elif self.path == '/api/preview_overlay':
+        elif self.path.startswith('/api/preview_overlay'):
             self.handle_api_preview_overlay()
             return
-        elif self.path == '/api/sync_prices':
+        elif self.path.startswith('/api/sync_prices'):
             self.handle_api_sync_prices()
             return
-        elif self.path == '/api/customize_tag':
+        elif self.path.startswith('/api/customize_tag'):
             self.handle_api_customize_tag()
             return
         else:
@@ -565,9 +565,14 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+from socketserver import ThreadingMixIn
+
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
+
 def run_server():
-    server = HTTPServer(('localhost', PORT), WebConsoleHandler)
-    print(f"[Web Console] Server running on http://localhost:{PORT}")
+    server = ThreadedHTTPServer(('localhost', PORT), WebConsoleHandler)
+    print(f"[Web Console] Threaded Server running on http://localhost:{PORT}")
     print(f"[Web Console] Open http://localhost:{PORT} in your browser to verify products & images!")
     server.serve_forever()
 

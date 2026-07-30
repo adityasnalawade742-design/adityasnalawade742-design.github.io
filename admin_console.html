@@ -1335,12 +1335,17 @@
             const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '15');
             const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
 
-            document.getElementById('tagSaveSpinner').style.display = 'inline-block';
-            showToast(`Re-rendering Canva graphic (${w}x${h}px, ${rot}°, ${selectedTagColor}) live...`, "🎨");
+            const saveSpinner = document.getElementById('tagSaveSpinner');
+            if (saveSpinner) saveSpinner.style.display = 'inline-block';
+            showToast(`Rendering Canva graphic via Playwright (${w}x${h}px, ${rot}°, ${selectedTagColor})...`, "🎨");
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 45000);
 
             fetch('/api/customize_tag', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     asin: activeTagAsin,
                     tag_width: w,
@@ -1355,21 +1360,27 @@
                     tag_pos_y: currentTagPosY
                 })
             })
-            .then(r => r.json())
+            .then(r => {
+                clearTimeout(timeoutId);
+                if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+                return r.json();
+            })
             .then(data => {
-                document.getElementById('tagSaveSpinner').style.display = 'none';
+                if (saveSpinner) saveSpinner.style.display = 'none';
                 if (data.status === 'success') {
                     document.getElementById('overlayModalImg').src = `${data.image}&t=${Date.now()}`;
                     const hpImg = document.getElementById(`hp-img-${activeTagAsin}`);
                     if (hpImg) hpImg.src = `${data.image}&t=${Date.now()}`;
-                    showToast("Price tag updated live!", "✨");
+                    showToast("Price tag updated & rendered live!", "✨");
                 } else {
                     alert("Error customizing tag: " + data.message);
                 }
             })
             .catch(e => {
-                document.getElementById('tagSaveSpinner').style.display = 'none';
-                alert("Error communicating with server.");
+                clearTimeout(timeoutId);
+                if (saveSpinner) saveSpinner.style.display = 'none';
+                console.error("[Customize Tag Error]", e);
+                alert("Error communicating with server: " + e.message);
             });
         }
 
