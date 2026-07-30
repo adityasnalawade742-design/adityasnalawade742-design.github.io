@@ -597,82 +597,105 @@
 
     <!-- Live Graphic Overlay Preview Modal -->
     <div class="modal" id="overlayModal">
-        <div class="modal-content" style="max-width: 560px; max-height: 90vh; overflow-y: auto; scrollbar-width: thin;">
-            <h3 style="color: var(--gold-primary); margin-bottom: 12px;">🖼️ Canva-Style Live Graphic Overlay Editor</h3>
+        <div class="modal-content" style="max-width: 960px; width: 92vw; max-height: 90vh; overflow-y: auto; scrollbar-width: thin; padding: 24px;">
             
-            <!-- Real-Time Interactive Drag-and-Drop Preview Container -->
-            <div id="previewCanvasContainer" style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); user-select: none;">
-                <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" src="" alt="Overlay Preview">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+                <h3 style="color: var(--gold-primary); font-size: 20px; margin: 0;">🖼️ Canva Studio Pro Overlay Editor</h3>
+                <button type="button" class="btn-action" style="padding: 6px 16px; font-size: 13px; background: rgba(255,255,255,0.1);" onclick="closeOverlayModal()">✕ Close Window</button>
+            </div>
+
+            <!-- 2-Column Pro Studio Layout -->
+            <div style="display: grid; grid-template-columns: minmax(320px, 440px) 1fr; gap: 24px; align-items: start;">
                 
-                <!-- Draggable Price Tag Graphic -->
-                <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 32%; transform: rotate(-6deg); cursor: grab; pointer-events: auto; z-index: 30; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.75)); border: 2px dashed rgba(255, 183, 3, 0.6); border-radius: 12px; padding: 4px; background: rgba(0,0,0,0.25);">
-                    <img id="liveTagImg" src="./price tags/tag 1.png" style="width: 100%; height: auto; object-fit: contain; pointer-events: none;">
-                    <div id="liveTagPriceText" style="position: absolute; top: 56%; left: 50%; transform: translate(-50%, -50%); font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 900; color: #111827; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(255,255,255,0.6);">$20.56</div>
-                    <div style="position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: #fb8500; color: #000; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px; white-space: nowrap; pointer-events: none;">🖐️ DRAG ME</div>
-                </div>
-            </div>
-            
-            <!-- Price Tag Customizer Panel -->
-            <div style="background: rgba(255,255,255,0.05); padding: 14px 18px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="color: var(--gold-primary); font-size: 14px; font-weight: 700;">🏷️ Drag-and-Drop Canva Customizer</div>
-                    <span id="dragPosBadge" style="font-size: 11px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 3px 10px; border-radius: 20px; font-weight: 700;">📍 Position: Default</span>
-                </div>
-
-                <!-- 1. Tag Size Scale -->
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
-                    <label style="font-size: 13px; min-width: 125px; color: #cbd5e1;">Tag Size Scale:</label>
-                    <select id="tagScaleSelect" class="input-field" style="padding: 6px 12px; font-size: 13px; flex: 1;" onchange="updateLiveTagPreview()">
-                        <option value="260x195">Small (260px × 195px)</option>
-                        <option value="320x240">Medium (320px × 240px)</option>
-                        <option value="380x285" selected>Large (380px × 285px) [Default]</option>
-                        <option value="450x337">Extra Large (450px × 337px)</option>
-                        <option value="520x390">Jumbo Bold (520px × 390px)</option>
-                    </select>
-                </div>
-
-                <!-- 2. Tag Rotation Angle -->
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
-                    <label style="font-size: 13px; min-width: 125px; color: #cbd5e1;">Tag Rotation:</label>
-                    <input type="range" id="tagRotationRange" min="-15" max="15" value="-6" style="flex: 1;" oninput="updateLiveTagPreview()">
-                    <span id="tagRotationVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 700; width: 35px;">-6°</span>
-                </div>
-
-                <!-- 3. Tag Background Color -->
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
-                    <label style="font-size: 13px; min-width: 125px; color: #cbd5e1;">Tag Card Color:</label>
-                    <div style="display: flex; gap: 8px; align-items: center; flex: 1;">
-                        <button type="button" title="Amber Gold" style="width: 22px; height: 22px; border-radius: 50%; background: #fb8500; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#fb8500')"></button>
-                        <button type="button" title="Cyber Coral" style="width: 22px; height: 22px; border-radius: 50%; background: #ff0055; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#ff0055')"></button>
-                        <button type="button" title="Royal Violet" style="width: 22px; height: 22px; border-radius: 50%; background: #7a00ff; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#7a00ff')"></button>
-                        <button type="button" title="Emerald Mint" style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#10b981')"></button>
-                        <button type="button" title="Pearl White" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#ffffff')"></button>
-                        <button type="button" title="Obsidian Dark" style="width: 22px; height: 22px; border-radius: 50%; background: #111827; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#111827')"></button>
-                        <input type="color" id="tagCustomColorInput" value="#fb8500" style="width: 28px; height: 24px; border: none; cursor: pointer; background: none;" onchange="setTagColor(this.value)">
+                <!-- LEFT COLUMN: HUGE HIGH-DEF 3:4 PREVIEW CANVAS -->
+                <div>
+                    <div style="font-size: 12px; color: var(--gold-primary); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                        📸 High-Definition Canvas (Drag Price Tag Below)
+                    </div>
+                    <div id="previewCanvasContainer" style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 18px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.7); user-select: none; border: 2px solid rgba(255,255,255,0.15);">
+                        <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" src="" alt="Overlay Preview">
+                        
+                        <!-- Draggable Price Tag Graphic -->
+                        <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 34%; transform: rotate(-6deg); cursor: grab; pointer-events: auto; z-index: 30; filter: drop-shadow(0 14px 28px rgba(0,0,0,0.8)); border: 2px dashed rgba(255, 183, 3, 0.7); border-radius: 12px; padding: 4px; background: rgba(0,0,0,0.3);">
+                            <img id="liveTagImg" src="./price tags/tag 1.png" style="width: 100%; height: auto; object-fit: contain; pointer-events: none;">
+                            <div id="liveTagPriceText" style="position: absolute; top: 56%; left: 50%; transform: translate(-50%, -50%); font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 900; color: #111827; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(255,255,255,0.6);">$20.56</div>
+                            <div style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: #fb8500; color: #000; font-size: 10.5px; font-weight: 800; padding: 3px 10px; border-radius: 20px; white-space: nowrap; pointer-events: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">🖐️ DRAG ME ANYWHERE</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 4. Price Text Size Scale -->
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
-                    <label style="font-size: 13px; min-width: 125px; color: #cbd5e1;">Price Text Size:</label>
-                    <input type="range" id="priceTextScaleRange" min="25" max="55" value="38" style="flex: 1;" oninput="updateLiveTagPreview()">
-                    <span id="priceTextScaleVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 700; width: 35px;">38%</span>
+                <!-- RIGHT COLUMN: SCROLLABLE CANVA CONTROLS SIDEBAR -->
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="background: rgba(255,255,255,0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                            <div style="color: var(--gold-primary); font-size: 15px; font-weight: 800;">⚙️ Graphic Controls</div>
+                            <span id="dragPosBadge" style="font-size: 11.5px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 4px 12px; border-radius: 20px; font-weight: 700;">📍 Position: Default</span>
+                        </div>
+
+                        <!-- 1. Tag Size Scale -->
+                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">1. Tag Badge Scale:</label>
+                            <select id="tagScaleSelect" class="input-field" style="padding: 8px 12px; font-size: 13.5px; width: 100%;" onchange="updateLiveTagPreview()">
+                                <option value="260x195">Small (260px × 195px)</option>
+                                <option value="320x240">Medium (320px × 240px)</option>
+                                <option value="380x285" selected>Large (380px × 285px) [Default]</option>
+                                <option value="450x337">Extra Large (450px × 337px)</option>
+                                <option value="520x390">Jumbo Bold (520px × 390px)</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Tag Rotation Angle -->
+                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">2. Tag Rotation Tilt:</label>
+                                <span id="tagRotationVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 800;">-6°</span>
+                            </div>
+                            <input type="range" id="tagRotationRange" min="-15" max="15" value="-6" style="width: 100%;" oninput="updateLiveTagPreview()">
+                        </div>
+
+                        <!-- 3. Tag Background Color -->
+                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">3. Tag Card Theme Color:</label>
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button type="button" title="Amber Gold" style="width: 28px; height: 28px; border-radius: 50%; background: #fb8500; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#fb8500')"></button>
+                                <button type="button" title="Cyber Coral" style="width: 28px; height: 28px; border-radius: 50%; background: #ff0055; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#ff0055')"></button>
+                                <button type="button" title="Royal Violet" style="width: 28px; height: 28px; border-radius: 50%; background: #7a00ff; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#7a00ff')"></button>
+                                <button type="button" title="Emerald Mint" style="width: 28px; height: 28px; border-radius: 50%; background: #10b981; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#10b981')"></button>
+                                <button type="button" title="Pearl White" style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#ffffff')"></button>
+                                <button type="button" title="Obsidian Dark" style="width: 28px; height: 28px; border-radius: 50%; background: #111827; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#111827')"></button>
+                                <input type="color" id="tagCustomColorInput" value="#fb8500" style="width: 34px; height: 28px; border: none; cursor: pointer; background: none;" onchange="setTagColor(this.value)">
+                            </div>
+                        </div>
+
+                        <!-- 4. Price Text Size Scale -->
+                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">4. Price Text Size:</label>
+                                <span id="priceTextScaleVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 800;">38%</span>
+                            </div>
+                            <input type="range" id="priceTextScaleRange" min="25" max="55" value="38" style="width: 100%;" oninput="updateLiveTagPreview()">
+                        </div>
+
+                        <!-- 5. Price Text Color -->
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">5. Price Text Color:</label>
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button type="button" title="Dark Obsidian" style="width: 28px; height: 28px; border-radius: 50%; background: #111827; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#111827')"></button>
+                                <button type="button" title="Pure White" style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ffffff')"></button>
+                                <button type="button" title="Amber Gold" style="width: 28px; height: 28px; border-radius: 50%; background: #fb8500; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#fb8500')"></button>
+                                <button type="button" title="Cyber Pink" style="width: 28px; height: 28px; border-radius: 50%; background: #ff0055; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ff0055')"></button>
+                                <input type="color" id="priceTextColorInput" value="#111827" style="width: 34px; height: 28px; border: none; cursor: pointer; background: none;" onchange="setPriceTextColor(this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Action Button -->
+                    <div id="modalSaveActionBox"></div>
+
                 </div>
 
-                <!-- 5. Price Text Color -->
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <label style="font-size: 13px; min-width: 125px; color: #cbd5e1;">Price Text Color:</label>
-                    <div style="display: flex; gap: 8px; align-items: center; flex: 1;">
-                        <button type="button" title="Dark Obsidian" style="width: 22px; height: 22px; border-radius: 50%; background: #111827; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#111827')"></button>
-                        <button type="button" title="Pure White" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ffffff')"></button>
-                        <button type="button" title="Amber Gold" style="width: 22px; height: 22px; border-radius: 50%; background: #fb8500; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#fb8500')"></button>
-                        <button type="button" title="Cyber Pink" style="width: 22px; height: 22px; border-radius: 50%; background: #ff0055; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ff0055')"></button>
-                        <input type="color" id="priceTextColorInput" value="#111827" style="width: 28px; height: 24px; border: none; cursor: pointer; background: none;" onchange="setPriceTextColor(this.value)">
-                    </div>
-                </div>
             </div>
 
-            <button class="btn-action" style="width: 100%; margin-top: 8px;" onclick="closeOverlayModal()">Close Preview</button>
         </div>
     </div>
         </div>
@@ -1228,18 +1251,19 @@
             updateLiveTagPreview();
             setTimeout(initDragAndDrop, 100);
             
-            // Set save button inside modal
+            // Set save button inside modal action box
             let saveBtn = document.getElementById('saveTagBtn');
+            const actionBox = document.getElementById('modalSaveActionBox') || document.querySelector('#overlayModal .modal-content');
             if (!saveBtn) {
-                const modalContent = document.querySelector('#overlayModal .modal-content');
                 saveBtn = document.createElement('button');
                 saveBtn.id = 'saveTagBtn';
                 saveBtn.className = 'btn-action btn-success';
                 saveBtn.style.width = '100%';
-                saveBtn.style.marginBottom = '10px';
-                saveBtn.innerHTML = '<div class="spinner" id="tagSaveSpinner"></div><span>🚀 Re-Render & Save Tag Live</span>';
+                saveBtn.style.padding = '12px 20px';
+                saveBtn.style.fontSize = '14px';
+                saveBtn.innerHTML = '<div class="spinner" id="tagSaveSpinner"></div><span>🚀 Re-Render & Save Graphic Live</span>';
                 saveBtn.onclick = saveTagCustomization;
-                modalContent.appendChild(saveBtn);
+                actionBox.appendChild(saveBtn);
             }
         }
 
