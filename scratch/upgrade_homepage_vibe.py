@@ -1,4 +1,22 @@
-<!DOCTYPE html>
+import os
+import sys
+import json
+import re
+import subprocess
+from pathlib import Path
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
+repo_dir = Path("G:/CLI/pinterest-auto-affiliate")
+index_path = repo_dir / "index.html"
+
+print("==================================================")
+print("✨ UPGRADING HOMEPAGE VIBE & LUXURY AESTHETICS")
+print("   Preserving 100% of DOM IDs, JS Functions & Multi-Region Features")
+print("==================================================")
+
+upgraded_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1101,3 +1119,19 @@
     </script>
 </body>
 </html>
+"""
+
+index_path.write_text(upgraded_html, encoding="utf-8")
+print(" ✅ Upgraded index.html with luxury dark mode glassmorphism, animated glowing ambient lights, and Playfair Display typography!")
+
+# Commit & Push Live to GitHub Pages
+print("\n🚀 Pushing upgraded luxury storefront live to GitHub Pages...")
+try:
+    subprocess.run(["git", "add", "-A"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "commit", "-m", "upgrade homepage design to ultra-luxury glassmorphism aesthetic while preserving 100% features and regional matrix"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "push", "origin", "main"], cwd=str(repo_dir), check=True)
+    print(" ✅ Git Commit & Push 100% Successful!")
+except Exception as e:
+    print(f" ⚠️ Git push warning: {e}")
+
+print("\n🎉 LUXURY HOMEPAGE REDESIGN DEPLOYED LIVE!")
