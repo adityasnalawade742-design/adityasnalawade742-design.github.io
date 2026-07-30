@@ -614,13 +614,6 @@
                     </div>
                     <div id="previewCanvasContainer" style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 18px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.7); user-select: none; border: 2px solid rgba(255,255,255,0.15);">
                         <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" src="" alt="Overlay Preview">
-                        
-                        <!-- Draggable Headline Text Block -->
-                        <div id="liveHeadlineOverlay" style="position: absolute; top: 6%; left: 5%; right: 5%; cursor: grab; pointer-events: auto; z-index: 25; text-align: center; border: 2px dashed rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 6px; background: rgba(0,0,0,0.35);">
-                            <div style="font-size: 10.5px; font-weight: 800; background: rgba(255, 255, 255, 0.25); color: #fff; padding: 2px 10px; border-radius: 20px; letter-spacing: 2px; text-transform: uppercase; display: inline-block; margin-bottom: 6px;">VIRAL FIND</div>
-                            <div id="liveHeadlineText" style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.9); line-height: 1.15; pointer-events: none;">Cute Bird Touch Lamp</div>
-                            <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: #fff; font-size: 9.5px; font-weight: 800; padding: 2px 8px; border-radius: 20px; white-space: nowrap; pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,0.5);">🖐️ DRAG HEADLINE TEXT</div>
-                        </div>
 
                         <!-- Draggable Price Tag Graphic -->
                         <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 34%; transform: rotate(-6deg); cursor: grab; pointer-events: auto; z-index: 30; filter: drop-shadow(0 14px 28px rgba(0,0,0,0.8)); border: 2px dashed rgba(255, 183, 3, 0.7); border-radius: 12px; padding: 4px; background: rgba(0,0,0,0.3);">
@@ -635,27 +628,8 @@
                 <div style="display: flex; flex-direction: column; gap: 16px;">
                     <div style="background: rgba(255,255,255,0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                            <div style="color: var(--gold-primary); font-size: 15px; font-weight: 800;">⚙️ Canva Graphic Controls</div>
+                            <div style="color: var(--gold-primary); font-size: 15px; font-weight: 800;">⚙️ Price Tag Controls</div>
                             <span id="dragPosBadge" style="font-size: 11.5px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 4px 12px; border-radius: 20px; font-weight: 700;">📍 Tag: Default</span>
-                        </div>
-
-                        <!-- 1. Headline Text Controls -->
-                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 12px; border-radius: 12px; margin-bottom: 14px;">
-                            <div style="color: #60a5fa; font-size: 13px; font-weight: 800; margin-bottom: 8px;">📝 Headline Text Positioning & Styling</div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                                <label style="font-size: 12px; color: #cbd5e1;">Headline Font Size:</label>
-                                <span id="headlineSizeVal" style="font-size: 12px; color: #60a5fa; font-weight: 800;">56px</span>
-                            </div>
-                            <input type="range" id="headlineSizeRange" min="30" max="90" value="56" style="width: 100%; margin-bottom: 8px;" oninput="updateLiveTagPreview()">
-                            
-                            <div style="display: flex; gap: 8px; align-items: center;">
-                                <label style="font-size: 12px; color: #cbd5e1;">Text Color:</label>
-                                <button type="button" title="White" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 1px solid #fff; cursor: pointer;" onclick="setHeadlineColor('#ffffff')"></button>
-                                <button type="button" title="Gold" style="width: 22px; height: 22px; border-radius: 50%; background: #fb8500; border: 1px solid #fff; cursor: pointer;" onclick="setHeadlineColor('#fb8500')"></button>
-                                <button type="button" title="Pink" style="width: 22px; height: 22px; border-radius: 50%; background: #ff0055; border: 1px solid #fff; cursor: pointer;" onclick="setHeadlineColor('#ff0055')"></button>
-                                <button type="button" title="Mint" style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 1px solid #fff; cursor: pointer;" onclick="setHeadlineColor('#10b981')"></button>
-                                <input type="color" id="headlineColorInput" value="#ffffff" style="width: 28px; height: 22px; border: none; cursor: pointer; background: none;" onchange="setHeadlineColor(this.value)">
-                            </div>
                         </div>
 
                         <!-- 1. Tag Size Scale -->
@@ -1225,55 +1199,6 @@
                 priceEl.style.top = `${shiftYPercent}%`;
                 priceEl.style.left = `${shiftXPercent}%`;
             }
-
-            const hlEl = document.getElementById('liveHeadlineText');
-            if (hlEl) {
-                const calculatedHlPx = Math.round(24 * (headlineSize / 56.0));
-                hlEl.style.fontSize = `${calculatedHlPx}px`;
-                hlEl.style.color = selectedHeadlineColor;
-            }
-        }
-
-        function initHeadlineDragAndDrop() {
-            const hl = document.getElementById('liveHeadlineOverlay');
-            const container = document.getElementById('previewCanvasContainer');
-            if (!hl || !container) return;
-
-            function startHlDrag(e) {
-                isDraggingHeadline = true;
-                hl.style.cursor = 'grabbing';
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                hlDragStartY = clientY;
-                const cRect = container.getBoundingClientRect();
-                const hRect = hl.getBoundingClientRect();
-                hlInitialTop = ((hRect.top - cRect.top) / cRect.height) * 100;
-            }
-
-            function moveHlDrag(e) {
-                if (!isDraggingHeadline) return;
-                e.preventDefault();
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                const cRect = container.getBoundingClientRect();
-                const deltaY = ((clientY - hlDragStartY) / cRect.height) * 100;
-                let newTop = Math.max(2, Math.min(80, hlInitialTop + deltaY));
-                currentHeadlinePosY = parseFloat(newTop.toFixed(1));
-                hl.style.top = `${currentHeadlinePosY}%`;
-                showToast(`Headline Position Top: ${currentHeadlinePosY}%`, "📝");
-            }
-
-            function endHlDrag() {
-                if (isDraggingHeadline) {
-                    isDraggingHeadline = false;
-                    hl.style.cursor = 'grab';
-                }
-            }
-
-            hl.onmousedown = startHlDrag;
-            hl.ontouchstart = startHlDrag;
-            window.addEventListener('mousemove', moveHlDrag);
-            window.addEventListener('touchmove', moveHlDrag);
-            window.addEventListener('mouseup', endHlDrag);
-            window.addEventListener('touchend', endHlDrag);
         }
 
         function initDragAndDrop() {
@@ -1337,8 +1262,6 @@
 
             window.onmouseup = endDrag;
             window.ontouchend = endDrag;
-
-            initHeadlineDragAndDrop();
         }
 
         function openTagEditorModal(asin, title, price) {
