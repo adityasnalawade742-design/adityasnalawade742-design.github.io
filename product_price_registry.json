@@ -37,7 +37,10 @@
     "hook_image": "focus_product_B0FXLYXM32_hook.jpg",
     "bridge_page": "bridge_B0FXLYXM32.html",
     "regional_prices": {
-      "IN": "Not Available"
+      "IN": "Not Available",
+      "UK": "INR16,179.25",
+      "DE": "INR13,162.19",
+      "JP": "\u00a524,243"
     },
     "search_keywords": "White Wavy Wall Body Standing Mirror"
   },
@@ -59,7 +62,9 @@
     "bridge_page": "bridge_B0C2YLN3H4.html",
     "last_updated": "2026-07-29T12:05:24.358736",
     "regional_prices": {
-      "IN": "\u20b9599.00"
+      "IN": "\u20b9599.00",
+      "AU": "$26.88",
+      "JP": "\u00a54,664"
     },
     "search_keywords": "White Ceramic Donut Flower Vase Set"
   },
@@ -81,7 +86,10 @@
     "bridge_page": "bridge_B07HP22QTZ.html",
     "regional_prices": {
       "IN": "\u20b92,762.75",
-      "US": "$9.99"
+      "US": "$9.99",
+      "UK": "INR1,571.67",
+      "AU": "$30.48",
+      "JP": "\u00a53,651"
     },
     "search_keywords": "Crystal Ball Prism Window Suncatcher"
   },
@@ -102,7 +110,8 @@
     "hook_image": "focus_product_B0BZXNSW5K_hook.jpg",
     "bridge_page": "bridge_B0BZXNSW5K.html",
     "regional_prices": {
-      "IN": "\u20b9475.00"
+      "IN": "\u20b9475.00",
+      "UK": "INR2,553.00"
     },
     "search_keywords": "Touch Control Dimmable Bedside Table Lamp"
   },
@@ -124,7 +133,8 @@
     "bridge_page": "bridge_B0DXKGL1T2.html",
     "last_updated": "2026-07-29T12:06:03.990914",
     "regional_prices": {
-      "IN": "Not Available"
+      "IN": "Not Available",
+      "UK": "INR4,648.56"
     },
     "search_keywords": "Lily of the Valley Flower Table Lamp"
   },
@@ -145,7 +155,9 @@
     "hook_image": "focus_product_B0D1FRDFFX_hook.jpg",
     "bridge_page": "bridge_B0D1FRDFFX.html",
     "regional_prices": {
-      "IN": "\u20b911,428.51"
+      "IN": "\u20b911,428.51",
+      "UK": "INR5,237.62",
+      "DE": "INR3,723.54"
     },
     "search_keywords": "Glass Mushroom Desk Table Lamp"
   },
@@ -166,7 +178,9 @@
     "hook_image": "focus_product_B0D8P8CSYP_hook.jpg",
     "bridge_page": "bridge_B0D8P8CSYP.html",
     "regional_prices": {
-      "IN": "\u20b93,843.00"
+      "IN": "\u20b93,843.00",
+      "UK": "INR2,790.67",
+      "DE": "INR3,285.34"
     },
     "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp"
   }
