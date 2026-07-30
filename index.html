@@ -528,25 +528,25 @@
             <span class="search-icon">🔍</span>
             <input type="text" id="searchInput" class="search-input" placeholder="Search lamps, mirrors, diffusers, vases..." onkeyup="filterProducts()">
         </div>
-        <div class="category-chips">
+                <div class="category-chips">
             <div class="chip active" onclick="setCategory('all', this)">✨ All Finds</div>
             <div class="chip" onclick="setCategory('lighting', this)">🕯️ Lamps & Lighting</div>
             <div class="chip" onclick="setCategory('mirror', this)">🪞 Mirrors & Wall</div>
-            <div class="chip" onclick="setCategory('decor', this)">🏺 Vases & Decor</div>
-            <div class="chip" onclick="setCategory('desk', this)">✨ Desk Accessories</div>
+            <div class="chip" onclick="setCategory('vases', this)">🏺 Vases</div>
+            <div class="chip" onclick="setCategory('decor', this)">🌿 Home Decor</div>
         </div>
     </section>
 
-    <!-- Product Grid Gallery -->
+        <!-- Product Grid Gallery -->
     <main class="grid" id="productGrid">
 
-        <!-- Card B0DZD1X83N (Minimalist Bedside Lamp) -->
+        <!-- Card B0DZD1X83N (Minimalist Wood Base Lamp) -->
         <div class="card-wrapper" id="card-B0DZD1X83N" data-base-usd="12.99" data-category="lighting">
             <a class="card" href="./bridge_B0DZD1X83N.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$12.99</div>
                     <div class="card-rating">★ 4.6</div>
-                    <img src="./focus_product_B0DZD1X83N_hook.jpg?v=lamp_v1" alt="9 Inch Small Minimalist Table Lamp for Bedroom Wood Base">
+                    <img src="./focus_product_B0DZD1X83N_hook.jpg?v=1785412334" alt="Minimalist Wood Base Bedside Table Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Minimalist Wood Base Bedside Table Lamp</h2>
@@ -565,25 +565,26 @@
                 <div class="card-img-container">
                     <div class="card-price-tag">$35.00</div>
                     <div class="card-rating">★ 4.9</div>
-                    <img src="./focus_product_B0GYDXHF4G_hook.jpg?v=diffuser_fresh_v14" alt="Flame Aroma Essential Oil Diffuser Dark Crackle">
+                    <img src="./focus_product_B0GYDXHF4G_hook.jpg?v=1785412334" alt="Flame Aroma Essential Oil Diffuser">
                 </div>
                 <div class="card-content">
-                    <h2>Flame Aroma Essential Oil Diffuser Dark Crackle</h2>
+                    <h2>Flame Aroma Essential Oil Diffuser</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0GYDXHF4G', 'card-B0GYDXHF4G')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0FXLYXM32 (Wavy Mirror) -->
-        <div class="card-wrapper" id="card-B0FXLYXM32" data-base-usd="76.49" data-category="mirror">
+        <div class="card-wrapper" id="card-B0FXLYXM32" data-base-usd="76.49" data-category="mirror mirrors decor">
             <a class="card" href="./bridge_B0FXLYXM32.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$76.49</div>
                     <div class="card-rating">★ 4.8</div>
-                    <img src="./focus_product_B0FXLYXM32_hook.jpg?v=nosub_wavy_v11" alt="White Wavy Wall Vanity Mirror">
+                    <img src="./focus_product_B0FXLYXM32_hook.jpg?v=1785412334" alt="White Wavy Wall Vanity Mirror">
                 </div>
                 <div class="card-content">
                     <h2>White Wavy Wall Vanity Mirror</h2>
@@ -593,15 +594,16 @@
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0FXLYXM32', 'card-B0FXLYXM32')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0C2YLN3H4 (Donut Vases) -->
-        <div class="card-wrapper" id="card-B0C2YLN3H4" data-base-usd="14.99" data-category="decor">
+        <div class="card-wrapper" id="card-B0C2YLN3H4" data-base-usd="14.99" data-category="vases decor">
             <a class="card" href="./bridge_B0C2YLN3H4.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$14.99</div>
-                    <div class="card-rating">★ 4.7</div>
-                    <img src="./focus_product_B0C2YLN3H4_exact2vases_hook.jpg?v=user_flux_v19" alt="White Ceramic Donut Vase Set of 2">
+                    <div class="card-rating">★ 4.9</div>
+                    <img src="./focus_product_B0C2YLN3H4_exact2vases_hook.jpg?v=1785412334" alt="White Ceramic Donut Vase Set of 2">
                 </div>
                 <div class="card-content">
                     <h2>White Ceramic Donut Vase Set of 2</h2>
@@ -611,6 +613,7 @@
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0C2YLN3H4', 'card-B0C2YLN3H4')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B07HP22QTZ (Crystal Suncatcher) -->
@@ -619,7 +622,7 @@
                 <div class="card-img-container">
                     <div class="card-price-tag">$9.99</div>
                     <div class="card-rating">★ 4.9</div>
-                    <img src="./focus_product_B07HP22QTZ_hook.jpg?v=master_vision_v6" alt="Suncatcher Crystal Ball Prism Window Rainbow Maker">
+                    <img src="./focus_product_B07HP22QTZ_hook.jpg?v=1785412334" alt="Crystal Prism Window Suncatcher">
                 </div>
                 <div class="card-content">
                     <h2>Crystal Prism Window Suncatcher</h2>
@@ -629,6 +632,7 @@
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B07HP22QTZ', 'card-B07HP22QTZ')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0BZXNSW5K (Bedside Touch Lamp) -->
@@ -636,17 +640,18 @@
             <a class="card" href="./bridge_B0BZXNSW5K.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$19.99</div>
-                    <div class="card-rating">★ 4.7</div>
-                    <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=1785411119" alt="Fenmzee Bedside Table Touch Lamp">
+                    <div class="card-rating">★ 4.5</div>
+                    <img src="./focus_product_B0BZXNSW5K_hook.jpg?v=1785412334" alt="Fenmzee Touch Bedside Table Lamp">
                 </div>
                 <div class="card-content">
-                    <h2>Fenmzee Bedside Table Touch Lamp</h2>
+                    <h2>Fenmzee Touch Bedside Table Lamp</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0BZXNSW5K', 'card-B0BZXNSW5K')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0DXKGL1T2 (Lily of the Valley Lamp) -->
@@ -655,7 +660,7 @@
                 <div class="card-img-container">
                     <div class="card-price-tag">$38.57</div>
                     <div class="card-rating">★ 4.8</div>
-                    <img src="./focus_product_B0DXKGL1T2_hook.jpg?v=nosub" alt="Lily of the Valley Flower Table Lamp">
+                    <img src="./focus_product_B0DXKGL1T2_hook.jpg?v=1785412334" alt="Lily of the Valley Flower Table Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Lily of the Valley Flower Table Lamp</h2>
@@ -665,24 +670,26 @@
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0DXKGL1T2', 'card-B0DXKGL1T2')">🗑️ Delete Product</button>
         </div>
 
-        <!-- Card B0D1FRDFFX (Mushroom Lamp) -->
+        <!-- Card B0D1FRDFFX (Glass Mushroom Lamp) -->
         <div class="card-wrapper" id="card-B0D1FRDFFX" data-base-usd="35.98" data-category="lighting">
             <a class="card" href="./bridge_B0D1FRDFFX.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$35.98</div>
-                    <div class="card-rating">★ 4.9</div>
-                    <img src="./focus_product_B0D1FRDFFX_hook.jpg" alt="Dawnwake Mushroom Touch Table Lamp">
+                    <div class="card-rating">★ 4.8</div>
+                    <img src="./focus_product_B0D1FRDFFX_hook.jpg?v=1785412334" alt="Glass Mushroom Table Lamp">
                 </div>
                 <div class="card-content">
-                    <h2>Dawnwake Mushroom Touch Table Lamp</h2>
+                    <h2>Glass Mushroom Table Lamp</h2>
                     <div class="card-cta">
                         <span>View Details</span>
                         <span class="arrow">→</span>
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0D1FRDFFX', 'card-B0D1FRDFFX')">🗑️ Delete Product</button>
         </div>
 
         <!-- Card B0D8P8CSYP (Cute Bird Lamp) -->
@@ -691,7 +698,7 @@
                 <div class="card-img-container">
                     <div class="card-price-tag">$20.56</div>
                     <div class="card-rating">★ 4.8</div>
-                    <img id="hp-img-B0D8P8CSYP" src="./focus_product_B0D8P8CSYP_hook.jpg?v=1785409809" alt="Cute Bird Dimmable Touch Night Lamp">
+                    <img src="./focus_product_B0D8P8CSYP_hook.jpg?v=1785412334" alt="Cute Bird Dimmable Touch Night Lamp">
                 </div>
                 <div class="card-content">
                     <h2>Cute Bird Dimmable Touch Night Lamp</h2>
@@ -701,6 +708,7 @@
                     </div>
                 </div>
             </a>
+            <button class="delete-btn" onclick="deleteCard('B0D8P8CSYP', 'card-B0D8P8CSYP')">🗑️ Delete Product</button>
         </div>
 
     </main>
