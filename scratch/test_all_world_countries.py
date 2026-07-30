@@ -32,9 +32,9 @@ def test_global_reach():
             page.goto(f"file:///G:/CLI/pinterest-auto-affiliate/bridge_B0C2YLN3H4.html?country={country}")
             time.sleep(0.5)
 
-            badge_text = page.inner_text(".tag")
-            print(f" Country: {country:3s} ({curr:3s}) -> Landing Page Tag: '{badge_text}'")
-            assert expected_sym in badge_text or "NOT AVAILABLE" in badge_text or curr in badge_text
+            badge_text = page.inner_text(".price")
+            print(f" Country: {country:3s} ({curr:3s}) -> Hero Price: '{badge_text}'")
+            assert expected_sym in badge_text or "NOT AVAILABLE" in badge_text or curr in badge_text or "Not Available" in badge_text
 
         browser.close()
         print("\n==================================================")

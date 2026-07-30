@@ -496,7 +496,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
                 const regPrice = regionalMatrix[regKey];
-                const priceTags = document.querySelectorAll('.tag, .hero-price, .cta-price, #heroPriceTag');
+                const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
 
                 if (regPrice === 'Not Available') {
                     priceTags.forEach(el => {
