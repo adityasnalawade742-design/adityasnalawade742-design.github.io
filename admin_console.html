@@ -1288,10 +1288,10 @@
 
         function openTagEditorModal(asin, title, price) {
             activeTagAsin = asin;
-            currentTagPosX = null;
-            currentTagPosY = null;
+            currentTagPosX = 61.0;
+            currentTagPosY = 75.0;
             if (document.getElementById('dragPosBadge')) {
-                document.getElementById('dragPosBadge').innerText = "📍 Tag: Default";
+                document.getElementById('dragPosBadge').innerText = "📍 Tag: Default (X=61%, Y=75%)";
             }
 
             const tag = document.getElementById('liveTagOverlay');

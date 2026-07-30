@@ -217,8 +217,12 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
         except Exception:
             font = ImageFont.load_default()
             
-        # Draw contrasting price text at the EXACT custom offset position inside tag
-        draw.text((center_x + price_text_offset_x, center_y + price_text_offset_y), price_str, fill=text_color, font=font, anchor="mm")
+        # Draw contrasting price text at the EXACT custom offset position inside tag (scaled to high-res PNG)
+        scale_ratio = card_width / 260.0
+        calc_offset_x = int(price_text_offset_x * scale_ratio)
+        calc_offset_y = int(price_text_offset_y * scale_ratio)
+
+        draw.text((center_x + calc_offset_x, center_y + calc_offset_y), price_str, fill=text_color, font=font, anchor="mm")
         
         stamped_path = Path(tag_path).parent / "stamped_ambient_tag.png"
         img.save(stamped_path, format="PNG")
@@ -232,21 +236,20 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
 
 
 def render_html_overlay(
-
     image_path: str,
     headline: str,
     subtitle: str = "",
-    badge_text: str = "AMAZON HOME FIND",
+    badge_text: str = "VIRAL FIND",
     price_str: str = "$19.99",
     features: list = None,
     output_path: str = None,
     theme: str = "floating_luxury",
-    enable_ai_designer: bool = True,
-    tag_width_px: int = 360,
-    tag_height_px: int = 270,
+    enable_ai_designer: bool = False,
+    tag_width_px: int = 380,
+    tag_height_px: int = 285,
     tag_rotation_deg: int = -6,
-    tag_pos_x: float = None,
-    tag_pos_y: float = None,
+    tag_pos_x: float = 61.0,
+    tag_pos_y: float = 75.0,
     tag_bg_hex: str = None,
     price_text_color: str = None,
     price_font_scale: float = 0.38,
@@ -263,12 +266,14 @@ def render_html_overlay(
     """
     ai_recommendation = None
     if enable_ai_designer:
-        custom_tag_p = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
-        if custom_tag_p.exists():
-            ai_recommendation = analyze_tag_and_room_with_gemini(image_path, str(custom_tag_p))
+        try:
+            from modules.ai_art_director import analyze_product_image_for_overlay
+            ai_recommendation = analyze_product_image_for_overlay(image_path)
+        except Exception as e_ai:
+            print(f"[HTML Overlay Engine] ⚠️ AI Director fallback: {e_ai}")
 
-        if ai_recommendation:
-            theme = ai_recommendation.get("theme_style", theme)
+    if ai_recommendation:
+        theme = ai_recommendation.get("theme_style", theme)
 
     if features is None:
         features = ["PREMIUM MATERIALS", "WARM AMBIENT GLOW", "STYLISH DECOR", "PERFECT GIFT"]
@@ -327,10 +332,10 @@ def render_html_overlay(
     if custom_tag_path.exists():
         stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale, price_text_offset_x=price_text_offset_x, price_text_offset_y=price_text_offset_y)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
-        if tag_pos_x is not None and tag_pos_y is not None:
-            pos_style = f"position: absolute; left: {tag_pos_x}%; top: {tag_pos_y}%; z-index: 20;"
-        else:
-            pos_style = "position: relative;"
+        
+        posX = tag_pos_x if tag_pos_x is not None else 61.0
+        posY = tag_pos_y if tag_pos_y is not None else 75.0
+        pos_style = f"position: absolute; left: {posX}%; top: {posY}%; z-index: 20;"
 
         price_pill_html = f"""
         <div class="custom-price-container" style="{pos_style} width: {tag_width_px}px; height: {tag_height_px}px; display: flex; align-items: center; justify-content: center; transform: rotate({tag_rotation_deg}deg); filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75));">
