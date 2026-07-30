@@ -499,6 +499,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             price_text_offset_y = int(data.get('price_text_offset_y', 15))
             tag_pos_x = float(data['tag_pos_x']) if 'tag_pos_x' in data and data['tag_pos_x'] is not None else None
             tag_pos_y = float(data['tag_pos_y']) if 'tag_pos_y' in data and data['tag_pos_y'] is not None else None
+            price_text_pos_x = float(data['price_text_pos_x']) if 'price_text_pos_x' in data and data['price_text_pos_x'] is not None else None
+            price_text_pos_y = float(data['price_text_pos_y']) if 'price_text_pos_y' in data and data['price_text_pos_y'] is not None else None
             headline_pos_y = float(data['headline_pos_y']) if 'headline_pos_y' in data and data['headline_pos_y'] is not None else None
             headline_color = data.get('headline_color', None)
             headline_size_px = int(data['headline_size_px']) if 'headline_size_px' in data and data['headline_size_px'] is not None else None
@@ -535,7 +537,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 headline_color=headline_color,
                 headline_size_px=headline_size_px,
                 price_text_offset_x=price_text_offset_x,
-                price_text_offset_y=price_text_offset_y
+                price_text_offset_y=price_text_offset_y,
+                price_text_pos_x=price_text_pos_x,
+                price_text_pos_y=price_text_pos_y
             )
 
             # Update cache-busted v param in bridge page and index.html
@@ -554,6 +558,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}", 'message': 'changed published'})
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             print(f"[Customize Tag Error] {e}")
             self.send_json({'status': 'error', 'message': str(e)})
 

@@ -260,7 +260,9 @@ def render_html_overlay(
     headline_color: str = None,
     headline_size_px: int = None,
     price_text_offset_x: int = 0,
-    price_text_offset_y: int = 15
+    price_text_offset_y: int = 15,
+    price_text_pos_x: float = None,
+    price_text_pos_y: float = None
 ) -> str:
     """
     Renders Canva-quality Pinterest graphic using Playwright & dynamic HTML/CSS templates.
@@ -332,8 +334,9 @@ def render_html_overlay(
 
     tag_accent_hex = tag_bg_hex if tag_bg_hex else (ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900")
     custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
+    if custom_tag_path.exists():
         # Recolored tag PNG without text bitmap stamping
-        stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean="", tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale)
+        stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_str="", tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
         
         posX = tag_pos_x if tag_pos_x is not None else 61.0
@@ -345,8 +348,9 @@ def render_html_overlay(
         # Calculate HTML CSS text properties matching admin_console.html 1:1
         f_scale = float(price_font_scale or 0.20)
         calc_font_px = max(10, int(tag_width_px * f_scale * 0.45))
-        shift_y_pct = 58.0 + (float(price_text_offset_y) * 0.30)
-        shift_x_pct = 50.0 + (float(price_text_offset_x) * 0.30)
+        
+        shift_y_pct = float(price_text_pos_y) if price_text_pos_y is not None else (58.0 + (float(price_text_offset_y) * 0.30))
+        shift_x_pct = float(price_text_pos_x) if price_text_pos_x is not None else (50.0 + (float(price_text_offset_x) * 0.30))
         p_color = price_text_color if price_text_color else "#111827"
 
         price_pill_html = f"""
