@@ -153,10 +153,10 @@ def render_pillow_fallback(image_path: str, headline: str, subtitle: str, badge_
         print(f"[Pillow Overlay Engine] Error generating fallback graphic: {e_pil}")
         return str(image_path)
 
-def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = None, price_text_color: str = None, price_font_scale: float = 0.38) -> str:
+def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = None, price_text_color: str = None, price_font_scale: float = 0.38, price_text_offset_x: int = 0, price_text_offset_y: int = 15) -> str:
     """
     Dynamically recolors tag 1.png to match the room photo's ambient accent color,
-    and stamps price text at the 100% exact visual dead center with custom font color & size!
+    and stamps price text at the exact visual position with custom offsets!
     """
     try:
         import PIL.ImageColor as ImageColor
@@ -217,8 +217,8 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
         except Exception:
             font = ImageFont.load_default()
             
-        # Draw contrasting price text at the EXACT visual center of the price tag
-        draw.text((center_x, center_y + 15), price_str, fill=text_color, font=font, anchor="mm")
+        # Draw contrasting price text at the EXACT custom offset position inside tag
+        draw.text((center_x + price_text_offset_x, center_y + price_text_offset_y), price_str, fill=text_color, font=font, anchor="mm")
         
         stamped_path = Path(tag_path).parent / "stamped_ambient_tag.png"
         img.save(stamped_path, format="PNG")
@@ -252,7 +252,9 @@ def render_html_overlay(
     price_font_scale: float = 0.38,
     headline_pos_y: float = None,
     headline_color: str = None,
-    headline_size_px: int = None
+    headline_size_px: int = None,
+    price_text_offset_x: int = 0,
+    price_text_offset_y: int = 15
 ) -> str:
     """
     Renders Canva-quality Pinterest graphic using Playwright & dynamic HTML/CSS templates.
@@ -323,7 +325,7 @@ def render_html_overlay(
     tag_accent_hex = tag_bg_hex if tag_bg_hex else (ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900")
     custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
     if custom_tag_path.exists():
-        stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale)
+        stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale, price_text_offset_x=price_text_offset_x, price_text_offset_y=price_text_offset_y)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
         if tag_pos_x is not None and tag_pos_y is not None:
             pos_style = f"position: absolute; left: {tag_pos_x}%; top: {tag_pos_y}%; z-index: 20;"

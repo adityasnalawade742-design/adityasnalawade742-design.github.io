@@ -495,6 +495,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             tag_color = data.get('tag_color', None)
             price_text_color = data.get('price_text_color', None)
             price_font_scale = float(data.get('price_font_scale', 0.38))
+            price_text_offset_x = int(data.get('price_text_offset_x', 0))
+            price_text_offset_y = int(data.get('price_text_offset_y', 15))
             tag_pos_x = float(data['tag_pos_x']) if 'tag_pos_x' in data and data['tag_pos_x'] is not None else None
             tag_pos_y = float(data['tag_pos_y']) if 'tag_pos_y' in data and data['tag_pos_y'] is not None else None
             headline_pos_y = float(data['headline_pos_y']) if 'headline_pos_y' in data and data['headline_pos_y'] is not None else None
@@ -531,7 +533,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 price_font_scale=price_font_scale,
                 headline_pos_y=headline_pos_y,
                 headline_color=headline_color,
-                headline_size_px=headline_size_px
+                headline_size_px=headline_size_px,
+                price_text_offset_x=price_text_offset_x,
+                price_text_offset_y=price_text_offset_y
             )
 
             # Update cache-busted v param in bridge page and index.html

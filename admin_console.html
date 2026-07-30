@@ -693,24 +693,35 @@
                             </div>
                         </div>
 
-                        <!-- 4. Price Text Size Scale -->
-                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">4. Price Text Size:</label>
-                                <span id="priceTextScaleVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 800;">38%</span>
+                        <!-- 4. Price Text Size & Position Controls -->
+                        <div style="background: rgba(251, 133, 0, 0.1); border: 1px solid rgba(251, 133, 0, 0.3); padding: 12px; border-radius: 12px; margin-bottom: 14px;">
+                            <div style="color: var(--gold-primary); font-size: 13px; font-weight: 800; margin-bottom: 8px;">💰 Price Text ($20.56) Size & Position</div>
+                            
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <label style="font-size: 12px; color: #cbd5e1;">Price Text Size:</label>
+                                <span id="priceTextScaleVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">38%</span>
                             </div>
-                            <input type="range" id="priceTextScaleRange" min="25" max="55" value="38" style="width: 100%;" oninput="updateLiveTagPreview()">
-                        </div>
+                            <input type="range" id="priceTextScaleRange" min="25" max="55" value="38" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
 
-                        <!-- 5. Price Text Color -->
-                        <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">5. Price Text Color:</label>
-                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <button type="button" title="Dark Obsidian" style="width: 28px; height: 28px; border-radius: 50%; background: #111827; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#111827')"></button>
-                                <button type="button" title="Pure White" style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ffffff')"></button>
-                                <button type="button" title="Amber Gold" style="width: 28px; height: 28px; border-radius: 50%; background: #fb8500; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#fb8500')"></button>
-                                <button type="button" title="Cyber Pink" style="width: 28px; height: 28px; border-radius: 50%; background: #ff0055; border: 2px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ff0055')"></button>
-                                <input type="color" id="priceTextColorInput" value="#111827" style="width: 34px; height: 28px; border: none; cursor: pointer; background: none;" onchange="setPriceTextColor(this.value)">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <label style="font-size: 12px; color: #cbd5e1;">Vertical Shift (Up / Down):</label>
+                                <span id="priceTextOffsetYVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">+15px</span>
+                            </div>
+                            <input type="range" id="priceTextOffsetYRange" min="-20" max="50" value="15" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
+
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <label style="font-size: 12px; color: #cbd5e1;">Horizontal Shift (Left / Right):</label>
+                                <span id="priceTextOffsetXVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">0px</span>
+                            </div>
+                            <input type="range" id="priceTextOffsetXRange" min="-30" max="30" value="0" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
+
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <label style="font-size: 12px; color: #cbd5e1;">Text Color:</label>
+                                <button type="button" title="Dark Obsidian" style="width: 22px; height: 22px; border-radius: 50%; background: #111827; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#111827')"></button>
+                                <button type="button" title="Pure White" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ffffff')"></button>
+                                <button type="button" title="Amber Gold" style="width: 22px; height: 22px; border-radius: 50%; background: #fb8500; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#fb8500')"></button>
+                                <button type="button" title="Cyber Pink" style="width: 22px; height: 22px; border-radius: 50%; background: #ff0055; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ff0055')"></button>
+                                <input type="color" id="priceTextColorInput" value="#111827" style="width: 28px; height: 22px; border: none; cursor: pointer; background: none;" onchange="setPriceTextColor(this.value)">
                             </div>
                         </div>
                     </div>
@@ -1185,10 +1196,14 @@
             const rot = parseInt(document.getElementById('tagRotationRange').value || '-6');
             const fontScale = parseFloat(document.getElementById('priceTextScaleRange').value || '38') / 100.0;
             const headlineSize = parseInt(document.getElementById('headlineSizeRange').value || '56');
+            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange') ? document.getElementById('priceTextOffsetYRange').value : '15');
+            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange') ? document.getElementById('priceTextOffsetXRange').value : '0');
 
             document.getElementById('tagRotationVal').innerText = `${rot}°`;
             document.getElementById('priceTextScaleVal').innerText = `${Math.round(fontScale * 100)}%`;
             document.getElementById('headlineSizeVal').innerText = `${headlineSize}px`;
+            if (document.getElementById('priceTextOffsetYVal')) document.getElementById('priceTextOffsetYVal').innerText = `${offsetY >= 0 ? '+' : ''}${offsetY}px`;
+            if (document.getElementById('priceTextOffsetXVal')) document.getElementById('priceTextOffsetXVal').innerText = `${offsetX >= 0 ? '+' : ''}${offsetX}px`;
 
             // Calculate width percentage relative to 1200px master canvas
             const widthPct = (w / 1200) * 100;
@@ -1203,6 +1218,12 @@
                 const calculatedPx = Math.round(18 * (fontScale / 0.38));
                 priceEl.style.fontSize = `${calculatedPx}px`;
                 priceEl.style.color = selectedPriceTextColor;
+                
+                // Real-time visual position shift inside the tag badge
+                const shiftYPercent = 56 + (offsetY - 15) * 0.3;
+                const shiftXPercent = 50 + offsetX * 0.3;
+                priceEl.style.top = `${shiftYPercent}%`;
+                priceEl.style.left = `${shiftXPercent}%`;
             }
 
             const hlEl = document.getElementById('liveHeadlineText');
@@ -1374,6 +1395,8 @@
             const rot = parseInt(document.getElementById('tagRotationRange').value || '-6');
             const fontScale = parseFloat(document.getElementById('priceTextScaleRange').value || '38') / 100.0;
             const headlineSize = parseInt(document.getElementById('headlineSizeRange').value || '56');
+            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange') ? document.getElementById('priceTextOffsetYRange').value : '15');
+            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange') ? document.getElementById('priceTextOffsetXRange').value : '0');
 
             document.getElementById('tagSaveSpinner').style.display = 'inline-block';
             showToast(`Re-rendering Canva graphic (${w}x${h}px, ${rot}°, ${selectedTagColor}) live...`, "🎨");
@@ -1389,6 +1412,8 @@
                     tag_color: selectedTagColor,
                     price_text_color: selectedPriceTextColor,
                     price_font_scale: fontScale,
+                    price_text_offset_x: offsetX,
+                    price_text_offset_y: offsetY,
                     tag_pos_x: currentTagPosX,
                     tag_pos_y: currentTagPosY,
                     headline_pos_y: currentHeadlinePosY,
