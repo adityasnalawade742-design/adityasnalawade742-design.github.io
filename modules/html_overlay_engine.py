@@ -329,8 +329,21 @@ def render_html_overlay(
     bot_h = scrim["bot_height"]
     top_op = scrim["top_opacity"]
     bot_op = scrim["bot_opacity"]
-
-
+    # Load system-wide saved layout defaults if present
+    defaults_file = Path("G:/CLI/pinterest-auto-affiliate/global_tag_defaults.json")
+    if defaults_file.exists():
+        try:
+            g_def = json.loads(defaults_file.read_text(encoding="utf-8"))
+            if tag_width_px == 380: tag_width_px = int(g_def.get("tag_width", 380))
+            if tag_rotation_deg == -6: tag_rotation_deg = int(g_def.get("tag_rotation", -6))
+            if tag_pos_x is None: tag_pos_x = float(g_def.get("tag_pos_x", 61.0))
+            if tag_pos_y is None: tag_pos_y = float(g_def.get("tag_pos_y", 75.0))
+            if tag_bg_hex is None: tag_bg_hex = g_def.get("tag_color", None)
+            if price_text_color is None: price_text_color = g_def.get("price_text_color", None)
+            if price_text_pos_x is None and "price_text_pos_x" in g_def: price_text_pos_x = float(g_def["price_text_pos_x"])
+            if price_text_pos_y is None and "price_text_pos_y" in g_def: price_text_pos_y = float(g_def["price_text_pos_y"])
+        except Exception as e_def:
+            print(f"[HTML Overlay Engine] ⚠️ Failed reading global defaults: {e_def}")
 
     tag_accent_hex = tag_bg_hex if tag_bg_hex else (ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900")
     custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")

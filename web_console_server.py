@@ -184,6 +184,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif parsed.path == '/api/batch_status':
             self.handle_api_batch_status(parsed.query)
             return
+        elif parsed.path == '/api/global_tag_defaults':
+            self.handle_api_get_global_defaults()
+            return
         else:
             return super().do_GET()
 
@@ -208,6 +211,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             return
         elif self.path.startswith('/api/customize_tag'):
             self.handle_api_customize_tag()
+            return
+        elif self.path.startswith('/api/save_global_defaults'):
+            self.handle_api_save_global_defaults()
             return
         else:
             self.send_error(404, "Endpoint not found")
@@ -556,12 +562,62 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 txt = re.sub(r"src=\"\./focus_product_" + asin + r"_hook\.jpg(\?v=[^\"]*)?\"", f'src="./focus_product_{asin}_hook.jpg?{v_tag}"', txt)
                 index_file.write_text(txt, encoding="utf-8")
 
-            self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}", 'message': 'changed published'})
+            # Auto-push updated image and HTML files to GitHub Pages live in background thread
+            def push_to_github_pages(target_asin, target_output):
+                try:
+                    import subprocess
+                    print(f"[Auto Git Deploy] 🚀 Deploying re-rendered graphic {target_output} to GitHub Pages...")
+                    subprocess.run(["git", "add", target_output, "index.html", f"bridge_{target_asin}.html", "price tags/stamped_ambient_tag.png"], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(["git", "commit", "-m", f"auto: publish re-rendered graphic for {target_asin} to GitHub Pages"], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(["git", "push", "origin", "main"], cwd=str(WORKSPACE_DIR), check=False)
+                    print(f"[Auto Git Deploy] ✅ Published live to GitHub Pages: https://adityasnalawade742-design.github.io/bridge_{target_asin}.html")
+                except Exception as e_git:
+                    print(f"[Auto Git Deploy] ⚠️ Git push warning: {e_git}")
+
+            import threading
+            threading.Thread(target=push_to_github_pages, args=(asin, output_img), daemon=True).start()
+
+            self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}", 'github_url': f"https://adityasnalawade742-design.github.io/bridge_{asin}.html?{v_tag}", 'message': 'changed published'})
         except Exception as e:
             import traceback
             traceback.print_exc()
             print(f"[Customize Tag Error] {e}")
             self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_get_global_defaults(self):
+        try:
+            defaults_path = WORKSPACE_DIR / "global_tag_defaults.json"
+            if defaults_path.exists():
+                data = json.loads(defaults_path.read_text(encoding="utf-8"))
+            else:
+                data = {"tag_width": 380, "tag_height": 514, "tag_rotation": -6, "tag_color": "#fb8500", "price_text_color": "#111827", "price_font_scale": 0.20, "price_text_offset_x": 0, "price_text_offset_y": 0, "price_text_pos_x": 50.0, "price_text_pos_y": 58.0, "tag_pos_x": 61.0, "tag_pos_y": 75.0}
+            self.send_json({"status": "success", "defaults": data})
+        except Exception as e:
+            self.send_json({"status": "error", "message": str(e)})
+
+    def handle_api_save_global_defaults(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8'))
+            defaults_path = WORKSPACE_DIR / "global_tag_defaults.json"
+            defaults_path.write_text(json.dumps(data, indent=4), encoding="utf-8")
+            print("[Global Defaults] ⭐ Saved new system-wide price tag default settings!")
+
+            # Auto-commit and push updated global_tag_defaults.json
+            def push_defaults():
+                try:
+                    import subprocess
+                    subprocess.run(["git", "add", "global_tag_defaults.json"], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(["git", "commit", "-m", "feat: save new system-wide price tag layout defaults"], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(["git", "push", "origin", "main"], cwd=str(WORKSPACE_DIR), check=False)
+                except Exception: pass
+            import threading
+            threading.Thread(target=push_defaults, daemon=True).start()
+
+            self.send_json({"status": "success", "message": "Saved as default for all future products!"})
+        except Exception as e:
+            self.send_json({"status": "error", "message": str(e)})
 
     def send_json(self, data):
         body = json.dumps(data).encode('utf-8')

@@ -701,6 +701,11 @@
                                 <input type="color" id="priceTextColorInput" value="#111827" style="width: 28px; height: 22px; border: none; cursor: pointer; background: none;" onchange="setPriceTextColor(this.value)">
                             </div>
                         </div>
+
+                        <!-- Save Global Defaults Button -->
+                        <button type="button" onclick="saveAsGlobalSystemDefault()" style="width: 100%; margin-bottom: 12px; padding: 10px; background: rgba(255, 183, 3, 0.15); color: var(--gold-primary); border: 1px dashed var(--gold-primary); border-radius: 12px; font-weight: 800; font-size: 12.5px; cursor: pointer; transition: all 0.2s ease;">
+                            ⭐ Save Layout as Default for ALL Future Products
+                        </button>
                     </div>
 
                     <!-- Save Action Button -->
@@ -1290,32 +1295,71 @@
             document.addEventListener('mouseup', endDrag, false);
             document.addEventListener('touchend', endDrag, false);
         function resetTagControlsToDefault() {
-            if (document.getElementById('tagScaleSelect')) document.getElementById('tagScaleSelect').value = '380x514';
-            if (document.getElementById('tagRotationRange')) document.getElementById('tagRotationRange').value = '-6';
-            if (document.getElementById('priceTextScaleRange')) document.getElementById('priceTextScaleRange').value = '20';
-            if (document.getElementById('priceTextOffsetYRange')) document.getElementById('priceTextOffsetYRange').value = '0';
-            if (document.getElementById('priceTextOffsetXRange')) document.getElementById('priceTextOffsetXRange').value = '0';
-            
-            selectedTagColor = '#fb8500';
-            selectedPriceTextColor = '#111827';
-            currentTagPosX = 61.0;
-            currentTagPosY = 75.0;
+            fetch('/api/global_tag_defaults')
+                .then(r => r.json())
+                .then(d => {
+                    if (d.status === 'success' && d.defaults) {
+                        const g = d.defaults;
+                        if (document.getElementById('tagScaleSelect')) document.getElementById('tagScaleSelect').value = `${g.tag_width}x${g.tag_height}`;
+                        if (document.getElementById('tagRotationRange')) document.getElementById('tagRotationRange').value = g.tag_rotation;
+                        if (document.getElementById('priceTextScaleRange')) document.getElementById('priceTextScaleRange').value = Math.round(g.price_font_scale * 100);
+                        if (document.getElementById('priceTextOffsetYRange')) document.getElementById('priceTextOffsetYRange').value = g.price_text_offset_y;
+                        if (document.getElementById('priceTextOffsetXRange')) document.getElementById('priceTextOffsetXRange').value = g.price_text_offset_x;
+                        selectedTagColor = g.tag_color || '#fb8500';
+                        selectedPriceTextColor = g.price_text_color || '#111827';
+                        currentTagPosX = g.tag_pos_x || 61.0;
+                        currentTagPosY = g.tag_pos_y || 75.0;
+                    }
+                    updateLiveTagPreview();
+                    showToast("Reset price tag to saved system defaults", "🔄");
+                })
+                .catch(() => {
+                    updateLiveTagPreview();
+                });
+        }
 
-            const tag = document.getElementById('liveTagOverlay');
-            if (tag) {
-                tag.style.left = 'auto';
-                tag.style.top = 'auto';
-                tag.style.right = '5%';
-                tag.style.bottom = '8%';
-                tag.style.filter = 'drop-shadow(0 14px 28px rgba(0,0,0,0.8))';
-            }
+        function saveAsGlobalSystemDefault() {
+            const scaleVal = document.getElementById('tagScaleSelect').value;
+            const [w, h] = scaleVal.split('x').map(Number);
+            const rot = parseInt(document.getElementById('tagRotationRange')?.value || '-6');
+            const fontScale = parseFloat(document.getElementById('priceTextScaleRange')?.value || '20') / 100.0;
+            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '0');
+            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
+            const textPosY = 58.0 + (offsetY * 0.30);
+            const textPosX = 50.0 + (offsetX * 0.30);
 
-            if (document.getElementById('dragPosBadge')) {
-                document.getElementById('dragPosBadge').innerText = "📍 Tag: Default (X=61%, Y=75%)";
-            }
+            showToast("Saving layout as system default for all future products...", "⭐");
 
-            updateLiveTagPreview();
-            showToast("Reset price tag to clean default settings", "🔄");
+            fetch('/api/save_global_defaults', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tag_width: w,
+                    tag_height: h,
+                    tag_rotation: rot,
+                    tag_color: selectedTagColor,
+                    price_text_color: selectedPriceTextColor,
+                    price_font_scale: fontScale,
+                    price_text_offset_x: offsetX,
+                    price_text_offset_y: offsetY,
+                    price_text_pos_x: textPosX,
+                    price_text_pos_y: textPosY,
+                    tag_pos_x: currentTagPosX,
+                    tag_pos_y: currentTagPosY
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast("⭐ Saved! All future products will use this default layout.", "✨");
+                } else {
+                    alert("Error saving global defaults: " + data.message);
+                }
+            })
+            .catch(e => {
+                console.error("[Save Global Defaults Error]", e);
+                alert("Error saving defaults: " + e.message);
+            });
         }
 
         function openTagEditorModal(asin, title, price) {
