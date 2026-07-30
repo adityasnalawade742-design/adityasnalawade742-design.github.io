@@ -1371,7 +1371,7 @@
                     document.getElementById('overlayModalImg').src = `${data.image}&t=${Date.now()}`;
                     const hpImg = document.getElementById(`hp-img-${activeTagAsin}`);
                     if (hpImg) hpImg.src = `${data.image}&t=${Date.now()}`;
-                    showToast("Price tag updated & rendered live!", "✨");
+                    showToast("changed published", "✨");
                 } else {
                     alert("Error customizing tag: " + data.message);
                 }

@@ -552,7 +552,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 txt = re.sub(r"src=\"\./focus_product_" + asin + r"_hook\.jpg(\?v=[^\"]*)?\"", f'src="./focus_product_{asin}_hook.jpg?{v_tag}"', txt)
                 index_file.write_text(txt, encoding="utf-8")
 
-            self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}"})
+            self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}", 'message': 'changed published'})
         except Exception as e:
             print(f"[Customize Tag Error] {e}")
             self.send_json({'status': 'error', 'message': str(e)})

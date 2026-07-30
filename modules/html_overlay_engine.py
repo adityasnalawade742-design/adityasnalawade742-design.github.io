@@ -690,10 +690,9 @@ def render_html_overlay(
         </div>
     </div>
 
+    {price_pill_html}
+
     <div class="bottom-container">
-        <div class="bottom-meta" style="justify-content: flex-end;">
-            {price_pill_html}
-        </div>
         <div class="features-grid">
             {feat_items}
         </div>
