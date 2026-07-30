@@ -497,9 +497,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
                 const regPrice = regionalMatrix[regKey];
                 const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
-                const explicitScrapedRegions = ['us', 'in', 'uk', 'de', 'ca', 'jp', 'au'];
+                const isExplicitScrapedMatch = (targetCC === 'US' && regKey === 'us') || ['in', 'uk', 'de', 'ca', 'jp', 'au', 'gb'].includes(targetCC.toLowerCase());
 
-                if (explicitScrapedRegions.includes(regKey) && regPrice === 'Not Available') {
+                if (isExplicitScrapedMatch && regPrice === 'Not Available') {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = '⚠️ NOT AVAILABLE IN YOUR REGION';
@@ -510,7 +510,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                             el.innerText = 'Not Available';
                         }
                     });
-                } else if (explicitScrapedRegions.includes(regKey) && regPrice) {
+                } else if (isExplicitScrapedMatch && regPrice) {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
