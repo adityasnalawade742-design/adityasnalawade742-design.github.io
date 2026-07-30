@@ -967,34 +967,36 @@
                 }
             }
 
-            fetch('https://api.country.is')
-                .then(res => res.json())
-                .then(data => {
-                    const country = (data.country || '').toUpperCase();
-                    if (countryToCurrencyMap[country]) {
-                        const detectedCurr = countryToCurrencyMap[country];
-                        const sel = document.getElementById('currencySelector');
-                        if (sel) {
-                            sel.value = detectedCurr;
-                            changeGlobalCurrency(detectedCurr);
-                        }
-                    }
-                })
-                .catch(e => {
-                    fetch('https://ipapi.co/json/')
-                        .then(res => res.json())
-                        .then(data => {
-                            const country = (data.country_code || '').toUpperCase();
-                            if (countryToCurrencyMap[country]) {
-                                const detectedCurr = countryToCurrencyMap[country];
-                                const sel = document.getElementById('currencySelector');
-                                if (sel) {
-                                    sel.value = detectedCurr;
-                                    changeGlobalCurrency(detectedCurr);
-                                }
+            if (!forcedCountry) {
+                fetch('https://api.country.is')
+                    .then(res => res.json())
+                    .then(data => {
+                        const country = (data.country || '').toUpperCase();
+                        if (countryToCurrencyMap[country]) {
+                            const detectedCurr = countryToCurrencyMap[country];
+                            const sel = document.getElementById('currencySelector');
+                            if (sel) {
+                                sel.value = detectedCurr;
+                                changeGlobalCurrency(detectedCurr);
                             }
-                        });
-                });
+                        }
+                    })
+                    .catch(e => {
+                        fetch('https://ipapi.co/json/')
+                            .then(res => res.json())
+                            .then(data => {
+                                const country = (data.country_code || '').toUpperCase();
+                                if (countryToCurrencyMap[country]) {
+                                    const detectedCurr = countryToCurrencyMap[country];
+                                    const sel = document.getElementById('currencySelector');
+                                    if (sel) {
+                                        sel.value = detectedCurr;
+                                        changeGlobalCurrency(detectedCurr);
+                                    }
+                                }
+                            });
+                    });
+            }
         })();
     </script>
 </body>
