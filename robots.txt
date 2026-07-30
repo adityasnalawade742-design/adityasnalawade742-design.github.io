@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+Sitemap: https://adityasnalawade742-design.github.io/sitemap.xml
