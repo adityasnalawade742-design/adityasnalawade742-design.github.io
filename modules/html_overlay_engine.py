@@ -219,7 +219,7 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
             
         # Draw contrasting price text using exact 1:1 CSS percentage coordinate mapping
         target_x_pct = (50.0 + float(price_text_offset_x) * 0.35) / 100.0
-        target_y_pct = (59.0 + float(price_text_offset_y - 15) * 0.35) / 100.0
+        target_y_pct = (69.0 + float(price_text_offset_y - 15) * 0.35) / 100.0
 
         text_x = int(w * target_x_pct)
         text_y = int(h * target_y_pct)
