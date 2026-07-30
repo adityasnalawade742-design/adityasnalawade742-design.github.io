@@ -54,7 +54,7 @@ seo_data = generate_pin_seo_data(prod["title"], prod["price"])
 hook_img_path = repo_dir / f"focus_product_{asin}_hook.jpg"
 render_html_overlay(
     image_path=str(saved_raw_path),
-    headline="Dimmable Touch Nightstand Lamp",
+    headline="Fenmzee Touch Bedside Table Lamp",
     subtitle="",
     badge_text="🕯️ BEDSIDE FAVORITE",
     price_str="$19.99",
