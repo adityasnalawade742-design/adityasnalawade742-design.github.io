@@ -543,13 +543,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             bridge_file = WORKSPACE_DIR / f"bridge_{asin}.html"
             if bridge_file.exists():
                 txt = bridge_file.read_text(encoding="utf-8")
-                txt = re.sub(r"focus_product_" + asin + r"_hook\.jpg(\?v=[^\"]*)?", f"focus_product_{asin}_hook.jpg?{v_tag}", txt)
+                txt = re.sub(r"focus_product_" + asin + r"_hook\.jpg(\?v=[^'\"\s>]+)?", f"focus_product_{asin}_hook.jpg?{v_tag}", txt)
                 bridge_file.write_text(txt, encoding="utf-8")
 
             index_file = WORKSPACE_DIR / "index.html"
             if index_file.exists():
                 txt = index_file.read_text(encoding="utf-8")
-                txt = re.sub(r"focus_product_" + asin + r"_hook\.jpg(\?v=[^\"]*)?", f"focus_product_{asin}_hook.jpg?{v_tag}", txt)
+                txt = re.sub(r"focus_product_" + asin + r"_hook\.jpg(\?v=[^'\"\s>]+)?", f"focus_product_{asin}_hook.jpg?{v_tag}", txt)
                 index_file.write_text(txt, encoding="utf-8")
 
             self.send_json({'status': 'success', 'asin': asin, 'v_tag': v_tag, 'image': f"./{output_img}?{v_tag}"})
