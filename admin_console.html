@@ -629,7 +629,10 @@
                     <div style="background: rgba(255,255,255,0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
                             <div style="color: var(--gold-primary); font-size: 15px; font-weight: 800;">⚙️ Price Tag Controls</div>
-                            <span id="dragPosBadge" style="font-size: 11.5px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 4px 12px; border-radius: 20px; font-weight: 700;">📍 Tag: Default</span>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button type="button" onclick="resetTagControlsToDefault()" style="font-size: 11px; background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-weight: 700; cursor: pointer;">🔄 Reset Default</button>
+                                <span id="dragPosBadge" style="font-size: 11.5px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 4px 12px; border-radius: 20px; font-weight: 700;">📍 Tag: Default</span>
+                            </div>
                         </div>
 
                         <!-- 1. Tag Size Scale -->
@@ -1286,6 +1289,33 @@
             document.addEventListener('touchmove', moveDrag, { passive: false });
             document.addEventListener('mouseup', endDrag, false);
             document.addEventListener('touchend', endDrag, false);
+        function resetTagControlsToDefault() {
+            if (document.getElementById('tagScaleSelect')) document.getElementById('tagScaleSelect').value = '380x514';
+            if (document.getElementById('tagRotationRange')) document.getElementById('tagRotationRange').value = '-6';
+            if (document.getElementById('priceTextScaleRange')) document.getElementById('priceTextScaleRange').value = '20';
+            if (document.getElementById('priceTextOffsetYRange')) document.getElementById('priceTextOffsetYRange').value = '0';
+            if (document.getElementById('priceTextOffsetXRange')) document.getElementById('priceTextOffsetXRange').value = '0';
+            
+            selectedTagColor = '#fb8500';
+            selectedPriceTextColor = '#111827';
+            currentTagPosX = 61.0;
+            currentTagPosY = 75.0;
+
+            const tag = document.getElementById('liveTagOverlay');
+            if (tag) {
+                tag.style.left = 'auto';
+                tag.style.top = 'auto';
+                tag.style.right = '5%';
+                tag.style.bottom = '8%';
+                tag.style.filter = 'drop-shadow(0 14px 28px rgba(0,0,0,0.8))';
+            }
+
+            if (document.getElementById('dragPosBadge')) {
+                document.getElementById('dragPosBadge').innerText = "📍 Tag: Default (X=61%, Y=75%)";
+            }
+
+            updateLiveTagPreview();
+            showToast("Reset price tag to clean default settings", "🔄");
         }
 
         function openTagEditorModal(asin, title, price) {
@@ -1396,10 +1426,14 @@
                         actionBox.appendChild(pubBanner);
                     }
                     pubBanner.style.cssText = "margin-top: 12px; padding: 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 12px; text-align: center; color: #10b981; font-weight: 800; font-size: 13.5px;";
+                    const ghUrl = data.github_url || `https://adityasnalawade742-design.github.io/bridge_${activeTagAsin}.html?t=${Date.now()}`;
                     pubBanner.innerHTML = `
                         <div>✨ changed published</div>
-                        <div style="font-size: 11.5px; color: #a7f3d0; margin-top: 4px; font-weight: 600;">Image updated live across index.html & bridge page!</div>
-                        <a href="./bridge_${activeTagAsin}.html?t=${Date.now()}" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #10b981; color: #000; font-weight: 800; border-radius: 8px; text-decoration: none; font-size: 12px;">🔗 View Published Bridge Page Live →</a>
+                        <div style="font-size: 11.5px; color: #a7f3d0; margin-top: 4px; font-weight: 600;">Deploying automatically to GitHub Pages live!</div>
+                        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+                            <a href="./bridge_${activeTagAsin}.html?t=${Date.now()}" target="_blank" style="padding: 8px 12px; background: #10b981; color: #000; font-weight: 800; border-radius: 8px; text-decoration: none; font-size: 12px;">🏠 Local Bridge Page</a>
+                            <a href="${ghUrl}" target="_blank" style="padding: 8px 12px; background: #3b82f6; color: #fff; font-weight: 800; border-radius: 8px; text-decoration: none; font-size: 12px;">🚀 GitHub Pages Live →</a>
+                        </div>
                     `;
                 } else {
                     alert("Error customizing tag: " + data.message);
