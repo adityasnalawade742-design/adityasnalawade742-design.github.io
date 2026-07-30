@@ -703,7 +703,7 @@
         </div>
 
         <!-- Card B07HP22QTZ (Crystal Suncatcher) -->
-        <div class="card-wrapper" id="card-B07HP22QTZ" data-base-usd="9.99" data-category="decor">
+        <div class="card-wrapper" id="card-B07HP22QTZ" data-base-usd="9.99" data-price-inr="2,762.75" data-category="decor">
             <a class="card" href="./bridge_B07HP22QTZ.html">
                 <div class="card-img-container">
                     <div class="card-price-tag">$9.99</div>
@@ -953,16 +953,29 @@
                 });
         })();
 
-        function changeGlobalCurrency(targetCurr) {
+                function changeGlobalCurrency(targetCurr) {
             const rate = exchangeRates[targetCurr] || 1.0;
             const sym = currencySymbols[targetCurr] || (targetCurr + " ");
+            const lowerCurr = targetCurr.toLowerCase();
 
             document.querySelectorAll('.card-wrapper').forEach(card => {
-                const baseUsd = parseFloat(card.getAttribute('data-base-usd') || '20.00');
-                const converted = (baseUsd * rate).toLocaleString(undefined, {
-                    minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
-                    maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
-                });
+                const regionalPrice = card.getAttribute(`data-price-${lowerCurr}`);
+                const priceTag = card.querySelector('.card-price-tag');
+
+                if (regionalPrice && priceTag) {
+                    priceTag.innerText = regionalPrice;
+                } else {
+                    const baseUsd = parseFloat(card.getAttribute('data-base-usd') || '20.00');
+                    const converted = (baseUsd * rate).toLocaleString(undefined, {
+                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
+                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
+                    });
+                    if (priceTag) {
+                        priceTag.innerText = `${sym}${converted}`;
+                    }
+                }
+            });
+        });
                 
                 const priceTag = card.querySelector('.card-price-tag');
                 if (priceTag) {

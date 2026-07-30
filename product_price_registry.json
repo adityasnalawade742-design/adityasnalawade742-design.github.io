@@ -66,7 +66,11 @@
     ],
     "raw_image": "raw_images/raw_B07HP22QTZ.jpg",
     "hook_image": "focus_product_B07HP22QTZ_hook.jpg",
-    "bridge_page": "bridge_B07HP22QTZ.html"
+    "bridge_page": "bridge_B07HP22QTZ.html",
+    "regional_prices": {
+      "IN": "\u20b92,762.75",
+      "US": "$9.99"
+    }
   },
   "B0BZXNSW5K": {
     "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
