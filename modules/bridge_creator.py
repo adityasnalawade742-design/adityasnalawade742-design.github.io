@@ -478,9 +478,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
-            {% set clean_words = product.title.split()[:4] | join(' ') %}
+            {% set search_phrase = product.get('search_keywords') or (product.title.split()[:4] | join(' ')) %}
             const currentAsin = "{{ product.get('target_asin', asin) }}";
-            const prodKeywords = encodeURIComponent("{{ clean_words }}");
+            const prodKeywords = encodeURIComponent("{{ search_phrase }}");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
 
             function applyGeoRedirect(cc) {

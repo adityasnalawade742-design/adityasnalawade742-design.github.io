@@ -20,6 +20,7 @@ for bf in bridge_files:
 # Master dictionary for all products in portfolio
 master_catalog = {
     "B0DZD1X83N": {
+        "search_keywords": "Minimalist Wood Base Table Nightstand Lamp",
         "title": "Minimalist Wood Base Cream Shade Bedside Table Lamp",
         "price": "$12.99",
         "rating": "4.6",
@@ -29,6 +30,7 @@ master_catalog = {
         "direct_regions": ["US", "DE", "SE", "CA", "JP"]
     },
     "B0BZXNSW5K": {
+        "search_keywords": "Touch Control Dimmable Bedside Table Lamp",
         "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
         "price": "$19.99",
         "rating": "4.5",
@@ -38,6 +40,7 @@ master_catalog = {
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "CA", "JP"]
     },
     "B0D1FRDFFX": {
+        "search_keywords": "Glass Mushroom Desk Table Lamp",
         "title": "Glass Mushroom Lamp Ambient Table Nightstand Light",
         "price": "$35.98",
         "rating": "4.8",
@@ -47,6 +50,7 @@ master_catalog = {
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0C2YLN3H4": {
+        "search_keywords": "White Ceramic Donut Flower Vase Set",
         "title": "White Ceramic Donut Vase Set of 2 Modern Nordic Home Decor",
         "price": "$28.99",
         "rating": "4.9",
@@ -56,6 +60,7 @@ master_catalog = {
         "direct_regions": ["US", "IN", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0GYDXHF4G": {
+        "search_keywords": "Volcano Flame Aroma Diffuser Lamp",
         "title": "Flame Aroma Essential Oil Diffuser Dark Crackle Flame Effect",
         "price": "$35.00",
         "rating": "4.9",
@@ -65,6 +70,7 @@ master_catalog = {
         "direct_regions": ["US", "DE", "SE", "CA", "JP"]
     },
     "B0FXLYXM32": {
+        "search_keywords": "White Wavy Wall Body Standing Mirror",
         "title": "White Wavy Wall Vanity Mirror Aesthetic Squiggle Mirror",
         "price": "$76.49",
         "rating": "4.8",
@@ -74,6 +80,7 @@ master_catalog = {
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B07HP22QTZ": {
+        "search_keywords": "Crystal Ball Prism Window Suncatcher",
         "title": "Crystal Prism Window Suncatcher Rainbow Maker Hanging Ornament",
         "price": "$12.99",
         "rating": "4.8",
@@ -83,6 +90,7 @@ master_catalog = {
         "direct_regions": ["US", "IN", "GB", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0D8P8CSYP": {
+        "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp",
         "title": "Aesthetic Sunset Lamp Projection Light Ambient Glow",
         "price": "$18.99",
         "rating": "4.6",
@@ -92,6 +100,7 @@ master_catalog = {
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
     "B0DXKGL1T2": {
+        "search_keywords": "Lily of the Valley Flower Table Lamp",
         "title": "Lily of the Valley Flower Table Lamp Glass Nightlight",
         "price": "$38.57",
         "rating": "4.8",
