@@ -360,5 +360,3189 @@
       "reviews": 350,
       "thumbnail": "https://m.media-amazon.com/images/I/719goE9Hk-L._AC_SL1500_.jpg"
     }
+  ],
+  "table lamp": [
+    {
+      "position": 1,
+      "asin": "B0BZXNSW5K",
+      "badges": [
+        "Overall Pick",
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BZXNSW5K",
+            "title": "Cream Shade-Wood Base",
+            "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0BZXNSW5K/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-1"
+          },
+          {
+            "position": 2,
+            "asin": "B0CYNYS6J9",
+            "title": "Cream - Wood Grain 2",
+            "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0CYNYS6J9/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-1"
+          },
+          {
+            "position": 3,
+            "asin": "B0CDLWDP8L",
+            "title": "Pink - Silver",
+            "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0CDLWDP8L/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-1"
+          },
+          {
+            "position": 4,
+            "asin": "B0CDLXM6WV",
+            "title": "Grey - Silver",
+            "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0CDLXM6WV/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-1"
+          },
+          {
+            "position": 5,
+            "asin": "B0FH6N1DGG",
+            "title": "White Shade-Black Base",
+            "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0FH6N1DGG/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-1"
+          },
+          {
+            "position": 6,
+            "asin": "B0FH6R54ST",
+            "title": "White Shade-Gold Base",
+            "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0FH6R54ST/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-1"
+          }
+        ],
+        "more_variants": "+17",
+        "more_variants_link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0BZXNSW5K/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-1"
+      },
+      "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet | 3-Way Dimmable, LED Bulb Included, Fabric Lampshade, Wood-Grain Metal Base, 14\" Small Nightstand Lamp for Desk, Living Room",
+      "link": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0BZXNSW5K/ref=sr_1_1?keywords=table+lamp&qid=1785402486&sr=8-1",
+      "link_clean": "https://www.amazon.com/Fenmzee-Bedside-Table-Lamp-Bedroom/dp/B0BZXNSW5K/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BZXNSW5K&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71zreHoOzVL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 12800,
+      "bought_last_month": "10K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "old_price": "$23.99",
+      "extracted_old_price": 23.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$17.99 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0BZXNSW5K/ref=sr_1_1_olp?keywords=table+lamp&qid=1785402486&sr=8-1",
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99,
+          "old_primary_price": "$23.99",
+          "extracted_old_primary_price": 23.99,
+          "more_buying_choices": "$17.99 (2+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0BZXNSW5K/ref=sr_1_1_olp?keywords=table+lamp&qid=1785402486&sr=8-1"
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "asin": "B0DD7JFK68",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7JFK68/ref=sr_1_2_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-2",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DD7JFK68",
+            "title": "Cream & Wooden",
+            "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7JFK68/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-2"
+          },
+          {
+            "position": 2,
+            "asin": "B0DZCLVHRZ",
+            "title": "Cream & Wooden 2",
+            "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DZCLVHRZ/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-2"
+          },
+          {
+            "position": 3,
+            "asin": "B0DD7MSJDM",
+            "title": "Linen & Black",
+            "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7MSJDM/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-2"
+          },
+          {
+            "position": 4,
+            "asin": "B0DZCN2RG4",
+            "title": "Cream & Redwood",
+            "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DZCN2RG4/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-2"
+          },
+          {
+            "position": 5,
+            "asin": "B0DD7JW5PQ",
+            "title": "Grey & Black",
+            "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7JW5PQ/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-2"
+          },
+          {
+            "position": 6,
+            "asin": "B0DD7L3BRP",
+            "title": "Linen & Brown",
+            "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7L3BRP/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-2"
+          }
+        ],
+        "more_variants": "+9",
+        "more_variants_link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7JFK68/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-2"
+      },
+      "title": "Dicoool Bedside Table Lamp for Bedroom - 3-Way Dimmable Touch Lamp, USB A+C | LED Bulb Included, 14\" Small Nightstand Lamp for Desk, Living Room, Guest Room, Cream Fabric Lampshade, Wood-Grain Metal Base",
+      "link": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7JFK68/ref=sr_1_2?keywords=table+lamp&qid=1785402486&sr=8-2",
+      "link_clean": "https://www.amazon.com/Touch-Bedside-Table-Lamp-USB/dp/B0DD7JFK68/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DD7JFK68&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71RL9RdCSzL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 3000,
+      "bought_last_month": "5K+ bought in past month",
+      "price": "$15.99",
+      "extracted_price": 15.99,
+      "old_price": "$19.99",
+      "extracted_old_price": 19.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$15.99",
+          "extracted_primary_price": 15.99,
+          "old_primary_price": "$19.99",
+          "extracted_old_primary_price": 19.99
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "asin": "B0GGZH27FW",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/ROTTOGOON-Bedroom-Bedside-Vintage-Nightstand/dp/B0GGZH27FW/ref=sr_1_3_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-3",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0GGZH27FW",
+            "title": "Gold+Green",
+            "link": "https://www.amazon.com/ROTTOGOON-Bedroom-Bedside-Vintage-Nightstand/dp/B0GGZH27FW/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-3"
+          },
+          {
+            "position": 2,
+            "asin": "B0GGZ9LPHD",
+            "title": "Black+Grey",
+            "link": "https://www.amazon.com/ROTTOGOON-Bedroom-Bedside-Vintage-Nightstand/dp/B0GGZ9LPHD/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-3"
+          },
+          {
+            "position": 3,
+            "asin": "B0GGYZFD87",
+            "title": "Gold+Champagne",
+            "link": "https://www.amazon.com/ROTTOGOON-Bedroom-Bedside-Vintage-Nightstand/dp/B0GGYZFD87/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-3"
+          }
+        ]
+      },
+      "title": "ROTTOGOON Glass Table Lamp Set of 2, Modern Table Lamps for Living Room Bedroom, Bedside Desk Lamps Vintage Nightstand Lamps with Linen Shades, 22\", Green",
+      "link": "https://www.amazon.com/ROTTOGOON-Bedroom-Bedside-Vintage-Nightstand/dp/B0GGZH27FW/ref=sr_1_3?keywords=table+lamp&qid=1785402486&sr=8-3",
+      "link_clean": "https://www.amazon.com/ROTTOGOON-Bedroom-Bedside-Vintage-Nightstand/dp/B0GGZH27FW/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GGZH27FW&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/81pRLOzZcbL._AC_UL320_.jpg",
+      "rating": 4.7,
+      "reviews": 13,
+      "bought_last_month": "50+ bought in past month",
+      "price": "$59.99",
+      "extracted_price": 59.99,
+      "old_price": "$69.99",
+      "extracted_old_price": 69.99,
+      "offers": [
+        "Save 5% on 2 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$59.99",
+          "extracted_primary_price": 59.99,
+          "old_primary_price": "$69.99",
+          "extracted_old_primary_price": 69.99
+        }
+      ]
+    },
+    {
+      "position": 4,
+      "asin": "B0BZTT3MKR",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BZTT3MKR",
+            "title": "Light Brown",
+            "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0BZTT3MKR/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-4"
+          },
+          {
+            "position": 2,
+            "asin": "B0BZTTG38V",
+            "title": "Walnut Wood Color &Grey Shade",
+            "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0BZTTG38V/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-4"
+          },
+          {
+            "position": 3,
+            "asin": "B0D2RHHX4T",
+            "title": "Rosewood Color&W-pattern Shade",
+            "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0D2RHHX4T/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-4"
+          },
+          {
+            "position": 4,
+            "asin": "B0D2RD77F1",
+            "title": "Rosewood Color&Vertical Stripe Shade",
+            "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0D2RD77F1/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-4"
+          },
+          {
+            "position": 5,
+            "asin": "B0DGFV54W6",
+            "title": "Rosewood Color&Vertical Wood Slat Shade",
+            "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0DGFV54W6/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-4"
+          },
+          {
+            "position": 6,
+            "asin": "B0BZTV39H2",
+            "title": "Natural Wood&Bark-textured Shade",
+            "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0BZTV39H2/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-4"
+          }
+        ],
+        "more_variants": "+2",
+        "more_variants_link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0BZTT3MKR/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-4"
+      },
+      "title": "EDISHINE Tripod Table Lamp, Small Cute Bedside Lamp, 14.2 Inch, E26 Base | Light Brown Wooden Base, Linen Beige Lampshade, Nightstand Lamp for Nursery, Bedroom, Kid Room, Living Room",
+      "link": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0BZTT3MKR/ref=sr_1_4?keywords=table+lamp&qid=1785402486&sr=8-4",
+      "link_clean": "https://www.amazon.com/EDISHINE-Lampshade-Nightstand-Bedside-Nursery/dp/B0BZTT3MKR/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BZTT3MKR&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/81hd5Sql6fL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 1500,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$24.99",
+      "extracted_price": 24.99,
+      "old_price": "$34.99",
+      "extracted_old_price": 34.99,
+      "offers": [
+        "Save 5% on 2 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$22.99 (2 used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0BZTT3MKR/ref=sr_1_4_olp?keywords=table+lamp&qid=1785402486&sr=8-4",
+      "climate_pledge_friendly": true,
+      "sustainability_features": [
+        {
+          "position": 1,
+          "name": "Recycled materials",
+          "snippet": "Contains at least 50% recycled material.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 2,
+          "name": "Safer chemicals",
+          "snippet": "Made with chemicals safer for human health and the environment.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 3,
+          "name": "Worker well-being",
+          "snippet": "Manufactured on farms or in facilities that protect the rights and/or health of workers.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        }
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$24.99",
+          "extracted_primary_price": 24.99,
+          "old_primary_price": "$34.99",
+          "extracted_old_primary_price": 34.99,
+          "more_buying_choices": "$22.99 (2 used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0BZTT3MKR/ref=sr_1_4_olp?keywords=table+lamp&qid=1785402486&sr=8-4"
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "asin": "B074XPNS3Z",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B074XPNS3Z",
+            "title": "Cream & Black",
+            "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B074XPNS3Z/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-5"
+          },
+          {
+            "position": 2,
+            "asin": "B0D477M2TP",
+            "title": "Black & Black",
+            "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B0D477M2TP/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-5"
+          },
+          {
+            "position": 3,
+            "asin": "B0D47HKHYF",
+            "title": "Gray & Black",
+            "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B0D47HKHYF/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-5"
+          },
+          {
+            "position": 4,
+            "asin": "B0D47HYBC2",
+            "title": "White & Black",
+            "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B0D47HYBC2/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-5"
+          },
+          {
+            "position": 5,
+            "asin": "B0D47KSD8N",
+            "title": "Cream & Black Set",
+            "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B0D47KSD8N/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-5"
+          },
+          {
+            "position": 6,
+            "asin": "B0DJXYFW8N",
+            "title": "Linen & Black",
+            "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B0DJXYFW8N/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-5"
+          }
+        ],
+        "more_variants": "+5",
+        "more_variants_link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B074XPNS3Z/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-5"
+      },
+      "title": "aooshine Small Bedside Table Lamp for Bedroom - Square Cream Fabric Shade | Inline Rocker Switch, Corded Electric, Bulb Not Included, 12.8\" Mini Table Lamp for Nightstand, Desk, Dorm, Office",
+      "link": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B074XPNS3Z/ref=sr_1_5?keywords=table+lamp&qid=1785402486&sr=8-5",
+      "link_clean": "https://www.amazon.com/Bedside-Aooshine-Minimalist-Bedroom-Bookcase/dp/B074XPNS3Z/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B074XPNS3Z&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61xxhaeUKIL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 21700,
+      "bought_last_month": "4K+ bought in past month",
+      "price": "$11.99",
+      "extracted_price": 11.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$11.99",
+          "extracted_primary_price": 11.99
+        }
+      ]
+    },
+    {
+      "position": 6,
+      "asin": "B0BHVP949X",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BHVP949X/ref=sr_1_6_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-6",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BHVP949X",
+            "title": "White",
+            "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BHVP949X/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-6"
+          },
+          {
+            "position": 2,
+            "asin": "B0C2VB8ZX8",
+            "title": "Pink-Silver",
+            "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0C2VB8ZX8/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-6"
+          },
+          {
+            "position": 3,
+            "asin": "B0BHVRHQNS",
+            "title": "Black",
+            "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BHVRHQNS/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-6"
+          },
+          {
+            "position": 4,
+            "asin": "B0DB19ZD77",
+            "title": "Wood",
+            "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0DB19ZD77/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-6"
+          },
+          {
+            "position": 5,
+            "asin": "B0DB1D5KK1",
+            "title": "Cream",
+            "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0DB1D5KK1/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-6"
+          },
+          {
+            "position": 6,
+            "asin": "B0BL6RZRBZ",
+            "title": "Off-White",
+            "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BL6RZRBZ/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-6"
+          }
+        ],
+        "more_variants": "+12",
+        "more_variants_link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BHVP949X/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-6"
+      },
+      "title": "Dicoool Bedside Table Lamp for Bedroom - Small Desk Lamp with USB Ports | USB A+C Ports, AC Outlet, 3 Color Temperatures, LED Bulb Included, White Fabric Shade, Black Metal Base, 14\" Nightstand lamp",
+      "link": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BHVP949X/ref=sr_1_6?keywords=table+lamp&qid=1785402486&sr=8-6",
+      "link_clean": "https://www.amazon.com/Small-Bedroom-Lamps-Color-Temperatures/dp/B0BHVP949X/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BHVP949X&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71C-9a3M-jL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 6000,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "old_price": "$23.99",
+      "extracted_old_price": 23.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99,
+          "old_primary_price": "$23.99",
+          "extracted_old_primary_price": 23.99
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "asin": "B0GWMFRPCN",
+      "variants": {
+        "more_variants": "+2 other colors/patterns",
+        "more_variants_link": "https://www.amazon.com/Farmhouse-Living-Stone-Like-Bedside-Bedroom/dp/B0GWMFRPCN/ref=cs_sr_dp_loc?keywords=table+lamp&qid=1785402486&sr=8-7"
+      },
+      "title": "Farmhouse Table Lamp for Living Room, Stone-Like Bedside Lamp for Bedroom | 26\" Tall Ginger Jar Side Lamp with Linen Shade, Rustic Boho Country Cottage End Table Lamp for Kitchen Counter Nightstand",
+      "link": "https://www.amazon.com/Farmhouse-Living-Stone-Like-Bedside-Bedroom/dp/B0GWMFRPCN/ref=sr_1_7?keywords=table+lamp&qid=1785402486&sr=8-7",
+      "link_clean": "https://www.amazon.com/Farmhouse-Living-Stone-Like-Bedside-Bedroom/dp/B0GWMFRPCN/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GWMFRPCN&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/81CxGCzEcpL._AC_UL320_.jpg",
+      "price": "$69.99",
+      "extracted_price": 69.99,
+      "offers": [
+        "Save 10% on 2 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$69.99",
+          "extracted_primary_price": 69.99
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "asin": "B0G2MGMMF3",
+      "title": "Seealle 23\" Modern Ceramic Table Lamps Set of 2, Lamps for Bedroom, White | Lamps for Living Room, Bedroom, Bedside, Night Stands, End Table, Desk, Farmhouse Home Decor",
+      "link": "https://www.amazon.com/Modern-Ceramic-Table-Lamps-Set/dp/B0G2MGMMF3/ref=sr_1_8?keywords=table+lamp&qid=1785402486&sr=8-8",
+      "link_clean": "https://www.amazon.com/Modern-Ceramic-Table-Lamps-Set/dp/B0G2MGMMF3/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0G2MGMMF3&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/819VYYKoxbL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 14,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$44.99",
+      "extracted_price": 44.99,
+      "offers": [
+        "Save 21% at checkout"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$44.99",
+          "extracted_primary_price": 44.99,
+          "secondary_price": "Save 21% at checkout",
+          "extracted_secondary_price": 21
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "asin": "B0G4PGCSNT",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0G4PGCSNT",
+            "title": "Warm&Wooden",
+            "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0G4PGCSNT/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-9"
+          },
+          {
+            "position": 2,
+            "asin": "B0H321NHXD",
+            "title": "White&Marble",
+            "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0H321NHXD/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-9"
+          },
+          {
+            "position": 3,
+            "asin": "B0GXY1XY61",
+            "title": "Triangle&Gold",
+            "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0GXY1XY61/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-9"
+          },
+          {
+            "position": 4,
+            "asin": "B0H326FZ9K",
+            "title": "Grey&Walnut",
+            "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0H326FZ9K/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-9"
+          },
+          {
+            "position": 5,
+            "asin": "B0H3246D7C",
+            "title": "Printed&White",
+            "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0H3246D7C/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-9"
+          },
+          {
+            "position": 6,
+            "asin": "B0H32CHBWT",
+            "title": "Black",
+            "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0H32CHBWT/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-9"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0G4PGCSNT/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-9"
+      },
+      "title": "Table Lamp for Bedroom, High-Sensitivity Touch, AC Outlet, USB A+C | 3-Level Dimmable Bedside Lamp with Eye-Care LED Bulb, Ideal Nightstand Lamp for Bedroom, Reading, Living Room (Warm&Wooden)",
+      "link": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0G4PGCSNT/ref=sr_1_9?keywords=table+lamp&qid=1785402486&sr=8-9",
+      "link_clean": "https://www.amazon.com/Fitfull-Nightstand-High-Sensitivity-3-Level-Dimmable/dp/B0G4PGCSNT/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0G4PGCSNT&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71yIOWYL6RL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 278,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$16.99",
+      "extracted_price": 16.99,
+      "old_price": "$22.99",
+      "extracted_old_price": 22.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$16.99",
+          "extracted_primary_price": 16.99,
+          "old_primary_price": "$22.99",
+          "extracted_old_primary_price": 22.99
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "asin": "B0F9X3PC9T",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0F9X3PC9T",
+            "title": "A. Beige Shade & Black Base",
+            "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X3PC9T/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-10"
+          },
+          {
+            "position": 2,
+            "asin": "B0F9X684P7",
+            "title": "B. Beige Shade & Black Base Set 2",
+            "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X684P7/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-10"
+          },
+          {
+            "position": 3,
+            "asin": "B0F9X6BPDM",
+            "title": "C. Oat Shade & Brown Base",
+            "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X6BPDM/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-10"
+          },
+          {
+            "position": 4,
+            "asin": "B0F9X4YHG1",
+            "title": "D. D:Beige Shade & Gold Base",
+            "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X4YHG1/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-10"
+          },
+          {
+            "position": 5,
+            "asin": "B0F9X71PC5",
+            "title": "G. White Shade & Silver Base",
+            "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X71PC5/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-10"
+          },
+          {
+            "position": 6,
+            "asin": "B0FCR8P9B6",
+            "title": "F. White Shade & Pearl-black Base",
+            "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0FCR8P9B6/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-10"
+          }
+        ],
+        "more_variants": "+4",
+        "more_variants_link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X3PC9T/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-10"
+      },
+      "title": "16.1\" Touch Table Lamp for Nightstand, 3 Way Dimmable Small Bedroom Lamp | Touch Control, Bulb Included, Black Bedside Lamps for Desk, Night Stands, Living Room, End Table, Corded",
+      "link": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X3PC9T/ref=sr_1_10?keywords=table+lamp&qid=1785402486&sr=8-10",
+      "link_clean": "https://www.amazon.com/Seealle-Nightstand-Dimmable-Bedroom-Bedside/dp/B0F9X3PC9T/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0F9X3PC9T&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71b+uZFjT-L._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 708,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$26.99",
+      "extracted_price": 26.99,
+      "offers": [
+        "Save 21% at checkout"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$26.99",
+          "extracted_primary_price": 26.99,
+          "secondary_price": "Save 21% at checkout",
+          "extracted_secondary_price": 21
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "asin": "B0C4JTPPYY",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0C4JTPPYY/ref=sr_1_11_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-11",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0C4JTPPYY",
+            "title": "Black",
+            "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0C4JTPPYY/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-11"
+          },
+          {
+            "position": 2,
+            "asin": "B0FJD9SVLM",
+            "title": "Matte White",
+            "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0FJD9SVLM/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-11"
+          },
+          {
+            "position": 3,
+            "asin": "B0D7Q66T5H",
+            "title": "Deep Black",
+            "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0D7Q66T5H/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-11"
+          },
+          {
+            "position": 4,
+            "asin": "B0GWTXC19J",
+            "title": "Brown",
+            "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0GWTXC19J/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-11"
+          },
+          {
+            "position": 5,
+            "asin": "B0GWTXXCB6",
+            "title": "Gold",
+            "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0GWTXXCB6/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-11"
+          },
+          {
+            "position": 6,
+            "asin": "B0CJ4JN52C",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0CJ4JN52C/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-11"
+          }
+        ],
+        "more_variants": "+7",
+        "more_variants_link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0C4JTPPYY/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-11"
+      },
+      "title": "Airlonv LED Desk Lamp with Clamp, 17\" Stepless Dimming Light, Black | 2700K-6500K, 100 LEDs, 360\u00b0 Gooseneck, Fits Up to 30\" Monitors, Flicker-Free Lighting for Home Office, Study& Workbench",
+      "link": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0C4JTPPYY/ref=sr_1_11?keywords=table+lamp&qid=1785402486&sr=8-11",
+      "link_clean": "https://www.amazon.com/Airlonv-Clamp-Stepless-Dimming-Light/dp/B0C4JTPPYY/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0C4JTPPYY&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Xa0fzUiGL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 7800,
+      "bought_last_month": "7K+ bought in past month",
+      "price": "$20.98",
+      "extracted_price": 20.98,
+      "old_price": "$25.99",
+      "extracted_old_price": 25.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$20.98",
+          "extracted_primary_price": 20.98,
+          "old_primary_price": "$25.99",
+          "extracted_old_primary_price": 25.99
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "asin": "B0F8BB3KV2",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F8BB3KV2/ref=sr_1_12_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-12",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0F8BB3KV2",
+            "title": "20.75'' Small - Beige and White",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F8BB3KV2/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-12"
+          },
+          {
+            "position": 2,
+            "asin": "B0F6Y134G5",
+            "title": "20.75'' Small - Light Pink",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F6Y134G5/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-12"
+          },
+          {
+            "position": 3,
+            "asin": "B0G4VZNCMP",
+            "title": "20.75'' Small - Brass Gold",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0G4VZNCMP/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-12"
+          },
+          {
+            "position": 4,
+            "asin": "B0F6XNWGYG",
+            "title": "20.75'' Small - Dark Green",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F6XNWGYG/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-12"
+          },
+          {
+            "position": 5,
+            "asin": "B0F6Y14MSY",
+            "title": "20.75'' Small - Dark Blue",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F6Y14MSY/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-12"
+          },
+          {
+            "position": 6,
+            "asin": "B0G4W4QQVQ",
+            "title": "20.75'' Small - Dark Grey",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0G4W4QQVQ/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-12"
+          }
+        ],
+        "more_variants": "+8",
+        "more_variants_link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F8BB3KV2/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-12"
+      },
+      "title": "PoKat 20.75\" Small Modern Ceramic Table Lamps Set of 2 for Bedroom, White | Bedside lamps for nightstands, farmhouse home decor, end table & desk light, ideal housewarming new home gift for women mom",
+      "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F8BB3KV2/ref=sr_1_12?keywords=table+lamp&qid=1785402486&sr=8-12",
+      "link_clean": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0F8BB3KV2/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0F8BB3KV2&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Qsv+yaH8L._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 885,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$39.99",
+      "extracted_price": 39.99,
+      "old_price": "$69.99",
+      "extracted_old_price": 69.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$39.99",
+          "extracted_primary_price": 39.99,
+          "old_primary_price": "$69.99",
+          "extracted_old_primary_price": 69.99
+        }
+      ]
+    },
+    {
+      "position": 13,
+      "asin": "B0DZD1X83N",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DZD1X83N",
+            "title": "Cream Shade - Wood Base",
+            "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD1X83N/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-13"
+          },
+          {
+            "position": 2,
+            "asin": "B0FQTY4JXB",
+            "title": "Cream Shade - Walnut Base set of 2",
+            "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0FQTY4JXB/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-13"
+          },
+          {
+            "position": 3,
+            "asin": "B0DZD31ZZF",
+            "title": "Cream Shade - Wood Base set of 2",
+            "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD31ZZF/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-13"
+          },
+          {
+            "position": 4,
+            "asin": "B0DZD3XSFX",
+            "title": "Ginkgo Cream Shade",
+            "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD3XSFX/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-13"
+          },
+          {
+            "position": 5,
+            "asin": "B0DZCZ44WZ",
+            "title": "Sunflower Cream Shade",
+            "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZCZ44WZ/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-13"
+          },
+          {
+            "position": 6,
+            "asin": "B0DZD25DYV",
+            "title": "Butterfly Cream Shade",
+            "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD25DYV/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-13"
+          }
+        ],
+        "more_variants": "+6",
+        "more_variants_link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD1X83N/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-13"
+      },
+      "title": "9\" Small Table Lamp for Bedroom - Inline Control with 3000K Blub | Cream Shade and Wood Base | 680 Lumens | Easy Assembly | Minimalist Design | E26 | for Kitchen | for Kids Room",
+      "link": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD1X83N/ref=sr_1_13?keywords=table+lamp&qid=1785402486&sr=8-13",
+      "link_clean": "https://www.amazon.com/Fenmzee-Small-Table-Lamp-Bedroom/dp/B0DZD1X83N/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DZD1X83N&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71HckKKPVML._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 1400,
+      "bought_last_month": "4K+ bought in past month",
+      "price": "$12.99",
+      "extracted_price": 12.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$10.39 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DZD1X83N/ref=sr_1_13_olp?keywords=table+lamp&qid=1785402486&sr=8-13",
+      "purchase_options": [
+        {
+          "primary_price": "$12.99",
+          "extracted_primary_price": 12.99,
+          "more_buying_choices": "$10.39 (2+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DZD1X83N/ref=sr_1_13_olp?keywords=table+lamp&qid=1785402486&sr=8-13"
+        }
+      ]
+    },
+    {
+      "position": 14,
+      "asin": "B0F4JSJSXH",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0F4JSJSXH",
+            "title": "Black",
+            "link": "https://www.amazon.com/HoperBriwght-Bedside-Table-Lampshades-Excluded/dp/B0F4JSJSXH/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-14"
+          },
+          {
+            "position": 2,
+            "asin": "B0F4JSFKKZ",
+            "title": "Wood",
+            "link": "https://www.amazon.com/HoperBriwght-Bedside-Table-Lampshades-Excluded/dp/B0F4JSFKKZ/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-14"
+          },
+          {
+            "position": 3,
+            "asin": "B0GSFJQ921",
+            "title": "Brown",
+            "link": "https://www.amazon.com/HoperBriwght-Bedside-Table-Lampshades-Excluded/dp/B0GSFJQ921/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-14"
+          }
+        ]
+      },
+      "title": "Bedside Table Lamps, Table Lamp for Bedroom, Lamps for Night Stands with Linen Lampshades, Small Table Lamp for Living Room, Office (Bulb Excluded)",
+      "link": "https://www.amazon.com/HoperBriwght-Bedside-Table-Lampshades-Excluded/dp/B0F4JSJSXH/ref=sr_1_14?keywords=table+lamp&qid=1785402486&sr=8-14",
+      "link_clean": "https://www.amazon.com/HoperBriwght-Bedside-Table-Lampshades-Excluded/dp/B0F4JSJSXH/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0F4JSJSXH&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/615XZ2DngSL._AC_UL320_.jpg",
+      "rating": 4.7,
+      "reviews": 340,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$11.59",
+      "extracted_price": 11.59,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$11.59",
+          "extracted_primary_price": 11.59
+        }
+      ]
+    },
+    {
+      "position": 15,
+      "asin": "B0DJYBF17N",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DJYBF17N",
+            "title": "Black 1",
+            "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0DJYBF17N/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-15"
+          },
+          {
+            "position": 2,
+            "asin": "B0DJYFJGQW",
+            "title": "Gold 1",
+            "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0DJYFJGQW/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-15"
+          },
+          {
+            "position": 3,
+            "asin": "B0FNM9NKQL",
+            "title": "Wood Grain 1",
+            "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0FNM9NKQL/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-15"
+          },
+          {
+            "position": 4,
+            "asin": "B0FSJWHD4Y",
+            "title": "White 1",
+            "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0FSJWHD4Y/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-15"
+          },
+          {
+            "position": 5,
+            "asin": "B0FS7B8MDR",
+            "title": "Pink 1",
+            "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0FS7B8MDR/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-15"
+          },
+          {
+            "position": 6,
+            "asin": "B0DJYCB6QY",
+            "title": "Brown 1",
+            "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0DJYCB6QY/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-15"
+          }
+        ],
+        "more_variants": "+13",
+        "more_variants_link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0DJYBF17N/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-15"
+      },
+      "title": "Kakanuo Cordless Table Lamp Rechargeable Black - KK 2 Pack 5000mAH Battery Operated Lamp for Counter, 3 Color Stepless Dimming Wireless Lamp for Dining Kitchen, Outdoor Patio, Touch Control",
+      "link": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0DJYBF17N/ref=sr_1_15?keywords=table+lamp&qid=1785402486&sr=8-15",
+      "link_clean": "https://www.amazon.com/Cordless-Table-Lamp-Rechargeable-Black/dp/B0DJYBF17N/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DJYBF17N&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/51hGSTESgyL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 1600,
+      "bought_last_month": "7K+ bought in past month",
+      "price": "$24.19",
+      "extracted_price": 24.19,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$16.93 (3+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DJYBF17N/ref=sr_1_15_olp?keywords=table+lamp&qid=1785402486&sr=8-15",
+      "purchase_options": [
+        {
+          "primary_price": "$24.19",
+          "extracted_primary_price": 24.19,
+          "more_buying_choices": "$16.93 (3+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DJYBF17N/ref=sr_1_15_olp?keywords=table+lamp&qid=1785402486&sr=8-15"
+        }
+      ]
+    },
+    {
+      "position": 16,
+      "asin": "B0D3WQKZ19",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WQKZ19/ref=sr_1_16_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-16",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0D3WQKZ19",
+            "title": "Matte Black",
+            "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WQKZ19/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-16"
+          },
+          {
+            "position": 2,
+            "asin": "B0F3HK3HCF",
+            "title": "Wood Grain",
+            "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0F3HK3HCF/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-16"
+          },
+          {
+            "position": 3,
+            "asin": "B0D3WK4RTC",
+            "title": "Antique Green",
+            "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WK4RTC/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-16"
+          },
+          {
+            "position": 4,
+            "asin": "B0D3WYD7B7",
+            "title": "Antique White",
+            "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WYD7B7/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-16"
+          },
+          {
+            "position": 5,
+            "asin": "B0GT4C2LKC",
+            "title": "Oil-Rubbed Bronze",
+            "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0GT4C2LKC/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-16"
+          },
+          {
+            "position": 6,
+            "asin": "B0D3WTFWQ9",
+            "title": "Antique Grey",
+            "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WTFWQ9/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-16"
+          }
+        ],
+        "more_variants": "+2",
+        "more_variants_link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WQKZ19/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-16"
+      },
+      "title": "Traditional Table Lamp Set of 2, Rustic Farmhouse Table Lamps for Living Room Bedroom, 22\" Bedside Desk Lamps Vintage Nightstand Lamps with Linen Shades, Black",
+      "link": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WQKZ19/ref=sr_1_16?keywords=table+lamp&qid=1785402486&sr=8-16",
+      "link_clean": "https://www.amazon.com/PARTPHONER-Traditional-Farmhouse-Bedroom-Nightstand/dp/B0D3WQKZ19/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0D3WQKZ19&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/81-cnzO42KL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 1800,
+      "bought_last_month": "400+ bought in past month",
+      "price": "$39.99",
+      "extracted_price": 39.99,
+      "old_price": "$49.98",
+      "extracted_old_price": 49.98,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$39.99",
+          "extracted_primary_price": 39.99,
+          "old_primary_price": "$49.98",
+          "extracted_old_primary_price": 49.98
+        }
+      ]
+    },
+    {
+      "position": 17,
+      "asin": "B0C3CMG9D8",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0C3CMG9D8",
+            "title": "Seeded Clear",
+            "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CMG9D8/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-17"
+          },
+          {
+            "position": 2,
+            "asin": "B0C3CJDYQB",
+            "title": "Gray",
+            "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CJDYQB/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-17"
+          },
+          {
+            "position": 3,
+            "asin": "B0C3CJMJRP",
+            "title": "Clear",
+            "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CJMJRP/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-17"
+          },
+          {
+            "position": 4,
+            "asin": "B0CYSJBYKD",
+            "title": "Opal Glass&Gold Base",
+            "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0CYSJBYKD/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-17"
+          },
+          {
+            "position": 5,
+            "asin": "B0C3CJSHN7",
+            "title": "Amber",
+            "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CJSHN7/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-17"
+          },
+          {
+            "position": 6,
+            "asin": "B0CYSJVJB7",
+            "title": "Clear Glass&Gold Base",
+            "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0CYSJVJB7/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-17"
+          }
+        ],
+        "more_variants": "+3",
+        "more_variants_link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CMG9D8/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-17"
+      },
+      "title": "Industrial Bedside Lamps Set of 2, Fully Dimmable Desk Lamps for Bedroom | Glass Shade, USB C+A Charging Port & Outlet, Black Nightstand Table Lamps for Living Room, Office, Reading, Vintage",
+      "link": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CMG9D8/ref=sr_1_17?keywords=table+lamp&qid=1785402486&sr=8-17",
+      "link_clean": "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CMG9D8/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0C3CMG9D8&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71s0Cn5QR0L._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 3100,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$49.99",
+      "extracted_price": 49.99,
+      "save_with_coupon": "You pay $37.49 with coupon",
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "more_buying_choices": "$42.49 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0C3CMG9D8/ref=sr_1_17_olp?keywords=table+lamp&qid=1785402486&sr=8-17",
+      "climate_pledge_friendly": true,
+      "sustainability_features": [
+        {
+          "position": 1,
+          "name": "Recycled materials",
+          "snippet": "Contains at least 50% recycled material.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 2,
+          "name": "Safer chemicals",
+          "snippet": "Made with chemicals safer for human health and the environment.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 3,
+          "name": "Worker well-being",
+          "snippet": "Manufactured on farms or in facilities that protect the rights and/or health of workers.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        }
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$49.99",
+          "extracted_primary_price": 49.99,
+          "more_buying_choices": "$42.49 (2+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0C3CMG9D8/ref=sr_1_17_olp?keywords=table+lamp&qid=1785402486&sr=8-17"
+        }
+      ]
+    },
+    {
+      "position": 18,
+      "asin": "B0D41XL87F",
+      "title": "Govee RGBIC Smart Table Lamp 2, Touch Bedside Small Table Lamp (Corded) | LED Desk Lamp Compatible with SmartThings, Matter, Alexa, Nightstand Lamp for Bedroom Living Room Night Light, 64 Scene Modes",
+      "link": "https://www.amazon.com/Govee-Bedside-Changing-Bedroom-Dimmable/dp/B0D41XL87F/ref=sr_1_18?keywords=table+lamp&qid=1785402486&sr=8-18",
+      "link_clean": "https://www.amazon.com/Govee-Bedside-Changing-Bedroom-Dimmable/dp/B0D41XL87F/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0D41XL87F&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/618yTEtHltL._AC_UL320_.jpg",
+      "rating": 4.7,
+      "reviews": 2300,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$69.99",
+      "extracted_price": 69.99,
+      "old_price": "$79.99",
+      "extracted_old_price": 79.99,
+      "offers": [
+        "Save 5% on 2 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "climate_pledge_friendly": true,
+      "works_with_alexa": true,
+      "sustainability_features": [
+        {
+          "position": 1,
+          "name": "Carbon impact",
+          "snippet": "Carbon emissions from the lifecycle of this product were measured, reduced and/or offset.",
+          "thumbnail": "https://m.media-amazon.com/images/I/117Gv10-Q1L._SS200_.png",
+          "certified_by": "ClimatePartner certified",
+          "certified_info": "The ClimatePartner certified product label confirms that a product meets the requirements for the five steps in climate action including calculating carbon footprints, setting reduction targets, implementing reductions, financing climate projects and communicating transparently to continuously reducing emissions."
+        }
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$69.99",
+          "extracted_primary_price": 69.99,
+          "old_primary_price": "$79.99",
+          "extracted_old_primary_price": 79.99
+        }
+      ]
+    },
+    {
+      "position": 19,
+      "asin": "B0DZFGTCLR",
+      "title": "Innqoo Candle Warmer Lamp with Timer Home Decor Birthday Gifts for Women | Dimmable Candle Warmer for Jar Candles, Height Adjustable Wax Melts Warmer, Room Decor House Warming Gifts New",
+      "link": "https://www.amazon.com/Innqoo-Dimmable-Candles-Adjustable-Birthday/dp/B0DZFGTCLR/ref=sr_1_19?keywords=table+lamp&qid=1785402486&sr=8-19",
+      "link_clean": "https://www.amazon.com/Innqoo-Dimmable-Candles-Adjustable-Birthday/dp/B0DZFGTCLR/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DZFGTCLR&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71t96oyL+UL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 3700,
+      "bought_last_month": "50K+ bought in past month",
+      "price": "$16.99",
+      "extracted_price": 16.99,
+      "old_price": "$19.99",
+      "extracted_old_price": 19.99,
+      "save_with_coupon": "You pay $12.91 with coupon",
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$8.99 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DZFGTCLR/ref=sr_1_19_olp?keywords=table+lamp&qid=1785402486&sr=8-19",
+      "climate_pledge_friendly": true,
+      "sustainability_features": [
+        {
+          "position": 1,
+          "name": "Recycled materials",
+          "snippet": "Contains at least 50% recycled material.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 2,
+          "name": "Safer chemicals",
+          "snippet": "Made with chemicals safer for human health and the environment.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 3,
+          "name": "Worker well-being",
+          "snippet": "Manufactured on farms or in facilities that protect the rights and/or health of workers.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        }
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$16.99",
+          "extracted_primary_price": 16.99,
+          "old_primary_price": "$19.99",
+          "extracted_old_primary_price": 19.99,
+          "more_buying_choices": "$8.99 (2+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DZFGTCLR/ref=sr_1_19_olp?keywords=table+lamp&qid=1785402486&sr=8-19"
+        }
+      ]
+    },
+    {
+      "position": 20,
+      "asin": "B0FLDBRFMG",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0FLDBRFMG",
+            "title": "Beige+Pearwood",
+            "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLDBRFMG/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-20"
+          },
+          {
+            "position": 2,
+            "asin": "B0FLDBRC71",
+            "title": "2Pack White+Pearwood",
+            "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLDBRC71/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-20"
+          },
+          {
+            "position": 3,
+            "asin": "B0FLD898L2",
+            "title": "2Pack White+Natural Wood",
+            "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLD898L2/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-20"
+          },
+          {
+            "position": 4,
+            "asin": "B0G58GJDFW",
+            "title": "2Pack Beige+Pearwood",
+            "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0G58GJDFW/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-20"
+          },
+          {
+            "position": 5,
+            "asin": "B0G58KTNZ1",
+            "title": "Gray+Dark Walnut",
+            "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0G58KTNZ1/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-20"
+          },
+          {
+            "position": 6,
+            "asin": "B0FLDDD9PR",
+            "title": "Pink+Natural Wood",
+            "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLDDD9PR/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-20"
+          }
+        ],
+        "more_variants": "+8",
+        "more_variants_link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLDBRFMG/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-20"
+      },
+      "title": "Tripod Table Lamp, 14.6 Inch Small Bedside Lamp with Beige Linen Shade, Modern Nightstand Lamp for Bedroom, Kids Room, Living Room, Nursery, Office, E26 Socket, Dark Wood Base, LE51TL05",
+      "link": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLDBRFMG/ref=sr_1_20?keywords=table+lamp&qid=1785402486&sr=8-20",
+      "link_clean": "https://www.amazon.com/GOEBLESON-Table-Nightstand-Bedside-LE51TL05/dp/B0FLDBRFMG/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FLDBRFMG&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71E4qcE729L._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 190,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$19.98",
+      "extracted_price": 19.98,
+      "old_price": "$24.99",
+      "extracted_old_price": 24.99,
+      "offers": [
+        "Save 5% on 5 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$18.89 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0FLDBRFMG/ref=sr_1_20_olp?keywords=table+lamp&qid=1785402486&sr=8-20",
+      "purchase_options": [
+        {
+          "primary_price": "$19.98",
+          "extracted_primary_price": 19.98,
+          "old_primary_price": "$24.99",
+          "extracted_old_primary_price": 24.99,
+          "more_buying_choices": "$18.89 (2+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0FLDBRFMG/ref=sr_1_20_olp?keywords=table+lamp&qid=1785402486&sr=8-20"
+        }
+      ]
+    },
+    {
+      "position": 21,
+      "asin": "B0BB5ZBT42",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Voncerus-Clamp-Lights-Office-Black/dp/B0BB5ZBT42/ref=sr_1_21_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-21",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BB5ZBT42",
+            "title": "\u200eS1 Black",
+            "link": "https://www.amazon.com/Voncerus-Clamp-Lights-Office-Black/dp/B0BB5ZBT42/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-21"
+          },
+          {
+            "position": 2,
+            "asin": "B0BB1SJ1B5",
+            "title": "S1 White and Silver",
+            "link": "https://www.amazon.com/Voncerus-Clamp-Lights-Office-Black/dp/B0BB1SJ1B5/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-21"
+          }
+        ]
+      },
+      "title": "LED Desk Lamp with Clamp, Clip on Lights for Home Office, Black | 3 Modes 10 Brightness, Long Flexible Goose-Neck, Eye-Caring, Memory Function, Energy Efficient, USB Adapter, Metal",
+      "link": "https://www.amazon.com/Voncerus-Clamp-Lights-Office-Black/dp/B0BB5ZBT42/ref=sr_1_21?keywords=table+lamp&qid=1785402486&sr=8-21",
+      "link_clean": "https://www.amazon.com/Voncerus-Clamp-Lights-Office-Black/dp/B0BB5ZBT42/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BB5ZBT42&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61RJ3ZzSURL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 8800,
+      "bought_last_month": "6K+ bought in past month",
+      "price": "$16.99",
+      "extracted_price": 16.99,
+      "old_price": "$22.99",
+      "extracted_old_price": 22.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "climate_pledge_friendly": true,
+      "sustainability_features": [
+        {
+          "position": 1,
+          "name": "Recycled materials",
+          "snippet": "Contains at least 50% recycled material.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51-XBqrXUyL._SS200_.png",
+          "certified_by": "Recycled Claim Standard Blended",
+          "certified_info": "Recycled Claim Standard (RCS Blended) certified products contain recycled content (>50%) that has been independently verified at each stage of the supply chain, from the source to the final product. The purchase of Recycled Claim Standard (RCS) certified products demonstrates demand for recycled materials. Climate Pledge Friendly requires the product contain at least 50% certified RCS Blended material by weight."
+        }
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$16.99",
+          "extracted_primary_price": 16.99,
+          "old_primary_price": "$22.99",
+          "extracted_old_primary_price": 22.99
+        }
+      ]
+    },
+    {
+      "position": 22,
+      "asin": "B0G4VTYPQG",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4VTYPQG/ref=sr_1_22_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-22",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0G4VTYPQG",
+            "title": "Blue - Silver",
+            "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4VTYPQG/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-22"
+          },
+          {
+            "position": 2,
+            "asin": "B0G4W4FQFD",
+            "title": "White",
+            "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4W4FQFD/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-22"
+          },
+          {
+            "position": 3,
+            "asin": "B0G4W2LSTS",
+            "title": "Gold",
+            "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4W2LSTS/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-22"
+          },
+          {
+            "position": 4,
+            "asin": "B0G4W2D33L",
+            "title": "Black",
+            "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4W2D33L/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-22"
+          },
+          {
+            "position": 5,
+            "asin": "B0G4VZKG84",
+            "title": "White - Black",
+            "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4VZKG84/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-22"
+          },
+          {
+            "position": 6,
+            "asin": "B0G4W12ZL3",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4W12ZL3/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-22"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4VTYPQG/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-22"
+      },
+      "title": "Touch Lamps for Bedroom Set of 2 - Dimmable, USB C+A, AC Outlet | Large 17.6\" Tall Lamp, 3-Way Dimming, 5000K Daylight Bulbs, Navy Blue Lampshade Silver Base, Decor for Living Room, Boys, Men",
+      "link": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4VTYPQG/ref=sr_1_22?keywords=table+lamp&qid=1785402486&sr=8-22",
+      "link_clean": "https://www.amazon.com/Blue-Touch-Lamps-Nightstand-Set/dp/B0G4VTYPQG/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0G4VTYPQG&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/81oXQhgk4JL._AC_UL320_.jpg",
+      "rating": 4.7,
+      "reviews": 387,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$29.99",
+      "extracted_price": 29.99,
+      "old_price": "$39.99",
+      "extracted_old_price": 39.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$29.99",
+          "extracted_primary_price": 29.99,
+          "old_primary_price": "$39.99",
+          "extracted_old_primary_price": 39.99
+        }
+      ]
+    },
+    {
+      "position": 23,
+      "asin": "B0C277LF46",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Honeywell-SunturaluxTM-Charging-Ports-HWT-H01/dp/B0C277LF46/ref=sr_1_23_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-23",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0C277LF46",
+            "title": "Black",
+            "link": "https://www.amazon.com/Honeywell-SunturaluxTM-Charging-Ports-HWT-H01/dp/B0C277LF46/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-23"
+          },
+          {
+            "position": 2,
+            "asin": "B0C2773FPN",
+            "title": "Gray",
+            "link": "https://www.amazon.com/Honeywell-SunturaluxTM-Charging-Ports-HWT-H01/dp/B0C2773FPN/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-23"
+          },
+          {
+            "position": 3,
+            "asin": "B0C276T1S3",
+            "title": "White",
+            "link": "https://www.amazon.com/Honeywell-SunturaluxTM-Charging-Ports-HWT-H01/dp/B0C276T1S3/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-23"
+          }
+        ]
+      },
+      "title": "Honeywell HWT-H01 LED Desk Lamp, Foldable & Stepless Dimmable, Black | Sunturalux Eye-Caring Desk Light with Charging Ports, Modern Table Lamp, Reading Lamp for Home Office Bedroom College Dorm",
+      "link": "https://www.amazon.com/Honeywell-SunturaluxTM-Charging-Ports-HWT-H01/dp/B0C277LF46/ref=sr_1_23?keywords=table+lamp&qid=1785402486&sr=8-23",
+      "link_clean": "https://www.amazon.com/Honeywell-SunturaluxTM-Charging-Ports-HWT-H01/dp/B0C277LF46/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0C277LF46&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/41ZMgydNUnL._AC_UL320_.jpg",
+      "rating": 4.7,
+      "reviews": 2200,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$37.99",
+      "extracted_price": 37.99,
+      "old_price": "$43.99",
+      "extracted_old_price": 43.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$37.99",
+          "extracted_primary_price": 37.99,
+          "old_primary_price": "$43.99",
+          "extracted_old_primary_price": 43.99
+        }
+      ]
+    },
+    {
+      "position": 24,
+      "asin": "B0C4SZBN64",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0C4SZBN64",
+            "title": "Beige and White",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0C4SZBN64/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-24"
+          },
+          {
+            "position": 2,
+            "asin": "B0CPYCDMCR",
+            "title": "Single - Beige and White - 23",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0CPYCDMCR/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-24"
+          },
+          {
+            "position": 3,
+            "asin": "B0DXKFNBH1",
+            "title": "Cream Pink",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0DXKFNBH1/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-24"
+          },
+          {
+            "position": 4,
+            "asin": "B0G4VYG982",
+            "title": "Cream",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0G4VYG982/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-24"
+          },
+          {
+            "position": 5,
+            "asin": "B0DNMVPBCJ",
+            "title": "Light Pink",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0DNMVPBCJ/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-24"
+          },
+          {
+            "position": 6,
+            "asin": "B0GK7BTT9H",
+            "title": "Autumn Gold",
+            "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0GK7BTT9H/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-24"
+          }
+        ],
+        "more_variants": "+12",
+        "more_variants_link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0C4SZBN64/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-24"
+      },
+      "title": "PoKat 23\" Modern Ceramic Table Lamp Set of 2 for Living Room Bedroom, White | Nightstand Lamps for Bedside, farmhouse end table & desk light, ideal housewarming gift, new home decor for women mom",
+      "link": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0C4SZBN64/ref=sr_1_24?keywords=table+lamp&qid=1785402486&sr=8-24",
+      "link_clean": "https://www.amazon.com/PoKat-Ceramic-Bedroom-Farmhouse-Nightstand/dp/B0C4SZBN64/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0C4SZBN64&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/710mJWK3xzL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 1600,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$58.78",
+      "extracted_price": 58.78,
+      "old_price": "$69.99",
+      "extracted_old_price": 69.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$58.78",
+          "extracted_primary_price": 58.78,
+          "old_primary_price": "$69.99",
+          "extracted_old_primary_price": 69.99
+        }
+      ]
+    },
+    {
+      "position": 25,
+      "asin": "B0DMSJ35R6",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMSJ35R6/ref=sr_1_25_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-25",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DMSJ35R6",
+            "title": "A-Beige Shade & Black Base",
+            "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMSJ35R6/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-25"
+          },
+          {
+            "position": 2,
+            "asin": "B0DMS3NN5K",
+            "title": "D-White Shade& Gold Base",
+            "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMS3NN5K/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-25"
+          },
+          {
+            "position": 3,
+            "asin": "B0DMRV67VP",
+            "title": "B-White Shade & Black Base",
+            "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMRV67VP/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-25"
+          },
+          {
+            "position": 4,
+            "asin": "B0GDFV7KVB",
+            "title": "E-Beige Shade & Brown Base",
+            "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0GDFV7KVB/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-25"
+          },
+          {
+            "position": 5,
+            "asin": "B0GDFN69HG",
+            "title": "F-Beige Shade & Wood Base",
+            "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0GDFN69HG/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-25"
+          },
+          {
+            "position": 6,
+            "asin": "B0GDFGDSBB",
+            "title": "G-Black Shade & Black Base",
+            "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0GDFGDSBB/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-25"
+          }
+        ],
+        "more_variants": "+2",
+        "more_variants_link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMSJ35R6/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-25"
+      },
+      "title": "20.7\" Tall Table Lamp with USB & Outlet, Fully Dimmable Nightstand Lamp | Linen Lampshade, USB Port and Outlet, Black Desk Lamp for Bedside, Living Room, Guest Room, Home Office, LED Bulb Included",
+      "link": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMSJ35R6/ref=sr_1_25?keywords=table+lamp&qid=1785402486&sr=8-25",
+      "link_clean": "https://www.amazon.com/Dimmable-Nightstand-Bedside-Lampshade-Included/dp/B0DMSJ35R6/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DMSJ35R6&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71PET6t0MTL._AC_UL320_.jpg",
+      "rating": 4.3,
+      "reviews": 465,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$33.99",
+      "extracted_price": 33.99,
+      "old_price": "$37.99",
+      "extracted_old_price": 37.99,
+      "offers": [
+        "Save 5% on 2 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$33.99",
+          "extracted_primary_price": 33.99,
+          "old_primary_price": "$37.99",
+          "extracted_old_primary_price": 37.99
+        }
+      ]
+    },
+    {
+      "position": 26,
+      "asin": "B08923SXXP",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B08923SXXP",
+            "title": "Black",
+            "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B08923SXXP/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-26"
+          },
+          {
+            "position": 2,
+            "asin": "B0DGKZMQFG",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B0DGKZMQFG/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-26"
+          },
+          {
+            "position": 3,
+            "asin": "B0DGKSSPBQ",
+            "title": "Blue",
+            "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B0DGKSSPBQ/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-26"
+          },
+          {
+            "position": 4,
+            "asin": "B0CLRQ8P3Y",
+            "title": "White",
+            "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B0CLRQ8P3Y/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-26"
+          },
+          {
+            "position": 5,
+            "asin": "B0DGKT3S1B",
+            "title": "Gold",
+            "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B0DGKT3S1B/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-26"
+          },
+          {
+            "position": 6,
+            "asin": "B0CLRQ8V4B",
+            "title": "Silver",
+            "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B0CLRQ8V4B/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-26"
+          }
+        ]
+      },
+      "title": "LED Desk Lamp with USB Ports,Touch Desk Lamps for Home Office with 5 Modes | 3 Brightness Desk Light with Small Night Light,Reading Lamp Table Lamp for Bedroom Bedside Study Black \uff08with adapter\uff09",
+      "link": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B08923SXXP/ref=sr_1_26?keywords=table+lamp&qid=1785402486&sr=8-26",
+      "link_clean": "https://www.amazon.com/Ports-Touch-Lamps-Office-Modes/dp/B08923SXXP/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B08923SXXP&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61po0IyEmOL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 14000,
+      "bought_last_month": "4K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99
+        }
+      ]
+    },
+    {
+      "position": 27,
+      "asin": "B0BTCYTJ67",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BTCYTJ67",
+            "title": "(2 Pack)Gray Linen & Matte Black(Base)-5000K Bulbs Included",
+            "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0BTCYTJ67/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-27"
+          },
+          {
+            "position": 2,
+            "asin": "B0DZXH6C4B",
+            "title": "(2 Pack)Black Line & Gold (Base)-2700K Bulbs Included",
+            "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0DZXH6C4B/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-27"
+          },
+          {
+            "position": 3,
+            "asin": "B0D45HSPF6",
+            "title": "(2 Pack)Black Linen& Matte Black(Base)-2700K Bulbs Included",
+            "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0D45HSPF6/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-27"
+          },
+          {
+            "position": 4,
+            "asin": "B0B6VHKZWM",
+            "title": "(2 Pack)-Beige Linen & Matte Black(Base)-2700K Bulbs Included",
+            "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0B6VHKZWM/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-27"
+          },
+          {
+            "position": 5,
+            "asin": "B0CHMLQ1G4",
+            "title": "(2 Pack)White Cream Linen & Brushed Gold (Base)-2700K Bulbs Included",
+            "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0CHMLQ1G4/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-27"
+          },
+          {
+            "position": 6,
+            "asin": "B0DP5YM6ZJ",
+            "title": "(2 Pack)White Linen & Brass (Base)-2700K Bulbs Included",
+            "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0DP5YM6ZJ/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-27"
+          }
+        ],
+        "more_variants": "+14",
+        "more_variants_link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0BTCYTJ67/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-27"
+      },
+      "title": "21\" Touch Bedside lamps with 2 USB & AC Outlets, 3-Way Dimmable Bedside Table Lamps Set of 2 for Bedroom Living Room Office Reading, Gray Shade Lamps for Night Stands, 5000K LED Bulbs Included",
+      "link": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0BTCYTJ67/ref=sr_1_27?keywords=table+lamp&qid=1785402486&sr=8-27",
+      "link_clean": "https://www.amazon.com/Control-Outlets-Dimmable-Nightstand-Included/dp/B0BTCYTJ67/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BTCYTJ67&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61wDurUKhuL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 1800,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$49.99",
+      "extracted_price": 49.99,
+      "old_price": "$59.99",
+      "extracted_old_price": 59.99,
+      "save_with_coupon": "You pay $42.49 with coupon",
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "more_buying_choices": "$47.49 (3 used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0BTCYTJ67/ref=sr_1_27_olp?keywords=table+lamp&qid=1785402486&sr=8-27",
+      "purchase_options": [
+        {
+          "primary_price": "$49.99",
+          "extracted_primary_price": 49.99,
+          "old_primary_price": "$59.99",
+          "extracted_old_primary_price": 59.99,
+          "more_buying_choices": "$47.49 (3 used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0BTCYTJ67/ref=sr_1_27_olp?keywords=table+lamp&qid=1785402486&sr=8-27"
+        }
+      ]
+    },
+    {
+      "position": 28,
+      "asin": "B09BDGBV43",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B09BDGBV43",
+            "title": "White",
+            "link": "https://www.amazon.com/Signature-Design-Ashley-Wardmont-Dimensional/dp/B09BDGBV43/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-28"
+          },
+          {
+            "position": 2,
+            "asin": "B097XL8XS9",
+            "title": "Off-White",
+            "link": "https://www.amazon.com/Signature-Design-Ashley-Wardmont-Dimensional/dp/B097XL8XS9/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-28"
+          }
+        ]
+      },
+      "title": "Signature Design by Ashley Wardmont Table Lamp, Compact Bedside Lamp for Nightstand, Retro Dimensional Base with Drum Shade, Antique White Ceramic, 18\" H",
+      "link": "https://www.amazon.com/Signature-Design-Ashley-Wardmont-Dimensional/dp/B09BDGBV43/ref=sr_1_28?keywords=table+lamp&qid=1785402486&sr=8-28",
+      "link_clean": "https://www.amazon.com/Signature-Design-Ashley-Wardmont-Dimensional/dp/B09BDGBV43/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B09BDGBV43&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61w5OA5JfRL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 616,
+      "bought_last_month": "300+ bought in past month",
+      "price": "$54.99",
+      "extracted_price": 54.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "more_buying_choices": "$34.85 (3+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B09BDGBV43/ref=sr_1_28_olp?keywords=table+lamp&qid=1785402486&sr=8-28",
+      "purchase_options": [
+        {
+          "primary_price": "$54.99",
+          "extracted_primary_price": 54.99,
+          "more_buying_choices": "$34.85 (3+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B09BDGBV43/ref=sr_1_28_olp?keywords=table+lamp&qid=1785402486&sr=8-28"
+        }
+      ]
+    },
+    {
+      "position": 29,
+      "asin": "B0CPYCDMCR",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0CPYCDMCR",
+            "title": "Single - Beige and White - 23",
+            "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0CPYCDMCR/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-29"
+          },
+          {
+            "position": 2,
+            "asin": "B0DXKFNBH1",
+            "title": "Cream Pink",
+            "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0DXKFNBH1/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-29"
+          },
+          {
+            "position": 3,
+            "asin": "B0G4VYG982",
+            "title": "Cream",
+            "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0G4VYG982/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-29"
+          },
+          {
+            "position": 4,
+            "asin": "B0DNMVPBCJ",
+            "title": "Light Pink",
+            "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0DNMVPBCJ/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-29"
+          },
+          {
+            "position": 5,
+            "asin": "B0GK7BTT9H",
+            "title": "Autumn Gold",
+            "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0GK7BTT9H/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-29"
+          },
+          {
+            "position": 6,
+            "asin": "B0C4SZBN64",
+            "title": "Beige and White",
+            "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0C4SZBN64/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-29"
+          }
+        ],
+        "more_variants": "+12",
+        "more_variants_link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0CPYCDMCR/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-29"
+      },
+      "title": "PoKat 23'' Bedside Table Lamp for Bedroom Nightstands, Birthday Gifts for Women Mom, House Warming Gifts New Home Decor, Ceramic Desk Lamp for Living Room, White Modern Bedroom Lamp",
+      "link": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0CPYCDMCR/ref=sr_1_29?keywords=table+lamp&qid=1785402486&sr=8-29",
+      "link_clean": "https://www.amazon.com/PoKat-Bedside-Table-Bedroom-Nightstand/dp/B0CPYCDMCR/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0CPYCDMCR&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71lyVEHYapL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 1600,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$39.94",
+      "extracted_price": 39.94,
+      "old_price": "$46.99",
+      "extracted_old_price": 46.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "more_buying_choices": "$36.35 (2 used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0CPYCDMCR/ref=sr_1_29_olp?keywords=table+lamp&qid=1785402486&sr=8-29",
+      "purchase_options": [
+        {
+          "primary_price": "$39.94",
+          "extracted_primary_price": 39.94,
+          "old_primary_price": "$46.99",
+          "extracted_old_primary_price": 46.99,
+          "more_buying_choices": "$36.35 (2 used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0CPYCDMCR/ref=sr_1_29_olp?keywords=table+lamp&qid=1785402486&sr=8-29"
+        }
+      ]
+    },
+    {
+      "position": 30,
+      "asin": "B0DK4QZ1C6",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0DK4QZ1C6/ref=sr_1_30_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-30",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DK4QZ1C6",
+            "title": "Black",
+            "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0DK4QZ1C6/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-30"
+          },
+          {
+            "position": 2,
+            "asin": "B07JHDQ6CL",
+            "title": "Nickle-White",
+            "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B07JHDQ6CL/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-30"
+          },
+          {
+            "position": 3,
+            "asin": "B0D2XKHXC3",
+            "title": "Flax-Yellowish",
+            "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0D2XKHXC3/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-30"
+          },
+          {
+            "position": 4,
+            "asin": "B0D2XHCYD7",
+            "title": "Blue-White",
+            "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0D2XHCYD7/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-30"
+          },
+          {
+            "position": 5,
+            "asin": "B0D2XKCG2B",
+            "title": "Pink-White",
+            "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0D2XKCG2B/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-30"
+          },
+          {
+            "position": 6,
+            "asin": "B0D2XKDZFZ",
+            "title": "Black-Black",
+            "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0D2XKDZFZ/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-30"
+          }
+        ],
+        "more_variants": "+3",
+        "more_variants_link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0DK4QZ1C6/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-30"
+      },
+      "title": "Bedside Table Lamp for Bedroom,Small Lamps for Night stands with Pull Chain | 3-Color Bedroom Table Lamps Desk Reading Light AC Outlet Nightstand Lamp for Living Room Decor/Dorm/Office Bulb Included",
+      "link": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0DK4QZ1C6/ref=sr_1_30?keywords=table+lamp&qid=1785402486&sr=8-30",
+      "link_clean": "https://www.amazon.com/Dott-Arts-Bedroom-Nightstand-Included/dp/B0DK4QZ1C6/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DK4QZ1C6&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/715cEiSokgL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 6000,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$15.99",
+      "extracted_price": 15.99,
+      "old_price": "$17.99",
+      "extracted_old_price": 17.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$15.99",
+          "extracted_primary_price": 15.99,
+          "old_primary_price": "$17.99",
+          "extracted_old_primary_price": 17.99
+        }
+      ]
+    },
+    {
+      "position": 31,
+      "asin": "B0CX144DHK",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0CX144DHK",
+            "title": "Orange",
+            "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CX144DHK/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-31"
+          },
+          {
+            "position": 2,
+            "asin": "B0FSXDKXVK",
+            "title": "Green",
+            "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0FSXDKXVK/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-31"
+          },
+          {
+            "position": 3,
+            "asin": "B0CX1KDRKP",
+            "title": "White",
+            "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CX1KDRKP/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-31"
+          },
+          {
+            "position": 4,
+            "asin": "B0CX17LWLY",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CX17LWLY/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-31"
+          },
+          {
+            "position": 5,
+            "asin": "B0D832KHTV",
+            "title": "Red",
+            "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0D832KHTV/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-31"
+          },
+          {
+            "position": 6,
+            "asin": "B0CWZXV59N",
+            "title": "Cream",
+            "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CWZXV59N/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-31"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CX144DHK/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-31"
+      },
+      "title": "Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp(Orange) | Cool Desk Lamps for Bedroom,Vintage Dimmable Bedside Small Cute Lamps, House Warming Gifts New Home Decor",
+      "link": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CX144DHK/ref=sr_1_31?keywords=table+lamp&qid=1785402486&sr=8-31",
+      "link_clean": "https://www.amazon.com/Glivpny-Century-Nightstand-3-Color-Options/dp/B0CX144DHK/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0CX144DHK&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/615y+g1kiAL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 688,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$37.99",
+      "extracted_price": 37.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$37.99",
+          "extracted_primary_price": 37.99
+        }
+      ]
+    },
+    {
+      "position": 32,
+      "asin": "B0FCS5W2WL",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0FCS5W2WL",
+            "title": "Black",
+            "link": "https://www.amazon.com/15W-Desk-Lamp-Charging-Ports/dp/B0FCS5W2WL/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-32"
+          },
+          {
+            "position": 2,
+            "asin": "B0FCS4D8P1",
+            "title": "White",
+            "link": "https://www.amazon.com/15W-Desk-Lamp-Charging-Ports/dp/B0FCS4D8P1/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-32"
+          }
+        ]
+      },
+      "title": "15W LED Desk Lamp with USB Charging Ports \u2013 Dimmable Table Lamp with 3 Color Temps, 5 Brightness, 4 Timers, Flexible Gooseneck Light with Base, Eye-Caring Reading Light for Home Office, Bedroom, Study",
+      "link": "https://www.amazon.com/15W-Desk-Lamp-Charging-Ports/dp/B0FCS5W2WL/ref=sr_1_32?keywords=table+lamp&qid=1785402486&sr=8-32",
+      "link_clean": "https://www.amazon.com/15W-Desk-Lamp-Charging-Ports/dp/B0FCS5W2WL/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FCS5W2WL&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61bl-TYGyzL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 1200,
+      "bought_last_month": "4K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$17.59 (3+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0FCS5W2WL/ref=sr_1_32_olp?keywords=table+lamp&qid=1785402486&sr=8-32",
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99,
+          "more_buying_choices": "$17.59 (3+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0FCS5W2WL/ref=sr_1_32_olp?keywords=table+lamp&qid=1785402486&sr=8-32"
+        }
+      ]
+    },
+    {
+      "position": 33,
+      "asin": "B0BXFS3HW9",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BXFS3HW9",
+            "title": "Earth Brown",
+            "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0BXFS3HW9/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-33"
+          },
+          {
+            "position": 2,
+            "asin": "B09KMDZK9N",
+            "title": "Vintage Grey",
+            "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B09KMDZK9N/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-33"
+          },
+          {
+            "position": 3,
+            "asin": "B0B726K59N",
+            "title": "Vintage Black",
+            "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0B726K59N/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-33"
+          },
+          {
+            "position": 4,
+            "asin": "B0D6C32DTJ",
+            "title": "Dark Purple",
+            "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0D6C32DTJ/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-33"
+          },
+          {
+            "position": 5,
+            "asin": "B0DH9SJCZN",
+            "title": "Blush Pink",
+            "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0DH9SJCZN/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-33"
+          },
+          {
+            "position": 6,
+            "asin": "B0DH9WDN4K",
+            "title": "Off-White",
+            "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0DH9WDN4K/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-33"
+          }
+        ],
+        "more_variants": "+4",
+        "more_variants_link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0BXFS3HW9/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-33"
+      },
+      "title": "Nourison Home 23\" Greyish Brown Earth Tone Rustic Farmhouse Ceramic Table Lamp for Bedroom, Living Room, Dining, Office, with Beige Linen Shade",
+      "link": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0BXFS3HW9/ref=sr_1_33?keywords=table+lamp&qid=1785402486&sr=8-33",
+      "link_clean": "https://www.amazon.com/Nourison-Rustic-Ceramic-Bedroom-Tapered/dp/B0BXFS3HW9/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BXFS3HW9&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/714qRk6OBfL._AC_UL320_.jpg",
+      "rating": 4.3,
+      "reviews": 1000,
+      "bought_last_month": "400+ bought in past month",
+      "price": "$85.50",
+      "extracted_price": 85.5,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$85.50",
+          "extracted_primary_price": 85.5
+        }
+      ]
+    },
+    {
+      "position": 34,
+      "asin": "B0D2LGK82V",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0D2LGK82V/ref=sr_1_34_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-34",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0D2LGK82V",
+            "title": "Black",
+            "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0D2LGK82V/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-34"
+          },
+          {
+            "position": 2,
+            "asin": "B0GKLWBJ9B",
+            "title": "Blue",
+            "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0GKLWBJ9B/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-34"
+          },
+          {
+            "position": 3,
+            "asin": "B0GD5LW8LC",
+            "title": "White",
+            "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0GD5LW8LC/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-34"
+          },
+          {
+            "position": 4,
+            "asin": "B0GF1FZHRX",
+            "title": "White Pro",
+            "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0GF1FZHRX/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-34"
+          },
+          {
+            "position": 5,
+            "asin": "B0GKLYSKPF",
+            "title": "Yellow",
+            "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0GKLYSKPF/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-34"
+          },
+          {
+            "position": 6,
+            "asin": "B0GFT2PGKZ",
+            "title": "Black Pro",
+            "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0GFT2PGKZ/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-34"
+          }
+        ],
+        "more_variants": "+2",
+        "more_variants_link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0D2LGK82V/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-34"
+      },
+      "title": "Addtam LED Desk Lamp, Power Strip with 3 Outlets 4 USB Charging Ports(2 USBC), 4 Modes 5 Level Brightness Touch Lamp, Small Desk Lamp for Home Office College Dorm Room Essentials",
+      "link": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0D2LGK82V/ref=sr_1_34?keywords=table+lamp&qid=1785402486&sr=8-34",
+      "link_clean": "https://www.amazon.com/Addtam-Outlets-Charging-Brightness-Essentials/dp/B0D2LGK82V/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0D2LGK82V&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61RTVGWbTzL._AC_UL320_.jpg",
+      "rating": 4.4,
+      "reviews": 1700,
+      "bought_last_month": "6K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "old_price": "$22.99",
+      "extracted_old_price": 22.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99,
+          "old_primary_price": "$22.99",
+          "extracted_old_primary_price": 22.99
+        }
+      ]
+    },
+    {
+      "position": 35,
+      "asin": "B0868HY623",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0868HY623",
+            "title": "White",
+            "link": "https://www.amazon.com/white-crown-Dimmable-Charging-Sensitive/dp/B0868HY623/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-35"
+          },
+          {
+            "position": 2,
+            "asin": "B0DQWLLMHS",
+            "title": "Pink",
+            "link": "https://www.amazon.com/white-crown-Dimmable-Charging-Sensitive/dp/B0DQWLLMHS/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-35"
+          },
+          {
+            "position": 3,
+            "asin": "B0DH2V8123",
+            "title": "Black",
+            "link": "https://www.amazon.com/white-crown-Dimmable-Charging-Sensitive/dp/B0DH2V8123/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-35"
+          }
+        ]
+      },
+      "title": "White crown LED Desk Lamp Dimmable Table Lamp Reading Lamp with USB Charging Port, 5 Lighting Modes, Sensitive Control, 30/60 Minutes Timer (White, First-Generation)",
+      "link": "https://www.amazon.com/white-crown-Dimmable-Charging-Sensitive/dp/B0868HY623/ref=sr_1_35?keywords=table+lamp&qid=1785402486&sr=8-35",
+      "link_clean": "https://www.amazon.com/white-crown-Dimmable-Charging-Sensitive/dp/B0868HY623/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0868HY623&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/51Ap5qHeQGL._AC_UL320_.jpg",
+      "rating": 4.4,
+      "reviews": 16900,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$17.99",
+      "extracted_price": 17.99,
+      "old_price": "$19.99",
+      "extracted_old_price": 19.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$17.99",
+          "extracted_primary_price": 17.99,
+          "old_primary_price": "$19.99",
+          "extracted_old_primary_price": 19.99
+        }
+      ]
+    },
+    {
+      "position": 36,
+      "asin": "B0BR5JHB3Z",
+      "title": "Touch Bedside Table LED Lamp, [Sleek Design & RGB Mode] Multi-Color Dimmable with Warm White Lights, Birthday Gifts for Women Mom, Smart Nightstand Small Lamp for Bedroom Living Room Home Decor",
+      "link": "https://www.amazon.com/ROOTRO-Bedside-Dimmable-Multi-Color-Nightstand/dp/B0BR5JHB3Z/ref=sr_1_36?keywords=table+lamp&qid=1785402486&sr=8-36",
+      "link_clean": "https://www.amazon.com/ROOTRO-Bedside-Dimmable-Multi-Color-Nightstand/dp/B0BR5JHB3Z/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BR5JHB3Z&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/51F1eWcmohL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 7100,
+      "bought_last_month": "5K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "old_price": "$23.99",
+      "extracted_old_price": 23.99,
+      "top_rated": true,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99,
+          "old_primary_price": "$23.99",
+          "extracted_old_primary_price": 23.99
+        }
+      ]
+    },
+    {
+      "position": 37,
+      "asin": "B0BR3R7GHN",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0BR3R7GHN/ref=sr_1_37_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-37",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BR3R7GHN",
+            "title": "Black-2",
+            "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0BR3R7GHN/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-37"
+          },
+          {
+            "position": 2,
+            "asin": "B0BR38BG27",
+            "title": "Black-1",
+            "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0BR38BG27/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-37"
+          },
+          {
+            "position": 3,
+            "asin": "B0CJM3Z824",
+            "title": "Orange-2",
+            "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0CJM3Z824/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-37"
+          },
+          {
+            "position": 4,
+            "asin": "B0CJLQNJ2S",
+            "title": "Green-2",
+            "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0CJLQNJ2S/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-37"
+          },
+          {
+            "position": 5,
+            "asin": "B0D1MDM6D5",
+            "title": "Brown-2",
+            "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0D1MDM6D5/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-37"
+          },
+          {
+            "position": 6,
+            "asin": "B0DPQ9Q7QN",
+            "title": "RGB Black-2",
+            "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0DPQ9Q7QN/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-37"
+          }
+        ],
+        "more_variants": "+5",
+        "more_variants_link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0BR3R7GHN/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-37"
+      },
+      "title": "KDG 2 Pack Cordless Black Table Lamps, Rechargeable Portable LED Desk Lamps | 5000mAh Battery Operated 3 Color Stepless Dimming Up for Restaurant, Bedroom, Outdoor Party, Camping, Coffee Shop, Nightlight",
+      "link": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0BR3R7GHN/ref=sr_1_37?keywords=table+lamp&qid=1785402486&sr=8-37",
+      "link_clean": "https://www.amazon.com/KDG-Cordless-Portable-Operated-Restaurant/dp/B0BR3R7GHN/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BR3R7GHN&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61N+Cn7-R2L._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 4400,
+      "bought_last_month": "6K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "old_price": "$22.99",
+      "extracted_old_price": 22.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$19.99",
+          "extracted_primary_price": 19.99,
+          "old_primary_price": "$22.99",
+          "extracted_old_primary_price": 22.99
+        }
+      ]
+    },
+    {
+      "position": 38,
+      "asin": "B0BRCJL4MM",
+      "badges": [
+        "Ends in 21:51:52"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BRCJL4MM",
+            "title": "Black",
+            "link": "https://www.amazon.com/Led-Desk-Lamp-Office-Home/dp/B0BRCJL4MM/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-38"
+          },
+          {
+            "position": 2,
+            "asin": "B0C69HDMTR",
+            "title": "White",
+            "link": "https://www.amazon.com/Led-Desk-Lamp-Office-Home/dp/B0C69HDMTR/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-38"
+          },
+          {
+            "position": 3,
+            "asin": "B0CGJ4S38S",
+            "title": "Black Plus",
+            "link": "https://www.amazon.com/Led-Desk-Lamp-Office-Home/dp/B0CGJ4S38S/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-38"
+          },
+          {
+            "position": 4,
+            "asin": "B0CFR2BNKL",
+            "title": "White Plus",
+            "link": "https://www.amazon.com/Led-Desk-Lamp-Office-Home/dp/B0CFR2BNKL/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-38"
+          }
+        ]
+      },
+      "title": "Led Desk Lamp for Office Home - Eye Caring Architect lamp with Clamp,Dual Screen Computer Monitor Work Smart Light: 24W 5 Color Flexible Adjustable Lighting Table Lamp for Study Drafting",
+      "link": "https://www.amazon.com/Led-Desk-Lamp-Office-Home/dp/B0BRCJL4MM/ref=sr_1_38?keywords=table+lamp&qid=1785402486&sr=8-38",
+      "link_clean": "https://www.amazon.com/Led-Desk-Lamp-Office-Home/dp/B0BRCJL4MM/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BRCJL4MM&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/616md8tdywL._AC_UL320_.jpg",
+      "rating": 4.7,
+      "reviews": 3400,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$46.49",
+      "extracted_price": 46.49,
+      "old_price": "$69.99",
+      "extracted_old_price": 69.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "climate_pledge_friendly": true,
+      "sustainability_features": [
+        {
+          "position": 1,
+          "name": "Recycled materials",
+          "snippet": "Contains at least 50% recycled material.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 2,
+          "name": "Safer chemicals",
+          "snippet": "Made with chemicals safer for human health and the environment.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        },
+        {
+          "position": 3,
+          "name": "Worker well-being",
+          "snippet": "Manufactured on farms or in facilities that protect the rights and/or health of workers.",
+          "thumbnail": "https://m.media-amazon.com/images/I/51IhSrucIyL._SS200_.png",
+          "certified_by": "Global Recycled Standard",
+          "certified_info": "Global Recycled Standard (GRS) certified products contain recycled content that has been independently verified at each stage of the supply chain, from the source to the final product and meet social, environmental, and chemical requirements. The purchase of Global Recycled Standard (GRS) certified products supports the use of recycled content in the supply chain. A product must contain at least 50% certified GRS material to qualify for inclusion in Climate Pledge Friendly."
+        }
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$46.49",
+          "extracted_primary_price": 46.49,
+          "old_primary_price": "$69.99",
+          "extracted_old_primary_price": 69.99
+        }
+      ]
+    },
+    {
+      "position": 39,
+      "asin": "B078W61H9P",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B078W61H9P",
+            "title": "Sandy Black",
+            "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B078W61H9P/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-39"
+          },
+          {
+            "position": 2,
+            "asin": "B07WGS7JMR",
+            "title": "Black",
+            "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B07WGS7JMR/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-39"
+          },
+          {
+            "position": 3,
+            "asin": "B07WHWJM1M",
+            "title": "White",
+            "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B07WHWJM1M/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-39"
+          },
+          {
+            "position": 4,
+            "asin": "B08NDRRVJY",
+            "title": "Gold",
+            "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B08NDRRVJY/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-39"
+          },
+          {
+            "position": 5,
+            "asin": "B07WFSFNCV",
+            "title": "Silver",
+            "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B07WFSFNCV/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-39"
+          },
+          {
+            "position": 6,
+            "asin": "B08ZXNW71X",
+            "title": "Green",
+            "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B08ZXNW71X/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-39"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B078W61H9P/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-39"
+      },
+      "title": "LEPOWER Metal Desk Lamp, Adjustable GooseNeck Reading Light for Bedroom | Compact & Sturdy, Space-Saving for Bedside & Dorm, E26 Table Lamp, Eye-Caring, Ideal for Study, Office, Back to School",
+      "link": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B078W61H9P/ref=sr_1_39?keywords=table+lamp&qid=1785402486&sr=8-39",
+      "link_clean": "https://www.amazon.com/LEPOWER-Flexible-Eye-Caring-Bedroom-Office/dp/B078W61H9P/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B078W61H9P&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61Ckk6bdzwL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 13700,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$19.98",
+      "extracted_price": 19.98,
+      "old_price": "$24.99",
+      "extracted_old_price": 24.99,
+      "offers": [
+        "Save 5% on 2 select item(s)"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$18.38 (2 used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B078W61H9P/ref=sr_1_39_olp?keywords=table+lamp&qid=1785402486&sr=8-39",
+      "purchase_options": [
+        {
+          "primary_price": "$19.98",
+          "extracted_primary_price": 19.98,
+          "old_primary_price": "$24.99",
+          "extracted_old_primary_price": 24.99,
+          "more_buying_choices": "$18.38 (2 used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B078W61H9P/ref=sr_1_39_olp?keywords=table+lamp&qid=1785402486&sr=8-39"
+        }
+      ]
+    },
+    {
+      "position": 40,
+      "asin": "B09PDBNXGD",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B09PDBNXGD",
+            "title": "Black",
+            "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B09PDBNXGD/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-40"
+          },
+          {
+            "position": 2,
+            "asin": "B0FBFV2HXF",
+            "title": "Matte Black",
+            "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B0FBFV2HXF/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-40"
+          },
+          {
+            "position": 3,
+            "asin": "B0F8VY3B3H",
+            "title": "Light Black",
+            "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B0F8VY3B3H/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-40"
+          },
+          {
+            "position": 4,
+            "asin": "B0BX6HYTY8",
+            "title": "Blue",
+            "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B0BX6HYTY8/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-40"
+          },
+          {
+            "position": 5,
+            "asin": "B0BX6M2ZKY",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B0BX6M2ZKY/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-40"
+          },
+          {
+            "position": 6,
+            "asin": "B09PRD696J",
+            "title": "White",
+            "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B09PRD696J/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-40"
+          }
+        ],
+        "more_variants": "+3",
+        "more_variants_link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B09PDBNXGD/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-40"
+      },
+      "title": "LED Desk Lamp with 10W Wireless Charging & Pen Holder, Black | CRI 95, 800LM, Stepless Dimming, 3 Modes, 360\u00b0Flexible Arm, Touch, Study Table Lamp for Home Office, Dorm Room, with Adapter",
+      "link": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B09PDBNXGD/ref=sr_1_40?keywords=table+lamp&qid=1785402486&sr=8-40",
+      "link_clean": "https://www.amazon.com/Wireless-Charger-Sailstar-Stepless-Included/dp/B09PDBNXGD/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B09PDBNXGD&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71I+NjQgQUL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 2400,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$25.19",
+      "extracted_price": 25.19,
+      "old_price": "$29.94",
+      "extracted_old_price": 29.94,
+      "offers": [
+        "Save 30% when you buy $199.99 of select items"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$25.19",
+          "extracted_primary_price": 25.19,
+          "old_primary_price": "$29.94",
+          "extracted_old_primary_price": 29.94
+        }
+      ]
+    },
+    {
+      "position": 41,
+      "asin": "B0DKP3D4X5",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP3D4X5/ref=sr_1_41_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-41",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DKP3D4X5",
+            "title": "Beige",
+            "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP3D4X5/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-41"
+          },
+          {
+            "position": 2,
+            "asin": "B0DKNYRFWL",
+            "title": "Black",
+            "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKNYRFWL/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-41"
+          },
+          {
+            "position": 3,
+            "asin": "B0DKRXHNYL",
+            "title": "Cream & Coffee",
+            "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKRXHNYL/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-41"
+          },
+          {
+            "position": 4,
+            "asin": "B0FN48P49X",
+            "title": "Beige & Coffee",
+            "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0FN48P49X/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-41"
+          },
+          {
+            "position": 5,
+            "asin": "B0DKP2M616",
+            "title": "White",
+            "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP2M616/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-41"
+          },
+          {
+            "position": 6,
+            "asin": "B0DKP1WGWT",
+            "title": "Gray",
+            "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP1WGWT/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-41"
+          }
+        ],
+        "more_variants": "+2",
+        "more_variants_link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP3D4X5/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-41"
+      },
+      "title": "Bedside Lamps for Bedroom Set of 2 - Table Desk Lamp for Nightstand | 15\" Table Lamp for Living Room with Pen Holder & Phone Stand, USB A+C Port, AC Outlet, 3 Color Temperature, LED Bulb Included",
+      "link": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP3D4X5/ref=sr_1_41?keywords=table+lamp&qid=1785402486&sr=8-41",
+      "link_clean": "https://www.amazon.com/Bedside-Table-Lamps-Bedroom-Set/dp/B0DKP3D4X5/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DKP3D4X5&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/619dZQ444SL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 1200,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$35.99",
+      "extracted_price": 35.99,
+      "old_price": "$39.99",
+      "extracted_old_price": 39.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$35.99",
+          "extracted_primary_price": 35.99,
+          "old_primary_price": "$39.99",
+          "extracted_old_primary_price": 39.99
+        }
+      ]
+    },
+    {
+      "position": 42,
+      "asin": "B0GQGKZDS6",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0GQGKZDS6",
+            "title": "Beige & Wood Grain",
+            "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGKZDS6/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-42"
+          },
+          {
+            "position": 2,
+            "asin": "B0GQGXLL91",
+            "title": "White & White",
+            "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGXLL91/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-42"
+          },
+          {
+            "position": 3,
+            "asin": "B0GQGT8ZFT",
+            "title": "Beige & Brown",
+            "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGT8ZFT/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-42"
+          },
+          {
+            "position": 4,
+            "asin": "B0GQH79CN1",
+            "title": "Grey & Grey",
+            "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQH79CN1/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-42"
+          },
+          {
+            "position": 5,
+            "asin": "B0GQGZDRJM",
+            "title": "Beige & Gold",
+            "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGZDRJM/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-42"
+          },
+          {
+            "position": 6,
+            "asin": "B0GQGYQ482",
+            "title": "Beige & Black",
+            "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGYQ482/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-42"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGKZDS6/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-42"
+      },
+      "title": "Touch Bedside Table Lamp for Bedroom, Stepless Dimmable, USB A+C, AC Outlet | Base Touch Button Only, Memory Brightness, Ultra-dim Night Light, Included Bulb for Optimal Dimming, Wood Grain Base, Nursery",
+      "link": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGKZDS6/ref=sr_1_42?keywords=table+lamp&qid=1785402486&sr=8-42",
+      "link_clean": "https://www.amazon.com/Bedside-Bedroom-Stepless-Dimmable-Outlet/dp/B0GQGKZDS6/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GQGKZDS6&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71+ZqsDxnvL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 160,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$24.99",
+      "extracted_price": 24.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$24.99",
+          "extracted_primary_price": 24.99
+        }
+      ]
+    },
+    {
+      "position": 43,
+      "asin": "B0G8H85L4T",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0G8H85L4T",
+            "title": "Warm Beige",
+            "link": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0G8H85L4T/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-43"
+          },
+          {
+            "position": 2,
+            "asin": "B0F3HR9CBB",
+            "title": "Gray",
+            "link": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0F3HR9CBB/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-43"
+          },
+          {
+            "position": 3,
+            "asin": "B0FT7Y7KBQ",
+            "title": "Soft White",
+            "link": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0FT7Y7KBQ/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-43"
+          },
+          {
+            "position": 4,
+            "asin": "B0FT7ZQBJJ",
+            "title": "Red",
+            "link": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0FT7ZQBJJ/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-43"
+          },
+          {
+            "position": 5,
+            "asin": "B0FT7XGSGB",
+            "title": "Light Gray",
+            "link": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0FT7XGSGB/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-43"
+          }
+        ]
+      },
+      "title": "BOBOMOMO Modern Table Lamp Set of 2, Warm Beige Resin Lamp with Natural Stone Look, 27.25\" Lamps for Living Room with Linen Shades, Bedside Lamp for Bedroom, Living Room, Nightstand, Entryway",
+      "link": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0G8H85L4T/ref=sr_1_43?keywords=table+lamp&qid=1785402486&sr=8-43",
+      "link_clean": "https://www.amazon.com/BOBOMOMO-Natural-Bedside-Nightstand-Entryway/dp/B0G8H85L4T/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0G8H85L4T&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/713g1YPsibL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 179,
+      "price": "$69.99",
+      "extracted_price": 69.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$69.99",
+          "extracted_primary_price": 69.99
+        }
+      ]
+    },
+    {
+      "position": 44,
+      "asin": "B0CLYVJTDL",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0CLYVJTDL",
+            "title": "Sand",
+            "link": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0CLYVJTDL/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-44"
+          },
+          {
+            "position": 2,
+            "asin": "B0DLC8W6GF",
+            "title": "Black",
+            "link": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0DLC8W6GF/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-44"
+          },
+          {
+            "position": 3,
+            "asin": "B0DLCR18RZ",
+            "title": "White/Tan",
+            "link": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0DLCR18RZ/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-44"
+          },
+          {
+            "position": 4,
+            "asin": "B0DLCMYTCG",
+            "title": "Brown",
+            "link": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0DLCMYTCG/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-44"
+          },
+          {
+            "position": 5,
+            "asin": "B0D6BZZLPX",
+            "title": "Terracotta",
+            "link": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0D6BZZLPX/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-44"
+          }
+        ]
+      },
+      "title": "Nourison Home 20\" Sand (Light Beige) Neutral Ceramic Table Lamp with Fabric Shade, Bedside Nightstand Lamp for Bedroom, Living Room, Entryway",
+      "link": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0CLYVJTDL/ref=sr_1_44?keywords=table+lamp&qid=1785402486&sr=8-44",
+      "link_clean": "https://www.amazon.com/Nourison-Concrete-Cement-Bedroom-Console/dp/B0CLYVJTDL/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0CLYVJTDL&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/811pLq5p27L._AC_UL320_.jpg",
+      "rating": 4.1,
+      "reviews": 187,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$76.51",
+      "extracted_price": 76.51,
+      "delivery": [
+        "Join Prime to get FREE delivery Sat, Aug 1",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$76.51",
+          "extracted_primary_price": 76.51
+        }
+      ]
+    },
+    {
+      "position": 45,
+      "asin": "B0D14L7MGZ",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14L7MGZ/ref=sr_1_45_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-45",
+      "badges": [
+        "With Prime"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0D14L7MGZ",
+            "title": "Black (2 Pack)",
+            "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14L7MGZ/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-45"
+          },
+          {
+            "position": 2,
+            "asin": "B0D14KPWDZ",
+            "title": "Gold (2 Pack)",
+            "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14KPWDZ/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-45"
+          },
+          {
+            "position": 3,
+            "asin": "B0D14KGJ45",
+            "title": "Brushed Nickel (2 Pack)",
+            "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14KGJ45/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-45"
+          },
+          {
+            "position": 4,
+            "asin": "B0D14HY8TN",
+            "title": "Brown (2 Pack)",
+            "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14HY8TN/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-45"
+          },
+          {
+            "position": 5,
+            "asin": "B0D14JB2SC",
+            "title": "White (2 Pack)",
+            "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14JB2SC/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-45"
+          },
+          {
+            "position": 6,
+            "asin": "B0GCLMSK8K",
+            "title": "Green (2 Pack)",
+            "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0GCLMSK8K/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-45"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14L7MGZ/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-45"
+      },
+      "title": "Modern Cordless Table Lamp Set of 2, Black Portable LED Desk Lamps | 5000mAh, Rechargeable, Battery Operated Lighting for Bedroom, Dining Room, Restaurant, Coffee Shop, Camping, Night Light",
+      "link": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14L7MGZ/ref=sr_1_45?keywords=table+lamp&qid=1785402486&sr=8-45",
+      "link_clean": "https://www.amazon.com/NEWSEE-Cordless-Portable-Rechargeable-Restaurant/dp/B0D14L7MGZ/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0D14L7MGZ&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71tZc+TJLqL._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 1100,
+      "bought_last_month": "2K+ bought in past month",
+      "price": "$26.99",
+      "extracted_price": 26.99,
+      "old_price": "$32.99",
+      "extracted_old_price": 32.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$26.99",
+          "extracted_primary_price": 26.99,
+          "old_primary_price": "$32.99",
+          "extracted_old_primary_price": 32.99
+        }
+      ]
+    },
+    {
+      "position": 46,
+      "asin": "B0FP5BTYDC",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/PARTPHONER-Narrow-Storage-Shelves-Bedroom/dp/B0FP5BTYDC/ref=sr_1_46_so_LAMP?keywords=table+lamp&qid=1785402486&sr=8-46",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0FP5BTYDC",
+            "title": "Rustic Brown",
+            "link": "https://www.amazon.com/PARTPHONER-Narrow-Storage-Shelves-Bedroom/dp/B0FP5BTYDC/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-46"
+          },
+          {
+            "position": 2,
+            "asin": "B0FPX7K7VL",
+            "title": "White",
+            "link": "https://www.amazon.com/PARTPHONER-Narrow-Storage-Shelves-Bedroom/dp/B0FPX7K7VL/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-46"
+          },
+          {
+            "position": 3,
+            "asin": "B0FPX4Y859",
+            "title": "Black",
+            "link": "https://www.amazon.com/PARTPHONER-Narrow-Storage-Shelves-Bedroom/dp/B0FPX4Y859/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-46"
+          }
+        ]
+      },
+      "title": "Floor Lamp with Table, Night Stand with Lamp, Narrow Side Table with 3CCT LED Bulb, Small Coffee Table, Modern End Table with Storage Shelves for Living Room Bedroom Home D\u00e9cor",
+      "link": "https://www.amazon.com/PARTPHONER-Narrow-Storage-Shelves-Bedroom/dp/B0FP5BTYDC/ref=sr_1_46?keywords=table+lamp&qid=1785402486&sr=8-46",
+      "link_clean": "https://www.amazon.com/PARTPHONER-Narrow-Storage-Shelves-Bedroom/dp/B0FP5BTYDC/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FP5BTYDC&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71f8nFfyOML._AC_UL320_.jpg",
+      "rating": 4.5,
+      "reviews": 249,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$39.99",
+      "extracted_price": 39.99,
+      "old_price": "$49.98",
+      "extracted_old_price": 49.98,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "purchase_options": [
+        {
+          "primary_price": "$39.99",
+          "extracted_primary_price": 39.99,
+          "old_primary_price": "$49.98",
+          "extracted_old_primary_price": 49.98
+        }
+      ]
+    },
+    {
+      "position": 47,
+      "asin": "B0CK835MGD",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0CK835MGD",
+            "title": "1 pcs",
+            "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0CK835MGD/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-47"
+          },
+          {
+            "position": 2,
+            "asin": "B0D6G1MGKG",
+            "title": "Gold 1pcs",
+            "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0D6G1MGKG/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-47"
+          },
+          {
+            "position": 3,
+            "asin": "B0D6FXVHSD",
+            "title": "Gold 2pcs",
+            "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0D6FXVHSD/ref=cs_sr_dp_loc_3?keywords=table+lamp&qid=1785402486&sr=8-47"
+          },
+          {
+            "position": 4,
+            "asin": "B0CK85MNX7",
+            "title": "Black 2pcs",
+            "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0CK85MNX7/ref=cs_sr_dp_loc_4?keywords=table+lamp&qid=1785402486&sr=8-47"
+          },
+          {
+            "position": 5,
+            "asin": "B0FWRHN7SC",
+            "title": "Fabric",
+            "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0FWRHN7SC/ref=cs_sr_dp_loc_5?keywords=table+lamp&qid=1785402486&sr=8-47"
+          },
+          {
+            "position": 6,
+            "asin": "B0FWRL8DX9",
+            "title": "Black Cutout",
+            "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0FWRL8DX9/ref=cs_sr_dp_loc_6?keywords=table+lamp&qid=1785402486&sr=8-47"
+          }
+        ],
+        "more_variants": "+2",
+        "more_variants_link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0CK835MGD/ref=cs_sr_dp_loc_n?keywords=table+lamp&qid=1785402486&sr=8-47"
+      },
+      "title": "ONEWISH Touch Bedside Lamp for Bedroom, 3-Way Dimmable Farmhouse Table Lamps for Nightstand with Fabric Shade, Desk Lamp for Kids Reading, Home Office",
+      "link": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0CK835MGD/ref=sr_1_47?keywords=table+lamp&qid=1785402486&sr=8-47",
+      "link_clean": "https://www.amazon.com/ONEWISH-Bedside-Dimmable-Farmhouse-Nightstand/dp/B0CK835MGD/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0CK835MGD&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71xaR3qz7TL._AC_UL320_.jpg",
+      "rating": 4.3,
+      "reviews": 2000,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$24.29",
+      "extracted_price": 24.29,
+      "old_price": "$26.99",
+      "extracted_old_price": 26.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4 on $35 of items shipped by Amazon"
+      ],
+      "more_buying_choices": "$21.38 (3+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0CK835MGD/ref=sr_1_47_olp?keywords=table+lamp&qid=1785402486&sr=8-47",
+      "purchase_options": [
+        {
+          "primary_price": "$24.29",
+          "extracted_primary_price": 24.29,
+          "old_primary_price": "$26.99",
+          "extracted_old_primary_price": 26.99,
+          "more_buying_choices": "$21.38 (3+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0CK835MGD/ref=sr_1_47_olp?keywords=table+lamp&qid=1785402486&sr=8-47"
+        }
+      ]
+    },
+    {
+      "position": 48,
+      "asin": "B097XL8XS9",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B097XL8XS9",
+            "title": "Off-White",
+            "link": "https://www.amazon.com/Signature-Design-Ashley-Rainermen-Herringbone/dp/B097XL8XS9/ref=cs_sr_dp_loc_1?keywords=table+lamp&qid=1785402486&sr=8-48"
+          },
+          {
+            "position": 2,
+            "asin": "B09BDGBV43",
+            "title": "White",
+            "link": "https://www.amazon.com/Signature-Design-Ashley-Rainermen-Herringbone/dp/B09BDGBV43/ref=cs_sr_dp_loc_2?keywords=table+lamp&qid=1785402486&sr=8-48"
+          }
+        ]
+      },
+      "title": "Signature Design by Ashley Rainermen Ceramic Table Lamp, 21\", Off White | Textured herringbone base, Transparent white glaze, Hardback fabric drum shade, Bedside use, 92.5-inch cord, E26 socket",
+      "link": "https://www.amazon.com/Signature-Design-Ashley-Rainermen-Herringbone/dp/B097XL8XS9/ref=sr_1_48?keywords=table+lamp&qid=1785402486&sr=8-48",
+      "link_clean": "https://www.amazon.com/Signature-Design-Ashley-Rainermen-Herringbone/dp/B097XL8XS9/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B097XL8XS9&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61zaOqIWmQL._AC_UL320_.jpg",
+      "rating": 4.6,
+      "reviews": 616,
+      "bought_last_month": "400+ bought in past month",
+      "price": "$59.99",
+      "extracted_price": 59.99,
+      "delivery": [
+        "Join Prime to get FREE delivery Tomorrow, Jul 31",
+        "Or Non-members get FREE delivery Tue, Aug 4"
+      ],
+      "more_buying_choices": "$40.65 (4+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B097XL8XS9/ref=sr_1_48_olp?keywords=table+lamp&qid=1785402486&sr=8-48",
+      "purchase_options": [
+        {
+          "primary_price": "$59.99",
+          "extracted_primary_price": 59.99,
+          "more_buying_choices": "$40.65 (4+ used & new offers)",
+          "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B097XL8XS9/ref=sr_1_48_olp?keywords=table+lamp&qid=1785402486&sr=8-48"
+        }
+      ]
+    }
   ]
 }
