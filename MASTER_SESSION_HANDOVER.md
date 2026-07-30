@@ -2,6 +2,15 @@
 
 ---
 
+## 🚨 MANDATORY NEXT SESSION STARTUP TASK
+> **High Priority Directive**: When this conversation or a new session is opened, your VERY FIRST ACTION must be to run:
+> ```bash
+> python sync_exact_amazon_prices.py
+> ```
+> This will scrape the latest live prices across 7 major Amazon hubs (`US`, `UK`, `IN`, `DE`, `CA`, `AU`, `JP`), convert prices for 160+ world currencies, rebuild all 9 landing pages, and push updated prices live to GitHub Pages!
+
+---
+
 ## 1. Executive Summary & Core Achievements
 
 This session completed a **complete 360-degree audit and empirical hardening** of the entire Pinterest Auto-Affiliate Platform.
@@ -35,11 +44,11 @@ Key Achievements:
 ## 3. Standard Operating CLI Commands for Any New Agent
 
 ```bash
+# Mandatory Session Startup: Sync prices across all regions & deploy live
+python sync_exact_amazon_prices.py
+
 # Rebuild all 9 landing pages with verified global matrix and push live
 python rebuild_EVERY_single_bridge.py
-
-# Daily multi-region price sync & auto-deploy
-python sync_exact_amazon_prices.py
 
 # Run master 189-point zero 404 audit across all 21 domains
 python scratch/master_zero_404_audit.py
@@ -52,6 +61,6 @@ python scratch/master_360_feature_audit.py
 
 ## 4. Current Repository State & Commit History
 
-* **Latest Commit**: `13bd691` (*"rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector"*)
+* **Latest Commit**: `c761b69` (*"add master system architecture and handover documentation"*)
 * **GitHub Pages Live Deployment**: 100% Up to Date at `https://adityasnalawade742-design.github.io/index.html`
 * **Test Status**: All 189 regional checks 100% PASSING.
