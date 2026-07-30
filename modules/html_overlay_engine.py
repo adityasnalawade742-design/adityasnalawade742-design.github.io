@@ -211,18 +211,20 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
             center_y = h // 2
             card_width = w
             
-        font_size = int(card_width * float(price_font_scale or 0.38) * 0.45)
+        font_size = int(card_width * float(price_font_scale or 0.38) * 0.25)
         try:
             font = ImageFont.truetype("arial.ttf", font_size)
         except Exception:
             font = ImageFont.load_default()
             
-        # Draw contrasting price text at the EXACT custom offset position inside tag (scaled to high-res PNG)
-        scale_ratio = card_width / 260.0
-        calc_offset_x = int(price_text_offset_x * scale_ratio)
-        calc_offset_y = int(price_text_offset_y * scale_ratio)
+        # Draw contrasting price text using exact 1:1 CSS percentage coordinate mapping
+        target_x_pct = (50.0 + float(price_text_offset_x) * 0.35) / 100.0
+        target_y_pct = (56.0 + float(price_text_offset_y - 15) * 0.35) / 100.0
 
-        draw.text((center_x + calc_offset_x, center_y + calc_offset_y), price_str, fill=text_color, font=font, anchor="mm")
+        text_x = int(w * target_x_pct)
+        text_y = int(h * target_y_pct)
+
+        draw.text((text_x, text_y), price_str, fill=text_color, font=font, anchor="mm")
         
         stamped_path = Path(tag_path).parent / "stamped_ambient_tag.png"
         img.save(stamped_path, format="PNG")

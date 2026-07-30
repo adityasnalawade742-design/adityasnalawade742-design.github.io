@@ -1200,13 +1200,13 @@
             if (priceEl) {
                 const liveTag = document.getElementById('liveTagOverlay');
                 const tagPx = liveTag ? (liveTag.offsetWidth || 130) : 130;
-                const calculatedPx = Math.round(tagPx * fontScale * 0.42);
+                const calculatedPx = Math.round(tagPx * fontScale * 0.45);
                 priceEl.style.fontSize = `${calculatedPx}px`;
                 priceEl.style.color = selectedPriceTextColor;
                 
                 // Real-time visual position shift inside the tag badge
-                const shiftYPercent = 56 + (offsetY - 15) * 0.3;
-                const shiftXPercent = 50 + offsetX * 0.3;
+                const shiftYPercent = 56 + (offsetY - 15) * 0.35;
+                const shiftXPercent = 50 + offsetX * 0.35;
                 priceEl.style.top = `${shiftYPercent}%`;
                 priceEl.style.left = `${shiftXPercent}%`;
             }
