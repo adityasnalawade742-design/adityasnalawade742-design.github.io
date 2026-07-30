@@ -472,7 +472,7 @@
             const currentAsin = "B07HP22QTZ";
             const prodKeywords = encodeURIComponent("Crystal Ball Prism Window Suncatcher");
             const directRegions = ["US", "IN", "GB", "UK", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {};
+            const regionalMatrix = {"au": "A$14.37", "ca": "CA$14.05", "de": "\u20ac8.75", "in": "\u20b92,762.75", "jp": "\u00a51,634", "uk": "\u00a37.50", "us": "$9.99"};
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();

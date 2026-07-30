@@ -472,7 +472,7 @@
             const currentAsin = "B0D1FRDFFX";
             const prodKeywords = encodeURIComponent("Glass Mushroom Desk Table Lamp");
             const directRegions = ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {};
+            const regionalMatrix = {"au": "A$51.75", "ca": "CA$50.60", "de": "\u20ac31.50", "in": "\u20b911,428.51", "jp": "Not Available", "uk": "\u00a327.01", "us": "$35.98"};
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
