@@ -249,7 +249,10 @@ def render_html_overlay(
     tag_pos_y: float = None,
     tag_bg_hex: str = None,
     price_text_color: str = None,
-    price_font_scale: float = 0.38
+    price_font_scale: float = 0.38,
+    headline_pos_y: float = None,
+    headline_color: str = None,
+    headline_size_px: int = None
 ) -> str:
     """
     Renders Canva-quality Pinterest graphic using Playwright & dynamic HTML/CSS templates.
@@ -354,6 +357,10 @@ def render_html_overlay(
 
     if theme == "bottom_glass_card" or "lamp" in headline_clean.lower():
         # Soft Bedside Warm Pearl & Glass Card Theme (Tailored for Lamps & Nightstand Decor)
+        top_container_pos_css = f"position: absolute; top: {headline_pos_y}%; left: 0; right: 0; z-index: 15;" if headline_pos_y is not None else ""
+        headline_color_css = f"color: {headline_color} !important;" if headline_color else ""
+        headline_size_css = f"font-size: {headline_size_px}px !important;" if headline_size_px else f"font-size: {dynamic_headline_size};"
+
         theme_css = f"""
         .scrim-top {{
             position: absolute; top: 0; left: 0; width: 100%; height: {top_h};
@@ -367,7 +374,7 @@ def render_html_overlay(
         }}
         .top-container {{
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            width: 100%; gap: 10px;
+            width: 100%; gap: 10px; {top_container_pos_css}
         }}
         .badge {{
             background: rgba(255, 255, 255, 0.22);
@@ -377,8 +384,8 @@ def render_html_overlay(
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
         }}
         .headline {{
-            font-family: 'Caveat', 'Playfair Display', 'Cormorant Garamond', cursive, serif; font-size: {dynamic_headline_size}; font-weight: 700;
-            line-height: 1.12; color: #ffffff; text-shadow: 0 4px 24px rgba(0,0,0,0.95);
+            font-family: 'Caveat', 'Playfair Display', 'Cormorant Garamond', cursive, serif; {headline_size_css} font-weight: 700;
+            line-height: 1.12; {headline_color_css or 'color: #ffffff;'} text-shadow: 0 4px 24px rgba(0,0,0,0.95);
             max-width: 1000px; padding: 0 20px;
         }}
 

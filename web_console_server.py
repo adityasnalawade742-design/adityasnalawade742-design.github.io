@@ -497,6 +497,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             price_font_scale = float(data.get('price_font_scale', 0.38))
             tag_pos_x = float(data['tag_pos_x']) if 'tag_pos_x' in data and data['tag_pos_x'] is not None else None
             tag_pos_y = float(data['tag_pos_y']) if 'tag_pos_y' in data and data['tag_pos_y'] is not None else None
+            headline_pos_y = float(data['headline_pos_y']) if 'headline_pos_y' in data and data['headline_pos_y'] is not None else None
+            headline_color = data.get('headline_color', None)
+            headline_size_px = int(data['headline_size_px']) if 'headline_size_px' in data and data['headline_size_px'] is not None else None
 
             reg_path = WORKSPACE_DIR / "product_price_registry.json"
             reg = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
@@ -525,7 +528,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 tag_pos_y=tag_pos_y,
                 tag_bg_hex=tag_color,
                 price_text_color=price_text_color,
-                price_font_scale=price_font_scale
+                price_font_scale=price_font_scale,
+                headline_pos_y=headline_pos_y,
+                headline_color=headline_color,
+                headline_size_px=headline_size_px
             )
 
             # Update cache-busted v param in bridge page and index.html
