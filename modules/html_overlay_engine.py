@@ -211,7 +211,7 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
             center_y = h // 2
             card_width = w
             
-        font_size = int(card_width * float(price_font_scale or 0.38))
+        font_size = int(card_width * float(price_font_scale or 0.38) * 0.45)
         try:
             font = ImageFont.truetype("arial.ttf", font_size)
         except Exception:

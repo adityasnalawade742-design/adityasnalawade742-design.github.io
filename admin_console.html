@@ -673,9 +673,9 @@
                             
                             <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                                 <label style="font-size: 12px; color: #cbd5e1;">Price Text Size:</label>
-                                <span id="priceTextScaleVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">38%</span>
+                                <span id="priceTextScaleVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">20%</span>
                             </div>
-                            <input type="range" id="priceTextScaleRange" min="25" max="55" value="38" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
+                            <input type="range" id="priceTextScaleRange" min="10" max="45" value="20" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
 
                             <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                                 <label style="font-size: 12px; color: #cbd5e1;">Vertical Shift (Up / Down):</label>
@@ -1200,7 +1200,7 @@
             if (priceEl) {
                 const liveTag = document.getElementById('liveTagOverlay');
                 const tagPx = liveTag ? (liveTag.offsetWidth || 130) : 130;
-                const calculatedPx = Math.round(tagPx * fontScale * 0.82);
+                const calculatedPx = Math.round(tagPx * fontScale * 0.42);
                 priceEl.style.fontSize = `${calculatedPx}px`;
                 priceEl.style.color = selectedPriceTextColor;
                 
