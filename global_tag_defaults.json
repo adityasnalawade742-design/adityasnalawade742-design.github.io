@@ -4,11 +4,11 @@
     "tag_rotation": -6,
     "tag_color": "#fb8500",
     "price_text_color": "#111827",
-    "price_font_scale": 0.2,
-    "price_text_offset_x": 0,
-    "price_text_offset_y": 0,
-    "price_text_pos_x": 50.0,
-    "price_text_pos_y": 58.0,
-    "tag_pos_x": 61.0,
-    "tag_pos_y": 75.0
+    "price_font_scale": 0.23,
+    "price_text_offset_x": 9,
+    "price_text_offset_y": 33,
+    "price_text_pos_x": 52.7,
+    "price_text_pos_y": 67.9,
+    "tag_pos_x": 62.7,
+    "tag_pos_y": 58
 }
