@@ -172,7 +172,7 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
                 data = []
                 for pixel in img.get_flattened_data() if hasattr(img, "get_flattened_data") else list(img.getdata()):
                     r, g, b, a = pixel
-                    if a > 100 and r > 180 and g > 180 and b > 180:
+                    if a > 100 and (r + g + b > 40):
                         data.append((target_rgb[0], target_rgb[1], target_rgb[2], a))
                     else:
                         data.append((r, g, b, a))

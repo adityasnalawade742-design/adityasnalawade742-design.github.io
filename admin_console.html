@@ -1145,6 +1145,23 @@
         function setTagColor(hex) {
             selectedTagColor = hex;
             document.getElementById('tagCustomColorInput').value = hex;
+            
+            const tagOverlay = document.getElementById('liveTagOverlay');
+            if (tagOverlay) {
+                tagOverlay.style.borderColor = hex;
+            }
+
+            const liveTagImg = document.getElementById('liveTagImg');
+            if (liveTagImg) {
+                // Apply instant live CSS visual tint filter to price tag badge preview
+                if (hex === '#fb8500') liveTagImg.style.filter = 'hue-rotate(0deg) saturate(1)';
+                else if (hex === '#ff0055') liveTagImg.style.filter = 'hue-rotate(-35deg) saturate(2.5)';
+                else if (hex === '#7a00ff') liveTagImg.style.filter = 'hue-rotate(85deg) saturate(2.5)';
+                else if (hex === '#10b981') liveTagImg.style.filter = 'hue-rotate(140deg) saturate(2.5)';
+                else if (hex === '#ffffff') liveTagImg.style.filter = 'brightness(1.6) contrast(1.2)';
+                else if (hex === '#111827') liveTagImg.style.filter = 'brightness(0.15) contrast(1.5)';
+                else liveTagImg.style.filter = 'sepia(0.5) saturate(2)';
+            }
             showToast(`Tag color set to ${hex}`, "🎨");
         }
 
@@ -1207,8 +1224,12 @@
             if (!tag || !container) return;
 
             function startDrag(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 isDraggingTag = true;
                 tag.style.cursor = 'grabbing';
+                tag.style.transition = 'none';
+
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -1246,7 +1267,7 @@
                 document.getElementById('dragPosBadge').innerText = `📍 Position: X=${currentTagPosX}%, Y=${currentTagPosY}%`;
             }
 
-            function endDrag() {
+            function endDrag(e) {
                 if (isDraggingTag) {
                     isDraggingTag = false;
                     tag.style.cursor = 'grab';
@@ -1254,14 +1275,21 @@
                 }
             }
 
-            tag.onmousedown = startDrag;
-            tag.ontouchstart = startDrag;
+            tag.removeEventListener('mousedown', startDrag);
+            tag.removeEventListener('touchstart', startDrag);
 
-            window.onmousemove = moveDrag;
-            window.ontouchmove = moveDrag;
+            tag.addEventListener('mousedown', startDrag, false);
+            tag.addEventListener('touchstart', startDrag, { passive: false });
 
-            window.onmouseup = endDrag;
-            window.ontouchend = endDrag;
+            document.removeEventListener('mousemove', moveDrag);
+            document.removeEventListener('touchmove', moveDrag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchend', endDrag);
+
+            document.addEventListener('mousemove', moveDrag, { passive: false });
+            document.addEventListener('touchmove', moveDrag, { passive: false });
+            document.addEventListener('mouseup', endDrag, false);
+            document.addEventListener('touchend', endDrag, false);
         }
 
         function openTagEditorModal(asin, title, price) {
