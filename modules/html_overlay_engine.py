@@ -345,8 +345,8 @@ def render_html_overlay(
         # Calculate HTML CSS text properties matching admin_console.html 1:1
         f_scale = float(price_font_scale or 0.20)
         calc_font_px = max(10, int(tag_width_px * f_scale * 0.45))
-        shift_y_pct = 50.0 + (float(price_text_offset_y) * 0.40)
-        shift_x_pct = 50.0 + (float(price_text_offset_x) * 0.40)
+        shift_y_pct = 58.0 + (float(price_text_offset_y) * 0.30)
+        shift_x_pct = 50.0 + (float(price_text_offset_x) * 0.30)
         p_color = price_text_color if price_text_color else "#111827"
 
         price_pill_html = f"""
