@@ -604,7 +604,7 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Search lamps, mirrors, diffusers, vases..." oninput="filterProducts()">
             <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" style="display:none;">✕</button>
         </div>
-                        <div class="category-chips" role="tablist" aria-label="Product Category Filters">
+                                <div class="category-chips" role="tablist" aria-label="Product Category Filters">
             <div class="chip active" tabindex="0" role="tab" aria-selected="true" aria-label="Filter all products" onclick="setCategory('all', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('all', this);event.preventDefault();}">✨ All Finds</div>
             <div class="chip" tabindex="0" role="tab" aria-selected="false" aria-label="Filter lamps and lighting" onclick="setCategory('lighting', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('lighting', this);event.preventDefault();}">🕯️ Lamps & Lighting</div>
             <div class="chip" tabindex="0" role="tab" aria-selected="false" aria-label="Filter mirrors and wall decor" onclick="setCategory('mirror', this)" onkeydown="if(event.key==='Enter'||event.key===' '){setCategory('mirror', this);event.preventDefault();}">🪞 Mirrors & Wall</div>
@@ -821,12 +821,16 @@
 
         let currentCategory = 'all';
 
-                        function setCategory(cat, element) {
+                                function setCategory(cat, element) {
             currentCategory = cat;
             document.querySelectorAll('.chip').forEach(c => {
                 c.classList.remove('active');
                 c.setAttribute('aria-selected', 'false');
             });
+            element.classList.add('active');
+            element.setAttribute('aria-selected', 'true');
+            filterProducts();
+        });
             element.classList.add('active');
             element.setAttribute('aria-selected', 'true');
             filterProducts();

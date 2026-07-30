@@ -98,9 +98,9 @@ print("\n🔨 Rebuilding landing pages with Google Product JSON-LD Schemas & Key
 for asin, item in master_catalog.items():
     seo_data = {
         "pin_title": item["title"],
-        "image_hook": item["headline"],
+        "image_hook": item.get("headline", item["title"])[:30],
         "subtitle_hook": "",
-        "badge_hook": item["badge"],
+        "badge_hook": "VIRAL ROOM FIND",
         "description": item["description"]
     }
     generate_bridge_page(item, seo_data, asin)
