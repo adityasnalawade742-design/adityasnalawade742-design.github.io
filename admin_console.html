@@ -1368,9 +1368,15 @@
             .then(data => {
                 if (saveSpinner) saveSpinner.style.display = 'none';
                 if (data.status === 'success') {
-                    document.getElementById('overlayModalImg').src = `${data.image}&t=${Date.now()}`;
-                    const hpImg = document.getElementById(`hp-img-${activeTagAsin}`);
-                    if (hpImg) hpImg.src = `${data.image}&t=${Date.now()}`;
+                    const newSrc = `${data.image}&t=${Date.now()}`;
+                    document.getElementById('overlayModalImg').src = newSrc;
+                    
+                    // Dynamically update all matching card images on page
+                    document.querySelectorAll('img').forEach(img => {
+                        if (img.src.includes(activeTagAsin) || (img.id && img.id.includes(activeTagAsin))) {
+                            img.src = newSrc;
+                        }
+                    });
                     showToast("changed published", "✨");
                 } else {
                     alert("Error customizing tag: " + data.message);
