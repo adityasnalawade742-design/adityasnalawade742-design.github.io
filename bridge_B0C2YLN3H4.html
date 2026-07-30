@@ -311,7 +311,7 @@
         <h1>White Ceramic Donut Vase Set of 2 Modern Nordic Home Decor</h1>
 
         <div class="price-container">
-            <div class="price">$28.99</div>
+            <div class="price">$14.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
@@ -472,7 +472,7 @@
             const currentAsin = "B0C2YLN3H4";
             const prodKeywords = encodeURIComponent("White Ceramic Donut Flower Vase Set");
             const directRegions = ["US", "IN", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {};
+            const regionalMatrix = {"au": "$26.88", "in": "\u20b9599.00", "jp": "\u00a54,664"};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -512,7 +512,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$28.99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$14.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
