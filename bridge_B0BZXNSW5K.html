@@ -576,4 +576,16 @@
         })();
     </script>
 
+
+    <script>
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                var mainImg = document.getElementById('mainImage');
+                if (mainImg) {
+                    var cleanSrc = mainImg.src.split('?')[0];
+                    mainImg.src = cleanSrc + '?t=' + Date.now();
+                }
+            }
+        });
+    </script>
 </body>
