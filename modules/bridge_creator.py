@@ -570,7 +570,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                if (directRegions.includes(targetCC)) {
+                const euCountries = ['DE', 'NL', 'FR', 'IT', 'ES', 'BE', 'PL', 'AT', 'SE'];
+                const isDirectListing = directRegions.includes(targetCC) || (euCountries.includes(targetCC) && directRegions.includes('DE'));
+                
+                if (isDirectListing) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=smartdeal0358-21`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
