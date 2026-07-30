@@ -549,9 +549,9 @@
                         <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" onclick="loadHomepageProducts()">
                             <span>📥 Load / Refresh Homepage Products</span>
                         </button>
-                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px;" onclick="runPriceSync()">
+                        <button class="btn-action" id="priceSyncBtn" style="padding: 8px 18px; font-size: 13px;" onclick="runPriceSync()">
                             <div class="spinner" id="syncSpinner"></div>
-                            <span>🔄 1-Click Daily Price Synchronizer</span>
+                            <span id="priceSyncText">🔄 1-Click Daily Price Synchronizer</span>
                         </button>
                     </div>
                 </div>
@@ -1111,12 +1111,30 @@
 
         function runPriceSync() {
             document.getElementById('syncSpinner').style.display = 'inline-block';
+            const btnText = document.getElementById('priceSyncText');
+            if (btnText) btnText.innerText = "⏳ Synchronizing Live Amazon Prices...";
+            showToast("Scraping live Amazon prices and updating storefront...", "🔍");
+
             fetch('/api/sync_prices', { method: 'POST' })
                 .then(r => r.json())
                 .then(data => {
                     document.getElementById('syncSpinner').style.display = 'none';
-                    showToast("Daily prices synchronized live across 9 storefronts!", "🔄");
-                    loadHomepageProducts();
+                    if (data.status === 'success') {
+                        if (btnText) btnText.innerText = "✅ Price Sync Complete!";
+                        showToast("Daily prices synchronized live across 9 storefronts!", "🔄");
+                        loadHomepageProducts();
+                        setTimeout(() => {
+                            if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
+                        }, 4000);
+                    } else {
+                        if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
+                        alert("Price sync notice: " + (data.message || "Done"));
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('syncSpinner').style.display = 'none';
+                    if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
+                    alert("Error executing price synchronization.");
                 });
         }
 
