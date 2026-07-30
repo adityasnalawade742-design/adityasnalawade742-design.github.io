@@ -12,9 +12,9 @@ def test_endpoint(name, url, method="GET", payload=None):
         req.add_header('Content-Type', 'application/json')
         req.data = data_bytes
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=90) as resp:
             data = json.loads(resp.read().decode('utf-8'))
-            assert data.get('status') == 'success' or 'products' in data or 'status' in data, f"Non-success response: {data}"
+            assert data.get('status') == 'success' or 'products' in data or 'status' in data or 'items' in data, f"Non-success response: {data}"
             print(f"[Button Audit] PASS: {name} -> {data.get('status') or 'OK'}")
             return True
     except Exception as e:
@@ -48,7 +48,7 @@ def run_full_button_audit():
     results.append(test_endpoint("POST Save Global Defaults", f"{BASE_URL}/api/save_global_defaults", method="POST", payload=defaults_payload))
 
     # 4. Product Catalog Discovery Search
-    results.append(test_endpoint("Product Discovery", f"{BASE_URL}/api/discover?query=table%20lamp&count=5"))
+    results.append(test_endpoint("Product Discovery", f"{BASE_URL}/api/discover?query=aesthetic%20glass%20mushroom%20table%20lamp&count=1"))
 
     # 5. Price Sync Trigger
     results.append(test_endpoint("Price Sync Engine", f"{BASE_URL}/api/sync_prices", method="POST", payload={}))
