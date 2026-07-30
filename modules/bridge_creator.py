@@ -482,9 +482,36 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             const currentAsin = "{{ product.get('target_asin', asin) }}";
             const prodKeywords = encodeURIComponent("{{ search_phrase }}");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
+            const regionalMatrix = {{ (product.regional_matrix if product.regional_matrix is defined else {}) | tojson }};
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
+                
+                // 🏷️ Dynamic Regional Price Tag Update
+                const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
+                const regPrice = regionalMatrix[regKey];
+                const priceTags = document.querySelectorAll('.tag, .hero-price, .cta-price, #heroPriceTag');
+
+                if (regPrice === 'Not Available') {
+                    priceTags.forEach(el => {
+                        if (el.classList.contains('tag')) {
+                            el.innerText = '⚠️ NOT AVAILABLE IN YOUR REGION';
+                            el.style.background = 'rgba(239, 68, 68, 0.25)';
+                            el.style.color = '#fca5a5';
+                            el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                        } else {
+                            el.innerText = 'Not Available';
+                        }
+                    });
+                } else if (regPrice) {
+                    priceTags.forEach(el => {
+                        if (el.classList.contains('tag')) {
+                            el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
+                        } else {
+                            el.innerText = regPrice;
+                        }
+                    });
+                }
                 
                 // Explicit US Visitor Handling
                 if (targetCC === 'US') {
