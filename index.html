@@ -921,6 +921,12 @@
                     const cleanHref = a.getAttribute('href').split('?')[0];
                     a.setAttribute('href', `${cleanHref}?country=${forcedCountry}`);
                 });
+                const detectedCurr = countryToCurrencyMap[forcedCountry.toUpperCase()];
+                if (detectedCurr) {
+                    const sel = document.getElementById('currencySelector');
+                    if (sel) sel.value = detectedCurr;
+                    changeGlobalCurrency(detectedCurr);
+                }
             }
 
             fetch('https://api.country.is')
@@ -953,7 +959,7 @@
                 });
         })();
 
-                function changeGlobalCurrency(targetCurr) {
+        function changeGlobalCurrency(targetCurr) {
             const rate = exchangeRates[targetCurr] || 1.0;
             const sym = currencySymbols[targetCurr] || (targetCurr + " ");
             const lowerCurr = targetCurr.toLowerCase();
@@ -973,13 +979,6 @@
                     if (priceTag) {
                         priceTag.innerText = `${sym}${converted}`;
                     }
-                }
-            });
-        });
-                
-                const priceTag = card.querySelector('.card-price-tag');
-                if (priceTag) {
-                    priceTag.innerText = `${sym}${converted}`;
                 }
             });
         }
