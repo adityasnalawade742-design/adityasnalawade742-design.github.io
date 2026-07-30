@@ -821,20 +821,12 @@
 
         let currentCategory = 'all';
 
-                                function setCategory(cat, element) {
+        function setCategory(cat, element) {
             currentCategory = cat;
             document.querySelectorAll('.chip').forEach(c => {
                 c.classList.remove('active');
                 c.setAttribute('aria-selected', 'false');
             });
-            element.classList.add('active');
-            element.setAttribute('aria-selected', 'true');
-            filterProducts();
-        });
-            element.classList.add('active');
-            element.setAttribute('aria-selected', 'true');
-            filterProducts();
-        });
             element.classList.add('active');
             element.setAttribute('aria-selected', 'true');
             filterProducts();
