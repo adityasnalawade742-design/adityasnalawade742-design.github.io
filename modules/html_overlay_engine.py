@@ -337,8 +337,10 @@ def render_html_overlay(
         posY = tag_pos_y if tag_pos_y is not None else 75.0
         pos_style = f"position: absolute; left: {posX}%; top: {posY}%; z-index: 20;"
 
+        calc_height_px = int(tag_width_px * (406.0 / 300.0))
+
         price_pill_html = f"""
-        <div class="custom-price-container" style="{pos_style} width: {tag_width_px}px; height: {tag_height_px}px; display: flex; align-items: center; justify-content: center; transform: rotate({tag_rotation_deg}deg); filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75));">
+        <div class="custom-price-container" style="{pos_style} width: {tag_width_px}px; height: {calc_height_px}px; display: flex; align-items: center; justify-content: center; transform: rotate({tag_rotation_deg}deg); filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75));">
             <img src="{tag_abs_url}" style="width: 100%; height: 100%; object-fit: contain;" />
         </div>
         """
