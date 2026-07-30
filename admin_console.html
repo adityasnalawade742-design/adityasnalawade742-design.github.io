@@ -1173,26 +1173,18 @@
             showToast(`Price text color set to ${hex}`, "🎨");
         }
 
-        function setHeadlineColor(hex) {
-            selectedHeadlineColor = hex;
-            document.getElementById('headlineColorInput').value = hex;
-            const hlEl = document.getElementById('liveHeadlineText');
-            if (hlEl) hlEl.style.color = hex;
-            showToast(`Headline text color set to ${hex}`, "🎨");
-        }
-
         function updateLiveTagPreview() {
-            const scaleVal = document.getElementById('tagScaleSelect').value; // e.g. 380x285
+            const scaleEl = document.getElementById('tagScaleSelect');
+            if (!scaleEl) return;
+            const scaleVal = scaleEl.value; // e.g. 380x285
             const [w, h] = scaleVal.split('x').map(Number);
-            const rot = parseInt(document.getElementById('tagRotationRange').value || '-6');
-            const fontScale = parseFloat(document.getElementById('priceTextScaleRange').value || '38') / 100.0;
-            const headlineSize = parseInt(document.getElementById('headlineSizeRange').value || '56');
-            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange') ? document.getElementById('priceTextOffsetYRange').value : '15');
-            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange') ? document.getElementById('priceTextOffsetXRange').value : '0');
+            const rot = parseInt(document.getElementById('tagRotationRange')?.value || '-6');
+            const fontScale = parseFloat(document.getElementById('priceTextScaleRange')?.value || '38') / 100.0;
+            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '15');
+            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
 
-            document.getElementById('tagRotationVal').innerText = `${rot}°`;
-            document.getElementById('priceTextScaleVal').innerText = `${Math.round(fontScale * 100)}%`;
-            document.getElementById('headlineSizeVal').innerText = `${headlineSize}px`;
+            if (document.getElementById('tagRotationVal')) document.getElementById('tagRotationVal').innerText = `${rot}°`;
+            if (document.getElementById('priceTextScaleVal')) document.getElementById('priceTextScaleVal').innerText = `${Math.round(fontScale * 100)}%`;
             if (document.getElementById('priceTextOffsetYVal')) document.getElementById('priceTextOffsetYVal').innerText = `${offsetY >= 0 ? '+' : ''}${offsetY}px`;
             if (document.getElementById('priceTextOffsetXVal')) document.getElementById('priceTextOffsetXVal').innerText = `${offsetX >= 0 ? '+' : ''}${offsetX}px`;
 
@@ -1264,7 +1256,9 @@
                 tag.style.right = 'auto';
                 tag.style.bottom = 'auto';
 
-                document.getElementById('dragPosBadge').innerText = `📍 Position: X=${currentTagPosX}%, Y=${currentTagPosY}%`;
+                if (document.getElementById('dragPosBadge')) {
+                    document.getElementById('dragPosBadge').innerText = `📍 Position: X=${currentTagPosX}%, Y=${currentTagPosY}%`;
+                }
             }
 
             function endDrag(e) {
@@ -1296,8 +1290,9 @@
             activeTagAsin = asin;
             currentTagPosX = null;
             currentTagPosY = null;
-            currentHeadlinePosY = null;
-            document.getElementById('dragPosBadge').innerText = "📍 Tag: Default";
+            if (document.getElementById('dragPosBadge')) {
+                document.getElementById('dragPosBadge').innerText = "📍 Tag: Default";
+            }
 
             const tag = document.getElementById('liveTagOverlay');
             if (tag) {
@@ -1307,16 +1302,8 @@
                 tag.style.bottom = '8%';
             }
 
-            const hl = document.getElementById('liveHeadlineOverlay');
-            if (hl) {
-                hl.style.top = '6%';
-            }
-
             const pTxt = document.getElementById('liveTagPriceText');
             if (pTxt && price) pTxt.innerText = price;
-
-            const hlTxt = document.getElementById('liveHeadlineText');
-            if (hlTxt && title) hlTxt.innerText = title;
 
             document.getElementById('overlayModalImg').src = `./focus_product_${asin}_hook.jpg?t=${Date.now()}`;
             document.getElementById('overlayModal').style.display = 'flex';
@@ -1343,11 +1330,10 @@
             if (!activeTagAsin) return;
             const scaleVal = document.getElementById('tagScaleSelect').value; // e.g. 380x285
             const [w, h] = scaleVal.split('x').map(Number);
-            const rot = parseInt(document.getElementById('tagRotationRange').value || '-6');
-            const fontScale = parseFloat(document.getElementById('priceTextScaleRange').value || '38') / 100.0;
-            const headlineSize = parseInt(document.getElementById('headlineSizeRange').value || '56');
-            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange') ? document.getElementById('priceTextOffsetYRange').value : '15');
-            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange') ? document.getElementById('priceTextOffsetXRange').value : '0');
+            const rot = parseInt(document.getElementById('tagRotationRange')?.value || '-6');
+            const fontScale = parseFloat(document.getElementById('priceTextScaleRange')?.value || '38') / 100.0;
+            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '15');
+            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
 
             document.getElementById('tagSaveSpinner').style.display = 'inline-block';
             showToast(`Re-rendering Canva graphic (${w}x${h}px, ${rot}°, ${selectedTagColor}) live...`, "🎨");
@@ -1366,10 +1352,7 @@
                     price_text_offset_x: offsetX,
                     price_text_offset_y: offsetY,
                     tag_pos_x: currentTagPosX,
-                    tag_pos_y: currentTagPosY,
-                    headline_pos_y: currentHeadlinePosY,
-                    headline_color: selectedHeadlineColor,
-                    headline_size_px: headlineSize
+                    tag_pos_y: currentTagPosY
                 })
             })
             .then(r => r.json())
