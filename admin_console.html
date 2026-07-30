@@ -403,7 +403,7 @@
             display: none;
             align-items: center;
             gap: 12px;
-            z-index: 1000;
+            z-index: 9999;
         }
 
         /* Modal Overlay Preview */
@@ -708,7 +708,7 @@
                         </div>
 
                         <!-- Save Global Defaults Button -->
-                        <button type="button" onclick="saveAsGlobalSystemDefault()" style="width: 100%; margin-bottom: 12px; padding: 10px; background: rgba(255, 183, 3, 0.15); color: var(--gold-primary); border: 1px dashed var(--gold-primary); border-radius: 12px; font-weight: 800; font-size: 12.5px; cursor: pointer; transition: all 0.2s ease;">
+                        <button type="button" id="saveDefaultBtn" onclick="saveAsGlobalSystemDefault()" style="width: 100%; margin-bottom: 12px; padding: 10px; background: rgba(255, 183, 3, 0.15); color: var(--gold-primary); border: 1px dashed var(--gold-primary); border-radius: 12px; font-weight: 800; font-size: 12.5px; cursor: pointer; transition: all 0.2s ease;">
                             ⭐ Save Layout as Default for ALL Future Products
                         </button>
                     </div>
@@ -1335,6 +1335,11 @@
             const textPosY = 58.0 + (offsetY * 0.30);
             const textPosX = 50.0 + (offsetX * 0.30);
 
+            const saveBtn = document.getElementById('saveDefaultBtn');
+            if (saveBtn) {
+                saveBtn.innerText = "⏳ Saving Default Preset...";
+            }
+
             showToast("Saving layout as system default for all future products...", "⭐");
 
             fetch('/api/save_global_defaults', {
@@ -1359,11 +1364,25 @@
             .then(data => {
                 if (data.status === 'success') {
                     showToast("⭐ Saved! All future products will use this default layout.", "✨");
+                    if (saveBtn) {
+                        saveBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+                        saveBtn.style.color = '#10b981';
+                        saveBtn.style.borderColor = '#10b981';
+                        saveBtn.innerText = "✅ Saved as System Default!";
+                        setTimeout(() => {
+                            saveBtn.style.background = 'rgba(255, 183, 3, 0.15)';
+                            saveBtn.style.color = 'var(--gold-primary)';
+                            saveBtn.style.borderColor = 'var(--gold-primary)';
+                            saveBtn.innerText = "⭐ Save Layout as Default for ALL Future Products";
+                        }, 3000);
+                    }
                 } else {
+                    if (saveBtn) saveBtn.innerText = "⭐ Save Layout as Default for ALL Future Products";
                     alert("Error saving global defaults: " + data.message);
                 }
             })
             .catch(e => {
+                if (saveBtn) saveBtn.innerText = "⭐ Save Layout as Default for ALL Future Products";
                 console.error("[Save Global Defaults Error]", e);
                 alert("Error saving defaults: " + e.message);
             });
