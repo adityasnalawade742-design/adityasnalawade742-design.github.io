@@ -896,6 +896,44 @@
             "SG": "SGD", "NZ": "NZD", "CH": "CHF", "SE": "SEK", "AE": "AED", "SA": "SAR", "KR": "KRW"
         };
 
+        function changeGlobalCurrency(targetCurr) {
+            const rate = exchangeRates[targetCurr] || 1.0;
+            const sym = currencySymbols[targetCurr] || (targetCurr + " ");
+            const currToRegionMap = { "USD": "us", "GBP": "uk", "INR": "in", "EUR": "de", "CAD": "ca", "JPY": "jp", "AUD": "au" };
+            const regionCode = currToRegionMap[targetCurr] || 'us';
+
+            document.querySelectorAll('.card-wrapper').forEach(card => {
+                const regionalVal = card.getAttribute(`data-price-${regionCode}`);
+                const priceTag = card.querySelector('.card-price-tag');
+
+                if (regionalVal === 'Not Available') {
+                    if (priceTag) {
+                        priceTag.innerText = 'Not Available';
+                        priceTag.style.background = 'rgba(239, 68, 68, 0.25)';
+                        priceTag.style.color = '#fca5a5';
+                        priceTag.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                    }
+                } else if (regionalVal && priceTag) {
+                    priceTag.innerText = regionalVal;
+                    priceTag.style.background = 'linear-gradient(135deg, rgba(255, 183, 3, 0.95), rgba(251, 133, 0, 0.95))';
+                    priceTag.style.color = '#000';
+                    priceTag.style.borderColor = 'transparent';
+                } else {
+                    const baseUsd = parseFloat(card.getAttribute('data-base-usd') || '20.00');
+                    const converted = (baseUsd * rate).toLocaleString(undefined, {
+                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
+                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
+                    });
+                    if (priceTag) {
+                        priceTag.innerText = `${sym}${converted}`;
+                        priceTag.style.background = 'linear-gradient(135deg, rgba(255, 183, 3, 0.95), rgba(251, 133, 0, 0.95))';
+                        priceTag.style.color = '#000';
+                        priceTag.style.borderColor = 'transparent';
+                    }
+                }
+            });
+        }
+
         // Fetch Live Exchange Rates from Open API
         fetch('https://open.er-api.com/v6/latest/USD')
             .then(res => res.json())
@@ -958,93 +996,6 @@
                         });
                 });
         })();
-
-                        function changeGlobalCurrency(targetCurr) {
-            const rate = exchangeRates[targetCurr] || 1.0;
-            const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-            const currToRegionMap = { "USD": "us", "GBP": "uk", "INR": "in", "EUR": "de", "CAD": "ca", "JPY": "jp", "AUD": "au" };
-            const regionCode = currToRegionMap[targetCurr] || 'us';
-
-            document.querySelectorAll('.card-wrapper').forEach(card => {
-                const regionalVal = card.getAttribute(`data-price-${regionCode}`);
-                const priceTag = card.querySelector('.card-price-tag');
-
-                if (regionalVal === 'Not Available') {
-                    if (priceTag) {
-                        priceTag.innerText = 'Not Available';
-                        priceTag.style.background = 'rgba(239, 68, 68, 0.25)';
-                        priceTag.style.color = '#fca5a5';
-                        priceTag.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                    }
-                } else if (regionalVal && priceTag) {
-                    priceTag.innerText = regionalVal;
-                    priceTag.style.background = 'linear-gradient(135deg, rgba(255, 183, 3, 0.95), rgba(251, 133, 0, 0.95))';
-                    priceTag.style.color = '#000';
-                    priceTag.style.borderColor = 'transparent';
-                } else {
-                    const baseUsd = parseFloat(card.getAttribute('data-base-usd') || '20.00');
-                    const converted = (baseUsd * rate).toLocaleString(undefined, {
-                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
-                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
-                    });
-                    if (priceTag) {
-                        priceTag.innerText = `${sym}${converted}`;
-                        priceTag.style.background = 'linear-gradient(135deg, rgba(255, 183, 3, 0.95), rgba(251, 133, 0, 0.95))';
-                        priceTag.style.color = '#000';
-                        priceTag.style.borderColor = 'transparent';
-                    }
-                }
-            });
-        };
-            const regionCode = currToRegionMap[targetCurr] || 'us';
-
-            document.querySelectorAll('.card-wrapper').forEach(card => {
-                const regionalVal = card.getAttribute(`data-price-${regionCode}`);
-                const priceTag = card.querySelector('.card-price-tag');
-
-                if (regionalVal === 'Not Available') {
-                    if (priceTag) {
-                        priceTag.innerText = 'Not Available';
-                        priceTag.style.background = 'rgba(239, 68, 68, 0.25)';
-                        priceTag.style.color = '#fca5a5';
-                        priceTag.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                    }
-                } else if (regionalVal && priceTag) {
-                    priceTag.innerText = regionalVal;
-                    priceTag.style.background = 'linear-gradient(135deg, rgba(255, 183, 3, 0.95), rgba(251, 133, 0, 0.95))';
-                    priceTag.style.color = '#000';
-                    priceTag.style.borderColor = 'transparent';
-                } else {
-                    const baseUsd = parseFloat(card.getAttribute('data-base-usd') || '20.00');
-                    const converted = (baseUsd * rate).toLocaleString(undefined, {
-                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
-                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
-                    });
-                    if (priceTag) {
-                        priceTag.innerText = `${sym}${converted}`;
-                        priceTag.style.background = 'linear-gradient(135deg, rgba(255, 183, 3, 0.95), rgba(251, 133, 0, 0.95))';
-                        priceTag.style.color = '#000';
-                        priceTag.style.borderColor = 'transparent';
-                    }
-                }
-            });
-        }`);
-                const priceTag = card.querySelector('.card-price-tag');
-
-                if (regionalPrice && priceTag) {
-                    priceTag.innerText = regionalPrice;
-                } else {
-                    const baseUsd = parseFloat(card.getAttribute('data-base-usd') || '20.00');
-                    const converted = (baseUsd * rate).toLocaleString(undefined, {
-                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
-                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
-                    });
-                    if (priceTag) {
-                        priceTag.innerText = `${sym}${converted}`;
-                    }
-                }
-            });
-        }
     </script>
 </body>
 
