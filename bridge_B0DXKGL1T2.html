@@ -472,7 +472,7 @@
             const currentAsin = "B0DDTPCDLB";
             const prodKeywords = encodeURIComponent("Lily of the Valley Flower Table Lamp");
             const directRegions = ["US", "UK", "DE", "SE", "CA", "JP"];
-            const regionalMatrix = {"au": "Not Available", "ca": "CA$54.24", "de": "\u20ac33.77", "in": "Not Available", "jp": "Not Available", "uk": "\u00a328.95", "us": "$38.57"};
+            const regionalMatrix = {};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -564,93 +564,6 @@
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=smartdeal0358-21`;
-                    if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
-                    if (geoBox) {
-                        const titleEl = document.getElementById('geoNoticeTitle');
-                        const descEl = document.getElementById('geoNoticeDesc');
-                        if (titleEl) titleEl.innerText = `Item Ships from Amazon US (Not Directly Listed on ${target.domain})`;
-                        if (descEl) descEl.innerText = `This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on ${target.domain} for fast delivery.`;
-                        geoBox.style.display = 'flex';
-                    }
-                }
-            });
-                } else if (regPrice) {
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
-                        } else {
-                            el.innerText = regPrice;
-                        }
-                    });
-                } else {
-                    const rate = exchangeRates[targetCurr] || 1.0;
-                    const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("".replace(/[^0-9.]/g, '') || '20.00');
-                    const converted = (baseUsd * rate).toLocaleString(undefined, {
-                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
-                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
-                    });
-                    const finalDisplayPrice = `${sym}${converted}`;
-
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = `✨ VERIFIED DEAL • ${finalDisplayPrice}`;
-                        } else {
-                            el.innerText = finalDisplayPrice;
-                        }
-                    });
-                });
-                } else if (regPrice) {
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
-                        } else {
-                            el.innerText = regPrice;
-                        }
-                    });
-                }
-                
-                // Explicit US Visitor Handling
-                if (targetCC === 'US') {
-                    const buyBtn = document.getElementById('buyBtn');
-                    const buyBtnText = document.getElementById('buyBtnText');
-                    const geoBox = document.getElementById('geoNoticeBox');
-                    if (directRegions.includes('US')) {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
-                        if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
-                    } else {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=smartdeal0358-21`;
-                        if (buyBtnText) buyBtnText.innerText = `SEARCH DEALS ON AMAZON US`;
-                    }
-                    if (geoBox) geoBox.style.display = 'none';
-                    return;
-                }
-
-                if (!countryMap[targetCC]) {
-                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                    const lang = (navigator.language || '').toLowerCase();
-                    if (tz.includes('asia') || lang.includes('in') || lang.includes('hi')) {
-                        targetCC = 'IN';
-                    } else if (tz.includes('europe') || lang.includes('gb') || lang.includes('de') || lang.includes('fr')) {
-                        targetCC = 'DE';
-                    } else {
-                        return;
-                    }
-                }
-
-                const target = countryMap[targetCC];
-                const buyBtn = document.getElementById('buyBtn');
-                const buyBtnText = document.getElementById('buyBtnText');
-                const geoBox = document.getElementById('geoNoticeBox');
-                
-                if (directRegions.includes(targetCC)) {
-                    // Direct product page link for countries where ASIN is directly listed
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=smartdeal0358-21`;
-                    if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
-                    if (geoBox) geoBox.style.display = 'none';
-                } else {
-                    // Unlisted in region -> Local Search Fallback & Notice Box (prevents 404)
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=smartdeal0358-21`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
