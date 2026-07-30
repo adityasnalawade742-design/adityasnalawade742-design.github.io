@@ -1,5 +1,6 @@
 from pathlib import Path
 from jinja2 import Template
+import json
 from config import BRIDGE_DIR, IMAGES_DIR
 
 BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -659,6 +660,13 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
         for i, img_path in enumerate(product_data["images"][:3]):
             raw_images_rel.append(f"./output/images/raw_amazon_{asin}_{i}.jpg")
     
+    # Load exact verified direct regions from global_direct_matrix.json
+    matrix_file = Path("G:/CLI/pinterest-auto-affiliate/global_direct_matrix.json")
+    if matrix_file.exists():
+        with open(matrix_file, "r", encoding="utf-8") as f:
+            g_matrix = json.load(f)
+            product_data["direct_regions"] = g_matrix.get(asin, ["US"])
+
     # Template rendering
     aff_url = product_data.get("affiliate_url") or f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
     template = Template(BRIDGE_PAGE_TEMPLATE)
