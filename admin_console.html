@@ -1198,7 +1198,9 @@
 
             const priceEl = document.getElementById('liveTagPriceText');
             if (priceEl) {
-                const calculatedPx = Math.round(18 * (fontScale / 0.38));
+                const liveTag = document.getElementById('liveTagOverlay');
+                const tagPx = liveTag ? (liveTag.offsetWidth || 130) : 130;
+                const calculatedPx = Math.round(tagPx * fontScale * 0.82);
                 priceEl.style.fontSize = `${calculatedPx}px`;
                 priceEl.style.color = selectedPriceTextColor;
                 
