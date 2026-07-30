@@ -3,27 +3,45 @@
   "B0FXLYXM32": [
     "UK",
     "IN",
-    "DE",
     "AU",
-    "JP"
+    "JP",
+    "DE",
+    "FR",
+    "IT",
+    "ES"
   ],
   "B0C2YLN3H4": [
     "IN",
-    "DE",
     "AU",
-    "JP"
+    "JP",
+    "DE",
+    "NL",
+    "FR",
+    "IT",
+    "ES",
+    "SE"
   ],
   "B07HP22QTZ": [
     "UK",
     "IN",
-    "DE",
     "AU",
-    "JP"
+    "JP",
+    "DE",
+    "NL",
+    "FR",
+    "IT",
+    "ES",
+    "SE"
   ],
   "B0BZXNSW5K": [
     "UK",
     "IN",
-    "DE"
+    "DE",
+    "NL",
+    "FR",
+    "IT",
+    "ES",
+    "SE"
   ],
   "B0DXKGL1T2": [
     "UK"
@@ -31,15 +49,25 @@
   "B0D1FRDFFX": [
     "UK",
     "IN",
+    "AU",
     "DE",
-    "AU"
+    "NL",
+    "FR",
+    "IT",
+    "ES",
+    "SE"
   ],
   "B0D8P8CSYP": [
     "UK",
     "IN",
-    "DE",
     "AU",
-    "JP"
+    "JP",
+    "DE",
+    "NL",
+    "FR",
+    "IT",
+    "ES",
+    "SE"
   ],
   "B0DZD1X83N": [
     "US"
