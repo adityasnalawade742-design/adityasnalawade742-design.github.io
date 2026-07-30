@@ -1,6 +1,24 @@
 import sys
 import json
 import re
+import requests
+import subprocess
+from pathlib import Path
+from bs4 import BeautifulSoup
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
+repo_dir = Path("G:/CLI/pinterest-auto-affiliate")
+sys.path.append(str(repo_dir))
+
+print("==================================================")
+print("🎯 UPGRADING DAILY PRICE SYNC SCRIPT (sync_exact_amazon_prices.py)")
+print("==================================================")
+
+upgraded_sync_script = """import sys
+import json
+import re
 import os
 import requests
 import subprocess
@@ -36,7 +54,7 @@ regions_to_scrape = [
 print("=== 🔄 DAILY MULTI-REGION AMAZON PRICE SYNCHRONIZATION ===")
 
 for asin, item in registry.items():
-    print(f"\n📦 [{asin}] {item.get('title', 'Product')[:35]}:")
+    print(f"\\n📦 [{asin}] {item.get('title', 'Product')[:35]}:")
     if "regional_prices" not in item:
         item["regional_prices"] = {}
         
@@ -71,13 +89,13 @@ for asin, item in registry.items():
 with open(registry_path, "w", encoding="utf-8") as f:
     json.dump(registry, f, indent=2)
 
-print("\n ✅ Registry updated with multi-region prices!")
+print("\\n ✅ Registry updated with multi-region prices!")
 
 # Rebuild 100% of landing pages to propagate new prices to ALL 21 DOMAINS & 200+ WORLD COUNTRIES
 from rebuild_EVERY_single_bridge import master_catalog
 from modules.bridge_creator import generate_bridge_page
 
-print("\n🔨 Rebuilding 100% of landing pages for all 21 Amazon domains...")
+print("\\n🔨 Rebuilding 100% of landing pages for all 21 Amazon domains...")
 for asin, item in master_catalog.items():
     if asin in registry:
         reg_data = registry[asin].get("regional_prices", {})
@@ -96,7 +114,7 @@ for asin, item in master_catalog.items():
     generate_bridge_page(item, seo_data, asin)
 
 # Git Commit & Push Live
-print("\n🚀 Pushing daily price sync live to GitHub Pages...")
+print("\\n🚀 Pushing daily price sync live to GitHub Pages...")
 try:
     subprocess.run(["git", "add", "-A"], cwd=str(p), check=True)
     subprocess.run(["git", "commit", "-m", "daily price sync: update multi-region prices for all 21 Amazon domains"], cwd=str(p), check=True)
@@ -105,4 +123,20 @@ try:
 except Exception as e:
     print(f" ⚠️ Git push info: {e}")
 
-print("\n🎉 MULTI-REGION PRICE SYNC COMPLETED SUCCESSFULLY!")
+print("\\n🎉 MULTI-REGION PRICE SYNC COMPLETED SUCCESSFULLY!")
+"""
+
+sync_file = repo_dir / "sync_exact_amazon_prices.py"
+sync_file.write_text(upgraded_sync_script, encoding="utf-8")
+print(" ✅ Upgraded sync_exact_amazon_prices.py to scrape multi-region prices & sync all 21 domains!")
+
+# Git Commit & Push Live
+try:
+    subprocess.run(["git", "add", "-A"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "commit", "-m", "upgrade sync_exact_amazon_prices.py to sync all 21 domains automatically"], cwd=str(repo_dir), check=True)
+    subprocess.run(["git", "push", "origin", "main"], cwd=str(repo_dir), check=True)
+    print(" ✅ Git Commit & Push 100% Successful!")
+except Exception as e:
+    print(f" ⚠️ Git push warning: {e}")
+
+print("\n🎉 UPGRADED DAILY PRICE SYNC DEPLOYED LIVE!")
