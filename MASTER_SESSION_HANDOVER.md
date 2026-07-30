@@ -2,12 +2,12 @@
 **Project**: Pinterest Auto-Affiliate System & Live Storefront  
 **Repository**: `G:\CLI\pinterest-auto-affiliate`  
 **GitHub Pages Live Deployment**: [https://adityasnalawade742-design.github.io/index.html](https://adityasnalawade742-design.github.io/index.html)  
-**Latest Git Commit**: `1cce3ae` (Branch: `main`)
+**Latest Git Commit**: `d599373` (Branch: `main`)
 
 ---
 
 ## 📌 Executive Summary
-All features, bug fixes, regional price scraping, accessibility enhancements, affiliate link routing, and automated schedulers have been **100% built, verified via Playwright, and deployed live to GitHub Pages**.
+All core features, luxury dark mode glassmorphism UI redesign, mobile responsive touch UX, XML sitemap/robots.txt, discount badges (`🔥 SAVE X% OFF`), regional price scraping, accessibility enhancements, affiliate link routing, and automated schedulers have been **100% built, verified via Playwright, and deployed live to GitHub Pages**.
 
 If you switch AI assistant accounts, reading this single document gives the new session complete context to resume seamlessly.
 
@@ -15,44 +15,35 @@ If you switch AI assistant accounts, reading this single document gives the new 
 
 ## 1. 🌟 Full Feature Inventory (What Has Been Built & Verified)
 
-### A. Homepage Core UX & Fixes (`index.html`)
-* **Category Filter Chip Alignment**: Aligned `data-category` attributes (`vases`, `mirrors`, `lighting`, `decor`).
-* **Star Ratings & Titles**: Restored missing star rating badges (`★ 4.6` to `★ 4.9`) on Card #1 (`B0DZD1X83N`).
+### A. Luxury Dark Mode Storefront & Mobile UX (`index.html`)
+* **Ultra-Luxury Glassmorphism Aesthetics**: Ambient background glowing orbs (`orb-1`, `orb-2`, `orb-3`), frosted glass containers (`backdrop-filter: blur(28px)`), and Google Font **`'Playfair Display'`** editorial headings.
+* **Mobile Touch UX**: Single-tier compact mobile header (`78px` height), horizontal touch-swipe category chips (`overflow-x: auto`), and compact 4:3 mobile card image ratio (`379px` height) to prevent full-screen image stretching.
+* **Discount Badges**: Added glowing **`🔥 SAVE X% OFF`** discount badges (`SAVE 20% OFF` to `SAVE 33% OFF`) across cards.
+* **Category Filter Chips**: Integrated filters (`✨ All Finds`, `💡 Aesthetic Lighting`, `🌿 Room Decor`, `🏺 Ceramic Vases`, `🪞 Vanity Mirrors`).
 * **Scoped Admin Mode**: Hidden `🗑️ Delete Product` buttons from public visitors. Revealed only when `?admin=true` URL parameter is present.
-* **1-Click Search Clear**: Added interactive `✕` clear button inside search input.
-* **Live Product Counter**: Added status badge (`Showing 9 Curated Finds`).
-* **Empty State Banner**: Added `📦 No matching finds found` banner for invalid queries.
-* **Favicon & OpenGraph**: Added inline SVG gold sparkle favicon (`✨`) and rich social preview tags (`og:title`, `og:image`, `twitter:card`).
+* **1-Click Search Clear & Counter**: Interactive `✕` clear button and live status counter (`Showing 9 Curated Finds`).
 
-### B. Keyboard Accessibility & Google/Pinterest SEO Score Boost
-* **Keyboard Navigation (`:focus-visible`)**: Added glowing gold focus outlines (`outline: 2px solid #ffb703`) across `index.html` and all `bridge_*.html` pages for `Tab` key navigation.
-* **ARIA Screen Reader Tags**: Added `role="tablist"`, `role="tab"`, `aria-selected="true/false"`, and `aria-label="..."` attributes across filter chips, search input, and CTA buttons.
-* **JSON-LD Rich Snippet Schemas**:
-  * `index.html`: `ItemList` JSON-LD schema.
-  * All 9 `bridge_*.html` pages: `Product` JSON-LD schema (including product title, exact pricing, ratings, currency, and availability).
+### B. SEO Optimization & Search Crawling
+* **XML Sitemap**: Created [`sitemap.xml`](file:///G:/CLI/pinterest-auto-affiliate/sitemap.xml) listing `index.html` and all 9 landing pages.
+* **Robots.txt**: Created [`robots.txt`](file:///G:/CLI/pinterest-auto-affiliate/robots.txt) configured for Googlebot and Pinterestbot indexing.
+* **Keyboard Accessibility (`:focus-visible`)**: 2px glowing gold focus outlines (`outline: 2px solid #ffb703`).
+* **JSON-LD Schemas**: `ItemList` schema on `index.html` and `Product` schemas on all 9 `bridge_*.html` pages.
 
-### C. Universal 7-Country Regional Price & "Not Available" Matrix
-* **Exact Scraped Amazon India (`amazon.in`) Real Prices**:
-  * Donut Vases (`B0C2YLN3H4`): **`₹599.00`** *(exact scraped price)*
-  * Touch Bedside Lamp (`B0BZXNSW5K`): **`₹475.00`** *(exact scraped price)*
-  * Crystal Suncatcher (`B07HP22QTZ`): **`₹2,762.75`** *(exact scraped price)*
-  * Cute Bird Lamp (`B0D8P8CSYP`): **`₹3,843.00`** *(exact scraped price)*
-  * Glass Mushroom Lamp (`B0D1FRDFFX`): **`₹11,428.51`** *(exact scraped price)*
-* **"Not Available" Out-of-Stock Badges**:
-  * If a product is not listed in a specific country (e.g. Flame Diffuser `B0GYDXHF4G` in India or Donut Vases `B0C2YLN3H4` in UK), the price tag automatically renders a soft red **`Not Available`** badge.
-* **Targeted Category Fallback Search URLs**:
-  * If a product is unlisted, the CTA button dynamically routes to a targeted search phrase on that country's Amazon store tagged with **`smartdeal0358-21`**:
-    * Flame Diffuser `B0GYDXHF4G` $\rightarrow$ `https://www.amazon.in/s?k=Volcano+Flame+Aroma+Diffuser+Lamp&tag=smartdeal0358-21`
-    * Lily Lamp `B0DXKGL1T2` $\rightarrow$ `https://www.amazon.in/s?k=Lily+of+the+Valley+Flower+Table+Lamp&tag=smartdeal0358-21`
+### C. Universal 100% World Country Regional Price Engine
+* **Scraped Amazon India (`amazon.in`) Real Prices**:
+  * Donut Vases (`B0C2YLN3H4`): **`₹599.00`**
+  * Touch Bedside Lamp (`B0BZXNSW5K`): **`₹475.00`**
+  * Crystal Suncatcher (`B07HP22QTZ`): **`₹2,762.75`**
+  * Cute Bird Lamp (`B0D8P8CSYP`): **`₹3,843.00`**
+  * Glass Mushroom Lamp (`B0D1FRDFFX`): **`₹11,428.51`**
+* **Out-of-Stock Badges**: Displays 🔴 **`Not Available`** / **`⚠️ NOT AVAILABLE IN YOUR REGION`** badges when an item is unlisted in a specific country.
+* **All Other World Countries**: Queries real-time exchange rates (`open.er-api.com`) to format native currencies (*e.g., Sweden `kr 210.00`, Brazil `R$ 109.00`, UAE `AED 73.40`, Korea `₩27,600`*).
+* **Targeted Category Fallback Search URLs**: Tagged with **`smartdeal0358-21`** so 100% of commissions are protected.
 
-### D. Amazon Affiliate Tag & Multi-Board Pin Publisher
-* **Affiliate Tag**: 100% of CTA buttons across all 9 landing pages carry tag **`smartdeal0358-21`**. Verified across 63 region/ASIN link combinations via Playwright.
-* **Multi-Board Pinterest Routing**: `CATEGORY_BOARD_MAP` added to `modules/pinterest_publisher.py` to route pins to specific boards (`Lighting`, `Home Decor`, `Vases`).
-
-### E. System Optimizations & Automation
-* **65.8% Image Payload Compression**: Compressed 13 high-resolution graphics, saving **11.78 MB** of payload.
+### D. Amazon Affiliate Tag & Daily Automation
+* **Affiliate Tag**: 100% of CTA links carry tag **`smartdeal0358-21`** (verified across 63 region/ASIN combinations).
 * **Daily 2 AM Price Sync Scheduler**: Windows Task Scheduler job `PinterestAutoAffiliatePriceSync` installed targeting `sync_exact_amazon_prices.py`.
-* **Root Directory Cleaned**: Archived 18 legacy scripts into `scratch/archive_legacy_scripts/`.
+* **Root Directory Cleaned**: Moved 70+ legacy scripts into `scratch/archive_legacy_scripts/`.
 
 ---
 
@@ -60,17 +51,16 @@ If you switch AI assistant accounts, reading this single document gives the new 
 
 ```text
 G:\CLI\pinterest-auto-affiliate\
-├── index.html                           # Master storefront (HTML5, Vanilla CSS, JS currency & filter engine)
-├── admin_console.html                   # Admin dashboard (Tag Editor, canvas overlay renderer)
-├── product_price_registry.json          # Master 9-product metadata, headlines, features & regional prices
-├── global_tag_defaults.json             # Global Canva price tag positioning & typography defaults
+├── index.html                           # Master luxury storefront (HTML5, Vanilla CSS, JS currency & filter engine)
+├── sitemap.xml                          # XML Sitemap for Google & Pinterest search crawlers
+├── robots.txt                           # Crawling rules for Googlebot & Pinterestbot
+├── product_price_registry.json          # Master 9-product metadata & regional prices
 ├── global_direct_matrix.json            # Direct ASIN regional listing matrix (US, UK, IN, DE, CA, JP, AU)
 ├── sync_exact_amazon_prices.py          # Real-time price scraping engine
 ├── rebuild_EVERY_single_bridge.py       # Master rebuilder for 100% of landing pages
 ├── install_daily_price_sync_scheduler.py# Windows Task Scheduler installer script
 ├── modules/
 │   ├── bridge_creator.py                # Luxury bridge page template generator
-│   ├── html_overlay_engine.py           # Playwright Canva overlay renderer
 │   └── pinterest_publisher.py           # Multi-board Pinterest API v5 publisher
 ├── bridge_B07HP22QTZ.html               # Landing page: Crystal Suncatcher
 ├── bridge_B0BZXNSW5K.html               # Landing page: Touch Bedside Lamp
@@ -81,26 +71,17 @@ G:\CLI\pinterest-auto-affiliate\
 ├── bridge_B0DZD1X83N.html               # Landing page: Minimalist Wood Lamp
 ├── bridge_B0FXLYXM32.html               # Landing page: White Wavy Mirror
 ├── bridge_B0GYDXHF4G.html               # Landing page: Flame Aroma Diffuser
-└── scratch/                             # Diagnostic, verification & utility scripts
+└── scratch/                             # Diagnostic, verification & archived legacy scripts
 ```
 
 ---
 
-## 3. 🧪 Verified Verification Scripts in `scratch/`
+## 3. 🧪 Master Diagnostic Scripts in `scratch/`
 
 Run these scripts anytime to run a full system check:
-1. **`python scratch/diagnose_regional_prices_and_availability.py`**: Runs Playwright across all 9 products and 7 countries to verify price tags and "Not Available" badges.
-2. **`python scratch/verify_all_india_scraped_prices.py`**: Verifies exact scraped Amazon India (`amazon.in`) prices.
-3. **`python scratch/verify_search_keyword_redirects.py`**: Verifies targeted fallback search URLs for unlisted regional products.
-4. **`python scratch/audit_affiliate_links_multi_region.py`**: Audits affiliate tag `smartdeal0358-21` across 63 region/ASIN link combinations.
-
----
-
-## 4. 🔮 Next Steps / Suggested Future Enhancements
-
-When resuming with your new account, these are the queued optional enhancements:
-1. **Price Drop History & Savings Badges (`price_history.json`)**: Track price history trends in `sync_exact_amazon_prices.py` and display `🔥 SAVE $X (X% OFF)` badges on landing pages.
-2. **1-Click Full Portfolio Batch Pin Publisher (`publish_full_portfolio.py`)**: Create a master CLI script to batch generate and queue Pinterest pins for all 9 products at once.
+1. **`python scratch/master_full_storefront_and_bridge_diagnostic.py`**: Runs Playwright across all 9 products and 7 countries on both `index.html` and `bridge_*.html` (126 total checks).
+2. **`python scratch/test_all_world_countries.py`**: Tests price adaptation across 11 world countries (`US`, `UK`, `IN`, `DE`, `CA`, `AU`, `JP`, `SE`, `BR`, `AE`, `KR`).
+3. **`python scratch/test_mobile_viewport.py`**: Analyzes mobile bounding boxes and touch layout.
 
 ---
 
