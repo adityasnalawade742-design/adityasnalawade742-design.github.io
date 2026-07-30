@@ -153,17 +153,17 @@ def render_pillow_fallback(image_path: str, headline: str, subtitle: str, badge_
         print(f"[Pillow Overlay Engine] Error generating fallback graphic: {e_pil}")
         return str(image_path)
 
-def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = None) -> str:
+def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = None, price_text_color: str = None, price_font_scale: float = 0.38) -> str:
     """
     Dynamically recolors tag 1.png to match the room photo's ambient accent color,
-    and stamps price text at the 100% exact visual dead center!
+    and stamps price text at the 100% exact visual dead center with custom font color & size!
     """
     try:
         import PIL.ImageColor as ImageColor
         img = Image.open(tag_path).convert("RGBA")
         
-        # Determine text color based on background luminance
-        text_color = (17, 24, 39, 255) # default dark obsidian
+        # Default dark obsidian text color
+        text_color = (17, 24, 39, 255)
         
         # If tag_bg_hex is provided, recolor card body pixels!
         if tag_bg_hex and tag_bg_hex.startswith("#"):
@@ -178,12 +178,18 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
                         data.append((r, g, b, a))
                 img.putdata(data)
                 
-                # Auto-select contrasting text color
+                # Auto-select contrasting text color unless custom price_text_color is set
                 lum = 0.299 * target_rgb[0] + 0.587 * target_rgb[1] + 0.114 * target_rgb[2]
                 text_color = (255, 255, 255, 255) if lum < 140 else (17, 24, 39, 255)
             except Exception as e_color:
                 print(f"[PIL Tag Recolorer] ⚠️ Color warning: {e_color}")
                 
+        if price_text_color and price_text_color.startswith("#"):
+            try:
+                tc_rgb = ImageColor.getrgb(price_text_color)
+                text_color = (tc_rgb[0], tc_rgb[1], tc_rgb[2], 255)
+            except Exception: pass
+
         draw = ImageDraw.Draw(img)
         w, h = img.size
         
@@ -205,14 +211,14 @@ def stamp_price_onto_tag_image(tag_path: str, price_str: str, tag_bg_hex: str = 
             center_y = h // 2
             card_width = w
             
-        font_size = int(card_width * 0.38)
+        font_size = int(card_width * float(price_font_scale or 0.38))
         try:
             font = ImageFont.truetype("arial.ttf", font_size)
         except Exception:
             font = ImageFont.load_default()
             
         # Draw contrasting price text at the EXACT visual center of the price tag
-        draw.text((center_x, center_y + 75), price_str, fill=text_color, font=font, anchor="mm")
+        draw.text((center_x, center_y + 15), price_str, fill=text_color, font=font, anchor="mm")
         
         stamped_path = Path(tag_path).parent / "stamped_ambient_tag.png"
         img.save(stamped_path, format="PNG")
@@ -240,7 +246,10 @@ def render_html_overlay(
     tag_height_px: int = 270,
     tag_rotation_deg: int = -6,
     tag_pos_x: float = None,
-    tag_pos_y: float = None
+    tag_pos_y: float = None,
+    tag_bg_hex: str = None,
+    price_text_color: str = None,
+    price_font_scale: float = 0.38
 ) -> str:
     """
     Renders Canva-quality Pinterest graphic using Playwright & dynamic HTML/CSS templates.
@@ -308,10 +317,10 @@ def render_html_overlay(
 
 
 
-    tag_accent_hex = ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900"
+    tag_accent_hex = tag_bg_hex if tag_bg_hex else (ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900")
     custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
     if custom_tag_path.exists():
-        stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex)
+        stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_clean, tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale)
         tag_abs_url = Path(stamped_tag_file).resolve().as_uri()
         if tag_pos_x is not None and tag_pos_y is not None:
             pos_style = f"position: absolute; left: {tag_pos_x}%; top: {tag_pos_y}%; z-index: 20;"
