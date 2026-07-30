@@ -14,7 +14,10 @@
     ],
     "raw_image": "raw_images/raw_B0GYDXHF4G.jpg",
     "hook_image": "focus_product_B0GYDXHF4G_hook.jpg",
-    "bridge_page": "bridge_B0GYDXHF4G.html"
+    "bridge_page": "bridge_B0GYDXHF4G.html",
+    "regional_prices": {
+      "IN": "Not Available"
+    }
   },
   "B0FXLYXM32": {
     "title": "Pocetry 22\"x30\" White Wavy Wall Mirror for Vanity",
@@ -31,7 +34,10 @@
     ],
     "raw_image": "raw_images/raw_B0FXLYXM32.jpg",
     "hook_image": "focus_product_B0FXLYXM32_hook.jpg",
-    "bridge_page": "bridge_B0FXLYXM32.html"
+    "bridge_page": "bridge_B0FXLYXM32.html",
+    "regional_prices": {
+      "IN": "Not Available"
+    }
   },
   "B0C2YLN3H4": {
     "title": "White Ceramic Donut Vase Set of 2",
@@ -49,7 +55,10 @@
     "raw_image": "raw_images/raw_B0C2YLN3H4.jpg",
     "hook_image": "focus_product_B0C2YLN3H4_exact2vases_hook.jpg",
     "bridge_page": "bridge_B0C2YLN3H4.html",
-    "last_updated": "2026-07-29T12:05:24.358736"
+    "last_updated": "2026-07-29T12:05:24.358736",
+    "regional_prices": {
+      "IN": "\u20b9599.00"
+    }
   },
   "B07HP22QTZ": {
     "title": "Suncatcher Crystal Ball Prism Window Rainbow Maker",
@@ -87,7 +96,10 @@
     ],
     "raw_image": "raw_images/raw_B0BZXNSW5K.jpg",
     "hook_image": "focus_product_B0BZXNSW5K_hook.jpg",
-    "bridge_page": "bridge_B0BZXNSW5K.html"
+    "bridge_page": "bridge_B0BZXNSW5K.html",
+    "regional_prices": {
+      "IN": "\u20b9475.00"
+    }
   },
   "B0DXKGL1T2": {
     "title": "Lily of the Valley Flower Table Lamp",
@@ -105,7 +117,10 @@
     "raw_image": "generated image.jpg",
     "hook_image": "focus_product_B0DXKGL1T2_hook.jpg",
     "bridge_page": "bridge_B0DXKGL1T2.html",
-    "last_updated": "2026-07-29T12:06:03.990914"
+    "last_updated": "2026-07-29T12:06:03.990914",
+    "regional_prices": {
+      "IN": "Not Available"
+    }
   },
   "B0D1FRDFFX": {
     "title": "Mushroom Lamp Glass Table Lamp for Bedroom & Nightstand Decor",
@@ -122,7 +137,10 @@
     ],
     "raw_image": "raw_images/raw_B0D1FRDFFX.jpg",
     "hook_image": "focus_product_B0D1FRDFFX_hook.jpg",
-    "bridge_page": "bridge_B0D1FRDFFX.html"
+    "bridge_page": "bridge_B0D1FRDFFX.html",
+    "regional_prices": {
+      "IN": "\u20b911,428.51"
+    }
   },
   "B0D8P8CSYP": {
     "title": "Cute Bird Dimmable Touch Night Lamp",
@@ -139,6 +157,9 @@
     ],
     "raw_image": "raw_images/birds_cute.jpg",
     "hook_image": "focus_product_B0D8P8CSYP_hook.jpg",
-    "bridge_page": "bridge_B0D8P8CSYP.html"
+    "bridge_page": "bridge_B0D8P8CSYP.html",
+    "regional_prices": {
+      "IN": "\u20b93,843.00"
+    }
   }
 }
