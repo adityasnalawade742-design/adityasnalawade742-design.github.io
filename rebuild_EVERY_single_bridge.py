@@ -110,13 +110,23 @@ master_catalog = {
         "direct_regions": ["US", "UK", "DE", "SE", "CA", "JP"],
     }
 }
-# Load and merge empirical scraped prices from product_price_registry.json
+# Load and merge empirical scraped prices and empirical direct matrix
 registry_path = repo_dir / "product_price_registry.json"
+matrix_path = repo_dir / "global_direct_matrix.json"
+
+matrix_data = {}
+if matrix_path.exists():
+    import json
+    with open(matrix_path, "r", encoding="utf-8") as f_mat:
+        matrix_data = json.load(f_mat)
+
 if registry_path.exists():
     import json
     with open(registry_path, "r", encoding="utf-8") as f_reg:
         reg_data = json.load(f_reg)
     for asin, item in master_catalog.items():
+        if asin in matrix_data:
+            item["direct_regions"] = matrix_data[asin]
         if asin in reg_data:
             reg_prices = reg_data[asin].get("regional_prices", {})
             item["regional_prices"] = reg_prices

@@ -413,7 +413,7 @@
 
         <!-- Geo Shipping Notice Box -->
         
-        <div id="geoNoticeBox" class="geo-notice-box" style="display: none;">
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
             <span class="geo-icon">📍</span>
             <div>
                 <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
@@ -425,7 +425,7 @@
         
         
         <a id="buyBtn" href="https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">BUY ON AMAZON (US $)</span>
+            <span id="buyBtnText">CHECK ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
         
@@ -568,8 +568,8 @@
             
             const currentAsin = "B0D8P8CSYP";
             const prodKeywords = encodeURIComponent("Cute Bird Touch Dimmable Nightstand Lamp").replace(/%20/g, "+");
-            const directRegions = ["UK", "IN", "AU", "JP", "DE", "NL", "FR", "IT", "ES", "SE"];
-            const regionalMatrix = {"AE": "AED101.39", "AU": "A$24.32", "BE": "29,99\u20ac", "BR": "R$209,71", "CA": "CA$21.76", "DE": "\u20ac3290,.83", "EG": "Not Available", "ES": "31,99\u20ac", "FR": "38,99\u20ac", "IN": "\u20b93,843.00", "IT": "38,99\u20ac", "JP": "\u00a52,480", "MX": "Not Available", "NL": "\u20ac28,99", "PL": "82,85z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e142.30\u200e", "SE": "312,38kr", "SG": "Not Available", "TR": "999,00\u00a0TL", "UK": "\u00a32,800.46", "US": "$1,813.73"};
+            const directRegions = ["US", "IT", "JP", "AU"];
+            const regionalMatrix = {"AE": "AED101.39", "AU": "A$24.32", "BE": "29,99\u20ac", "BR": "R$209,71", "CA": "CA$21.76", "DE": "\u20ac32.90", "EG": "Not Available", "ES": "31,99\u20ac", "FR": "38,99\u20ac", "IN": "\u20b93,843.00", "IT": "38,99\u20ac", "JP": "\u00a52,480", "MX": "Not Available", "NL": "\u20ac28,99", "PL": "82,85z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e142.30\u200e", "SE": "312,38kr", "SG": "Not Available", "TR": "999,00\u00a0TL", "UK": "\u00a328.00", "US": "$18.99"};
             const regionalAsins = {"US": "B0D8P8CSYP"};
 
             
@@ -675,7 +675,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$1,813.73".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$18.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
