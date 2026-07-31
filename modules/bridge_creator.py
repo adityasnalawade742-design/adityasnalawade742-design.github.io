@@ -430,13 +430,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         <!-- High-Converting CTA -->
         {% set clean_words = product.title.split()[:4] | join(' ') %}
         {% if not is_in_direct %}
-        <a id="buyBtn" href="https://www.amazon.in/s?k={{ clean_words|urlencode }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">SEARCH LOCAL DEALS ON AMAZON INDIA (₹)</span>
+        <a id="buyBtn" href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">CHECK ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
         {% else %}
-        <a id="buyBtn" href="https://www.amazon.in/dp/{{ asin }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">BUY ON AMAZON INDIA (₹)</span>
+        <a id="buyBtn" href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
+            <span id="buyBtnText">BUY ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
         {% endif %}
