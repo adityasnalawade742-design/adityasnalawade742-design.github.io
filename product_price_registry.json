@@ -38,16 +38,17 @@
     "bridge_page": "bridge_B0FXLYXM32.html",
     "regional_prices": {
       "IN": "Not Available",
-      "UK": "INR16,179.25",
-      "DE": "INR13,162.19",
-      "JP": "\u00a524,243"
+      "UK": "INR13,471.63",
+      "DE": "INR13,184.18",
+      "JP": "\u00a520,390",
+      "CA": "$216.34"
     },
     "search_keywords": "White Wavy Wall Body Standing Mirror"
   },
   "B0C2YLN3H4": {
     "title": "White Ceramic Donut Vase Set of 2",
     "url": "https://www.amazon.com/dp/B0C2YLN3H4?tag=smartdeal0358-21",
-    "current_price": "$14.99",
+    "current_price": "INR1,527.70",
     "headline": "White Ceramic Donut Vase Set",
     "subtitle": "",
     "badge": "\ud83c\udf3f BOHO DECOR PICK",
@@ -64,14 +65,16 @@
     "regional_prices": {
       "IN": "\u20b9599.00",
       "AU": "$26.88",
-      "JP": "\u00a54,664"
+      "JP": "\u00a54,664",
+      "US": "INR1,527.70",
+      "CA": "$42.26"
     },
     "search_keywords": "White Ceramic Donut Flower Vase Set"
   },
   "B07HP22QTZ": {
     "title": "Suncatcher Crystal Ball Prism Window Rainbow Maker",
     "url": "https://www.amazon.com/dp/B07HP22QTZ?tag=smartdeal0358-21",
-    "current_price": "$9.99",
+    "current_price": "INR763.37",
     "headline": "Crystal Prism Window Suncatcher",
     "subtitle": "RAINBOW SPECTRUM MAKER",
     "badge": "\ud83c\udf08 SUNLIGHT MAGIC",
@@ -85,18 +88,19 @@
     "hook_image": "focus_product_B07HP22QTZ_hook.jpg",
     "bridge_page": "bridge_B07HP22QTZ.html",
     "regional_prices": {
-      "IN": "\u20b92,762.75",
-      "US": "$9.99",
+      "IN": "\u20b92,760.15",
+      "US": "INR763.37",
       "UK": "INR1,571.67",
-      "AU": "$30.48",
-      "JP": "\u00a53,651"
+      "AU": "$30.57",
+      "JP": "\u00a53,651",
+      "CA": "$19.99"
     },
     "search_keywords": "Crystal Ball Prism Window Suncatcher"
   },
   "B0BZXNSW5K": {
     "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
     "url": "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-21",
-    "current_price": "$19.99",
+    "current_price": "INR1,718.78",
     "headline": "Dimmable Touch Nightstand Lamp",
     "subtitle": "",
     "badge": "\ud83d\udd6f\ufe0f BEDSIDE FAVORITE",
@@ -111,7 +115,9 @@
     "bridge_page": "bridge_B0BZXNSW5K.html",
     "regional_prices": {
       "IN": "\u20b9475.00",
-      "UK": "INR2,553.00"
+      "UK": "INR2,553.00",
+      "US": "INR1,718.78",
+      "CA": "$29.99"
     },
     "search_keywords": "Touch Control Dimmable Bedside Table Lamp"
   },
@@ -155,16 +161,16 @@
     "hook_image": "focus_product_B0D1FRDFFX_hook.jpg",
     "bridge_page": "bridge_B0D1FRDFFX.html",
     "regional_prices": {
-      "IN": "\u20b911,428.51",
+      "IN": "\u20b911,356.51",
       "UK": "INR5,237.62",
-      "DE": "INR3,723.54"
+      "DE": "INR3,729.76"
     },
     "search_keywords": "Glass Mushroom Desk Table Lamp"
   },
   "B0D8P8CSYP": {
     "title": "Cute Bird Dimmable Touch Night Lamp",
     "url": "https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-21",
-    "current_price": "$20.56",
+    "current_price": "INR\u00a01,336.62",
     "headline": "Cute Bird Dimmable Touch Lamp",
     "subtitle": "SOFT NIGHTSTAND LIGHT",
     "badge": "\ud83d\udc26 CUTE BEDSIDE PICK",
@@ -180,7 +186,8 @@
     "regional_prices": {
       "IN": "\u20b93,843.00",
       "UK": "INR2,790.67",
-      "DE": "INR3,285.34"
+      "DE": "INR3,290.83",
+      "US": "INR\u00a01,336.62"
     },
     "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp"
   }
