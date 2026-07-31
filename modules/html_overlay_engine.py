@@ -90,8 +90,10 @@ def detect_image_luminance(image_path: str) -> dict:
             stat = crop_img.resize((50, 50))
             pixels = list(stat.getdata())
             lums = [0.299 * r + 0.587 * g + 0.114 * b for r, g, b in pixels]
-        top_lum = sum(top_crop.getdata()) / float(top_crop.size[0] * top_crop.size[1])
-        bot_lum = sum(bot_crop.getdata()) / float(bot_crop.size[0] * bot_crop.size[1])
+            return sum(lums) / len(lums) if lums else 100.0
+
+        top_lum = calc_lum(top_crop)
+        bot_lum = calc_lum(bot_crop)
         
         # High-contrast dimming for bright glowing lamps & room lights
         top_scrim_opacity = 0.55 if top_lum > 70 else 0.35

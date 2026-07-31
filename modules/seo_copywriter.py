@@ -117,7 +117,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
         description = (
             "Tired of harsh bedroom lighting? Elevate your nightstand aesthetic with this viral Dawnwake Mushroom Touch Table Lamp! "
             "Features smooth dimmable touch controls and warm ambient glow for cozy reading nights. "
-            "Tap link to shop now on Amazon! #mushroomlamp #bedside lamp #cozyroomdecor #aestheticroom #amazonfinds"
+            "Tap link to shop now on Amazon! #mushroomlamp #bedsidelamp #cozyroomdecor #aestheticroom #amazonfinds"
         )
         keywords = ["mushroom touch lamp", "bedside table lamp", "cozy room decor", "aesthetic nightstand", "amazon room finds"]
 
