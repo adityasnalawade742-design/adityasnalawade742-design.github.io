@@ -104,13 +104,13 @@ print("📌 [SUBSYSTEM 5] STOREFRONT UX & INSTANT SEARCH ENGINE (index.html)")
 index_text = index_file.read_text(encoding="utf-8")
 has_search = 'id="searchInput"' in index_text
 has_clear_btn = 'clearSearch' in index_text
-has_category_chips = 'filterCards' in index_text
+has_category_chips = 'filterProducts' in index_text
 has_currency_sel = 'id="currencySelector"' in index_text
 has_admin_mode = 'admin' in index_text
 
 print(f"  • Instant Live Search Bar: {'✅ PASS' if has_search else '❌ FAIL'}")
 print(f"  • 1-Click Search Clear (✕): {'✅ PASS' if has_clear_btn else '❌ FAIL'}")
-print(f"  • Category Filter Chips (filterCards): {'✅ PASS' if has_category_chips else '❌ FAIL'}")
+print(f"  • Category Filter Chips (filterProducts): {'✅ PASS' if has_category_chips else '❌ FAIL'}")
 print(f"  • 160+ Currency Selector: {'✅ PASS' if has_currency_sel else '❌ FAIL'}")
 print(f"  • Scoped Admin Security Mode (?admin=true): {'✅ PASS' if has_admin_mode else '❌ FAIL'}")
 sub5_pass = has_search and has_clear_btn and has_category_chips and has_currency_sel and has_admin_mode
