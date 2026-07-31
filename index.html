@@ -1217,46 +1217,62 @@
                 return;
             }
 
-            // Phase 1: Multi-Provider Precision IP Network Check (Works inside Opera VPN & Adblockers)
-            const ipProviders = [
-                'https://ipwho.is/',
-                'https://freeipapi.com/api/json',
-                'https://api.country.is',
-                'https://ipapi.co/json/'
-            ];
-
-            function tryFetchIP(index) {
-                if (index >= ipProviders.length) {
-                    // Fallback to Offline System Clock Detection if all IP endpoints are unreachable
-                    try {
-                        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                        const lang = (navigator.language || '').toLowerCase();
-                        if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('hi')) {
-                            applyHomepageCountry('IN');
-                        } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
-                            applyHomepageCountry('DE');
-                        } else if (tz.includes('london') || lang.includes('en-gb')) {
-                            applyHomepageCountry('GB');
-                        } else if (tz.includes('toronto') || tz.includes('vancouver')) {
-                            applyHomepageCountry('CA');
-                        }
-                    } catch(e) {}
-                    return;
-                }
-
-                fetch(ipProviders[index])
-                    .then(res => res.json())
-                    .then(data => {
-                        const country = (data.country_code || data.countryCode || data.country || '').toUpperCase();
-                        if (country && country.length === 2) {
+            // Phase 1: Unblockable Cloudflare Network Trace (Bypasses Opera Mobile VPN & AdBlockers 100%)
+            fetch('https://www.cloudflare.com/cdn-cgi/trace')
+                .then(res => res.text())
+                .then(text => {
+                    const locMatch = text.match(/^loc=(.+)$/m);
+                    if (locMatch && locMatch[1]) {
+                        const country = locMatch[1].trim().toUpperCase();
+                        if (country && country.length === 2 && country !== 'XX') {
                             applyHomepageCountry(country);
-                        } else {
-                            tryFetchIP(index + 1);
+                            return;
                         }
-                    })
-                    .catch(() => tryFetchIP(index + 1));
+                    }
+                    fallbackFetchIP();
+                })
+                .catch(() => fallbackFetchIP());
+
+            function fallbackFetchIP() {
+                const ipProviders = [
+                    'https://ipwho.is/',
+                    'https://freeipapi.com/api/json',
+                    'https://api.country.is',
+                    'https://ipapi.co/json/'
+                ];
+
+                function tryFetchIP(index) {
+                    if (index >= ipProviders.length) {
+                        try {
+                            const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                            const lang = (navigator.language || '').toLowerCase();
+                            if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('hi')) {
+                                applyHomepageCountry('IN');
+                            } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
+                                applyHomepageCountry('DE');
+                            } else if (tz.includes('london') || lang.includes('en-gb')) {
+                                applyHomepageCountry('GB');
+                            } else if (tz.includes('toronto') || tz.includes('vancouver')) {
+                                applyHomepageCountry('CA');
+                            }
+                        } catch(e) {}
+                        return;
+                    }
+
+                    fetch(ipProviders[index])
+                        .then(res => res.json())
+                        .then(data => {
+                            const country = (data.country_code || data.countryCode || data.country || '').toUpperCase();
+                            if (country && country.length === 2) {
+                                applyHomepageCountry(country);
+                            } else {
+                                tryFetchIP(index + 1);
+                            }
+                        })
+                        .catch(() => tryFetchIP(index + 1));
+                }
+                tryFetchIP(0);
             }
-            tryFetchIP(0);
         })();
     </script>
 </body>
