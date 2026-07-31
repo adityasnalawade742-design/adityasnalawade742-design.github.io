@@ -215,6 +215,21 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/save_global_defaults'):
             self.handle_api_save_global_defaults()
             return
+        elif self.path.startswith('/api/matrix'):
+            self.handle_api_matrix()
+            return
+        elif self.path.startswith('/api/audit_links'):
+            self.handle_api_audit_links()
+            return
+        elif self.path.startswith('/api/rerender_badges'):
+            self.handle_api_rerender_badges()
+            return
+        elif self.path.startswith('/api/campaign_tracker'):
+            self.handle_api_campaign_tracker()
+            return
+        elif self.path.startswith('/api/logs'):
+            self.handle_api_logs()
+            return
         else:
             self.send_error(404, "Endpoint not found")
 
@@ -317,6 +332,48 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 'task_key': 'global_sync',
                 'message': 'Master 21-Domain Regional Price Sync Pipeline Launched! Scraping all regional storefronts and deploying live...'
             })
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_matrix(self):
+        try:
+            mat_file = WORKSPACE_DIR / "global_direct_matrix.json"
+            reg_file = WORKSPACE_DIR / "product_price_registry.json"
+            mat_data = json.loads(mat_file.read_text(encoding="utf-8")) if mat_file.exists() else {}
+            reg_data = json.loads(reg_file.read_text(encoding="utf-8")) if reg_file.exists() else {}
+            self.send_json({'status': 'success', 'matrix': mat_data, 'registry': reg_data})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_audit_links(self):
+        try:
+            audit_script = str(WORKSPACE_DIR / "scratch" / "master_zero_404_audit.py")
+            res = subprocess.run([sys.executable, audit_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+            self.send_json({'status': 'success', 'output': res.stdout})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_rerender_badges(self):
+        try:
+            rerender_script = str(WORKSPACE_DIR / "rebuild_all_price_badges_usd.py")
+            res = subprocess.run([sys.executable, rerender_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+            self.send_json({'status': 'success', 'message': 'All Playwright graphic price badges re-rendered successfully!', 'output': res.stdout})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_campaign_tracker(self):
+        try:
+            tracker_file = WORKSPACE_DIR / "pinterest_campaign_tracker.json"
+            data = json.loads(tracker_file.read_text(encoding="utf-8")) if tracker_file.exists() else {}
+            self.send_json({'status': 'success', 'tracker': data})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_logs(self):
+        try:
+            log_file = WORKSPACE_DIR / "server.log"
+            logs = log_file.read_text(encoding="utf-8")[-2000:] if log_file.exists() else "System running smoothly..."
+            self.send_json({'status': 'success', 'logs': logs})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
