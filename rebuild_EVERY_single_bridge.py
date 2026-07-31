@@ -91,13 +91,13 @@ master_catalog = {
     },
     "B0D8P8CSYP": {
         "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp",
-        "title": "Aesthetic Sunset Lamp Projection Light Ambient Glow",
+        "title": "Cute Bird Touch Control Nightstand Lamp",
         "price": "$18.99",
-        "rating": "4.6",
-        "features": ["SUNSET PROJECTION GLOW", "360 DEGREE ROTATION", "USB POWERED", "PHOTO BACKGROUND LIGHT"],
+        "rating": "4.8",
+        "features": ["DIMMABLE TOUCH CONTROL", "RECHARGEABLE BATTERY", "WARM BEDSIDE GLOW", "PORTABLE NIGHT LIGHT"],
         "category": "lighting",
-        "description": "Create warm romantic room vibes with this viral sunset projection lamp.",
-        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
+        "description": "Adorable dimmable touch nightstand lamp in aesthetic bird design. Soft warm ambient light perfect for cozy bedrooms, desks, and bedside tables.",
+        "direct_regions": ["US", "IT", "JP", "AU"]
     },
     "B0DXKGL1T2": {
         "search_keywords": "Lily of the Valley Flower Table Lamp",
