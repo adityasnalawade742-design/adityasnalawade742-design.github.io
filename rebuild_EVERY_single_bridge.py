@@ -108,10 +108,21 @@ master_catalog = {
         "category": "lighting",
         "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
         "direct_regions": ["US", "UK", "DE", "SE", "CA", "JP"],
-        "target_asin": "B0DDTPCDLB",
-        "affiliate_url": "https://www.amazon.com/dp/B0DDTPCDLB?tag=smartdeal0358-21"
     }
 }
+# Load and merge empirical scraped prices from product_price_registry.json
+registry_path = repo_dir / "product_price_registry.json"
+if registry_path.exists():
+    import json
+    with open(registry_path, "r", encoding="utf-8") as f_reg:
+        reg_data = json.load(f_reg)
+    for asin, item in master_catalog.items():
+        if asin in reg_data:
+            reg_prices = reg_data[asin].get("regional_prices", {})
+            item["regional_prices"] = reg_prices
+            item["regional_matrix"] = reg_prices
+            if "current_price" in reg_data[asin]:
+                item["current_price"] = reg_data[asin]["current_price"]
 
 print("\n[Master Rebuilder] Rebuilding 100% of all landing pages with Multi-Region Geo-Redirector...\n")
 
