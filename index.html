@@ -1144,10 +1144,10 @@
             const rate = exchangeRates[targetCurr] || 1.0;
             const sym = currencySymbols[targetCurr] || (targetCurr + " ");
             const currToRegionMap = { "USD": "us", "GBP": "uk", "INR": "in", "EUR": "de", "CAD": "ca", "JPY": "jp", "AUD": "au" };
-            const regionCode = currToRegionMap[targetCurr] || 'us';
+            const regionCode = currToRegionMap[targetCurr];
 
             document.querySelectorAll('.card-wrapper').forEach(card => {
-                const regionalVal = card.getAttribute(`data-price-${regionCode}`);
+                const regionalVal = regionCode ? card.getAttribute(`data-price-${regionCode}`) : null;
                 const priceTag = card.querySelector('.card-price-tag');
 
                 if (regionalVal === 'Not Available') {
