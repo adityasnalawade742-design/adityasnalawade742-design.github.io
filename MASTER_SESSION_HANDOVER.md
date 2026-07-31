@@ -19,7 +19,13 @@ Key Achievements:
 1. **100% Zero 404 Error Rate Across 21 Amazon Domains**:
    * Empirically pinged Amazon servers for all 9 products across US, UK, India, Germany, Canada, Australia, Japan, Netherlands, France, Italy, Spain, and Sweden.
    * Updated [`global_direct_matrix.json`](file:///G:/CLI/pinterest-auto-affiliate/global_direct_matrix.json) so direct `/dp/{asin}` links are ONLY generated when the product actually exists in that country's Amazon catalog.
-   * For all other countries, CTA buttons automatically route to targeted category search fallback URLs (`/s?k=...`), preserving **100% affiliate commission tag (`smartdeal0358-21`)** with zero dead links!
+   * For all other countries, CTA buttons automatically route to targeted category search fallback URLs (`/s?k=...`), preserving **100% affiliate commission tag** with zero dead links!
+2. **8-Country Active Associate Store ID & Amazon OneLink Integration**:
+   * Configured all 8 major global Amazon storefronts in [`modules/bridge_creator.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/bridge_creator.py):
+     - 🇺🇸 US: `smartdeal0358-20` | 🇨🇦 CA: `smartdeal0302-20` | 🇮🇳 IN: `smartdeal0358-21`
+     - 🇬🇧 UK: `smartdea04b3a-21` | 🇩🇪 DE: `smartdeal0bb4-21` | 🇫🇷 FR: `smartdeal0962-21`
+     - 🇪🇸 ES: `smartdeal0b46-21` | 🇮🇹 IT: `smartdea03a8d-21`
+   * **100% Amazon OneLink Linked**: Successfully consolidated all 8 country store accounts in Amazon OneLink for unified earnings reporting and fail-safe redirection!
 2. **Empirical European Union Catalog Routing**:
    * Resolved Netherlands (`.nl`) VPN edge cases for `B0DZD1X83N` and `B0D8P8CSYP`.
    * Verified exact live availability for all 6 major EU storefronts (`DE`, `NL`, `FR`, `IT`, `ES`, `SE`).

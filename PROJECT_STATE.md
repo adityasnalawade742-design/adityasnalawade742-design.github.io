@@ -4,7 +4,15 @@
 > **Repository**: `G:\CLI\pinterest-auto-affiliate`  
 > **Remote Origin**: `https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io.git`  
 > **Live Showcase**: [https://adityasnalawade742-design.github.io/index.html](https://adityasnalawade742-design.github.io/index.html)  
-> **Official Affiliate Tag**: `smartdeal0358-21` (100% verified across all direct links & global geo-redirects)
+> **Official Regional Affiliate Tags**:
+> - 🇺🇸 **US**: `smartdeal0358-20`
+> - 🇨🇦 **CA**: `smartdeal0302-20`
+> - 🇮🇳 **IN**: `smartdeal0358-21`
+> - 🇬🇧 **UK**: `smartdea04b3a-21`
+> - 🇩🇪 **DE**: `smartdeal0bb4-21`
+> - 🇫🇷 **FR**: `smartdeal0962-21`
+> - 🇪🇸 **ES**: `smartdeal0b46-21`
+> - 🇮🇹 **IT**: `smartdea03a8d-21`
 
 ---
 
