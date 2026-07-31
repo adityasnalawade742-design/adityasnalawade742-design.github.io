@@ -749,7 +749,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pinterest OAuth 2.0 Auth Callback | Cozy Room Decor Auto Publisher</title>
+    <title>Pinterest OAuth 2.0 Auth Callback | Cozy Room Decor Publisher Pro</title>
     <style>
         body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0a10; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }}
         .auth-card {{ background: rgba(22, 20, 30, 0.9); border: 1px solid rgba(255, 183, 3, 0.4); border-radius: 24px; padding: 40px; max-width: 600px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }}

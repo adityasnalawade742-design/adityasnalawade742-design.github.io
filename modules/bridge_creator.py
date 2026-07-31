@@ -519,14 +519,14 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
         <!-- Site Footer -->
         <footer style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed rgba(255,255,255,0.12); text-align: center; font-size: 12px; color: #64748b;">
-            <p style="font-size: 12px; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px;">Company: Cozy Room Finds | App: Cozy Room Decor Auto Publisher (ID: 1594896)</p>
+            <p style="font-size: 12px; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px;">Company: Cozy Room Finds | App: Cozy Room Decor Publisher Pro (ID: 1594896)</p>
             <div style="margin-bottom: 8px;">
                 <a href="./index.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 8px; font-weight: 600;">🏠 Home Showcase</a> • 
                 <a href="./privacy-policy.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 8px; font-weight: 600;">Privacy Policy & Developer Compliance</a> •
                 <a href="mailto:aditya.s.nalawade147@gmail.com" style="color: var(--accent-gold); text-decoration: none; margin: 0 8px; font-weight: 600;">Contact Email</a>
             </div>
             <p style="font-size: 11px; line-height: 1.5; color: #64748b;">
-                As an Amazon Associate, Cozy Room Finds earns from qualifying purchases. App: Cozy Room Decor Auto Publisher (App ID: 1594896). Developer Contact: <a href="mailto:aditya.s.nalawade147@gmail.com" style="color: var(--accent-gold);">aditya.s.nalawade147@gmail.com</a>.
+                As an Amazon Associate, Cozy Room Finds earns from qualifying purchases. App: Cozy Room Decor Publisher Pro (App ID: 1594896). Developer Contact: <a href="mailto:aditya.s.nalawade147@gmail.com" style="color: var(--accent-gold);">aditya.s.nalawade147@gmail.com</a>.
             </p>
         </footer>
     </div>
