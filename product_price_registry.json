@@ -24,7 +24,10 @@
       "AU": "Not Available",
       "JP": "Not Available"
     },
-    "search_keywords": "Volcano Flame Aroma Diffuser Lamp"
+    "search_keywords": "Volcano Flame Aroma Diffuser Lamp",
+    "regional_asins": {
+      "US": "B0GYDXHF4G"
+    }
   },
   "B0FXLYXM32": {
     "title": "Pocetry 22\"x30\" White Wavy Wall Mirror for Vanity",
@@ -51,7 +54,16 @@
       "AU": "A$116.26",
       "JP": "¥20,390"
     },
-    "search_keywords": "White Wavy Wall Body Standing Mirror"
+    "search_keywords": "White Wavy Wall Body Standing Mirror",
+    "regional_asins": {
+      "US": "B0FXLYXM32",
+      "IN": "B0FXLYXM32",
+      "UK": "B0FXLYXM32",
+      "DE": "B0FXLYXM32",
+      "CA": "B0FXLYXM32",
+      "AU": "B0FXLYXM32",
+      "JP": "B0FXLYXM32"
+    }
   },
   "B0C2YLN3H4": {
     "title": "White Ceramic Donut Vase Set of 2",
@@ -79,7 +91,16 @@
       "AU": "A$26.88",
       "JP": "¥4,664"
     },
-    "search_keywords": "White Ceramic Donut Flower Vase Set"
+    "search_keywords": "White Ceramic Donut Flower Vase Set",
+    "regional_asins": {
+      "US": "B0C2YLN3H4",
+      "IN": "B0C2YLN3H4",
+      "UK": "B0C2YLN3H4",
+      "DE": "B0C2YLN3H4",
+      "CA": "B0C2YLN3H4",
+      "AU": "B0C2YLN3H4",
+      "JP": "B0C2YLN3H4"
+    }
   },
   "B07HP22QTZ": {
     "title": "Suncatcher Crystal Ball Prism Window Rainbow Maker",
@@ -106,7 +127,16 @@
       "AU": "A$30.57",
       "JP": "¥3,651"
     },
-    "search_keywords": "Crystal Ball Prism Window Suncatcher"
+    "search_keywords": "Crystal Ball Prism Window Suncatcher",
+    "regional_asins": {
+      "US": "B07HP22QTZ",
+      "IN": "B07HP22QTZ",
+      "UK": "B07HP22QTZ",
+      "DE": "B07HP22QTZ",
+      "CA": "B07HP22QTZ",
+      "AU": "B07HP22QTZ",
+      "JP": "B07HP22QTZ"
+    }
   },
   "B0BZXNSW5K": {
     "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
@@ -133,7 +163,16 @@
       "AU": "A$30.38",
       "JP": "¥3,098"
     },
-    "search_keywords": "Touch Control Dimmable Bedside Table Lamp"
+    "search_keywords": "Touch Control Dimmable Bedside Table Lamp",
+    "regional_asins": {
+      "US": "B0BZXNSW5K",
+      "IN": "B0BZXNSW5K",
+      "UK": "B0BZXNSW5K",
+      "DE": "B0BZXNSW5K",
+      "CA": "B0BZXNSW5K",
+      "AU": "B0BZXNSW5K",
+      "JP": "B0BZXNSW5K"
+    }
   },
   "B0DXKGL1T2": {
     "title": "Lily of the Valley Flower Table Lamp",
@@ -161,7 +200,16 @@
       "AU": "A$58.63",
       "JP": "¥5,978"
     },
-    "search_keywords": "Lily of the Valley Flower Table Lamp"
+    "search_keywords": "Lily of the Valley Flower Table Lamp",
+    "regional_asins": {
+      "US": "B0DDTPCDLB",
+      "IN": "B0DDTPCDLB",
+      "UK": "B0DDTPCDLB",
+      "DE": "B0DDTPCDLB",
+      "CA": "B0DDTPCDLB",
+      "AU": "B0DDTPCDLB",
+      "JP": "B0DDTPCDLB"
+    }
   },
   "B0D1FRDFFX": {
     "title": "Mushroom Lamp Glass Table Lamp for Bedroom & Nightstand Decor",
@@ -188,7 +236,16 @@
       "AU": "A$54.69",
       "JP": "¥5,577"
     },
-    "search_keywords": "Glass Mushroom Desk Table Lamp"
+    "search_keywords": "Glass Mushroom Desk Table Lamp",
+    "regional_asins": {
+      "US": "B0D1FRDFFX",
+      "IN": "B0D1FRDFFX",
+      "UK": "B0D1FRDFFX",
+      "DE": "B0D1FRDFFX",
+      "CA": "B0D1FRDFFX",
+      "AU": "B0D1FRDFFX",
+      "JP": "B0D1FRDFFX"
+    }
   },
   "B0D8P8CSYP": {
     "title": "Cute Bird Dimmable Touch Night Lamp",
@@ -215,7 +272,16 @@
       "AU": "A$24.32",
       "JP": "¥2,480"
     },
-    "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp"
+    "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp",
+    "regional_asins": {
+      "US": "B0D8P8CSYP",
+      "IN": "B0D8P8CSYP",
+      "UK": "B0D8P8CSYP",
+      "DE": "B0D8P8CSYP",
+      "CA": "B0D8P8CSYP",
+      "AU": "B0D8P8CSYP",
+      "JP": "B0D8P8CSYP"
+    }
   },
   "B0DZD1X83N": {
     "title": "Minimalist Wood Base Cream Shade Bedside Lamp",
@@ -242,6 +308,15 @@
       "AU": "A$30.40",
       "JP": "¥3,100"
     },
-    "search_keywords": "Minimalist Wood Base Table Lamp"
+    "search_keywords": "Minimalist Wood Base Table Lamp",
+    "regional_asins": {
+      "US": "B0DZD1X83N",
+      "IN": "B0DZD1X83N",
+      "UK": "B0DZD1X83N",
+      "DE": "B0DZD1X83N",
+      "CA": "B0DZD1X83N",
+      "AU": "B0DZD1X83N",
+      "JP": "B0DZD1X83N"
+    }
   }
 }
