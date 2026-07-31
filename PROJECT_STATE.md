@@ -1,24 +1,34 @@
 # 📌 Pinterest Auto-Affiliate Automation System — Master Project State & Handoff Guide
 
-> **Last Updated**: July 29, 2026  
+> **Last Updated**: August 1, 2026  
 > **Repository**: `G:\CLI\pinterest-auto-affiliate`  
 > **Remote Origin**: `https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io.git`  
 > **Live Showcase**: [https://adityasnalawade742-design.github.io/index.html](https://adityasnalawade742-design.github.io/index.html)  
-> **Official Regional Affiliate Tags**:
-> - 🇺🇸 **US**: `smartdeal0358-20`
-> - 🇨🇦 **CA**: `smartdeal0302-20`
-> - 🇮🇳 **IN**: `smartdeal0358-21`
-> - 🇬🇧 **UK**: `smartdea04b3a-21`
-> - 🇩🇪 **DE**: `smartdeal0bb4-21`
-> - 🇫🇷 **FR**: `smartdeal0962-21`
-> - 🇪🇸 **ES**: `smartdeal0b46-21`
-> - 🇮🇹 **IT**: `smartdea03a8d-21`
+> **Privacy Policy**: [https://adityasnalawade742-design.github.io/privacy-policy.html](https://adityasnalawade742-design.github.io/privacy-policy.html)  
+> **Terms of Service**: [https://adityasnalawade742-design.github.io/terms-of-service.html](https://adityasnalawade742-design.github.io/terms-of-service.html)  
+> **Company Name**: Cozy Room Finds  
+> **App Name**: Cozy Room Decor Publisher Pro  
+> **Developer Contact Email**: `aditya.s.nalawade742@gmail.com`  
 
 ---
 
 ## 1. Executive Summary & Accomplishments
 
-This project is an **end-to-end automated affiliate marketing & landing page generation platform** built for Pinterest traffic. It automatically extracts Amazon product listing data, filters photos for seller text/infographics/hands, applies Playwright high-resolution 1200x1600 visual pin overlays with dynamic gradient scrims, builds high-converting glassmorphism landing pages, and routes global visitors across **9 Amazon country storefronts** (`US`, `IN`, `UK`, `DE`, `SE`, `SG`, `CA`, `AU`, `JP`) with zero 404 errors.
+This project is an **end-to-end automated affiliate marketing & landing page generation platform** built for Pinterest traffic. It automatically extracts Amazon product listing data, filters photos for seller text/infographics/hands, applies Playwright high-resolution visual pin overlays with dynamic gradient scrims, builds high-converting glassmorphism landing pages, and routes global visitors across **9 Amazon country storefronts** (`US`, `IN`, `UK`, `DE`, `SE`, `SG`, `CA`, `AU`, `JP`) with zero 404 errors.
+
+### Recent Major Hardening (August 1, 2026):
+1. **100% Pinterest Support Rejection Issue Resolution**:
+   - Company (`Cozy Room Finds`) & App (`Cozy Room Decor Publisher Pro`) names matched across [index.html](file:///G:/CLI/pinterest-auto-affiliate/index.html), [privacy-policy.html](file:///G:/CLI/pinterest-auto-affiliate/privacy-policy.html), [terms-of-service.html](file:///G:/CLI/pinterest-auto-affiliate/terms-of-service.html), and all 9 bridge landing pages.
+   - Added high-visibility glowing gold email badge pill displaying **`aditya.s.nalawade742@gmail.com`** (100% matched with Pinterest Business profile `@adityasnalawade0703`).
+   - Created full n8n OAuth 2.0 video demo guide in [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md).
+
+2. **Legal & Compliance Infrastructure**:
+   - Published live [`terms-of-service.html`](file:///G:/CLI/pinterest-auto-affiliate/terms-of-service.html).
+   - Standardized single high-visibility email badge pill across all footer footings.
+
+3. **Git & GitHub Pages Build Health**:
+   - Fixed `mode 160000` nested submodule build failure by removing `github_pages` from tracking and updating `.gitignore`.
+   - Verified 100% automated green deployments on GitHub Pages.
 
 ---
 
@@ -36,63 +46,44 @@ This project is an **end-to-end automated affiliate marketing & landing page gen
 | 8 | **`B0D1FRDFFX`** | Glass Mushroom Table Lamp | `B0D1FRDFFX` | `["US"]` | [bridge_B0D1FRDFFX.html](./bridge_B0D1FRDFFX.html) |
 | 9 | **`B0D8P8CSYP`** | Cute Bird Dimmable Touch Night Lamp | `B0D8P8CSYP` | `["US", "IN"]` | [bridge_B0D8P8CSYP.html](./bridge_B0D8P8CSYP.html) |
 
-*Note: Product `B0DLN5S5K9` was explicitly deleted per user directive.*
-
 ---
 
 ## 3. Core Architecture & System Modules
 
 ### 🖥️ `web_console_server.py` (Interactive Web Server)
 - Runs locally at `http://localhost:5000`.
+- Endpoints `/api/auth/pinterest` & `/api/auth/callback` render live OAuth authorization screens.
 - Endpoint `/api/extract?target={ASIN}` extracts full Amazon photo suite and metadata.
 - Endpoint `/api/generate` launches background campaign generation.
-- **Remote Image Downloader**: Handled HTTP image URLs directly to prevent Windows `OSError: [Errno 22]` path errors.
 
 ### 🎨 `modules/html_overlay_engine.py` (Playwright 1200x1600 Visual Overlay)
-- Uses Playwright to render pixel-perfect 1200x1600 Pinterest pin graphics.
-- **Smart Brightness Engine**: Measures pixel luminance across top and bottom 25% zones using ITU-R BT.601 formula:
-  $$\text{Luminance} = (0.299 \times R) + (0.587 \times G) + (0.114 \times B)$$
-- **Adaptive Scrim Opacities**:
-  - Bright / Glowing Lamp Scenes ($\text{Luminance} > 70$): Sets `0.55` top / `0.65` bottom dark gradient scrims.
-  - Dark Room Scenes ($\text{Luminance} \le 70$): Sets `0.35` top / `0.45` bottom dark gradient scrims.
-  - Guarantees **7:1 AAA WCAG contrast ratio** for white headline text and price pills.
+- Uses Playwright to render pixel-perfect 1200x1600 Pinterest pin graphics with adaptive gradient scrims.
 
 ### 🌐 `modules/bridge_creator.py` (Universal Multi-Region Geo-Redirector Engine)
-- Generates luxury glassmorphism landing pages.
-- **JavaScript `applyGeoRedirect(countryCode)`**:
-  - Detects visitor country across 9 global Amazon storefronts (`US`, `IN`, `UK`, `DE`, `SE`, `SG`, `CA`, `AU`, `JP`).
-  - **100% Tag Attachment**: Appends `tag=smartdeal0358-21` to all direct listing URLs (`amazon.com/dp/{asin}?tag=smartdeal0358-21`) AND local search fallback URLs (`amazon.in/s?k={keywords}&tag=smartdeal0358-21`).
-  - **Zero 404 Fallback**: If an item is unlisted in a specific country, automatically falls back to local search and displays the *"Item Ships Globally from Amazon US"* notice box.
+- Generates luxury glassmorphism landing pages with 100% affiliate tag attachment (`tag=smartdeal0358-21`).
+- Displays uniform high-visibility developer email contact (`aditya.s.nalawade742@gmail.com`) and legal footer links.
 
-### ⚡ `modules/image_generator.py` (Replicate FLUX-Dev & Safety Timeout Guard)
-- Generates 8K commercial room backgrounds using Replicate FLUX-Dev API.
-- **20-Second Hard Timeout Guard**: Caps Replicate API predictions at 20s max. If queue spikes occur, instantly falls back to using the clean listing photo without process timeouts.
-
-### 🔨 `rebuild_EVERY_single_bridge.py` (Master Rebuilder)
-- Script to rebuild 100% of all landing pages across the repository using the latest catalog mapping and geo-redirect rules.
+### 🔄 `n8n_pinterest_affiliate_workflow.json` (n8n Integration)
+- Workflow for automated product processing, image generation, pin metadata, and posting via Pinterest API v5 (`POST /v5/pins`).
 
 ---
 
-## 4. Key Scripts & Utility Tooling
+## 4. How to Resume Work in Any Session or Account
 
-| Script Name | Purpose | How to Run |
-| :--- | :--- | :--- |
-| `web_console_server.py` | Starts Web Console at `http://localhost:5000` | `python -u web_console_server.py` |
-| `rebuild_EVERY_single_bridge.py` | Rebuilds 100% of landing pages and pushes to GitHub | `python rebuild_EVERY_single_bridge.py` |
-| `audit_all_affiliate_tags.py` | Verifies `tag=smartdeal0358-21` across all cards & JS code | `python audit_all_affiliate_tags.py` |
-| `fast_audit_9_storefronts.py` | Audits ASIN direct availability across 9 global Amazon stores | `python fast_audit_9_storefronts.py` |
+When starting a fresh session or switching accounts:
 
----
-
-## 5. How to Resume Work in a New Conversation / AGY Account
-
-When starting a fresh conversation or switching AGY accounts, follow these 3 simple steps:
-
-1. **Open Workspace**: Point AGY CLI to `G:\CLI\pinterest-auto-affiliate`.
-2. **Read Master State**: Inspect `PROJECT_STATE.md` (this file) to recall project setup.
-3. **Verify/Run**:
-   - Check Web Console: `python -u web_console_server.py`
-   - Rebuild catalog if needed: `python rebuild_EVERY_single_bridge.py`
-   - Verify affiliate tags: `python audit_all_affiliate_tags.py`
+1. **Open Workspace**: Point to `G:\CLI\pinterest-auto-affiliate`.
+2. **Run Zero-Drift Health Check**:
+   ```bash
+   python run_daily_health_check.py
+   ```
+3. **Rebuild & Deploy Landing Pages**:
+   ```bash
+   python rebuild_EVERY_single_bridge.py
+   ```
+4. **Launch Web Console**:
+   ```bash
+   python -u web_console_server.py
+   ```
 
 Everything is committed, pushed to `main`, and deployed live on GitHub Pages!
