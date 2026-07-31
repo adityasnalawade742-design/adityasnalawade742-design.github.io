@@ -730,16 +730,29 @@
                     }
                 } catch(e) {}
 
-                // ⚡ Phase 2: Asynchronous Precision Network Check
-                fetch('https://api.country.is')
-                    .then(r => r.json())
-                    .then(d => { if (d && d.country) applyGeoRedirect(d.country); })
-                    .catch(err => {
-                        fetch('https://ipapi.co/json/')
-                            .then(r => r.json())
-                            .then(d => { if (d && d.country_code) applyGeoRedirect(d.country_code); })
-                            .catch(e => {});
-                    });
+                // ⚡ Phase 2: Multi-Provider Robust IP Resolution (Works inside Opera VPN & Adblockers)
+                const ipProviders = [
+                    'https://ipwho.is/',
+                    'https://freeipapi.com/api/json',
+                    'https://api.country.is',
+                    'https://ipapi.co/json/'
+                ];
+
+                function tryFetchIP(index) {
+                    if (index >= ipProviders.length) return;
+                    fetch(ipProviders[index])
+                        .then(r => r.json())
+                        .then(d => {
+                            const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
+                            if (c && c.length === 2) {
+                                applyGeoRedirect(c);
+                            } else {
+                                tryFetchIP(index + 1);
+                            }
+                        })
+                        .catch(() => tryFetchIP(index + 1));
+                }
+                tryFetchIP(0);
             }
         })();
     </script>

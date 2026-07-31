@@ -1232,16 +1232,29 @@
                 }
             } catch(e) {}
 
-            // Phase 2: Asynchronous Precision IP Network Check
-            fetch('https://api.country.is')
-                .then(res => res.json())
-                .then(data => { if (data && data.country) applyHomepageCountry(data.country); })
-                .catch(() => {
-                    fetch('https://ipapi.co/json/')
-                        .then(res => res.json())
-                        .then(data => { if (data && data.country_code) applyHomepageCountry(data.country_code); })
-                        .catch(() => {});
-                });
+            // Phase 2: Multi-Provider Robust IP Resolution (Works inside Opera VPN & Adblockers)
+            const ipProviders = [
+                'https://ipwho.is/',
+                'https://freeipapi.com/api/json',
+                'https://api.country.is',
+                'https://ipapi.co/json/'
+            ];
+
+            function tryFetchIP(index) {
+                if (index >= ipProviders.length) return;
+                fetch(ipProviders[index])
+                    .then(res => res.json())
+                    .then(data => {
+                        const country = (data.country_code || data.countryCode || data.country || '').toUpperCase();
+                        if (country && country.length === 2) {
+                            applyHomepageCountry(country);
+                        } else {
+                            tryFetchIP(index + 1);
+                        }
+                    })
+                    .catch(() => tryFetchIP(index + 1));
+            }
+            tryFetchIP(0);
         })();
     </script>
 </body>
