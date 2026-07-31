@@ -1116,21 +1116,40 @@
         function runPriceSync() {
             document.getElementById('syncSpinner').style.display = 'inline-block';
             const btnText = document.getElementById('priceSyncText');
-            if (btnText) btnText.innerText = "⏳ Synchronizing Live Amazon Prices...";
-            showToast("Scraping live Amazon prices and updating storefront...", "🔍");
+            if (btnText) btnText.innerText = "⏳ Launching 21-Domain Price Sync...";
+            showToast("Scraping 21 global Amazon domains & re-rendering badges...", "🔍");
 
             fetch('/api/sync_prices', { method: 'POST' })
                 .then(r => r.json())
                 .then(data => {
-                    document.getElementById('syncSpinner').style.display = 'none';
                     if (data.status === 'success') {
-                        if (btnText) btnText.innerText = "✅ Price Sync Complete!";
-                        showToast("Daily prices synchronized live across 9 storefronts!", "🔄");
-                        loadHomepageProducts();
-                        setTimeout(() => {
-                            if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
-                        }, 4000);
+                        // Poll live task status
+                        const pollInterval = setInterval(() => {
+                            fetch('/api/status?asin=global_sync')
+                                .then(res => res.json())
+                                .then(sData => {
+                                    if (sData.message && btnText) {
+                                        btnText.innerText = "⏳ " + sData.message;
+                                    }
+                                    if (sData.status === 'completed') {
+                                        clearInterval(pollInterval);
+                                        document.getElementById('syncSpinner').style.display = 'none';
+                                        if (btnText) btnText.innerText = "✅ Price Sync Complete!";
+                                        showToast("Daily prices synchronized live across 21 global storefronts!", "🔄");
+                                        loadHomepageProducts();
+                                        setTimeout(() => {
+                                            if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
+                                        }, 5000);
+                                    } else if (sData.status === 'error') {
+                                        clearInterval(pollInterval);
+                                        document.getElementById('syncSpinner').style.display = 'none';
+                                        if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
+                                        alert("Price sync notice: " + (sData.message || "Error"));
+                                    }
+                                }).catch(() => {});
+                        }, 2000);
                     } else {
+                        document.getElementById('syncSpinner').style.display = 'none';
                         if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
                         alert("Price sync notice: " + (data.message || "Done"));
                     }

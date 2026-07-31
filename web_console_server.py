@@ -300,7 +300,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             # Execute master regional scraper suite across all 21 Amazon domains
             def run_sync():
                 update_task_status('global_sync', {'status': 'running', 'message': 'Scraping 21 Amazon domains and re-rendering badges...'})
-                res = subprocess.run([sys.executable, "sync_all_regional_prices_master.py"], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+                sync_script = str(WORKSPACE_DIR / "sync_all_regional_prices_master.py")
+                res = subprocess.run([sys.executable, sync_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
                 if res.returncode == 0:
                     update_task_status('global_sync', {'status': 'completed', 'message': '100% Price Sync & Badge Re-rendering Complete!'})
                 else:
@@ -636,10 +637,20 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json({"status": "error", "message": str(e)})
 
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+
     def send_json(self, data):
         body = json.dumps(data).encode('utf-8')
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.send_header('Content-Length', len(body))
         self.end_headers()
         self.wfile.write(body)
@@ -650,9 +661,23 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
 
 def run_server():
-    server = ThreadedHTTPServer(('localhost', PORT), WebConsoleHandler)
-    print(f"[Web Console] Threaded Server running on http://localhost:{PORT}")
-    print(f"[Web Console] Open http://localhost:{PORT} in your browser to verify products & images!")
+    candidate_ports = [5000, 5001, 8080, 8081]
+    server = None
+    active_port = PORT
+    for p in candidate_ports:
+        try:
+            server = ThreadedHTTPServer(('localhost', p), WebConsoleHandler)
+            active_port = p
+            break
+        except OSError:
+            continue
+
+    if not server:
+        server = ThreadedHTTPServer(('localhost', 0), WebConsoleHandler)
+        active_port = server.server_address[1]
+
+    print(f"[Web Console] Threaded Server running on http://localhost:{active_port}")
+    print(f"[Web Console] Open http://localhost:{active_port} in your browser to verify products & images!")
     server.serve_forever()
 
 if __name__ == '__main__':
