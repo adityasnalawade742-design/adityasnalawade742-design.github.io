@@ -762,12 +762,12 @@ def render_html_overlay(
                     "--force-color-profile=srgb",
                     "--disable-color-correct-rendering"
                 ])
-                context = browser.new_context(viewport={"width": 1200, "height": 1600}, device_scale_factor=2)
+                context = browser.new_context(viewport={"width": 1200, "height": 1600}, device_scale_factor=1.5)
                 page = context.new_page()
 
                 page.goto(temp_html.resolve().as_uri())
                 page.wait_for_timeout(1000)
-                page.screenshot(path=str(output_path), type="jpeg", quality=98)
+                page.screenshot(path=str(output_path), type="jpeg", quality=88)
                 browser.close()
                 rendered = True
                 break

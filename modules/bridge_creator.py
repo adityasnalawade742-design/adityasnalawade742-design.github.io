@@ -10,6 +10,17 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ seo.pin_title }} | Cozy Room Finds</title>
     <meta name="description" content="{{ seo.description }}">
+
+    <!-- OpenGraph & Social Media Sharing Preview Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ seo.pin_title }} | Cozy Room Finds">
+    <meta property="og:description" content="{{ seo.description }}">
+    <meta property="og:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
+    <meta property="og:url" content="https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ seo.pin_title }} | Cozy Room Finds">
+    <meta name="twitter:description" content="{{ seo.description }}">
+    <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {

@@ -179,6 +179,27 @@ if sub_dir.exists():
             with open(sub_bf, "w", encoding="utf-8") as f_dst:
                 f_dst.write(content)
 
+# Regenerate sitemap.xml for Google Search Console indexing
+print("\n[Master Rebuilder] 🗺️ Auto-generating sitemap.xml for Google Search Console...")
+try:
+    import datetime
+    today_str = datetime.date.today().isoformat()
+    base_domain = "https://adityasnalawade742-design.github.io"
+    sitemap_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        f'  <url>\n    <loc>{base_domain}/index.html</loc>\n    <lastmod>{today_str}</lastmod>\n    <priority>1.00</priority>\n  </url>'
+    ]
+    for asin in master_catalog:
+        sitemap_lines.append(f'  <url>\n    <loc>{base_domain}/bridge_{asin}.html</loc>\n    <lastmod>{today_str}</lastmod>\n    <priority>0.80</priority>\n  </url>')
+    sitemap_lines.append('</urlset>')
+
+    sitemap_file = repo_dir / "sitemap.xml"
+    sitemap_file.write_text("\n".join(sitemap_lines), encoding="utf-8")
+    print(f" ✅ sitemap.xml generated with {len(master_catalog) + 1} URLs!")
+except Exception as e_sm:
+    print(f" ⚠️ Warning generating sitemap: {e_sm}")
+
 print("\n[Master Rebuilder] Pushing 100% of rebuilt bridge pages live to GitHub Pages...")
 try:
     subprocess.run(["git", "add", "-A"], check=True)
