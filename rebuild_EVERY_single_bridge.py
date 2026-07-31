@@ -22,7 +22,7 @@ master_catalog = {
     "B0DZD1X83N": {
         "search_keywords": "Minimalist Wood Base Table Nightstand Lamp",
         "title": "Minimalist Wood Base Cream Shade Bedside Table Lamp",
-        "price": "$12.99",
+        "price": "$20.00",
         "rating": "4.6",
         "features": ["MINIMALIST WOOD BASE", "CREAM FABRIC LAMPSHADE", "WARM AMBIENT GLOW", "INLINE CONTROL SWITCH"],
         "category": "lighting",
