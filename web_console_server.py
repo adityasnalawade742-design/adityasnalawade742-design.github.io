@@ -299,14 +299,21 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         try:
             # Execute master regional scraper suite across all 21 Amazon domains
             def run_sync():
-                subprocess.run([sys.executable, "sync_all_regional_prices_master.py"], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
-            
+                update_task_status('global_sync', {'status': 'running', 'message': 'Scraping 21 Amazon domains and re-rendering badges...'})
+                res = subprocess.run([sys.executable, "sync_all_regional_prices_master.py"], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+                if res.returncode == 0:
+                    update_task_status('global_sync', {'status': 'completed', 'message': '100% Price Sync & Badge Re-rendering Complete!'})
+                else:
+                    update_task_status('global_sync', {'status': 'error', 'message': res.stderr[:200]})
+
+            update_task_status('global_sync', {'status': 'running', 'message': 'Launching 21-Domain Price Sync Pipeline...'})
             t = threading.Thread(target=run_sync)
             t.daemon = True
             t.start()
             
             self.send_json({
                 'status': 'success', 
+                'task_key': 'global_sync',
                 'message': 'Master 21-Domain Regional Price Sync Pipeline Launched! Scraping all regional storefronts and deploying live...'
             })
         except Exception as e:
