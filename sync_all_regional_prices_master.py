@@ -19,7 +19,8 @@ scrapers = [
     ("Germany (Amazon.de)", "modules/scrapers/scrape_de.py"),
     ("Canada (Amazon.ca)", "modules/scrapers/scrape_ca.py"),
     ("Australia (Amazon.com.au)", "modules/scrapers/scrape_au.py"),
-    ("Japan (Amazon.co.jp)", "modules/scrapers/scrape_jp.py")
+    ("Japan (Amazon.co.jp)", "modules/scrapers/scrape_jp.py"),
+    ("14 Extended Global Domains (FR, ES, IT, SE, NL, PL, TR, BE, MX, BR, SG, AE, SA, EG)", "modules/scrapers/scrape_extended_domains.py")
 ]
 
 for name, script_path in scrapers:
