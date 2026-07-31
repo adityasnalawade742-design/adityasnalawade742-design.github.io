@@ -578,7 +578,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
             {% set search_phrase = product.get('search_keywords') or (product.title.split()[:4] | join(' ')) %}
             const currentAsin = "{{ product.get('target_asin', asin) }}";
-            const prodKeywords = encodeURIComponent("{{ search_phrase }}");
+            const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
             const regionalMatrix = {{ (product.regional_matrix if product.regional_matrix is defined else {}) | tojson }};
 
