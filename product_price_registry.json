@@ -10,7 +10,21 @@
       "DE": "€90,.45",
       "CA": "CA$27.20",
       "AU": "A$30.40",
-      "JP": "¥3,100"
+      "JP": "¥3,100",
+      "FR": "Not Available",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "SE": "212,07kr",
+      "NL": "Not Available",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "Not Available",
+      "MX": "Not Available",
+      "BR": "Not Available",
+      "SG": "Not Available",
+      "AE": "AED157.95",
+      "SA": "ريال‎215.86‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0DZD1X83N",
@@ -31,7 +45,21 @@
       "DE": "Not Available",
       "CA": "Not Available",
       "AU": "Not Available",
-      "JP": "Not Available"
+      "JP": "Not Available",
+      "FR": "Not Available",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "SE": "Not Available",
+      "NL": "Not Available",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "Not Available",
+      "MX": "Not Available",
+      "BR": "Not Available",
+      "SG": "Not Available",
+      "AE": "Not Available",
+      "SA": "Not Available",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0GYDXHF4G"
@@ -48,7 +76,21 @@
       "DE": "€628,.89",
       "CA": "CA$216.34",
       "AU": "A$116.26",
-      "JP": "¥20,390"
+      "JP": "¥20,390",
+      "FR": "Not Available",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "SE": "Not Available",
+      "NL": "Not Available",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "Not Available",
+      "MX": "Not Available",
+      "BR": "Not Available",
+      "SG": "S$147.86",
+      "AE": "AED476.54",
+      "SA": "ريال‎578.69‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0FXLYXM32"
@@ -65,7 +107,21 @@
       "DE": "€16.84",
       "CA": "CA$42.26",
       "AU": "A$26.88",
-      "JP": "¥4,644"
+      "JP": "¥4,644",
+      "FR": "33,94€",
+      "ES": "33,54€",
+      "IT": "35,06€",
+      "SE": "Not Available",
+      "NL": "€89,23",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "70,20€",
+      "MX": "Not Available",
+      "BR": "R$171,53",
+      "SG": "Not Available",
+      "AE": "AED118.17",
+      "SA": "ريال‎186.57‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0C2YLN3H4"
@@ -82,7 +138,21 @@
       "DE": "€8.75",
       "CA": "CA$19.99",
       "AU": "A$30.57",
-      "JP": "¥3,651"
+      "JP": "¥3,651",
+      "FR": "15,99€",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "SE": "431,89kr",
+      "NL": "€33,73",
+      "PL": "207,60zł",
+      "TR": "Not Available",
+      "BE": "42,97€",
+      "MX": "Not Available",
+      "BR": "R$98,25",
+      "SG": "S$23.97",
+      "AE": "AED72.52",
+      "SA": "ريال‎107.91‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B07HP22QTZ"
@@ -99,7 +169,21 @@
       "DE": "€18.39",
       "CA": "CA$29.99",
       "AU": "A$30.38",
-      "JP": "¥3,098"
+      "JP": "¥3,098",
+      "FR": "Not Available",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "SE": "Not Available",
+      "NL": "€91,08",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "Not Available",
+      "MX": "Not Available",
+      "BR": "R$938,14",
+      "SG": "Not Available",
+      "AE": "AED149.61",
+      "SA": "ريال‎226.93‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0BZXNSW5K"
@@ -116,7 +200,21 @@
       "DE": "€35.48",
       "CA": "CA$52.46",
       "AU": "A$58.63",
-      "JP": "¥5,978"
+      "JP": "¥5,978",
+      "FR": "Not Available",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "SE": "Not Available",
+      "NL": "Not Available",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "Not Available",
+      "MX": "Not Available",
+      "BR": "Not Available",
+      "SG": "Not Available",
+      "AE": "AED171.37",
+      "SA": "Not Available",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0DXKGL1T2"
@@ -133,7 +231,21 @@
       "DE": "€180,.89",
       "CA": "CA$48.93",
       "AU": "A$54.69",
-      "JP": "¥5,577"
+      "JP": "¥5,577",
+      "FR": "50,04€",
+      "ES": "49,99€",
+      "IT": "31,49€",
+      "SE": "377,37kr",
+      "NL": "€49,99",
+      "PL": "466,18zł",
+      "TR": "Not Available",
+      "BE": "107,49€",
+      "MX": "Not Available",
+      "BR": "R$442,57",
+      "SG": "Not Available",
+      "AE": "AED147.28",
+      "SA": "ريال‎137.76‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0D1FRDFFX"
@@ -150,7 +262,21 @@
       "DE": "€159,.59",
       "CA": "CA$21.76",
       "AU": "A$24.32",
-      "JP": "¥2,480"
+      "JP": "¥2,480",
+      "FR": "38,99€",
+      "ES": "31,99€",
+      "IT": "38,99€",
+      "SE": "312,38kr",
+      "NL": "€28,99",
+      "PL": "82,85zł",
+      "TR": "999,00 TL",
+      "BE": "29,99€",
+      "MX": "Not Available",
+      "BR": "R$209,71",
+      "SG": "Not Available",
+      "AE": "AED101.39",
+      "SA": "ريال‎142.30‎",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0D8P8CSYP"
