@@ -496,7 +496,8 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "IN": "smartdeal0358-21",
                 "UK": "smartdea04b3a-21",
                 "GB": "smartdea04b3a-21",
-                "DE": "smartdeal0bb4-21"
+                "DE": "smartdeal0bb4-21",
+                "FR": "smartdeal0962-21"
             };
 
             function getTag(cc) {
