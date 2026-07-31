@@ -74,7 +74,7 @@
   "B07HP22QTZ": {
     "title": "Suncatcher Crystal Ball Prism Window Rainbow Maker",
     "url": "https://www.amazon.com/dp/B07HP22QTZ?tag=smartdeal0358-21",
-    "current_price": "INR763.37",
+    "current_price": "$7.99",
     "headline": "Crystal Prism Window Suncatcher",
     "subtitle": "RAINBOW SPECTRUM MAKER",
     "badge": "\ud83c\udf08 SUNLIGHT MAGIC",
@@ -89,7 +89,7 @@
     "bridge_page": "bridge_B07HP22QTZ.html",
     "regional_prices": {
       "IN": "\u20b92,760.15",
-      "US": "INR763.37",
+      "US": "$7.99",
       "UK": "INR1,571.67",
       "AU": "$30.57",
       "JP": "\u00a53,651",
@@ -170,10 +170,10 @@
   "B0D8P8CSYP": {
     "title": "Cute Bird Dimmable Touch Night Lamp",
     "url": "https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-20",
-    "current_price": "INR 1,336.62",
+    "current_price": "INR1,813.37",
     "headline": "Cute Bird Dimmable Touch Lamp",
     "subtitle": "SOFT NIGHTSTAND LIGHT",
-    "badge": "🐤 CUTE BEDSIDE PICK",
+    "badge": "\ud83d\udc24 CUTE BEDSIDE PICK",
     "features": [
       "RECHARGEABLE BATTERY",
       "TOUCH DIMMING",
@@ -184,20 +184,20 @@
     "hook_image": "focus_product_B0D8P8CSYP_hook.jpg",
     "bridge_page": "bridge_B0D8P8CSYP.html",
     "regional_prices": {
-      "IN": "₹3,843.00",
+      "IN": "\u20b93,843.00",
       "UK": "INR2,790.67",
       "DE": "INR3,290.83",
-      "US": "INR 1,336.62"
+      "US": "INR1,813.37"
     },
     "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp"
   },
   "B0DZD1X83N": {
     "title": "Minimalist Wood Base Cream Shade Bedside Lamp",
     "url": "https://www.amazon.com/dp/B0DZD1X83N?tag=smartdeal0358-20",
-    "current_price": "$20.00",
+    "current_price": "INR954.45",
     "headline": "Minimalist Wood Base Table Lamp",
     "subtitle": "",
-    "badge": "✨ VIRAL ROOM FIND",
+    "badge": "\u2728 VIRAL ROOM FIND",
     "features": [
       "SOLID WOOD BASE",
       "WARM FABRIC SHADE",
@@ -208,7 +208,8 @@
     "hook_image": "focus_product_B0DZD1X83N_hook.jpg",
     "bridge_page": "bridge_B0DZD1X83N.html",
     "regional_prices": {
-      "US": "$20.00"
+      "US": "INR954.45",
+      "CA": "$17.99"
     },
     "search_keywords": "Minimalist Wood Base Table Lamp"
   }
