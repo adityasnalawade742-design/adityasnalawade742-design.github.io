@@ -711,7 +711,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     } else if (tz.includes('europe') || lang.includes('gb') || lang.includes('de') || lang.includes('fr')) {
                         targetCC = 'DE';
                     } else {
-                        return;
+                        targetCC = 'US';
                     }
                 }
 
