@@ -607,7 +607,20 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "amazon.de": "smartdeal0bb4-21",
                 "amazon.fr": "smartdeal0962-21",
                 "amazon.es": "smartdeal0b46-21",
-                "amazon.it": "smartdea03a8d-21"
+                "amazon.it": "smartdea03a8d-21",
+                "amazon.se": "smartdeal0bb4-21",
+                "amazon.nl": "smartdeal0bb4-21",
+                "amazon.pl": "smartdeal0bb4-21",
+                "amazon.com.tr": "smartdeal0bb4-21",
+                "amazon.com.be": "smartdeal0962-21",
+                "amazon.com.mx": "smartdeal0358-20",
+                "amazon.com.br": "smartdeal0358-20",
+                "amazon.sg": "smartdeal0358-20",
+                "amazon.ae": "smartdeal0358-20",
+                "amazon.sa": "smartdeal0358-20",
+                "amazon.eg": "smartdeal0358-20",
+                "amazon.co.jp": "smartdeal0358-20",
+                "amazon.com.au": "smartdeal0358-20"
             };
 
             function getTag(cc) {
