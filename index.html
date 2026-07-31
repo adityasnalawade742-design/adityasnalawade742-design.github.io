@@ -1217,22 +1217,7 @@
                 return;
             }
 
-            // Phase 1: Instant Offline Detection (Timezone & Language)
-            try {
-                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                const lang = (navigator.language || '').toLowerCase();
-                if (tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia') || lang.includes('hi')) {
-                    applyHomepageCountry('IN');
-                } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr') || lang.includes('es') || lang.includes('it')) {
-                    applyHomepageCountry('DE');
-                } else if (tz.includes('london') || lang.includes('en-gb')) {
-                    applyHomepageCountry('GB');
-                } else if (tz.includes('toronto') || tz.includes('vancouver')) {
-                    applyHomepageCountry('CA');
-                }
-            } catch(e) {}
-
-            // Phase 2: Multi-Provider Robust IP Resolution (Works inside Opera VPN & Adblockers)
+            // Phase 1: Multi-Provider Precision IP Network Check (Works inside Opera VPN & Adblockers)
             const ipProviders = [
                 'https://ipwho.is/',
                 'https://freeipapi.com/api/json',
@@ -1241,7 +1226,24 @@
             ];
 
             function tryFetchIP(index) {
-                if (index >= ipProviders.length) return;
+                if (index >= ipProviders.length) {
+                    // Fallback to Offline System Clock Detection if all IP endpoints are unreachable
+                    try {
+                        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                        const lang = (navigator.language || '').toLowerCase();
+                        if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('hi')) {
+                            applyHomepageCountry('IN');
+                        } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
+                            applyHomepageCountry('DE');
+                        } else if (tz.includes('london') || lang.includes('en-gb')) {
+                            applyHomepageCountry('GB');
+                        } else if (tz.includes('toronto') || tz.includes('vancouver')) {
+                            applyHomepageCountry('CA');
+                        }
+                    } catch(e) {}
+                    return;
+                }
+
                 fetch(ipProviders[index])
                     .then(res => res.json())
                     .then(data => {
