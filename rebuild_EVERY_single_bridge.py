@@ -121,6 +121,7 @@ if registry_path.exists():
             reg_prices = reg_data[asin].get("regional_prices", {})
             item["regional_prices"] = reg_prices
             item["regional_matrix"] = reg_prices
+            item["regional_asins"] = reg_data[asin].get("regional_asins", {})
             if "current_price" in reg_data[asin]:
                 item["current_price"] = reg_data[asin]["current_price"]
 
