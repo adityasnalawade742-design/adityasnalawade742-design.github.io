@@ -530,7 +530,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 <a href="./terms-of-service.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 8px; font-weight: 600;">Terms of Service</a>
             </div>
             <p style="font-size: 11px; line-height: 1.5; color: #64748b;">
-                As an Amazon Associate, Cozy Room Finds earns from qualifying purchases. App: Cozy Room Decor Publisher Pro. Developer Contact: <a href="mailto:aditya.s.nalawade742@gmail.com" style="color: var(--accent-gold);">aditya.s.nalawade742@gmail.com</a>.
+                As an Amazon Associate, Cozy Room Finds earns from qualifying purchases. App: Cozy Room Decor Publisher Pro.
             </p>
         </footer>
     </div>
