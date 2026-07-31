@@ -5,7 +5,7 @@
     "current_price": "$35.00",
     "headline": "Flame Aroma Essential Oil Diffuser",
     "subtitle": "",
-    "badge": "\u2728 VIRAL ROOM FIND",
+    "badge": "✨ VIRAL ROOM FIND",
     "features": [
       "VOLCANO FLAME MIST",
       "WARM AMBER GLOW",
@@ -16,7 +16,8 @@
     "hook_image": "focus_product_B0GYDXHF4G_hook.jpg",
     "bridge_page": "bridge_B0GYDXHF4G.html",
     "regional_prices": {
-      "IN": "Not Available"
+      "IN": "Not Available",
+      "US": "$35.00"
     },
     "search_keywords": "Volcano Flame Aroma Diffuser Lamp"
   },
@@ -26,7 +27,7 @@
     "current_price": "$76.49",
     "headline": "White Wavy Wall Vanity Mirror",
     "subtitle": "",
-    "badge": "\u2728 VANITY GOALS",
+    "badge": "✨ VANITY GOALS",
     "features": [
       "CREAM WAVY FRAME",
       "HIGH CLARITY GLASS",
@@ -40,18 +41,19 @@
       "IN": "Not Available",
       "UK": "INR13,471.63",
       "DE": "INR13,184.18",
-      "JP": "\u00a520,390",
-      "CA": "$216.34"
+      "JP": "¥20,390",
+      "CA": "$216.34",
+      "US": "$76.49"
     },
     "search_keywords": "White Wavy Wall Body Standing Mirror"
   },
   "B0C2YLN3H4": {
     "title": "White Ceramic Donut Vase Set of 2",
     "url": "https://www.amazon.com/dp/B0C2YLN3H4?tag=smartdeal0358-21",
-    "current_price": "INR1,527.70",
+    "current_price": "$18.30",
     "headline": "White Ceramic Donut Vase Set",
     "subtitle": "",
-    "badge": "\ud83c\udf3f BOHO DECOR PICK",
+    "badge": "🌿 BOHO DECOR PICK",
     "features": [
       "SET OF 2 VASES",
       "MATTE CERAMIC",
@@ -63,10 +65,10 @@
     "bridge_page": "bridge_B0C2YLN3H4.html",
     "last_updated": "2026-07-29T12:05:24.358736",
     "regional_prices": {
-      "IN": "\u20b9599.00",
+      "IN": "₹599.00",
       "AU": "$26.88",
-      "JP": "\u00a54,664",
-      "US": "INR1,527.70",
+      "JP": "¥4,664",
+      "US": "$18.30",
       "CA": "$42.26"
     },
     "search_keywords": "White Ceramic Donut Flower Vase Set"
@@ -77,7 +79,7 @@
     "current_price": "$7.99",
     "headline": "Crystal Prism Window Suncatcher",
     "subtitle": "RAINBOW SPECTRUM MAKER",
-    "badge": "\ud83c\udf08 SUNLIGHT MAGIC",
+    "badge": "🌈 SUNLIGHT MAGIC",
     "features": [
       "K9 OPTICAL CRYSTAL",
       "RAINBOW MAKER",
@@ -88,11 +90,11 @@
     "hook_image": "focus_product_B07HP22QTZ_hook.jpg",
     "bridge_page": "bridge_B07HP22QTZ.html",
     "regional_prices": {
-      "IN": "\u20b92,760.15",
+      "IN": "₹2,760.15",
       "US": "$7.99",
       "UK": "INR1,571.67",
       "AU": "$30.57",
-      "JP": "\u00a53,651",
+      "JP": "¥3,651",
       "CA": "$19.99"
     },
     "search_keywords": "Crystal Ball Prism Window Suncatcher"
@@ -100,10 +102,10 @@
   "B0BZXNSW5K": {
     "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
     "url": "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-21",
-    "current_price": "INR1,718.78",
+    "current_price": "$19.99",
     "headline": "Dimmable Touch Nightstand Lamp",
     "subtitle": "",
-    "badge": "\ud83d\udd6f\ufe0f BEDSIDE FAVORITE",
+    "badge": "🕯️ BEDSIDE FAVORITE",
     "features": [
       "DIMMABLE TOUCH CONTROL",
       "DUAL USB A+C CHARGING PORTS",
@@ -114,9 +116,9 @@
     "hook_image": "focus_product_B0BZXNSW5K_hook.jpg",
     "bridge_page": "bridge_B0BZXNSW5K.html",
     "regional_prices": {
-      "IN": "\u20b9475.00",
+      "IN": "₹475.00",
       "UK": "INR2,553.00",
-      "US": "INR1,718.78",
+      "US": "$19.99",
       "CA": "$29.99"
     },
     "search_keywords": "Touch Control Dimmable Bedside Table Lamp"
@@ -127,7 +129,7 @@
     "current_price": "$38.57",
     "headline": "Lily of the Valley Flower Lamp",
     "subtitle": "",
-    "badge": "\u2728 VIRAL ROOM FIND",
+    "badge": "✨ VIRAL ROOM FIND",
     "features": [
       "3 COLOR MODES",
       "WARM BEDSIDE GLOW",
@@ -140,7 +142,8 @@
     "last_updated": "2026-07-29T12:06:03.990914",
     "regional_prices": {
       "IN": "Not Available",
-      "UK": "INR4,648.56"
+      "UK": "INR4,648.56",
+      "US": "$38.57"
     },
     "search_keywords": "Lily of the Valley Flower Table Lamp"
   },
@@ -161,19 +164,20 @@
     "hook_image": "focus_product_B0D1FRDFFX_hook.jpg",
     "bridge_page": "bridge_B0D1FRDFFX.html",
     "regional_prices": {
-      "IN": "\u20b911,356.51",
+      "IN": "₹11,356.51",
       "UK": "INR5,237.62",
-      "DE": "INR3,729.76"
+      "DE": "INR3,729.76",
+      "US": "$35.98"
     },
     "search_keywords": "Glass Mushroom Desk Table Lamp"
   },
   "B0D8P8CSYP": {
     "title": "Cute Bird Dimmable Touch Night Lamp",
     "url": "https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-20",
-    "current_price": "INR1,813.37",
+    "current_price": "$16.00",
     "headline": "Cute Bird Dimmable Touch Lamp",
     "subtitle": "SOFT NIGHTSTAND LIGHT",
-    "badge": "\ud83d\udc24 CUTE BEDSIDE PICK",
+    "badge": "🐤 CUTE BEDSIDE PICK",
     "features": [
       "RECHARGEABLE BATTERY",
       "TOUCH DIMMING",
@@ -184,20 +188,20 @@
     "hook_image": "focus_product_B0D8P8CSYP_hook.jpg",
     "bridge_page": "bridge_B0D8P8CSYP.html",
     "regional_prices": {
-      "IN": "\u20b93,843.00",
+      "IN": "₹3,843.00",
       "UK": "INR2,790.67",
       "DE": "INR3,290.83",
-      "US": "INR1,813.37"
+      "US": "$16.00"
     },
     "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp"
   },
   "B0DZD1X83N": {
     "title": "Minimalist Wood Base Cream Shade Bedside Lamp",
     "url": "https://www.amazon.com/dp/B0DZD1X83N?tag=smartdeal0358-20",
-    "current_price": "INR954.45",
+    "current_price": "$20.00",
     "headline": "Minimalist Wood Base Table Lamp",
     "subtitle": "",
-    "badge": "\u2728 VIRAL ROOM FIND",
+    "badge": "✨ VIRAL ROOM FIND",
     "features": [
       "SOLID WOOD BASE",
       "WARM FABRIC SHADE",
@@ -208,7 +212,7 @@
     "hook_image": "focus_product_B0DZD1X83N_hook.jpg",
     "bridge_page": "bridge_B0DZD1X83N.html",
     "regional_prices": {
-      "US": "INR954.45",
+      "US": "$20.00",
       "CA": "$17.99"
     },
     "search_keywords": "Minimalist Wood Base Table Lamp"
