@@ -588,6 +588,17 @@
                 "IT": "smartdea03a8d-21"
             };
 
+            const domainToTagMap = {
+                "amazon.com": "smartdeal0358-20",
+                "amazon.ca": "smartdeal0302-20",
+                "amazon.in": "smartdeal0358-21",
+                "amazon.co.uk": "smartdea04b3a-21",
+                "amazon.de": "smartdeal0bb4-21",
+                "amazon.fr": "smartdeal0962-21",
+                "amazon.es": "smartdeal0b46-21",
+                "amazon.it": "smartdea03a8d-21"
+            };
+
             function getTag(cc) {
                 return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20";
             }
@@ -642,8 +653,6 @@
                 }
 
                 // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling
-                const currentTag = getTag(targetCC);
-
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
@@ -673,6 +682,7 @@
                 }
 
                 const target = countryMap[targetCC];
+                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
                 const buyBtn = document.getElementById('buyBtn');
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
@@ -680,11 +690,11 @@
                 const isDirectListing = directRegions.includes(targetCC);
                 
                 if (isDirectListing) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${currentTag}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${activeTag}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=${currentTag}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=${activeTag}`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
                         const titleEl = document.getElementById('geoNoticeTitle');
