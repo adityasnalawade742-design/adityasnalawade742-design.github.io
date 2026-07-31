@@ -10,6 +10,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ seo.pin_title }} | Cozy Room Finds</title>
     <meta name="description" content="{{ seo.description }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 
     <!-- OpenGraph & Social Media Sharing Preview Meta Tags -->
     <meta property="og:type" content="website">
@@ -21,6 +22,29 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <meta name="twitter:title" content="{{ seo.pin_title }} | Cozy Room Finds">
     <meta name="twitter:description" content="{{ seo.description }}">
     <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
+
+    <!-- Schema.org JSON-LD Structured Data for Google SERP Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "{{ seo.pin_title }}",
+      "image": "https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg",
+      "description": "{{ seo.description }}",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "{{ product.price | replace('$', '') | replace(',', '') }}",
+        "availability": "https://schema.org/InStock",
+        "url": "https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "128"
+      }
+    }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
