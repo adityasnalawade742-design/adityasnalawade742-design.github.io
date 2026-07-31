@@ -42,17 +42,11 @@ registry_file.write_text(json.dumps(registry, indent=2, ensure_ascii=False), enc
 cards = soup.find_all("div", class_="card-wrapper")
 index_modified = False
 
-direct_regions_map = {
-    "B0DZD1X83N": "US,DE,SE,CA,JP",
-    "B0BZXNSW5K": "US,IN,UK,DE,SE,CA,JP",
-    "B0D1FRDFFX": "US,IN,UK,DE,SE,SG,CA,AU,JP",
-    "B0C2YLN3H4": "US,IN,DE,SE,SG,CA,AU,JP",
-    "B0GYDXHF4G": "US,DE,SE,CA,JP",
-    "B0FXLYXM32": "US,IN,UK,DE,SE,SG,CA,AU,JP",
-    "B07HP22QTZ": "US,IN,GB,UK,DE,SE,SG,CA,AU,JP",
-    "B0D8P8CSYP": "US,IN,UK,DE,SE,SG,CA,AU,JP",
-    "B0DXKGL1T2": "US,UK,DE,SE,CA,JP"
-}
+# Load empirical direct matrix
+matrix_file = repo / "global_direct_matrix.json"
+direct_matrix = {}
+if matrix_file.exists():
+    direct_matrix = json.loads(matrix_file.read_text(encoding="utf-8"))
 
 for card in cards:
     asin = card.get("data-asin") or card.get("id", "").replace("card-", "")
@@ -60,19 +54,32 @@ for card in cards:
         continue
     
     rp = registry[asin].get("regional_prices", {})
-    base_usd = registry[asin].get("current_price", "$19.99").replace("$", "")
+    raw_usd = registry[asin].get("current_price", "$19.99")
+    base_usd = re.sub(r"[^\d.]", "", raw_usd)
+    if not base_usd or float(base_usd) > 500:
+        if asin == "B0C2YLN3H4": base_usd = "28.99"
+        elif asin == "B07HP22QTZ": base_usd = "12.99"
+        elif asin == "B0BZXNSW5K": base_usd = "19.99"
+        elif asin == "B0D8P8CSYP": base_usd = "18.99"
+
+    clean_us_price = f"${base_usd}" if not raw_usd.startswith("$") else raw_usd
+    if "," in clean_us_price or (base_usd and float(base_usd) > 500):
+        clean_us_price = f"${base_usd}"
+
+    matrix_regs = direct_matrix.get(asin, ["US"])
+    direct_regs_str = ",".join(matrix_regs)
     
     # Check and heal attributes
     attr_updates = {
         "data-base-usd": base_usd,
-        "data-price-us": rp.get("US", f"${base_usd}"),
+        "data-price-us": clean_us_price,
         "data-price-in": rp.get("IN", "Not Available"),
         "data-price-uk": rp.get("UK", "Not Available"),
         "data-price-de": rp.get("DE", "Not Available"),
         "data-price-ca": rp.get("CA", "Not Available"),
         "data-price-au": rp.get("AU", "Not Available"),
         "data-price-jp": rp.get("JP", "Not Available"),
-        "data-direct-regions": direct_regions_map.get(asin, "US,IN,UK,DE,CA,AU,JP")
+        "data-direct-regions": direct_regs_str
     }
     
     for k, v in attr_updates.items():
