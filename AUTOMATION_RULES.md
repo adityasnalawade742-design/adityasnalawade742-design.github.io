@@ -79,3 +79,9 @@ Every Amazon listing photo suite (5–9 photos) MUST undergo the following 4-lay
 ## 7. 🚫 No Fluff / Generic Subtitles Rule
 - **Clean Graphic Subtitles**: NEVER add generic marketing fluff subtitles like `"ELEVATE YOUR VANITY SPACE"`, `"VINTAGE FLORAL GLOW"`, or arbitrary taglines to Playwright graphic overlays (`focus_product_{asin}_hook.jpg`).
 - **Default Subtitle Policy**: Subtitles MUST be left empty (`""`) unless explicitly requested by the user.
+
+---
+
+## 8. 🛡️ Single Source of Truth for Catalog Metadata Rule
+- **Registry Supremacy**: `product_price_registry.json` is the 100% single authoritative source of truth for all product titles, headlines, features, descriptions, and pricing.
+- **Dynamic Override Requirement**: `rebuild_EVERY_single_bridge.py` MUST dynamically load and override all metadata from `product_price_registry.json` for every ASIN before generating landing pages. Hardcoded fallback strings in `master_catalog` will never override the empirical registry data.

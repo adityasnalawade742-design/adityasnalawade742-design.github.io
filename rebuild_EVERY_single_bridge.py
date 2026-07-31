@@ -128,12 +128,21 @@ if registry_path.exists():
         if asin in matrix_data:
             item["direct_regions"] = matrix_data[asin]
         if asin in reg_data:
-            reg_prices = reg_data[asin].get("regional_prices", {})
+            reg_item = reg_data[asin]
+            reg_prices = reg_item.get("regional_prices", {})
             item["regional_prices"] = reg_prices
             item["regional_matrix"] = reg_prices
-            item["regional_asins"] = reg_data[asin].get("regional_asins", {})
-            if "current_price" in reg_data[asin]:
-                item["current_price"] = reg_data[asin]["current_price"]
+            item["regional_asins"] = reg_item.get("regional_asins", {})
+            if "current_price" in reg_item and reg_item["current_price"]:
+                item["current_price"] = reg_item["current_price"]
+            if "title" in reg_item and reg_item["title"]:
+                item["title"] = reg_item["title"]
+            if "headline" in reg_item and reg_item["headline"]:
+                item["headline"] = reg_item["headline"]
+            if "features" in reg_item and reg_item["features"]:
+                item["features"] = reg_item["features"]
+            if "description" in reg_item and reg_item["description"]:
+                item["description"] = reg_item["description"]
 
 print("\n[Master Rebuilder] Rebuilding 100% of all landing pages with Multi-Region Geo-Redirector...\n")
 
