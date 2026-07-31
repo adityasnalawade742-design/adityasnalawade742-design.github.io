@@ -1192,67 +1192,56 @@
             })
             .catch(e => console.log('Using default rates fallback'));
 
+        function applyHomepageCountry(countryCode) {
+            if (!countryCode) return;
+            const cc = countryCode.toUpperCase();
+            document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
+                const cleanHref = a.getAttribute('href').split('?')[0];
+                a.setAttribute('href', `${cleanHref}?country=${cc}`);
+            });
+            const detectedCurr = countryToCurrencyMap[cc];
+            if (detectedCurr) {
+                const sel = document.getElementById('currencySelector');
+                if (sel) sel.value = detectedCurr;
+                changeGlobalCurrency(detectedCurr);
+            }
+        }
+
         // Auto-Detect Visitor's Local Country IP & Forward ?country= parameter to all card links
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
             const forcedCountry = urlParams.get('country') || urlParams.get('geo');
             
-            // Forward ?country= parameter to all bridge links on index.html
             if (forcedCountry) {
-                document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
-                    const cleanHref = a.getAttribute('href').split('?')[0];
-                    a.setAttribute('href', `${cleanHref}?country=${forcedCountry}`);
-                });
-                const detectedCurr = countryToCurrencyMap[forcedCountry.toUpperCase()];
-                if (detectedCurr) {
-                    const sel = document.getElementById('currencySelector');
-                    if (sel) sel.value = detectedCurr;
-                    changeGlobalCurrency(detectedCurr);
-                }
+                applyHomepageCountry(forcedCountry);
+                return;
             }
 
-            if (!forcedCountry) {
-                fetch('https://api.country.is')
-                    .then(res => res.json())
-                    .then(data => {
-                        const country = (data.country || '').toUpperCase();
-                        if (country) {
-                            document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
-                                const cleanHref = a.getAttribute('href').split('?')[0];
-                                a.setAttribute('href', `${cleanHref}?country=${country}`);
-                            });
-                        }
-                        if (countryToCurrencyMap[country]) {
-                            const detectedCurr = countryToCurrencyMap[country];
-                            const sel = document.getElementById('currencySelector');
-                            if (sel) {
-                                sel.value = detectedCurr;
-                                changeGlobalCurrency(detectedCurr);
-                            }
-                        }
-                    })
-                    .catch(e => {
-                        fetch('https://ipapi.co/json/')
-                            .then(res => res.json())
-                            .then(data => {
-                                const country = (data.country_code || '').toUpperCase();
-                                if (country) {
-                                    document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
-                                        const cleanHref = a.getAttribute('href').split('?')[0];
-                                        a.setAttribute('href', `${cleanHref}?country=${country}`);
-                                    });
-                                }
-                                if (countryToCurrencyMap[country]) {
-                                    const detectedCurr = countryToCurrencyMap[country];
-                                    const sel = document.getElementById('currencySelector');
-                                    if (sel) {
-                                        sel.value = detectedCurr;
-                                        changeGlobalCurrency(detectedCurr);
-                                    }
-                                }
-                            });
-                    });
-            }
+            // Phase 1: Instant Offline Detection (Timezone & Language)
+            try {
+                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                const lang = (navigator.language || '').toLowerCase();
+                if (tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia') || lang.includes('hi')) {
+                    applyHomepageCountry('IN');
+                } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr') || lang.includes('es') || lang.includes('it')) {
+                    applyHomepageCountry('DE');
+                } else if (tz.includes('london') || lang.includes('en-gb')) {
+                    applyHomepageCountry('GB');
+                } else if (tz.includes('toronto') || tz.includes('vancouver')) {
+                    applyHomepageCountry('CA');
+                }
+            } catch(e) {}
+
+            // Phase 2: Asynchronous Precision IP Network Check
+            fetch('https://api.country.is')
+                .then(res => res.json())
+                .then(data => { if (data && data.country) applyHomepageCountry(data.country); })
+                .catch(() => {
+                    fetch('https://ipapi.co/json/')
+                        .then(res => res.json())
+                        .then(data => { if (data && data.country_code) applyHomepageCountry(data.country_code); })
+                        .catch(() => {});
+                });
         })();
     </script>
 </body>
