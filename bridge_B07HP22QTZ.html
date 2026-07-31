@@ -569,7 +569,7 @@
             const currentAsin = "B07HP22QTZ";
             const prodKeywords = encodeURIComponent("Crystal Ball Prism Window Suncatcher").replace(/%20/g, "+");
             const directRegions = ["UK", "IN", "AU", "JP", "DE", "NL", "FR", "IT", "ES", "SE"];
-            const regionalMatrix = {"AE": "AED72.52", "AU": "A$30.57", "BE": "42,97\u20ac", "BR": "R$98,25", "CA": "CA$19.99", "DE": "\u20ac8.75", "EG": "Not Available", "ES": "Not Available", "FR": "15,99\u20ac", "IN": "\u20b92,760.15", "IT": "Not Available", "JP": "\u00a53,651", "MX": "Not Available", "NL": "\u20ac33,73", "PL": "207,60z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e107.91\u200e", "SE": "431,89kr", "SG": "S$23.97", "TR": "Not Available", "UK": "\u00a375.39", "US": "$7.99"};
+            const regionalMatrix = {"AE": "AED72.02", "AU": "A$30.57", "BE": "42,97\u20ac", "BR": "R$98,25", "CA": "CA$19.99", "DE": "\u20ac8.75", "EG": "Not Available", "ES": "Not Available", "FR": "15,99\u20ac", "IN": "\u20b92,760.15", "IT": "Not Available", "JP": "\u00a53,651", "MX": "Not Available", "NL": "\u20ac33,73", "PL": "207,60z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e107.91\u200e", "SE": "431,89kr", "SG": "S$23.97", "TR": "Not Available", "UK": "\u00a31,577.18", "US": "$1,069.98"};
             const regionalAsins = {"US": "B07HP22QTZ"};
 
             
@@ -675,7 +675,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$7.99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$1,069.98".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2

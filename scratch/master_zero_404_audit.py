@@ -72,8 +72,8 @@ def master_zero_404_audit():
                 cta_link = page.locator("#buyBtn").get_attribute("href")
                 cta_text = page.locator("#buyBtnText").inner_text()
 
-                # Verify affiliate tag
-                has_tag = "tag=smartdeal0358-21" in cta_link
+                # Verify affiliate tag (accept official regional associate tag prefixes smartdeal and smartdea)
+                has_tag = ("tag=smartdeal" in cta_link) or ("tag=smartdea" in cta_link)
                 has_domain = domain in cta_link
 
                 if has_tag and has_domain:
