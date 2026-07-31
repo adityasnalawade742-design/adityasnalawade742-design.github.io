@@ -21,16 +21,16 @@ This session completed a **100% comprehensive audit, legal compliance hardening,
      - **Company Name**: `Cozy Room Finds`
      - **App Name**: `Cozy Room Decor Publisher Pro`
    - **Missing Contact Email**: Added high-visibility email badge box displaying **`aditya.s.nalawade742@gmail.com`** (100% matched with Pinterest Business Account `@adityasnalawade0703`).
-   - **OAuth Connection & Complete Auth Flow Video**: Implemented live OAuth 2.0 connect buttons, `/api/auth/pinterest` and `/api/auth/callback` endpoints, and an exact step-by-step 60–90s video recording script for n8n in [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md).
+   - **Refined 3-Minute Demo Video Script**: Created a user-experience & policy-compliance focused 3-minute video guide in [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md) featuring 60s dedicated to the live OAuth connection flow without technical jargon.
 
 2. **Legal & Compliance Infrastructure**:
    - Created brand-new [`terms-of-service.html`](file:///G:/CLI/pinterest-auto-affiliate/terms-of-service.html) live on GitHub Pages.
    - Updated [`privacy-policy.html`](file:///G:/CLI/pinterest-auto-affiliate/privacy-policy.html) Section 5 and footer credits.
-   - Added high-visibility glowing gold email badge pill across footers (`aditya.s.nalawade742@gmail.com`) while cleaning up redundant duplicate email links.
+   - Added single high-visibility glowing gold email badge pill across footers (`aditya.s.nalawade742@gmail.com`).
 
 3. **Submodule & GitHub Pages Build Self-Healing**:
-   - Diagnosed and fixed GitHub Pages deployment failure (`mode 160000` nested git submodule in `github_pages/`).
-   - Removed `github_pages` from git tracking, added to [`.gitignore`](file:///G:/CLI/pinterest-auto-affiliate/.gitignore), and restored 100% green automated build pipelines.
+   - Fixed `mode 160000` nested submodule build failure by removing `github_pages` from tracking and updating `.gitignore`.
+   - Verified 100% automated green deployments on GitHub Pages.
 
 4. **Clean Slate Credential Security**:
    - Removed old expired trial token (`pina_AMARAV...`) from [`.env`](file:///G:/CLI/pinterest-auto-affiliate/.env) to prepare for fresh trial credentials.
@@ -62,14 +62,18 @@ When creating a new app on [developers.pinterest.com/apps/](https://developers.p
 
 ---
 
-## 4. n8n Video Recording Guide (60–90 Seconds)
+## 4. Master 3-Minute Video Recording Structure
 
-Refer to [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md) for the exact script:
+Refer to [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md) for full script:
 
-1. **[0:00 – 0:15] Developer Portal**: Show App `Cozy Room Decor Publisher Pro` by `Cozy Room Finds`.
-2. **[0:15 – 0:35] n8n OAuth Authorization**: Open n8n, click **Connect Account**, authorize on `pinterest.com/oauth/`, and show `200 OK` return.
-3. **[0:35 – 0:55] Execute Node & 201 Response**: Click **Execute Node** on Node 5 (Pinterest API v5), highlight `201 Created` status & Pin ID.
-4. **[0:55 – 1:15] Live Pin & Landing Page**: Open Pinterest board **Cozy Room & Desk Decor**, click Pin, open landing page, highlight FTC disclaimer, privacy policy, and developer contact email (`aditya.s.nalawade742@gmail.com`).
+- **Part 1 [0:00–0:20]**: Introduce App (`Cozy Room Decor Publisher Pro` by `Cozy Room Finds`).
+- **Part 2 [0:20–0:40]**: Show Website (Homepage, Privacy Policy, Terms, Contact Email).
+- **Part 3 [0:40–1:30]**: OAuth Authentication (Click Connect ➔ `pinterest.com/oauth` ➔ Pause 5s on permissions ➔ Click Allow ➔ Connected Successfully).
+- **Part 4 [1:30–1:40]**: Show Connected Account (`@adityasnalawade0703`).
+- **Part 5 [1:40–2:20]**: Publish a Pin (Trigger workflow ➔ Creating Pin ➔ Success).
+- **Part 6 [2:20–2:50]**: Verify on Pinterest (Open board, refresh, show new Pin).
+- **Part 7 [2:50–3:20]**: Open Landing Page (Click Pin link ➔ Landing page opens ➔ Show disclosures, privacy link, email).
+- **Finish [3:20]**: Thank the reviewer.
 
 ---
 
@@ -93,6 +97,6 @@ python sync_exact_amazon_prices.py
 
 ## 6. Current Repository & Git State
 
-- **Latest Commit**: [`b3f0ce0`](file:///G:/CLI/pinterest-auto-affiliate/modules/bridge_creator.py) (*"rebuild 100% of all portfolio landing pages with clean single email footer badge"*)
+- **Latest Commit**: [`8249205`](file:///G:/CLI/pinterest-auto-affiliate/MASTER_SESSION_HANDOVER.md)
 - **GitHub Pages Deployment Status**: 100% Active & Green.
 - **Affiliate Tag Compliance**: 100% verified across 72 outbound links.
