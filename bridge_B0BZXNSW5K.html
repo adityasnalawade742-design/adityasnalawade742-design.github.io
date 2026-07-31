@@ -570,6 +570,7 @@
             const prodKeywords = encodeURIComponent("Touch Control Dimmable Bedside Table Lamp").replace(/%20/g, "+");
             const directRegions = ["UK", "IN", "DE", "NL", "FR", "IT", "ES", "SE"];
             const regionalMatrix = {"AU": "A$30.38", "CA": "CA$29.99", "DE": "\u20ac18.39", "IN": "\u20b9475.00", "JP": "\u00a53,098", "UK": "\u00a315.59", "US": "$19.99"};
+            const regionalAsins = {};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -671,14 +672,17 @@
                     });
                 }
 
-                // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling
+                // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling (ASIN Variant Mapper + Zero-404 Fallback)
+                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (isDirectListing ? currentAsin : null);
+
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
                     const usTag = getTag('US');
-                    if (directRegions.includes('US')) {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=${usTag}`;
+                    const activeUsAsin = regionalAsins['US'] || currentAsin;
+                    if (directRegions.includes('US') || activeUsAsin) {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${activeUsAsin}?tag=${usTag}`;
                         if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
                     } else {
                         if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=${usTag}`;
@@ -706,10 +710,8 @@
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                const isDirectInTarget = directRegions.includes(targetCC);
-                
-                if (isDirectInTarget) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${activeTag}`;
+                if (targetAsin) {
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}?tag=${activeTag}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {

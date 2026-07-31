@@ -581,6 +581,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
             const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
+            const regionalAsins = {{ (product.regional_asins if product.regional_asins is defined else {}) | tojson }};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -682,14 +683,17 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     });
                 }
 
-                // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling
+                // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling (ASIN Variant Mapper + Zero-404 Fallback)
+                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (isDirectListing ? currentAsin : null);
+
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
                     const usTag = getTag('US');
-                    if (directRegions.includes('US')) {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=${usTag}`;
+                    const activeUsAsin = regionalAsins['US'] || currentAsin;
+                    if (directRegions.includes('US') || activeUsAsin) {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${activeUsAsin}?tag=${usTag}`;
                         if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
                     } else {
                         if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=${usTag}`;
@@ -717,10 +721,8 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                const isDirectInTarget = directRegions.includes(targetCC);
-                
-                if (isDirectInTarget) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${activeTag}`;
+                if (targetAsin) {
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}?tag=${activeTag}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
