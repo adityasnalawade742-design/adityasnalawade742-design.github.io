@@ -773,7 +773,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         
         <div class="info-box">
             <div class="info-row"><span class="info-label">Company Name:</span><span class="info-val">Cozy Room Finds</span></div>
-            <div class="info-row"><span class="info-label">Application Name:</span><span class="info-val">Cozy Room Decor Auto Publisher</span></div>
+            <div class="info-row"><span class="info-label">Application Name:</span><span class="info-val">Cozy Room Decor Publisher Pro</span></div>
             <div class="info-row"><span class="info-label">Pinterest App ID:</span><span class="info-val">1594896</span></div>
             <div class="info-row"><span class="info-label">Connected Profile:</span><span class="info-val">@adityasnalawade0703</span></div>
             <div class="info-row"><span class="info-label">OAuth Authorization Code:</span><span class="info-val">{code[:25]}...</span></div>
