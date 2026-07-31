@@ -717,9 +717,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
-                const isDirectListing = directRegions.includes(targetCC);
+                const isDirectInTarget = directRegions.includes(targetCC);
                 
-                if (isDirectListing) {
+                if (isDirectInTarget) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${activeTag}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
