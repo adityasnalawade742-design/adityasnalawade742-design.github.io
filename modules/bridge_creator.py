@@ -580,7 +580,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             const currentAsin = "{{ product.get('target_asin', asin) }}";
             const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
-            const regionalMatrix = {{ (product.regional_matrix if product.regional_matrix is defined else {}) | tojson }};
+            const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -634,10 +634,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
-                const regPrice = regionalMatrix[regKey];
+                const regPrice = regionalMatrix[targetCC] || regionalMatrix[targetCC.toLowerCase()] || regionalMatrix[regKey];
                 const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
                 const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au'];
-                const isExplicitScrapedMatch = (targetCC === 'US' && regKey === 'us') || (explicitScrapedRegions.includes(regKey) && explicitScrapedRegions.includes(targetCC.toLowerCase()));
+                const isExplicitScrapedMatch = (targetCC === 'US' && regKey === 'us') || (explicitScrapedRegions.includes(regKey) && explicitScrapedRegions.includes(targetCC.toLowerCase())) || Boolean(regPrice);
 
                 if (isExplicitScrapedMatch && regPrice === 'Not Available') {
                     priceTags.forEach(el => {
