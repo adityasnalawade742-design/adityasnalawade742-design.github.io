@@ -573,9 +573,32 @@
             const regionalAsins = {"AU": "B0BZXNSW5K", "CA": "B0BZXNSW5K", "DE": "B0BZXNSW5K", "IN": "B0BZXNSW5K", "JP": "B0BZXNSW5K", "UK": "B0BZXNSW5K", "US": "B0BZXNSW5K"};
 
             
-                        const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
+                        let exchangeRates = { 
+                "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, 
+                "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "NOK": 10.80, 
+                "DKK": 6.85, "PLN": 3.95, "CZK": 23.50, "HUF": 360.0, "RON": 4.56, "BGN": 1.80, "TRY": 32.50, 
+                "ILS": 3.70, "AED": 3.67, "SAR": 3.75, "QAR": 3.64, "KWD": 0.31, "BHD": 0.38, "OMR": 0.38, 
+                "KRW": 1380.0, "CNY": 7.25, "HKD": 7.80, "TWD": 32.50, "THB": 36.50, "MYR": 4.70, "IDR": 16200.0, 
+                "PHP": 58.50, "VND": 25400.0, "ZAR": 18.50, "EGP": 48.50, "NGN": 1500.0, "KES": 130.0, 
+                "ARS": 900.0, "CLP": 930.0, "COP": 3900.0, "PEN": 3.75, "UYU": 39.0 
+            };
             const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "SGD": "S$", "NZD": "NZ$", "CHF": "CHF ", "SEK": "kr ", "NOK": "kr ", "DKK": "kr. ", "PLN": "zł ", "CZK": "Kč ", "HUF": "Ft ", "RON": "lei ", "BGN": "лв ", "TRY": "₺", "ILS": "₪", "AED": "AED ", "SAR": "SAR ", "QAR": "QAR ", "KWD": "KWD ", "BHD": "BHD ", "OMR": "OMR ", "KRW": "₩", "CNY": "¥", "HKD": "HK$", "TWD": "NT$", "THB": "฿", "MYR": "RM ", "IDR": "Rp ", "PHP": "₱", "VND": "₫", "ZAR": "R ", "EGP": "E£ ", "NGN": "₦", "KES": "KSh ", "ARS": "$", "CLP": "$", "COP": "$", "PEN": "S/. ", "UYU": "$U " };
             const countryToCurrencyMap = { "US": "USD", "CA": "CAD", "MX": "MXN", "BR": "BRL", "AR": "ARS", "CL": "CLP", "CO": "COP", "PE": "PEN", "UY": "UYU", "EC": "USD", "SV": "USD", "PA": "USD", "PR": "USD", "GB": "GBP", "UK": "GBP", "IM": "GBP", "JE": "GBP", "GG": "GBP", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "BE": "EUR", "AT": "EUR", "FI": "EUR", "IE": "EUR", "PT": "EUR", "GR": "EUR", "CY": "EUR", "EE": "EUR", "LV": "EUR", "LT": "EUR", "LU": "EUR", "MT": "EUR", "SK": "EUR", "SI": "EUR", "HR": "EUR", "MC": "EUR", "AD": "EUR", "SM": "EUR", "VA": "EUR", "ME": "EUR", "XK": "EUR", "CH": "CHF", "LI": "CHF", "SE": "SEK", "NO": "NOK", "SJ": "NOK", "DK": "DKK", "FO": "DKK", "GL": "DKK", "PL": "PLN", "CZ": "CZK", "HU": "HUF", "RO": "RON", "BG": "BGN", "TR": "TRY", "IN": "INR", "NP": "INR", "BT": "INR", "JP": "JPY", "CN": "CNY", "HK": "HKD", "TW": "TWD", "KR": "KRW", "SG": "SGD", "AU": "AUD", "NZ": "NZD", "TH": "THB", "MY": "MYR", "ID": "IDR", "PH": "PHP", "VN": "VND", "IL": "ILS", "AE": "AED", "SA": "SAR", "QA": "QAR", "KW": "KWD", "BH": "BHD", "OM": "OMR", "ZA": "ZAR", "EG": "EGP", "NG": "NGN", "KE": "KES" };
+
+            // Fetch Live Exchange Rates for 100% Price Parity
+            try {
+                fetch('https://open.er-api.com/v6/latest/USD')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.rates) {
+                            exchangeRates = { ...exchangeRates, ...data.rates };
+                            if (window.currentAppliedCC) {
+                                applyGeoRedirect(window.currentAppliedCC);
+                            }
+                        }
+                    })
+                    .catch(e => {});
+            } catch(e) {}
 
             const associateTagMap = {
                 "US": "smartdeal0358-20",
@@ -619,6 +642,7 @@
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
+                window.currentAppliedCC = targetCC;
                 const isDirectListing = directRegions.includes(targetCC);
                 
                 // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
