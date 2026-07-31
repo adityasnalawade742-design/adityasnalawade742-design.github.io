@@ -311,7 +311,7 @@
         <h1>Crystal Prism Window Suncatcher Rainbow Maker Hanging Ornament</h1>
 
         <div class="price-container">
-            <div class="price">INR763.37</div>
+            <div class="price">$12.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
@@ -472,12 +472,22 @@
             const currentAsin = "B07HP22QTZ";
             const prodKeywords = encodeURIComponent("Crystal Ball Prism Window Suncatcher");
             const directRegions = ["UK", "IN", "AU", "JP", "DE", "NL", "FR", "IT", "ES", "SE"];
-            const regionalMatrix = {"au": "$30.57", "ca": "$19.99", "in": "\u20b92,760.15", "jp": "\u00a53,651", "uk": "INR1,571.67", "us": "INR763.37"};
+            const regionalMatrix = {};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
             const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "SGD": "S$", "NZD": "NZ$", "CHF": "CHF ", "SEK": "kr ", "AED": "AED ", "SAR": "SAR ", "KRW": "₩" };
             const countryToCurrencyMap = { "US": "USD", "GB": "GBP", "UK": "GBP", "IN": "INR", "CA": "CAD", "AU": "AUD", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "BE": "EUR", "AT": "EUR", "FI": "EUR", "IE": "EUR", "JP": "JPY", "BR": "BRL", "MX": "MXN", "SG": "SGD", "NZ": "NZD", "CH": "CHF", "SE": "SEK", "AE": "AED", "SA": "SAR", "KR": "KRW" };
+
+            const associateTagMap = {
+                "US": "smartdeal0358-20",
+                "CA": "smartdeal0302-20",
+                "IN": "smartdeal0358-21"
+            };
+
+            function getTag(cc) {
+                return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20";
+            }
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
@@ -512,7 +522,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("INR763.37".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$12.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
@@ -529,15 +539,18 @@
                 }
 
                 // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling
+                const currentTag = getTag(targetCC);
+
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
+                    const usTag = getTag('US');
                     if (directRegions.includes('US')) {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=${usTag}`;
                         if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
                     } else {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=${usTag}`;
                         if (buyBtnText) buyBtnText.innerText = `SEARCH DEALS ON AMAZON US`;
                     }
                     if (geoBox) geoBox.style.display = 'none';
@@ -564,11 +577,11 @@
                 const isDirectListing = directRegions.includes(targetCC);
                 
                 if (isDirectListing) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=smartdeal0358-21`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${currentTag}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=${currentTag}`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
                         const titleEl = document.getElementById('geoNoticeTitle');

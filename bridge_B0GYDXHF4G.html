@@ -472,12 +472,22 @@
             const currentAsin = "B0GYDXHF4G";
             const prodKeywords = encodeURIComponent("Volcano Flame Aroma Diffuser Lamp");
             const directRegions = [];
-            const regionalMatrix = {"in": "Not Available"};
+            const regionalMatrix = {};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
             const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "SGD": "S$", "NZD": "NZ$", "CHF": "CHF ", "SEK": "kr ", "AED": "AED ", "SAR": "SAR ", "KRW": "₩" };
             const countryToCurrencyMap = { "US": "USD", "GB": "GBP", "UK": "GBP", "IN": "INR", "CA": "CAD", "AU": "AUD", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "BE": "EUR", "AT": "EUR", "FI": "EUR", "IE": "EUR", "JP": "JPY", "BR": "BRL", "MX": "MXN", "SG": "SGD", "NZ": "NZD", "CH": "CHF", "SE": "SEK", "AE": "AED", "SA": "SAR", "KR": "KRW" };
+
+            const associateTagMap = {
+                "US": "smartdeal0358-20",
+                "CA": "smartdeal0302-20",
+                "IN": "smartdeal0358-21"
+            };
+
+            function getTag(cc) {
+                return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20";
+            }
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
@@ -529,15 +539,18 @@
                 }
 
                 // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling
+                const currentTag = getTag(targetCC);
+
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');
                     const buyBtnText = document.getElementById('buyBtnText');
                     const geoBox = document.getElementById('geoNoticeBox');
+                    const usTag = getTag('US');
                     if (directRegions.includes('US')) {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=smartdeal0358-21`;
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/dp/${currentAsin}?tag=${usTag}`;
                         if (buyBtnText) buyBtnText.innerText = `CHECK DEAL ON AMAZON`;
                     } else {
-                        if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                        if (buyBtn) buyBtn.href = `https://www.amazon.com/s?k=${prodKeywords}&tag=${usTag}`;
                         if (buyBtnText) buyBtnText.innerText = `SEARCH DEALS ON AMAZON US`;
                     }
                     if (geoBox) geoBox.style.display = 'none';
@@ -564,11 +577,11 @@
                 const isDirectListing = directRegions.includes(targetCC);
                 
                 if (isDirectListing) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=smartdeal0358-21`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${currentAsin}?tag=${currentTag}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=${currentTag}`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
                         const titleEl = document.getElementById('geoNoticeTitle');
