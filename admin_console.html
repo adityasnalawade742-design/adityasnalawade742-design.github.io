@@ -544,7 +544,8 @@
         <div id="modeHomepage" style="display: none;">
             <div class="card-box">
                 <div class="card-header-title">
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <span>🏠 Live Portfolio Homepage Showcase & Controls</span>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" onclick="loadHomepageProducts()">
                             <span>📥 Refresh Products</span>
                         </button>
@@ -552,8 +553,68 @@
                             <div class="spinner" id="syncSpinner"></div>
                             <span id="priceSyncText">🔄 1-Click Daily Price Synchronizer</span>
                         </button>
+                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(16, 185, 129, 0.2); border-color: var(--green-success);" onclick="runRerenderBadges()">
+                            <span>🎨 Re-render All Price Badges</span>
+                        </button>
+                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(59, 130, 246, 0.2); border-color: #3b82f6;" onclick="runZero404Audit()">
+                            <span>⚡ Run Zero-404 Audit</span>
+                        </button>
+                    </div>
+                </div>
 
                 <div class="preview-grid" id="homepageProductsGrid"></div>
+            </div>
+
+            <!-- 21-REGION AVAILABILITY MATRIX GRID -->
+            <div class="card-box" style="margin-top: 24px;">
+                <div class="card-header-title">
+                    <span>📊 21-Region Storefront Availability & Direct Link Matrix Grid</span>
+                    <span style="font-size: 12px; color: var(--text-sub);"><span style="color:#10b981; font-weight:800;">DP</span> = Direct Product Page | <span style="color:#3b82f6; font-weight:800;">S</span> = Search Fallback</span>
+                </div>
+                <div style="overflow-x: auto; max-width: 100%;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 12px; font-family: 'Outfit', sans-serif;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.15); color: var(--gold-primary);">
+                                <th style="padding: 10px; text-align: left;">Product ASIN / Title</th>
+                                <th style="padding: 6px;">US</th>
+                                <th style="padding: 6px;">UK</th>
+                                <th style="padding: 6px;">IN</th>
+                                <th style="padding: 6px;">DE</th>
+                                <th style="padding: 6px;">FR</th>
+                                <th style="padding: 6px;">ES</th>
+                                <th style="padding: 6px;">IT</th>
+                                <th style="padding: 6px;">CA</th>
+                                <th style="padding: 6px;">AU</th>
+                                <th style="padding: 6px;">JP</th>
+                                <th style="padding: 6px;">SE</th>
+                                <th style="padding: 6px;">NL</th>
+                                <th style="padding: 6px;">PL</th>
+                                <th style="padding: 6px;">TR</th>
+                                <th style="padding: 6px;">BE</th>
+                                <th style="padding: 6px;">MX</th>
+                                <th style="padding: 6px;">BR</th>
+                                <th style="padding: 6px;">SG</th>
+                                <th style="padding: 6px;">AE</th>
+                                <th style="padding: 6px;">SA</th>
+                                <th style="padding: 6px;">EG</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrixTableBody">
+                            <tr><td colspan="22" style="padding: 20px; color: var(--text-sub);">Loading 21-Region Matrix Grid...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- REAL-TIME TERMINAL LOG STREAMER -->
+            <div class="card-box" style="margin-top: 24px;">
+                <div class="card-header-title">
+                    <span>🖥️ Real-Time System & Scraper Terminal Streamer</span>
+                    <span style="font-size: 12px; color: var(--text-sub);">Auto-refreshing every 3s</span>
+                </div>
+                <div id="terminalLogBox" style="background: #000; color: #10b981; font-family: 'Courier New', monospace; font-size: 12.5px; padding: 16px; border-radius: 12px; height: 180px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; border: 1px solid rgba(255,255,255,0.1);">
+                    System running smoothly...
+                </div>
             </div>
         </div>
 

@@ -312,17 +312,46 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
     def handle_api_sync_prices(self):
         try:
-            # Execute master regional scraper suite across all 21 Amazon domains
             def run_sync():
-                update_task_status('global_sync', {'status': 'running', 'message': 'Scraping 21 Amazon domains and re-rendering badges...'})
+                update_task_status('global_sync', {'status': 'running', 'message': 'Launching 21-Domain Price Sync...'})
                 sync_script = str(WORKSPACE_DIR / "sync_all_regional_prices_master.py")
-                res = subprocess.run([sys.executable, sync_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
-                if res.returncode == 0:
-                    update_task_status('global_sync', {'status': 'completed', 'message': '100% Price Sync & Badge Re-rendering Complete!'})
-                else:
-                    update_task_status('global_sync', {'status': 'error', 'message': res.stderr[:200]})
+                log_file_path = WORKSPACE_DIR / "server.log"
+                
+                with open(log_file_path, "a", encoding="utf-8") as log_f:
+                    log_f.write(f"\n--- Launching 21-Domain Price Sync Pipeline [{time.strftime('%Y-%m-%d %H:%M:%S')}] ---\n")
+                    log_f.flush()
+                    
+                    proc = subprocess.Popen(
+                        [sys.executable, sync_script],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        cwd=str(WORKSPACE_DIR),
+                        bufsize=1
+                    )
+                    
+                    for line in proc.stdout:
+                        log_f.write(line)
+                        log_f.flush()
+                        clean_line = line.strip()
+                        if clean_line:
+                            update_task_status('global_sync', {
+                                'status': 'running',
+                                'message': clean_line[:80]
+                            })
+                    
+                    proc.wait()
+                    if proc.returncode == 0:
+                        update_task_status('global_sync', {
+                            'status': 'completed',
+                            'message': '100% Price Sync & Badge Re-rendering Complete!'
+                        })
+                    else:
+                        update_task_status('global_sync', {
+                            'status': 'error',
+                            'message': f'Sync exited with code {proc.returncode}'
+                        })
 
-            update_task_status('global_sync', {'status': 'running', 'message': 'Launching 21-Domain Price Sync Pipeline...'})
             t = threading.Thread(target=run_sync)
             t.daemon = True
             t.start()
