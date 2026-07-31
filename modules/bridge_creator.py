@@ -641,12 +641,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 if (isExplicitScrapedMatch && regPrice === 'Not Available') {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
-                            el.innerText = '⚠️ NOT AVAILABLE IN YOUR REGION';
-                            el.style.background = 'rgba(239, 68, 68, 0.25)';
-                            el.style.color = '#fca5a5';
-                            el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                            el.innerText = '🔴 OUT OF STOCK';
+                            el.style.background = 'rgba(249, 115, 22, 0.25)';
+                            el.style.color = '#fdba74';
+                            el.style.borderColor = 'rgba(249, 115, 22, 0.4)';
                         } else {
-                            el.innerText = 'Not Available';
+                            el.innerText = 'Out of Stock';
                         }
                     });
                 } else if (isExplicitScrapedMatch && regPrice) {
@@ -655,6 +655,17 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                             el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
                         } else {
                             el.innerText = regPrice;
+                        }
+                    });
+                } else if (!isDirectListing) {
+                    priceTags.forEach(el => {
+                        if (el.classList.contains('tag')) {
+                            el.innerText = '⚠️ NOT AVAILABLE IN YOUR REGION';
+                            el.style.background = 'rgba(239, 68, 68, 0.25)';
+                            el.style.color = '#fca5a5';
+                            el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                        } else {
+                            el.innerText = 'Not Available';
                         }
                     });
                 } else {

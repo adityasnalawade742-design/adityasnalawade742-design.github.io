@@ -1162,9 +1162,18 @@
 
             document.querySelectorAll('.card-wrapper').forEach(card => {
                 const regionalVal = regionCode ? card.getAttribute(`data-price-${regionCode}`) : null;
+                const directRegions = (card.getAttribute('data-direct-regions') || '').split(',');
+                const isDirectInRegion = regionCode ? directRegions.map(r=>r.toLowerCase()).includes(regionCode.toLowerCase()) : false;
                 const priceTag = card.querySelector('.card-price-tag');
 
-                if (regionalVal === 'Not Available') {
+                if (isDirectInRegion && regionalVal === 'Not Available') {
+                    if (priceTag) {
+                        priceTag.innerText = 'Out of Stock';
+                        priceTag.style.background = 'rgba(249, 115, 22, 0.25)';
+                        priceTag.style.color = '#fdba74';
+                        priceTag.style.border = '1px solid rgba(249, 115, 22, 0.4)';
+                    }
+                } else if (!isDirectInRegion && (regionalVal === 'Not Available' || (regionCode && !regionalVal))) {
                     if (priceTag) {
                         priceTag.innerText = 'Not Available';
                         priceTag.style.background = 'rgba(239, 68, 68, 0.22)';
