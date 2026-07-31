@@ -311,7 +311,7 @@
         <h1>Crystal Prism Window Suncatcher Rainbow Maker Hanging Ornament</h1>
 
         <div class="price-container">
-            <div class="price">$12.99</div>
+            <div class="price">INR763.37</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
@@ -472,7 +472,7 @@
             const currentAsin = "B07HP22QTZ";
             const prodKeywords = encodeURIComponent("Crystal Ball Prism Window Suncatcher");
             const directRegions = ["UK", "IN", "AU", "JP", "DE", "NL", "FR", "IT", "ES", "SE"];
-            const regionalMatrix = {};
+            const regionalMatrix = {"au": "$30.57", "ca": "$19.99", "in": "\u20b92,760.15", "jp": "\u00a53,651", "uk": "INR1,571.67", "us": "INR763.37"};
 
             
                         const exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "AED": 3.67, "SAR": 3.75, "KRW": 1380.0 };
@@ -512,7 +512,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$12.99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("INR763.37".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
