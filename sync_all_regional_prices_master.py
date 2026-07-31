@@ -33,6 +33,12 @@ for name, script_path in scrapers:
     time.sleep(0.5)
 
 print("\n-------------------------------------------------------------------------")
+print("🎨 RE-RENDERING PLAYWRIGHT GRAPHIC PRICE BADGES FOR ALL PRODUCTS...")
+print("-------------------------------------------------------------------------")
+badge_res = subprocess.run(["python", "rebuild_all_price_badges_usd.py"], cwd=str(repo), capture_output=True, text=True, encoding="utf-8", errors="replace")
+print(badge_res.stdout.strip())
+
+print("\n-------------------------------------------------------------------------")
 print("🛡️ RUNNING AUTOMATED ZERO-DRIFT HEALTH CHECK & AUTO-HEAL...")
 print("-------------------------------------------------------------------------")
 hc_res = subprocess.run(["python", "run_daily_health_check.py"], cwd=str(repo), capture_output=True, text=True, encoding="utf-8", errors="replace")
