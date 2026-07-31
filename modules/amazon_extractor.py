@@ -48,7 +48,8 @@ def is_lifestyle_photo(image_url: str) -> bool:
             border_pixels.append(img.getpixel((x, h - 1)))
         for y in range(0, h, max(1, h // 20)):
             border_pixels.append(img.getpixel((0, y)))
-            white_count = sum(1 for r, g, b in border_pixels if r > 240 and g > 240 and b > 240)
+            border_pixels.append(img.getpixel((w - 1, y)))
+        white_count = sum(1 for r, g, b in border_pixels if r > 240 and g > 240 and b > 240)
         white_ratio = white_count / len(border_pixels)
         return white_ratio < 0.60
     except Exception:

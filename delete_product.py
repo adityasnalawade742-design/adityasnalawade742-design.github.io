@@ -76,6 +76,20 @@ def delete_product(product_id: str):
         except Exception as e:
             print(f"  ⚠️ Registry update error: {e}")
 
+    # Remove from global_direct_matrix.json
+    matrix_file = project_root / "global_direct_matrix.json"
+    if matrix_file.exists():
+        try:
+            with open(matrix_file, "r", encoding="utf-8") as f:
+                mat = json.load(f)
+            if product_id in mat:
+                del mat[product_id]
+                with open(matrix_file, "w", encoding="utf-8") as f:
+                    json.dump(mat, f, indent=2)
+                print(f"  ✓ Removed {product_id} from global_direct_matrix.json!")
+        except Exception as e:
+            print(f"  ⚠️ Matrix update error: {e}")
+
     # Remove from processed_asins.json
     try:
         from modules.automated_product_selector import remove_processed_asin
