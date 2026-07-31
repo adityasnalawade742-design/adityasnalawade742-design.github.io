@@ -1,4 +1,4 @@
-import sys, json, time
+import sys, json, time, re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -24,7 +24,15 @@ def scrape_se_prices():
                 page.goto(url, timeout=10000, wait_until="domcontentloaded")
                 time.sleep(0.3)
                 offscreen = page.query_selector(".a-price .a-offscreen")
-                if offscreen: price_str = offscreen.inner_text().strip()
+                if offscreen:
+                    txt = offscreen.inner_text().strip()
+                    m = re.search(r"(\d{1,3}(?:\s*\d{3})*(?:,\d{2})?)\s*kr", txt)
+                    if m:
+                        raw_num = m.group(1).replace(" ", "").replace(",", ".")
+                        val = float(raw_num)
+                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                        if val <= (base_usd * 25.0):
+                            price_str = f"{val:.2f}kr".replace(".", ",")
             except Exception: pass
 
             if price_str:

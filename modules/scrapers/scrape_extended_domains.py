@@ -1,6 +1,7 @@
 import sys
 import json
 import time
+import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -55,14 +56,31 @@ def scrape_extended_domains():
                     offscreen = page.query_selector(".a-price .a-offscreen")
                     if offscreen:
                         txt = offscreen.inner_text().strip()
-                        if symbol in txt or any(char.isdigit() for char in txt):
-                            price_str = txt
+                        m = re.search(r"(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)", txt)
+                        if m:
+                            raw_num = m.group(1).replace(" ", "")
+                            if "," in raw_num and "." in raw_num:
+                                if raw_num.find(",") < raw_num.find("."):
+                                    raw_num = raw_num.replace(",", "")
+                                else:
+                                    raw_num = raw_num.replace(".", "").replace(",", ".")
+                            elif "," in raw_num:
+                                raw_num = raw_num.replace(",", ".")
+                            
+                            try:
+                                val = float(raw_num)
+                                base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                                if 1.0 <= val <= (base_usd * 4.0 * 100.0):
+                                    price_str = txt
+                            except ValueError:
+                                pass
 
                     if not price_str:
                         whole = page.query_selector("span.a-price-whole")
                         if whole:
-                            w = whole.inner_text().strip().replace("\n", "")
-                            price_str = f"{symbol} {w}" if symbol not in w else w
+                            w = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
+                            if w.isdigit():
+                                price_str = f"{symbol}{w}"
                 except Exception:
                     pass
 

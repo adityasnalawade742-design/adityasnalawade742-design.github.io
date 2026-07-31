@@ -1,6 +1,7 @@
 import sys
 import json
 import time
+import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -36,17 +37,23 @@ def scrape_in_prices():
 
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
-                    txt = offscreen.inner_text().strip().replace("INR", "₹").strip()
-                    if "₹" in txt:
-                        price_str = txt
+                    txt = offscreen.inner_text().strip()
+                    m = re.search(r"[₹\s]*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)", txt)
+                    if m:
+                        val = float(m.group(1).replace(",", ""))
+                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                        if val <= (base_usd * 150.0):
+                            price_str = f"₹{val:,.2f}"
 
                 if not price_str:
                     whole = page.query_selector("span.a-price-whole")
-                    frac = page.query_selector("span.a-price-fraction")
                     if whole:
-                        w = whole.inner_text().strip().replace("\n", "")
-                        f = frac.inner_text().strip() if frac else "00"
-                        price_str = f"₹{w}.{f}" if "." not in w else f"₹{w}"
+                        w_raw = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
+                        if w_raw.isdigit():
+                            val = float(w_raw)
+                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                            if val <= (base_usd * 150.0):
+                                price_str = f"₹{val:,.2f}"
             except Exception:
                 pass
 

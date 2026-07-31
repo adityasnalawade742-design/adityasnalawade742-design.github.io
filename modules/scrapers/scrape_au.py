@@ -1,6 +1,7 @@
 import sys
 import json
 import time
+import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -37,16 +38,24 @@ def scrape_au_prices():
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
                     txt = offscreen.inner_text().strip()
-                    if "$" in txt:
-                        price_str = txt if "A$" in txt else txt.replace("$", "A$")
+                    m = re.search(r"\$?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)", txt)
+                    if m:
+                        val = float(m.group(1).replace(",", ""))
+                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                        if val <= (base_usd * 3.5):
+                            price_str = f"A${val:.2f}"
 
                 if not price_str:
                     whole = page.query_selector("span.a-price-whole")
                     frac = page.query_selector("span.a-price-fraction")
                     if whole:
-                        w = whole.inner_text().strip().replace("\n", "").replace(".", "")
-                        f = frac.inner_text().strip() if frac else "00"
-                        price_str = f"A${w}.{f}"
+                        w_raw = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
+                        f_raw = frac.inner_text().strip() if frac else "00"
+                        if w_raw.isdigit():
+                            val = float(f"{w_raw}.{f_raw}")
+                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                            if val <= (base_usd * 3.5):
+                                price_str = f"A${val:.2f}"
             except Exception:
                 pass
 

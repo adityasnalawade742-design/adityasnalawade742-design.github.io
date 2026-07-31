@@ -1,6 +1,7 @@
 import sys
 import json
 import time
+import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -37,14 +38,22 @@ def scrape_jp_prices():
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
                     txt = offscreen.inner_text().strip()
-                    if "¥" in txt or "￥" in txt:
-                        price_str = txt.replace("￥", "¥")
+                    m = re.search(r"[¥￥\s]*(\d{1,3}(?:,\d{3})*)", txt)
+                    if m:
+                        val = int(m.group(1).replace(",", ""))
+                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                        if val <= (base_usd * 300.0):
+                            price_str = f"¥{val:,}"
 
                 if not price_str:
                     whole = page.query_selector("span.a-price-whole")
                     if whole:
-                        w = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
-                        price_str = f"¥{w}"
+                        w_raw = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
+                        if w_raw.isdigit():
+                            val = int(w_raw)
+                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                            if val <= (base_usd * 300.0):
+                                price_str = f"¥{val:,}"
             except Exception:
                 pass
 
