@@ -371,13 +371,13 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0D8P8CSYP_hook.jpg?v=7" alt="Cute Bird Touch Control Nightstand Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0D8P8CSYP_hook.jpg?v=3" alt="Cute Bird Touch Control Nightstand Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D8P8CSYP_hook.jpg?v=7', this)">✨ Commercial View</button>
-            <button class="img-tab-btn" onclick="switchImage('./raw_images/raw_B0D8P8CSYP.jpg?v=7', this)">📷 Clean Photo View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D8P8CSYP_hook.jpg?v=3', this)">✨ Commercial View</button>
+            
         </div>
 
         <p class="description">Adorable dimmable touch nightstand lamp in aesthetic bird design. Soft warm ambient light perfect for cozy bedrooms, desks, and bedside tables.</p>
@@ -569,7 +569,7 @@
             const currentAsin = "B0D8P8CSYP";
             const prodKeywords = encodeURIComponent("Cute Bird Touch Dimmable Nightstand Lamp").replace(/%20/g, "+");
             const directRegions = ["US", "IT", "JP", "AU"];
-            const regionalMatrix = {"AE": "AED101.39", "AU": "A$24.32", "BE": "29,99\u20ac", "BR": "R$209,71", "CA": "CA$21.76", "DE": "\u20ac32.90", "EG": "Not Available", "ES": "31,99\u20ac", "FR": "38,99\u20ac", "IN": "\u20b93,843.00", "IT": "38,99\u20ac", "JP": "\u00a52,480", "MX": "Not Available", "NL": "\u20ac28,99", "PL": "82,85z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e142.30\u200e", "SE": "312,38kr", "SG": "Not Available", "TR": "999,00\u00a0TL", "UK": "\u00a328.00", "US": "$18.99"};
+            const regionalMatrix = {"AE": "AED101.39", "AU": "A$24.32", "BE": "29,99\u20ac", "BR": "R$209,71", "CA": "CA$21.76", "DE": "\u20ac32.90", "EG": "Not Available", "ES": "31,99\u20ac", "FR": "38,99\u20ac", "IN": "\u20b93,843.00", "IT": "38,99\u20ac", "JP": "\u00a52,480", "MX": "Not Available", "NL": "\u20ac28,99", "PL": "82,85z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e142.30\u200e", "SE": "312,38kr", "SG": "Not Available", "TR": "999,00\u00a0TL", "UK": "\u00a32,800.46", "US": "$1,813.73"};
             const regionalAsins = {"US": "B0D8P8CSYP"};
 
             
@@ -675,7 +675,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$18.99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$1,813.73".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
