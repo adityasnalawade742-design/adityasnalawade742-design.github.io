@@ -629,6 +629,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
+                const isDirectListing = directRegions.includes(targetCC);
                 
                 // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
@@ -657,17 +658,6 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                             el.innerText = regPrice;
                         }
                     });
-                } else if (!isDirectListing) {
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = '⚠️ NOT AVAILABLE IN YOUR REGION';
-                            el.style.background = 'rgba(239, 68, 68, 0.25)';
-                            el.style.color = '#fca5a5';
-                            el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                        } else {
-                            el.innerText = 'Not Available';
-                        }
-                    });
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
@@ -680,7 +670,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
-                            el.innerText = `✨ VERIFIED DEAL • ${finalDisplayPrice}`;
+                            el.innerText = isDirectListing ? `✨ VERIFIED DEAL • ${finalDisplayPrice}` : `⚠️ UNLISTED IN REGION • ${finalDisplayPrice}`;
+                            if (!isDirectListing) {
+                                el.style.background = 'rgba(239, 68, 68, 0.25)';
+                                el.style.color = '#fca5a5';
+                                el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                            }
                         } else {
                             el.innerText = finalDisplayPrice;
                         }
