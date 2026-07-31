@@ -297,8 +297,18 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
     def handle_api_sync_prices(self):
         try:
-            res = subprocess.run([sys.executable, "sync_exact_amazon_prices.py"], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
-            self.send_json({'status': 'success', 'message': 'Price synchronization complete!', 'output': res.stdout[:200]})
+            # Execute master regional scraper suite across all 21 Amazon domains
+            def run_sync():
+                subprocess.run([sys.executable, "sync_all_regional_prices_master.py"], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+            
+            t = threading.Thread(target=run_sync)
+            t.daemon = True
+            t.start()
+            
+            self.send_json({
+                'status': 'success', 
+                'message': 'Master 21-Domain Regional Price Sync Pipeline Launched! Scraping all regional storefronts and deploying live...'
+            })
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
