@@ -3,6 +3,7 @@ import json
 import re
 import time
 from pathlib import Path
+from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
 if hasattr(sys.stdout, "reconfigure"):
