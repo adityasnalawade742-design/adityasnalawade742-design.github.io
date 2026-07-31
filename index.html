@@ -1139,14 +1139,14 @@
 
                 if (isDirectInRegion && regionalVal === 'Not Available') {
                     if (priceTag) {
-                        priceTag.innerText = 'Out of Stock';
+                        priceTag.innerText = '🔴 OUT OF STOCK';
                         priceTag.style.background = 'rgba(249, 115, 22, 0.25)';
                         priceTag.style.color = '#fdba74';
                         priceTag.style.border = '1px solid rgba(249, 115, 22, 0.4)';
                     }
                 } else if (!isDirectInRegion && (regionalVal === 'Not Available' || (regionCode && !regionalVal))) {
                     if (priceTag) {
-                        priceTag.innerText = 'Not Available';
+                        priceTag.innerText = '🔴 OUT OF STOCK';
                         priceTag.style.background = 'rgba(239, 68, 68, 0.22)';
                         priceTag.style.color = '#fca5a5';
                         priceTag.style.border = '1px solid rgba(239, 68, 68, 0.4)';
