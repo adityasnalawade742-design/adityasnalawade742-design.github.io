@@ -493,7 +493,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             const associateTagMap = {
                 "US": "smartdeal0358-20",
                 "CA": "smartdeal0302-20",
-                "IN": "smartdeal0358-21"
+                "IN": "smartdeal0358-21",
+                "UK": "smartdea04b3a-21",
+                "GB": "smartdea04b3a-21"
             };
 
             function getTag(cc) {
