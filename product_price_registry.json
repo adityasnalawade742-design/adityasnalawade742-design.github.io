@@ -16,8 +16,8 @@
     "hook_image": "focus_product_B0GYDXHF4G_hook.jpg",
     "bridge_page": "bridge_B0GYDXHF4G.html",
     "regional_prices": {
-      "IN": "Not Available",
       "US": "$35.00",
+      "IN": "Not Available",
       "UK": "Not Available",
       "DE": "Not Available",
       "CA": "Not Available",
@@ -43,13 +43,13 @@
     "hook_image": "focus_product_B0FXLYXM32_hook.jpg",
     "bridge_page": "bridge_B0FXLYXM32.html",
     "regional_prices": {
-      "IN": "₹6386.91",
+      "US": "$76.49",
+      "IN": "₹6,386.91",
       "UK": "£59.66",
       "DE": "€70.37",
-      "JP": "¥11,856",
-      "CA": "CA$104.03",
-      "US": "$76.49",
-      "AU": "A$116.26"
+      "CA": "CA$216.34",
+      "AU": "A$116.26",
+      "JP": "¥20,390"
     },
     "search_keywords": "White Wavy Wall Body Standing Mirror"
   },
@@ -71,13 +71,13 @@
     "bridge_page": "bridge_B0C2YLN3H4.html",
     "last_updated": "2026-07-29T12:05:24.358736",
     "regional_prices": {
-      "IN": "₹599.00",
-      "AU": "A$27.82",
-      "JP": "¥2,836",
       "US": "$18.30",
-      "CA": "CA$24.89",
+      "IN": "₹599.00",
       "UK": "£14.27",
-      "DE": "€16.84"
+      "DE": "€16.84",
+      "CA": "CA$42.26",
+      "AU": "A$26.88",
+      "JP": "¥4,664"
     },
     "search_keywords": "White Ceramic Donut Flower Vase Set"
   },
@@ -98,13 +98,13 @@
     "hook_image": "focus_product_B07HP22QTZ_hook.jpg",
     "bridge_page": "bridge_B07HP22QTZ.html",
     "regional_prices": {
-      "IN": "₹667.16",
       "US": "$7.99",
-      "UK": "£6.23",
-      "AU": "A$12.14",
-      "JP": "¥1,238",
-      "CA": "CA$10.87",
-      "DE": "€7.35"
+      "IN": "₹2,760.15",
+      "UK": "£14.99",
+      "DE": "€8.75",
+      "CA": "CA$19.99",
+      "AU": "A$30.57",
+      "JP": "¥3,651"
     },
     "search_keywords": "Crystal Ball Prism Window Suncatcher"
   },
@@ -125,11 +125,11 @@
     "hook_image": "focus_product_B0BZXNSW5K_hook.jpg",
     "bridge_page": "bridge_B0BZXNSW5K.html",
     "regional_prices": {
+      "US": "$19.99",
       "IN": "₹475.00",
       "UK": "£15.59",
-      "US": "$19.99",
-      "CA": "CA$27.19",
       "DE": "€18.39",
+      "CA": "CA$29.99",
       "AU": "A$30.38",
       "JP": "¥3,098"
     },
@@ -153,9 +153,9 @@
     "bridge_page": "bridge_B0DXKGL1T2.html",
     "last_updated": "2026-07-29T12:06:03.990914",
     "regional_prices": {
-      "IN": "₹3220.59",
-      "UK": "£30.08",
       "US": "$38.57",
+      "IN": "₹3,220.59",
+      "UK": "£30.08",
       "DE": "€35.48",
       "CA": "CA$52.46",
       "AU": "A$58.63",
@@ -180,10 +180,10 @@
     "hook_image": "focus_product_B0D1FRDFFX_hook.jpg",
     "bridge_page": "bridge_B0D1FRDFFX.html",
     "regional_prices": {
-      "IN": "₹3004.33",
+      "US": "$35.98",
+      "IN": "₹11,356.51",
       "UK": "£28.06",
       "DE": "€33.10",
-      "US": "$35.98",
       "CA": "CA$48.93",
       "AU": "A$54.69",
       "JP": "¥5,577"
@@ -207,10 +207,10 @@
     "hook_image": "focus_product_B0D8P8CSYP_hook.jpg",
     "bridge_page": "bridge_B0D8P8CSYP.html",
     "regional_prices": {
-      "IN": "₹1336.00",
+      "US": "$16.00",
+      "IN": "₹3,843.00",
       "UK": "£12.48",
       "DE": "€14.72",
-      "US": "$16.00",
       "CA": "CA$21.76",
       "AU": "A$24.32",
       "JP": "¥2,480"
@@ -235,11 +235,11 @@
     "bridge_page": "bridge_B0DZD1X83N.html",
     "regional_prices": {
       "US": "$20.00",
-      "CA": "CA$27.20",
+      "IN": "₹1,670.00",
       "UK": "£15.60",
       "DE": "€18.40",
+      "CA": "CA$27.20",
       "AU": "A$30.40",
-      "IN": "₹1670.00",
       "JP": "¥3,100"
     },
     "search_keywords": "Minimalist Wood Base Table Lamp"
