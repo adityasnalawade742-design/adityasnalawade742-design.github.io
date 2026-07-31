@@ -1216,6 +1216,12 @@
                     .then(res => res.json())
                     .then(data => {
                         const country = (data.country || '').toUpperCase();
+                        if (country) {
+                            document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
+                                const cleanHref = a.getAttribute('href').split('?')[0];
+                                a.setAttribute('href', `${cleanHref}?country=${country}`);
+                            });
+                        }
                         if (countryToCurrencyMap[country]) {
                             const detectedCurr = countryToCurrencyMap[country];
                             const sel = document.getElementById('currencySelector');
@@ -1230,6 +1236,12 @@
                             .then(res => res.json())
                             .then(data => {
                                 const country = (data.country_code || '').toUpperCase();
+                                if (country) {
+                                    document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
+                                        const cleanHref = a.getAttribute('href').split('?')[0];
+                                        a.setAttribute('href', `${cleanHref}?country=${country}`);
+                                    });
+                                }
                                 if (countryToCurrencyMap[country]) {
                                     const detectedCurr = countryToCurrencyMap[country];
                                     const sel = document.getElementById('currencySelector');
