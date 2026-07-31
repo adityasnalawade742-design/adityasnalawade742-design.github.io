@@ -428,10 +428,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         <div class="features-box">
             <h3>✦ Product Highlights & Specifications</h3>
             <ul class="features-list">
-                {% if product.features and product.features|length > 0 %}
+                {% if product.features and (product.features is mapping or product.features is sequence) and (product.features is not string) and product.features|length > 0 %}
                 {% for feat in product.features[:6] %}
                 <li>✨ {{ feat }}</li>
                 {% endfor %}
+                {% elif product.features and product.features is string %}
+                <li>✨ {{ product.features }}</li>
                 {% else %}
                 <li>💡 3-Way Dimmable Touch Control</li>
                 <li>⚡ Dual USB A+C Fast Charging</li>
