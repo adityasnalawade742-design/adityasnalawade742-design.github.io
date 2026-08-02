@@ -14,37 +14,25 @@
 
 ---
 
-## 1. Executive Summary & Accomplishments
+## 1. System Overview
 
-This project is an **end-to-end automated affiliate marketing & landing page generation platform** built for Pinterest traffic. It automatically extracts Amazon product listing data, filters photos for seller text/infographics/hands, applies Playwright high-resolution visual pin overlays with dynamic gradient scrims, builds high-converting glassmorphism landing pages, and routes global visitors across **21 Amazon country storefronts** with zero 404 errors.
-
----
-
-## 2. Complete Change History (Newest First)
-
-### August 2, 2026 — n8n Workflow Redesign
-- ✅ Added **"📌 Send to n8n" tab** to `admin_console.html` (3-step: discover → image review → send)
-- ✅ Added `POST /api/prepare_n8n_batch` endpoint to `web_console_server.py`
-- ✅ Added `POST /api/create_bridge_page` endpoint to `web_console_server.py` (called by n8n per-product)
-- ✅ Redesigned `n8n_pinterest_affiliate_workflow.json` — now 6 nodes with proper per-product loop, bridge page builder node, and immediate ACK response
-- ✅ Latest commit: `2f0dff9`
-
-### August 1, 2026 — Pinterest API Standard Access Re-Application
-- ✅ Resolved 100% of Pinterest Support rejection points
-- ✅ Company & App names matched across all pages
-- ✅ Added high-visibility email badge (`aditya.s.nalawade742@gmail.com`) to all footers
-- ✅ Created `terms-of-service.html` live on GitHub Pages
-- ✅ Fixed `mode 160000` nested submodule build failure
-
-### July 31, 2026 — System Hardening
-- ✅ Zero-Drift Self-Healing Bot: 100% Pass (9 products)
-- ✅ 45-Currency Parity Audit: 405/405 Tests Pass
-- ✅ 72 Outbound Affiliate Links: 100% Active
-- ✅ Regional ASIN Variant Mapper active for B0DZD1X83N (DE/SE → B0F946YHSZ)
+An **end-to-end automated affiliate marketing & landing page generation platform** built for Pinterest traffic. It automatically extracts Amazon product listing data, filters photos for seller text/infographics/hands, applies Playwright high-resolution visual pin overlays with dynamic gradient scrims, builds high-converting glassmorphism landing pages, and routes global visitors across **21 Amazon country storefronts** with zero 404 errors.
 
 ---
 
-## 3. Master Catalog Matrix (9 Active Portfolio Products)
+## 2. Complete Change History (August 2, 2026 Updates)
+
+### Web Console Rebuild & n8n Pipeline Integration:
+- ✅ **Rebuilt Web Console (`admin_console.html`)**: Redesigned into 2 clean tabs (`📌 Send to n8n Workflow` and `🏠 Homepage Manager`). Step 1 products start unselected for total control.
+- ✅ **Real Amazon Listing Photos (`modules/amazon_finder.py`)**: Resolved 43-byte transparent placeholder image issues by fetching real Amazon listing hero photos (`https://m.media-amazon.com/images/I/..._SL1500_.jpg`).
+- ✅ **SerpAPI Key Failover (`modules/amazon_finder.py`)**: Added automatic key failover across `SERPAPI_KEYS` array (Keys #1, #2, #3). When Key #1 ran out of searches, system auto-switched to active Keys #2 and #3.
+- ✅ **Backend Endpoints (`web_console_server.py`)**: Added `POST /api/prepare_n8n_batch` (packages product/photo selections, downloads images, writes SEO copy) and `POST /api/create_bridge_page` (called by n8n per-product to build bridge HTML and render hook image).
+- ✅ **n8n Workflow (`n8n_pinterest_affiliate_workflow.json`)**: Updated to a 6-node pipeline with 1-by-1 product looping, local bridge builder node, and Pinterest API v5 POST publisher.
+- ✅ **Restored Original Portfolio**: Restored `B0DZD1X83N` and `B0GYDXHF4G` back to the live homepage.
+
+---
+
+## 3. Active Portfolio Products (9 Items)
 
 | # | ASIN | Product Title | USD Price | Landing Page |
 | :-: | :--- | :--- | :--- | :--- |
@@ -60,61 +48,28 @@ This project is an **end-to-end automated affiliate marketing & landing page gen
 
 ---
 
-## 4. Core Architecture & System Modules
+## 4. How to Resume Work in Any Session or AGY Account
 
-### 🖥️ `web_console_server.py` (Interactive Web Server — Port 5000)
-- Open `http://localhost:5000` to access the full admin dashboard
-- **Tabs**: 10-Product Selector | Homepage Manager | Single ASIN Inspector | **📌 Send to n8n** (NEW)
-- **Key Endpoints**:
-  - `GET /api/discover` — search Amazon products
-  - `GET /api/extract` — extract single product photos
-  - `POST /api/batch_extract` — extract photos for multiple ASINs
-  - `POST /api/generate` — generate single campaign (AI image + bridge + pin)
-  - `POST /api/batch_generate` — generate batch campaigns
-  - `POST /api/prepare_n8n_batch` — **(NEW)** prep product+image selections for n8n
-  - `POST /api/create_bridge_page` — **(NEW)** called by n8n to build bridge page + hook image per product
-  - `POST /api/n8n/dispatch-batch` — legacy direct dispatch (still works)
-  - `POST /api/sync_prices` — trigger 21-domain price sync
-  - `GET /api/auth/pinterest` → Pinterest OAuth 2.0 flow
+When opening a new session or changing AGY accounts:
 
-### 🎨 `modules/html_overlay_engine.py` (Playwright 1200×1600 Visual Overlay)
-- Renders Pinterest pin graphics with adaptive gradient scrims
-- Uses Gemini Vision as dual-image Art Director for price tag positioning
-
-### 🌐 `modules/bridge_creator.py` (Universal Multi-Region Geo-Redirector Engine)
-- Generates glassmorphism landing pages with 100% affiliate tag attachment
-- Geo-redirects 200+ countries to their local Amazon storefront
-
-### 🔄 `n8n_pinterest_affiliate_workflow.json` (n8n Integration — REDESIGNED Aug 2)
-- **6-node workflow**: Webhook → ACK → Split per product → Build bridge page → Merge → Post pin
-- Webhook path: `pinterest-batch`
-- Calls local server at `localhost:5000/api/create_bridge_page` per product
-- Posts to Pinterest API v5 with unique SEO title + description + bridge URL
-
----
-
-## 5. How to Resume Work in Any Session or Account
-
-When starting a fresh session or switching accounts:
-
-1. **Read this file** — you're on the right track.
-2. **Open Workspace**: Point to `G:\CLI\pinterest-auto-affiliate`.
-3. **Run Zero-Drift Health Check**:
+1. **Read Handover Docs**:
+   - `MASTER_SESSION_HANDOVER.md`
+   - `PROJECT_STATE.md`
+2. **Run Zero-Drift Health Check**:
    ```bash
    python run_daily_health_check.py
    ```
-4. **Launch Web Console**:
+3. **Launch Web Console**:
    ```bash
    python -u web_console_server.py
    ```
-5. **Open browser**: `http://localhost:5000`
-6. **To use the n8n workflow**: Click **📌 Send to n8n** tab → Search products → Review images → Send.
+4. **Open Browser**: Go to `http://localhost:5000` (or `http://localhost:5000/console`).
 
 Everything is committed, pushed to `main`, and deployed live on GitHub Pages!
 
 ---
 
-## 6. Official Amazon Associate Store IDs
+## 5. Amazon Associate Store IDs Across Regions
 
 | Region | Store ID |
 | :--- | :--- |
@@ -127,15 +82,3 @@ Everything is committed, pushed to `main`, and deployed live on GitHub Pages!
 | 🇪🇸 ES | `smartdeal0b46-21` |
 | 🇮🇹 IT | `smartdea03a8d-21` |
 | All others (SE, NL, PL, TR, BE, MX, BR, SG, AE, SA, EG, JP, AU) | OneLink → nearest native tag |
-
----
-
-## 7. Git Commit History (Last 5)
-
-```
-2f0dff9  feat: new n8n Send to n8n tab with 3-step workflow, bridge page builder endpoint, redesigned 6-node n8n workflow
-28112ac  fix: debug pass - fix render_html_overlay args, NoneType crash, path.exists, duplicate import, sys.stdout corruption
-25d30ef  feat: complete batch curation, manual image selector, and auto-bridge n8n workflow dispatch
-984d701  docs: update master demo video guide for n8n workflow canvas and App ID 1596368
-ad34a49  rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector
-```
