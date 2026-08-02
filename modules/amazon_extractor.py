@@ -97,31 +97,29 @@ def is_grid_collage(image_url: str) -> bool:
     Scans central horizontal/vertical coordinate bands for seam lines and white dividers.
     """
     try:
+        # White studio cutouts are single products, never split collages
+        if not is_lifestyle_photo(image_url):
+            return False
+
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
-        raw = requests.get(image_url, headers=headers, timeout=10).content
+        raw = requests.get(image_url, headers=headers, timeout=6).content
         img = Image.open(io.BytesIO(raw)).convert('RGB').resize((200, 200))
         w, h = img.size
         
-        def scan_band(pixels_list, threshold=240, seam_ratio=0.80):
+        def scan_band(pixels_list, threshold=240, seam_ratio=0.85):
             white_count = sum(1 for r, g, b in pixels_list if r > threshold and g > threshold and b > threshold)
             return (white_count / len(pixels_list)) > seam_ratio if pixels_list else False
         
-        # Check horizontal center band (y = h//2 ± 3)
+        # Check horizontal center band (y = h//2)
         h_band = [img.getpixel((x, h // 2)) for x in range(w)]
-        h_band2 = [img.getpixel((x, h // 2 + 3)) for x in range(w)]
-        h_band3 = [img.getpixel((x, h // 2 - 3)) for x in range(w)]
-        
-        # Check vertical center band (x = w//2 ± 3)
+        # Check vertical center band (x = w//2)
         v_band = [img.getpixel((w // 2, y)) for y in range(h)]
-        v_band2 = [img.getpixel((w // 2 + 3, y)) for y in range(h)]
         
-        is_h_seam = scan_band(h_band) or scan_band(h_band2) or scan_band(h_band3)
-        is_v_seam = scan_band(v_band) or scan_band(v_band2)
+        is_h_seam = scan_band(h_band)
+        is_v_seam = scan_band(v_band)
         
-        result = is_h_seam and is_v_seam
-        return result
+        return is_h_seam and is_v_seam
     except Exception as e:
-        print(f"[is_grid_collage Error] {e}")
         return False
 
 def has_human_presence(image_url: str) -> bool:
@@ -141,10 +139,18 @@ def has_human_presence(image_url: str) -> bool:
         for x in range(100):
             for y in range(100):
                 r, g, b = img.getpixel((x, y))
-                # Flesh tone range: reddish-warm, moderate saturation
-                if r > 60 and g > 40 and b > 20 and r > g and r > b and (r - b) > 15 and (r - g) < 80:
+                # Tightened flesh-tone range:
+                # (r-g) < 40 excludes orange/amber product tones (candles, lamps, terracotta)
+                # (r-b) > 30 requires stronger red bias (real skin, not warm wood/amber)
+                # r must dominate both channels significantly
+                if (r > 80 and g > 40 and b > 20
+                        and r > g and r > b
+                        and (r - b) > 30
+                        and (r - g) < 40
+                        and g > b):
                     skin_pixels += 1
-        return (skin_pixels / total) > 0.08
+        # Raise threshold to 15% to avoid false positives from warm-lit room shots
+        return (skin_pixels / total) > 0.15
     except Exception:
         return False
 
@@ -201,11 +207,20 @@ def score_product_photo(image_url: str, title: str = "") -> dict:
     if is_grid_collage(image_url):
         return {"score": 0, "prompt_strength": 0.48, "is_white_bg": False, "reason": "grid_collage"}
     
-    if has_human_presence(image_url):
+    try:
+        has_human = has_human_presence(image_url)
+    except Exception:
+        has_human = False
+
+    if has_human:
         return {"score": 0, "prompt_strength": 0.48, "is_white_bg": False, "reason": "human_presence"}
 
-    has_text = has_text_annotation(image_url)
-    is_lifestyle = is_lifestyle_photo(image_url)
+    try:
+        has_text = has_text_annotation(image_url)
+        is_lifestyle = is_lifestyle_photo(image_url)
+    except Exception:
+        # Network error — assume usable with neutral score
+        return {"score": 50, "prompt_strength": 0.48, "is_white_bg": False, "reason": "network_error_assume_ok"}
     is_white_bg = not is_lifestyle
 
     title_lwr = (title or "").lower()
@@ -302,6 +317,14 @@ def get_best_image_for_asin(asin: str, title: str = "", photos: list = None, sav
     else:
         # 3. Listing Photos Scrape & Quality Scoring
         candidate_photos = photos or fetch_all_product_images(clean_asin)
+        # Filter out tracking sprites (_SP\d+), ad widgets, and non-media-amazon CDN URLs
+        candidate_photos = [
+            u for u in candidate_photos
+            if u and u.startswith("http")
+            and "amazon-adsystem" not in u
+            and "ws-na." not in u
+            and not any(f"_SP{n}" in u for n in ["100", "200", "300"])
+        ]
         scored = []
         for p_url in candidate_photos:
             if p_url and p_url.startswith("http"):
@@ -313,26 +336,49 @@ def get_best_image_for_asin(asin: str, title: str = "", photos: list = None, sav
             scored.sort(key=lambda x: x[0], reverse=True)
             best_score, winning_url, best_meta = scored[0]
             winning_source = "scraped_listing"
+        elif candidate_photos:
+            # Fallback to main listing photo if quality filter rejected all candidates
+            winning_url = candidate_photos[0]
+            winning_source = "main_listing_fallback"
+            best_meta = {"score": 30, "prompt_strength": 0.48, "is_white_bg": True}
         else:
-            # 4. Product-Specific CDN Fallback (Never generic cross-product image!)
-            winning_url = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&ServiceVersion=20070822&MarketPlace=US&ID=AsinImage&WS=1&Format=_SL1500_&ASIN={clean_asin}"
-            winning_source = "amazon_cdn_fallback"
+            # Product-Specific Constructable Fallback
+            winning_url = f"https://m.media-amazon.com/images/P/{clean_asin}.01.LZZZZZZZ.jpg"
+            winning_source = "constructable_fallback"
             best_meta = {"score": 30, "prompt_strength": 0.48, "is_white_bg": True}
 
     # Save to SQLite Cache
     set_cached_image(clean_asin, winning_url, source=winning_source)
 
     # 5. Stream download to raw_images/raw_{ASIN}.jpg
+    MIN_IMAGE_BYTES = 5000  # anything smaller is a broken/placeholder image
     if save_to_disk and winning_url.startswith("http"):
-        try:
-            resp = requests.get(winning_url, headers={"User-Agent": "Mozilla/5.0"}, stream=True, timeout=15)
-            if resp.status_code == 200:
-                with open(target_raw_file, "wb") as f_out:
-                    for chunk in resp.iter_content(chunk_size=16384):
-                        f_out.write(chunk)
-                print(f"[Unified Extractor] Downloaded raw image for {clean_asin} -> {target_raw_file.name}")
-        except Exception as e_dl:
-            print(f"[Unified Extractor Warning] Download failed for {clean_asin}: {e_dl}")
+        downloaded_ok = False
+        urls_to_try = [winning_url]
+        # If using constructable fallback, also try alternative known formats
+        if winning_source == "constructable_fallback":
+            urls_to_try += [
+                f"https://m.media-amazon.com/images/I/{clean_asin}._SL1500_.jpg",  # direct ASIN format
+                f"https://images-na.ssl-images-amazon.com/images/P/{clean_asin}.01.LZZZZZZZ.jpg",
+            ]
+        for try_url in urls_to_try:
+            try:
+                resp = requests.get(try_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}, stream=True, timeout=15)
+                if resp.status_code == 200:
+                    with open(target_raw_file, "wb") as f_out:
+                        for chunk in resp.iter_content(chunk_size=16384):
+                            f_out.write(chunk)
+                    if target_raw_file.stat().st_size >= MIN_IMAGE_BYTES:
+                        print(f"[Unified Extractor] Downloaded raw image for {clean_asin} -> {target_raw_file.name} ({target_raw_file.stat().st_size//1024}KB)")
+                        downloaded_ok = True
+                        break
+                    else:
+                        print(f"[Unified Extractor] Tiny file ({target_raw_file.stat().st_size}B) from {try_url[:60]} — trying next URL")
+                        target_raw_file.unlink(missing_ok=True)  # delete bad file
+            except Exception as e_dl:
+                print(f"[Unified Extractor Warning] Download failed for {clean_asin} ({try_url[:50]}): {e_dl}")
+        if not downloaded_ok:
+            print(f"[Unified Extractor] All download attempts failed for {clean_asin} — will serve CDN URL")
 
     return {
         "asin": clean_asin,
@@ -547,8 +593,8 @@ def fetch_all_product_images(asin: str) -> list:
                         pass
 
                 if not all_images:
-                    # Fallback: regex scan all media-amazon /I/ URLs in the page
-                    found = re.findall(r'https://m\.media-amazon\.com/images/I/[A-Za-z0-9+_%.-]+', html)
+                    # Fallback: regex scan all media-amazon /I/ image URLs in the page
+                    found = re.findall(r'https://m\.media-amazon\.com/images/I/[A-Za-z0-9+_%.-]+\.(?:jpg|jpeg|png|webp)', html, re.IGNORECASE)
                     all_images = [enhance_to_max_resolution(u) for u in found]
 
                 # Deduplicate, strip ad URLs, filter out tiny icon sprites
@@ -558,7 +604,9 @@ def fetch_all_product_images(asin: str) -> list:
                 def _is_product_img(url):
                     if not url: return False
                     lower = url.lower()
-                    if lower.endswith('.js') or lower.endswith('.css') or '._rc' in lower or '._png' in lower and not lower.endswith('.png'):
+                    if any(lower.endswith(ext) for ext in ['.js', '.css', '.html', '.htm', '.json']):
+                        return False
+                    if '._rc' in lower or ('._png' in lower and not lower.endswith('.png')):
                         return False
                     m = re.search(r'/images/I/([A-Za-z0-9+%-]+)\.', url)
                     return bool(m and len(m.group(1)) > 10)

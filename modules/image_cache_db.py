@@ -32,7 +32,11 @@ def get_cached_image(asin: str) -> str:
         c.execute("SELECT image_url FROM product_images WHERE asin = ?", (asin.upper().strip(),))
         row = c.fetchone()
         conn.close()
-        return row[0] if row and row[0] else ""
+        url = row[0] if row and row[0] else ""
+        # Reject tracking sprites, ad widgets, and tiny thumbnails
+        if url and ("_SP" in url or "amazon-adsystem" in url or "ws-na." in url):
+            return ""
+        return url
     except Exception as e:
         print(f"[Image DB Error] Could not read cache for {asin}: {e}")
         return ""

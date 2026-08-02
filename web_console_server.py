@@ -247,6 +247,12 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/delete_homepage_product'):
             self.handle_api_delete_homepage_product()
             return
+        elif self.path.startswith('/api/reject_product'):
+            self.handle_api_reject_product()
+            return
+        elif self.path.startswith('/api/confirm_published'):
+            self.handle_api_confirm_published()
+            return
         elif self.path.startswith('/api/preview_overlay'):
             self.handle_api_preview_overlay()
             return
@@ -536,6 +542,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         print(f"[Web Console] Discovering live items for query: '{kw}'...")
         try:
             from modules.amazon_finder import fetch_product_image_for_asin
+            from modules.product_registry import get_blocked_asins
+            blocked_asins = get_blocked_asins()
+
             raw_items = fetch_amazon_products(query=kw, num_results=count)
             items = []
             skipped_no_image = 0
@@ -544,20 +553,21 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 if not asin or len(asin) != 10:
                     print(f"[Web Console] Skipping invalid ASIN: '{asin}'")
                     continue
+
+                if asin in blocked_asins:
+                    print(f"[Web Console] Skipping blocked ASIN (already published or rejected): '{asin}'")
+                    continue
+
                 already_pub = is_asin_published_on_homepage(asin)
-                thumbnail = item.get('original_image_url') or item.get('thumbnail', '')
+                local_raw = WORKSPACE_DIR / f"raw_images/raw_{asin}.jpg"
 
-                # Run all 4 image strategies if thumbnail is missing/broken
-                bad = (
-                    not thumbnail
-                    or 'amazon-adsystem.com' in thumbnail
-                    or '/images/P/' in thumbnail
-                )
-                if bad:
-                    print(f"[Web Console] Fetching image for {asin} via 4-strategy pipeline...")
+                if local_raw.exists() and local_raw.stat().st_size > 5000:
+                    thumbnail = f"/raw_images/raw_{asin}.jpg?v={int(time.time())}"
+                else:
                     thumbnail = fetch_product_image_for_asin(asin, item.get('title', ''))
+                    if local_raw.exists() and local_raw.stat().st_size > 5000:
+                        thumbnail = f"/raw_images/raw_{asin}.jpg?v={int(time.time())}"
 
-                # HARD FILTER: never show a product without a confirmed image
                 if not thumbnail:
                     skipped_no_image += 1
                     print(f"[Web Console] SKIPPED {asin} — no image found by any strategy")
@@ -742,6 +752,43 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 })
 
         self.send_json({'status': 'success', 'items': extracted_batch})
+
+    def handle_api_reject_product(self):
+        """POST /api/reject_product — Body: { asin, title, reason }"""
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+        asin = data.get('asin', '').strip().upper()
+        title = data.get('title', '')
+        reason = data.get('reason', 'user_skip')
+
+        if not asin or len(asin) != 10:
+            self.send_json({'status': 'error', 'message': 'Invalid ASIN'})
+            return
+
+        from modules.product_registry import mark_as_rejected
+        mark_as_rejected(asin=asin, title=title, reason=reason)
+        self.send_json({'status': 'success', 'asin': asin, 'message': f'ASIN {asin} marked as rejected.'})
+
+    def handle_api_confirm_published(self):
+        """POST /api/confirm_published — Body: { asin, title, price, pinterest_pin_id, image_url }"""
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+        asin = data.get('asin', '').strip().upper()
+        title = data.get('title', '')
+        price = data.get('price', '$19.99')
+        pinterest_pin_id = data.get('pinterest_pin_id', '')
+        image_url = data.get('image_url', '')
+
+        if not asin or len(asin) != 10:
+            self.send_json({'status': 'error', 'message': 'Invalid ASIN'})
+            return
+
+        from modules.product_registry import mark_as_published
+        mark_as_published(asin=asin, title=title, price=price, pinterest_pin_id=pinterest_pin_id, image_url=image_url)
+        self.send_json({'status': 'success', 'asin': asin, 'message': f'ASIN {asin} marked as published.'})
+
 
 
     def handle_api_generate(self):
@@ -1092,8 +1139,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     subprocess.run(['git', 'push', 'origin', 'main'],
                         cwd=str(WORKSPACE_DIR), check=False)
                     print(f'[Create Bridge Page] ✅ Pushed bridge_{target_asin}.html live!')
+                    from modules.automated_product_selector import cleanup_unselected_raw_images
+                    cleanup_unselected_raw_images()
                 except Exception as eg:
-                    print(f'[Create Bridge Page] Git push warning: {eg}')
+                    print(f'[Create Bridge Page Warning] Git push error: {eg}')
 
             threading.Thread(target=push_live, args=(asin,), daemon=True).start()
 
@@ -1455,5 +1504,10 @@ def run_server():
     server.serve_forever()
 
 if __name__ == '__main__':
+    try:
+        from modules.product_registry import cleanup_orphaned_raw_images
+        cleanup_orphaned_raw_images(max_age_hours=24)
+    except Exception as e:
+        print(f"[Registry Cleanup Warning] {e}")
     run_server()
 

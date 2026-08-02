@@ -70,7 +70,12 @@ def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: fl
         print(f"[Amazon Finder] Found {len(result_set)} live Amazon products for query: '{search_query}'")
         return result_set
 
-    print("[Amazon Finder] Falling back to curated high-converting niche products...")
+    print("[Amazon Finder] SerpAPI unavailable — falling back to direct Amazon live search scraper...")
+    scraped_live = _scrape_amazon_search(search_query, num_results=num_results, min_price=min_price, max_price=max_price)
+    if scraped_live:
+        print(f"[Amazon Finder] Scraped {len(scraped_live)} live products directly from Amazon for '{search_query}'")
+        return scraped_live
+
     return fetch_sample_amazon_products()
 
 def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_price: float = 10.0, max_price: float = 50.0):
@@ -136,6 +141,84 @@ def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_pric
             print(f"[SerpAPI Exception Key #{key_idx}] Error: {e}")
 
     return None
+
+
+def _scrape_amazon_search(query: str, num_results: int = 10, min_price: float = 10.0, max_price: float = 50.0) -> list:
+    """
+    Direct Amazon Search Scraper.
+    Fetches https://www.amazon.com/s?k={query} directly when SerpAPI is out of credits or unavailable.
+    Parses product ASINs, titles, prices, ratings, and image URLs.
+    """
+    encoded_q = urllib.parse.quote_plus(query)
+    search_url = f"https://www.amazon.com/s?k={encoded_q}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+    }
+
+    try:
+        resp = requests.get(search_url, headers=headers, timeout=8)
+        if resp.status_code != 200:
+            return []
+
+        soup = BeautifulSoup(resp.text, "html.parser")
+        product_cards = soup.find_all("div", {"data-component-type": "s-search-result"})
+
+        results = []
+        for card in product_cards:
+            asin = card.get("data-asin", "").strip().upper()
+            if not asin or len(asin) != 10:
+                continue
+
+            # Title
+            title_el = card.find("h2") or card.find("span", {"class": "a-text-normal"})
+            title = title_el.get_text().strip() if title_el else f"Product {asin}"
+
+            # Adult aesthetic check
+            if not is_adult_aesthetic_product(title):
+                continue
+
+            # Price
+            price_el = card.find("span", {"class": "a-offscreen"})
+            price_str = price_el.get_text().strip() if price_el else "$24.99"
+            price_num = parse_price_float(price_str)
+            if price_num > 0 and (price_num < min_price or price_num > max_price):
+                continue
+
+            # Rating
+            rating_el = card.find("span", {"class": "a-icon-alt"})
+            rating_str = rating_el.get_text() if rating_el else "4.5"
+            rating_match = re.search(r'([0-9\.]+)\s*out', rating_str)
+            rating_val = float(rating_match.group(1)) if rating_match else 4.5
+            if rating_val < 4.2:
+                continue
+
+            # Image
+            img_el = card.find("img", {"class": "s-image"})
+            thumb_url = img_el.get("src", "") if img_el else ""
+
+            affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+
+            results.append({
+                "id": asin,
+                "title": title,
+                "category": "Cozy Room Decor & Lighting",
+                "price": price_str or "$24.99",
+                "rating": str(rating_val),
+                "reviews_count": 250,
+                "affiliate_url": affiliate_url,
+                "original_image_url": thumb_url,
+                "features": [f"{rating_val} Amazon Rating", title[:45]]
+            })
+
+            if len(results) >= num_results:
+                break
+
+        return results
+    except Exception as e:
+        print(f"[Amazon Search Scraper Error] {e}")
+        return []
 
 
 # ---------------------------------------------------------------------------
@@ -316,9 +399,9 @@ def fetch_product_image_for_asin(asin: str, title: str = "") -> str:
     if res and res.get("image_url"):
         return res["image_url"]
 
-    # Fallback to direct Amazon CDN
+    # Fallback to constructable m.media-amazon.com URL (always resolvable, ASIN-specific)
     clean_asin = (asin or "").strip().upper()
-    return f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&ServiceVersion=20070822&MarketPlace=US&ID=AsinImage&WS=1&Format=_SL1500_&ASIN={clean_asin}"
+    return f"https://m.media-amazon.com/images/P/{clean_asin}.01.LZZZZZZZ.jpg"
 
 
 def _fetch_amazon_product_image(asin: str) -> str:
@@ -372,11 +455,13 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
         # Get thumbnail — google organic results rarely have this; scraper fills the gap
         image_url = item.get("thumbnail") or item.get("image") or item.get("original_image_url", "")
 
-        # Reject broken ad-widget tracker URLs and the 1x1 GIF ASIN-based pattern
+        # Reject broken ad-widget tracker URLs, 1x1 GIF patterns, and tiny resize thumbnails
         bad_url = (
             not image_url
             or "amazon-adsystem.com" in image_url
             or "ws-na.amazon" in image_url
+            or "_SP" in image_url          # tracking sprites (_SP100, _SP200)
+            or "_AC_SR" in image_url       # tiny resize tokens (_AC_SR38,50_ etc)
             or ("/images/P/" in image_url and ".01._" in image_url)
         )
         if bad_url and asin:

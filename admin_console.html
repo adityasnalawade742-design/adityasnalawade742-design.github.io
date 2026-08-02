@@ -592,8 +592,7 @@
                 const isValidThumb = Boolean(
                     item.thumbnail 
                     && typeof item.thumbnail === 'string' 
-                    && item.thumbnail.startsWith('http') 
-                    && !item.thumbnail.includes('amazon-adsystem')
+                    && (item.thumbnail.startsWith('http') || item.thumbnail.startsWith('/'))
                 );
                 
                 const fallbackUrl = `https://placehold.co/300x300/1e1a2e/ffb703?text=${encodeURIComponent(titleStr.substring(0, 25))}`;
@@ -605,24 +604,65 @@
                 const card = document.createElement('div');
                 card.id = `card-${asin}`;
                 card.className = 'product-card';
+                const safeSrc = thumbSrc.replace(/"/g, '%22');
+                const safeFallback = fallbackUrl.replace(/"/g, '%22');
                 card.innerHTML = `
                     <div class="product-thumb-wrap" style="position:relative;">
-                        <img src="${escapeHTML(thumbSrc)}"
+                        <img src="${safeSrc}"
                              id="thumb-${escapeHTML(asin)}"
                              data-asin="${escapeHTML(asin)}"
                              class="product-thumb"
-                             onerror="this.src='${escapeHTML(fallbackUrl)}';this.onerror=null;" />
+                             referrerpolicy="no-referrer"
+                             onerror="this.src='${safeFallback}';this.onerror=null;" />
                         ${alreadyLive ? '<div style="position:absolute;top:6px;left:6px;background:rgba(16,185,129,0.92);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:10px;">🏠 LIVE</div>' : ''}
+                        <button onclick="dismissProduct(event, '${escapeHTML(asin)}', '${escapeHTML(titleStr).replace(/'/g, "\\'")}')"
+                                title="Dismiss product (never show again & delete image)"
+                                style="position:absolute;top:6px;right:6px;background:rgba(239,68,68,0.85);color:#fff;border:none;border-radius:10px;padding:3px 7px;font-size:11px;font-weight:800;cursor:pointer;z-index:5;transition:transform 0.1s;"
+                                onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1.0)'">
+                            🚫
+                        </button>
                     </div>
                     <div class="product-title">${escapeHTML(titleStr)}</div>
                     <div class="product-price">${escapeHTML(item.price || '$19.99')}</div>
                     <div id="badge-${asin}" class="check-badge" style="display:none;">✓</div>
                 `;
-                card.onclick = () => toggleSelectProduct(asin, card);
+                card.onclick = (e) => {
+                    if (e.target.tagName === 'BUTTON') return;
+                    toggleSelectProduct(asin, card);
+                };
                 grid.appendChild(card);
             });
             document.getElementById('n8nStep1Footer').style.display = 'block';
             updateSelectedCounter();
+        }
+
+        function dismissProduct(event, asin, title) {
+            if (event) event.stopPropagation();
+            const card = document.getElementById(`card-${asin}`);
+            if (card) {
+                card.style.opacity = '0.3';
+                card.style.pointerEvents = 'none';
+            }
+            fetch('/api/reject_product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ asin, title, reason: 'user_dismiss_card' })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast(`Dismissed ${asin} — added to Rejected Excel registry & raw image deleted.`, '🚫');
+                    if (card) card.remove();
+                    if (n8nSelectedAsins.has(asin)) {
+                        n8nSelectedAsins.delete(asin);
+                        updateSelectedCounter();
+                    }
+                }
+            })
+            .catch(err => {
+                if (card) card.style.opacity = '1';
+                showToast('Failed to dismiss product: ' + err, '❌');
+            });
         }
 
         function autoFetchImageForCard(asin, imgEl) {
@@ -740,19 +780,22 @@
                 const row = document.createElement('div');
                 row.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;';
                 
-                const photosHtml = (item.photos || []).map((ph, idx) => `
-                    <div onclick="selectOverridePhoto('${asin}', '${escapeHTML(ph.url)}')"
-                         style="flex:0 0 110px;cursor:pointer;border-radius:14px;overflow:hidden;border:3px solid ${ph.url === n8nChosenPhotos[asin] ? 'var(--gold-primary)' : 'rgba(255,255,255,0.15)'};position:relative;transition:all 0.2s;">
-                        <img src="${escapeHTML(ph.url)}" style="width:110px;height:110px;object-fit:cover;display:block;" />
+                const photosHtml = (item.photos || []).map((ph, idx) => {
+                    const phSrc = (ph.url || '').replace(/"/g, '%22');
+                    const isChosen = ph.url === n8nChosenPhotos[asin];
+                    return `
+                    <div onclick="selectOverridePhoto('${asin}', '${phSrc}')"
+                         style="flex:0 0 110px;cursor:pointer;border-radius:14px;overflow:hidden;border:3px solid ${isChosen ? 'var(--gold-primary)' : 'rgba(255,255,255,0.15)'};position:relative;transition:all 0.2s;">
+                        <img src="${phSrc}" style="width:110px;height:110px;object-fit:cover;display:block;" referrerpolicy="no-referrer" />
                         <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.75);font-size:10px;font-weight:800;text-align:center;padding:3px;color:${ph.is_clean ? '#4ade80' : '#f87171'}">${ph.is_clean ? '✓ CLEAN' : '✗ BAD'}</div>
-                        ${ph.url === n8nChosenPhotos[asin] ? '<div style="position:absolute;top:4px;right:4px;background:var(--gold-primary);color:#000;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;">PICK ✓</div>' : ''}
+                        ${isChosen ? '<div style="position:absolute;top:4px;right:4px;background:var(--gold-primary);color:#000;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;">PICK ✓</div>' : ''}
                     </div>
-                `).join('');
+                `}).join('');
 
                 row.innerHTML = `
                     <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
                         <div style="flex:0 0 auto;text-align:center;">
-                            <img src="${escapeHTML(n8nChosenPhotos[asin] || '')}" id="prev-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:16px;border:3px solid var(--gold-primary);" />
+                            <img src="${(n8nChosenPhotos[asin] || '').replace(/"/g, '%22')}" id="prev-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:16px;border:3px solid var(--gold-primary);" referrerpolicy="no-referrer" />
                             <div style="font-size:12px;color:var(--gold-primary);font-weight:800;margin-top:6px;">Chosen Photo</div>
                         </div>
                         <div style="flex:1;min-width:200px;">

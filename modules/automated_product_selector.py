@@ -138,3 +138,33 @@ def get_next_automated_product() -> dict:
     print("[Automated Selector] All queued Home Decor products are currently published on the homepage!")
     return None
 
+
+def cleanup_unselected_raw_images() -> int:
+    """
+    Deletes any raw_images/raw_{ASIN}.jpg files that belong to unchosen search results 
+    (ASINs not currently published on index.html or in product_price_registry.json).
+    Returns the count of cleaned up files.
+    """
+    active_asins = get_active_homepage_asins()
+    raw_dir = PROJECT_ROOT / "raw_images"
+    if not raw_dir.exists():
+        return 0
+
+    cleaned_count = 0
+    for file_path in raw_dir.glob("raw_*.jpg"):
+        m = re.search(r"raw_([A-Z0-9]{10})\.jpg", file_path.name, re.IGNORECASE)
+        if m:
+            asin = m.group(1).upper()
+            if asin not in active_asins:
+                try:
+                    file_path.unlink()
+                    cleaned_count += 1
+                    print(f"[Cleanup] Purged unchosen raw image: {file_path.name}")
+                except Exception as e:
+                    print(f"[Cleanup Error] Could not delete {file_path.name}: {e}")
+
+    if cleaned_count > 0:
+        print(f"[Cleanup] Successfully purged {cleaned_count} unchosen raw image files from disk!")
+    return cleaned_count
+
+

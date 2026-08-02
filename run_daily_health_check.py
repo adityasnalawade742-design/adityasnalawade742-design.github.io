@@ -116,6 +116,14 @@ if index_modified or healed_count > 0:
     except Exception as e_git:
         print(f"⚠️ Git push after health-check warning: {e_git}")
 
+try:
+    from modules.automated_product_selector import cleanup_unselected_raw_images
+    purged = cleanup_unselected_raw_images()
+    if purged > 0:
+        print(f"  🧹 Auto-Purged {purged} unchosen scratch images from raw_images/")
+except Exception as e_cln:
+    print(f"⚠️ Image cleanup warning: {e_cln}")
+
 print(f"\n=========================================================================")
 print(f"🏆 ZERO-DRIFT HEALTH CHECK COMPLETE: Healed {healed_count} items!")
 print(f"=========================================================================")
