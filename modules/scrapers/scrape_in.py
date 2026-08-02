@@ -54,8 +54,8 @@ def scrape_in_prices():
                             base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
                             if val <= (base_usd * 150.0):
                                 price_str = f"₹{val:,.2f}"
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"  ⚠️ India scrape error for {asin}: {e}")
 
             if price_str:
                 item["regional_prices"]["IN"] = price_str

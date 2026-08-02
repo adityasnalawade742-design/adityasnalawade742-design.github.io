@@ -25,7 +25,7 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     print("🤖 === N8N TRIGGERED PINTEREST AFFILIATE PIPELINE ===")
     
     if asin and not amazon_url:
-        amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
+        amazon_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
     
     if asin and is_asin_published_on_homepage(asin):
         msg = f"⚠️ ASIN {asin} is already published on the homepage. Skipping generation until it is deleted from the homepage."
@@ -95,7 +95,7 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         image_path=raw_image_path,
         headline=headline,
         subtitle=seo_data.get("subtitle_hook") or "",
-        badge_text=seo_data.get("badge_hook") or "RAINBOW MAKER",
+        badge_text=seo_data.get("badge_hook") or "VIRAL ROOM FIND",
         price_str=prod['price'],
         features=seo_data.get("features"),
         output_path=hook_img_path,

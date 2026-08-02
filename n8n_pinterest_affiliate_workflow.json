@@ -133,7 +133,7 @@
           "string": [
             {
               "name": "result",
-              "value": "={{ 'Pin posted for ' + $json.final_asin + ' — Pin ID: ' + ($json.id || 'N/A') + ' | Bridge: ' + $json.final_bridge_url }}"
+              "value": "={{ 'Pin posted for ' + ($node['4. Merge — Combine SEO Copy + Bridge URL + Image URL'].json.final_asin || $json.final_asin || 'N/A') + ' — Pin ID: ' + ($json.id || 'N/A') + ' | Bridge: ' + ($node['4. Merge — Combine SEO Copy + Bridge URL + Image URL'].json.final_bridge_url || $json.final_bridge_url || '') }}"
             }
           ]
         },

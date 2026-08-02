@@ -81,8 +81,8 @@ def scrape_extended_domains():
                             w = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
                             if w.isdigit():
                                 price_str = f"{symbol}{w}"
-                except Exception:
-                    pass
+                except Exception as e:
+                    print(f"  ⚠️ {cc} scrape error for {asin}: {e}")
 
                 if price_str:
                     item["regional_prices"][cc] = price_str
