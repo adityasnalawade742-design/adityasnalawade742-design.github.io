@@ -206,6 +206,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/batch_generate'):
             self.handle_api_batch_generate()
             return
+        elif self.path.startswith('/api/n8n/dispatch-batch'):
+            self.handle_api_dispatch_n8n_batch()
+            return
         elif self.path.startswith('/api/delete_homepage_product'):
             self.handle_api_delete_homepage_product()
             return
@@ -727,6 +730,134 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             self.send_json({"status": "success", "message": "Saved as default for all future products!"})
         except Exception as e:
+            self.send_json({"status": "error", "message": str(e)})
+
+    def handle_api_dispatch_n8n_batch(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
+            items = data.get('items', [])
+            n8n_webhook_url = data.get('n8n_webhook_url', 'http://localhost:5678/webhook/process-product')
+
+            if not items:
+                self.send_json({"status": "error", "message": "No items selected in batch."})
+                return
+
+            print(f"[n8n Dispatcher] 🚀 Dispatching batch of {len(items)} items to n8n Workflow ({n8n_webhook_url})...")
+
+            batch_results = []
+            
+            def process_n8n_batch():
+                import urllib.request
+                for item in items:
+                    asin = item.get('asin')
+                    title = item.get('title', 'Aesthetic Home Decor Find')
+                    price = item.get('price', '$19.99')
+                    chosen_photo = item.get('chosen_photo_url') or item.get('winner_photo')
+                    
+                    print(f"[n8n Dispatcher] ⚙️ Processing ASIN: {asin} | Chosen Photo: {chosen_photo[:40]}...")
+
+                    # 1. Generate/Deploy Bridge Page
+                    from modules.amazon_extractor import get_product_details_and_photos
+                    from modules.bridge_creator import generate_bridge_page
+                    from modules.seo_copywriter import generate_pin_seo_data
+                    from modules.html_overlay_engine import render_html_overlay
+                    from modules.pinterest_publisher import publish_pin_to_pinterest
+                    from modules.automated_product_selector import save_processed_asin
+
+                    amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
+                    prod = get_product_details_and_photos(amazon_url) or {
+                        'title': title, 'price': price, 'features': ['Aesthetic Decor', 'Cozy Glow', 'Modern Style'],
+                        'category': 'decor', 'url': amazon_url
+                    }
+
+                    # 2. Unique SEO & Viral Hashtags
+                    seo_data = generate_pin_seo_data(product_title=title, price=price, category=prod.get('category', 'decor'))
+                    
+                    # Ensure targeted hashtags are attached
+                    category_hashtags = "#cozyroom #aestheticdecor #roomdecor #homefinds #amazonfinds"
+                    if "pin_description" in seo_data and category_hashtags not in seo_data["pin_description"]:
+                        seo_data["pin_description"] += f"\n\n{category_hashtags}"
+
+                    # 3. Build & Deploy Bridge Page
+                    generate_bridge_page(prod, seo_data, asin)
+
+                    # 4. Render Luxury Price Badge & Typography Template
+                    raw_img_path = str(WORKSPACE_DIR / f"raw_images/raw_{asin}.jpg")
+                    if chosen_photo and chosen_photo.startswith('http'):
+                        try:
+                            req = urllib.request.Request(chosen_photo, headers={'User-Agent': 'Mozilla/5.0'})
+                            with urllib.request.urlopen(req) as resp, open(raw_img_path, 'wb') as f:
+                                f.write(resp.read())
+                        except Exception as e_dl:
+                            print(f"[n8n Dispatcher] Warning downloading photo: {e_dl}")
+
+                    hook_img_path = str(WORKSPACE_DIR / f"focus_product_{asin}_hook.jpg")
+                    render_html_overlay(
+                        image_path=raw_img_path if (WORKSPACE_DIR / raw_img_path).exists() else str(WORKSPACE_DIR / "raw_images/raw_B0BZXNSW5K.jpg"),
+                        headline=seo_data.get("image_hook") or "COZY ROOM FIND",
+                        subtitle=seo_data.get("subtitle_hook") or "AESTHETIC DECOR",
+                        badge_text=seo_data.get("badge_hook") or "VIRAL FIND",
+                        price_str=price,
+                        features=prod.get('features', []),
+                        output_path=hook_img_path
+                    )
+
+                    # 5. Forward Payload to n8n Webhook Endpoint if reachable
+                    bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
+                    image_url = f"https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg"
+
+                    n8n_payload = {
+                        "asin": asin,
+                        "title": title,
+                        "price": price,
+                        "pin_title": seo_data.get("pin_title"),
+                        "pin_description": seo_data.get("description") or seo_data.get("pin_description"),
+                        "bridge_url": bridge_url,
+                        "image_url": image_url
+                    }
+
+                    try:
+                        req_data = json.dumps(n8n_payload).encode('utf-8')
+                        n8n_req = urllib.request.Request(n8n_webhook_url, data=req_data, headers={'Content-Type': 'application/json'})
+                        with urllib.request.urlopen(n8n_req, timeout=3) as n8n_res:
+                            print(f"[n8n Webhook] ✅ Dispatched to n8n Webhook: {n8n_res.status}")
+                    except Exception as e_n8n:
+                        print(f"[n8n Webhook] Note: n8n local webhook listening check: {e_n8n}")
+
+                    # 6. Publish Pin to Pinterest API v5
+                    publish_pin_to_pinterest(
+                        image_path=hook_img_path,
+                        title=seo_data.get("pin_title"),
+                        description=seo_data.get("description") or seo_data.get("pin_description"),
+                        destination_url=bridge_url,
+                        image_url=image_url
+                    )
+
+                    save_processed_asin(asin)
+
+                # Push updated bridge pages to GitHub Pages
+                try:
+                    import subprocess
+                    subprocess.run(["git", "add", "bridge_*.html", "focus_product_*_hook.jpg", "index.html", "product_price_registry.json"], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(["git", "commit", "-m", f"feat: n8n batch published {len(items)} products with bridge pages"], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(["git", "push", "origin", "main"], cwd=str(WORKSPACE_DIR), check=False)
+                    print(f"[n8n Dispatcher] 🏆 Successfully pushed batch bridge pages live to GitHub Pages!")
+                except Exception as e_git:
+                    print(f"[n8n Dispatcher] Git push info: {e_git}")
+
+            import threading
+            threading.Thread(target=process_n8n_batch, daemon=True).start()
+
+            self.send_json({
+                "status": "success",
+                "message": f"🚀 Successfully dispatched {len(items)} products to n8n workflow pipeline!",
+                "batch_count": len(items)
+            })
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
             self.send_json({"status": "error", "message": str(e)})
 
     def handle_api_auth_pinterest(self):

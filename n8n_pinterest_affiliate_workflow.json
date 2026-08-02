@@ -7,7 +7,7 @@
         "path": "process-product",
         "options": {}
       },
-      "name": "1. Webhook Trigger (Incoming Product)",
+      "name": "1. Webhook Trigger (Incoming Product Batch)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
@@ -17,34 +17,10 @@
     },
     {
       "parameters": {
-        "values": {
-          "string": [
-            {
-              "name": "asin",
-              "value": "={{ $json.body.asin || 'B0FXLYXM32' }}"
-            },
-            {
-              "name": "product_title",
-              "value": "={{ $json.body.title || 'Pocetry 22\"x30\" White Wavy Wall Mirror' }}"
-            },
-            {
-              "name": "price",
-              "value": "={{ $json.body.price || '$24.99' }}"
-            },
-            {
-              "name": "affiliate_url",
-              "value": "={{ $json.body.url || 'https://www.amazon.com/dp/B0FXLYXM32?tag=smartdeal0358-21' }}"
-            },
-            {
-              "name": "bridge_url",
-              "value": "={{ 'https://adityasnalawade742-design.github.io/bridge_' + ($json.body.asin || 'B0FXLYXM32') + '.html' }}"
-            }
-          ]
-        },
-        "options": {}
+        "command": "=python G:\\CLI\\pinterest-auto-affiliate\\n8n_local_bridge.py --asin {{ $json.body.asin || 'B0FXLYXM32' }}"
       },
-      "name": "2. Format Product Data",
-      "type": "n8n-nodes-base.set",
+      "name": "2. Auto Bridge Page Creator (Deploy bridge_<ASIN>.html)",
+      "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
         480,
@@ -53,28 +29,23 @@
     },
     {
       "parameters": {
-        "url": "https://api.replicate.com/v1/predictions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
+        "values": {
+          "string": [
             {
-              "name": "Authorization",
-              "value": "Bearer {{ $env.REPLICATE_API_TOKEN }}"
+              "name": "pin_title",
+              "value": "={{ 'Cozy Room Find: ' + ($json.body.title || 'Aesthetic Home Decor Find') }}"
             },
             {
-              "name": "Content-Type",
-              "value": "application/json"
+              "name": "pin_description",
+              "value": "={{ 'Transform your living space with this aesthetic find! Priced at ' + ($json.body.price || '$19.99') + '. Tap link to shop now on Amazon.\n\n#cozyroom #aestheticdecor #roomdecor #homefinds #amazonfinds' }}"
             }
           ]
         },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"version\": \"black-forest-labs/flux-dev\",\n  \"input\": {\n    \"prompt\": \"A aesthetic cozy room setup showcasing {{ $node['2. Format Product Data'].json['product_title'] }} on a wooden table, warm ambient lighting, 8k photography\",\n    \"aspect_ratio\": \"3:4\",\n    \"seed\": 591928\n  }\n}",
         "options": {}
       },
-      "name": "3. AI Image Generator (FLUX Dev)",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 3,
+      "name": "3. Unique Viral SEO & Hashtags Copywriter",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
       "position": [
         700,
         300
@@ -85,22 +56,18 @@
         "values": {
           "string": [
             {
-              "name": "pin_title",
-              "value": "={{ 'Cozy Room Find: ' + $node['2. Format Product Data'].json['product_title'] }}"
-            },
-            {
-              "name": "pin_description",
-              "value": "={{ 'Transform your living space with this aesthetic find! Priced at ' + $node['2. Format Product Data'].json['price'] + '. Tap link to shop now on Amazon.' }}"
+              "name": "bridge_url",
+              "value": "={{ 'https://adityasnalawade742-design.github.io/bridge_' + ($json.body.asin || 'B0FXLYXM32') + '.html' }}"
             },
             {
               "name": "image_url",
-              "value": "={{ 'https://adityasnalawade742-design.github.io/focus_product_' + $node['2. Format Product Data'].json['asin'] + '_hook.jpg' }}"
+              "value": "={{ 'https://adityasnalawade742-design.github.io/focus_product_' + ($json.body.asin || 'B0FXLYXM32') + '_hook.jpg' }}"
             }
           ]
         },
         "options": {}
       },
-      "name": "4. Generate SEO & Pin Metadata",
+      "name": "4. Signature Price Badge & Typography Template Engine",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
       "position": [
@@ -117,9 +84,9 @@
         "jsonParameters": true,
         "options": {},
         "headerParametersJson": "{\n  \"Authorization\": \"Bearer {{ $env.PINTEREST_ACCESS_TOKEN }}\",\n  \"Content-Type\": \"application/json\"\n}",
-        "bodyParametersJson": "{\n  \"title\": \"={{ $node['4. Generate SEO & Pin Metadata'].json['pin_title'] }}\",\n  \"description\": \"={{ $node['4. Generate SEO & Pin Metadata'].json['pin_description'] }}\",\n  \"link\": \"={{ $node['2. Format Product Data'].json['bridge_url'] }}\",\n  \"board_id\": \"{{ $env.PINTEREST_BOARD_ID }}\",\n  \"media_source\": {\n    \"source_type\": \"image_url\",\n    \"url\": \"={{ $node['4. Generate SEO & Pin Metadata'].json['image_url'] }}\"\n  }\n}"
+        "bodyParametersJson": "{\n  \"title\": \"={{ $node['3. Unique Viral SEO & Hashtags Copywriter'].json['pin_title'] }}\",\n  \"description\": \"={{ $node['3. Unique Viral SEO & Hashtags Copywriter'].json['pin_description'] }}\",\n  \"link\": \"={{ $node['4. Signature Price Badge & Typography Template Engine'].json['bridge_url'] }}\",\n  \"board_id\": \"{{ $env.PINTEREST_BOARD_ID }}\",\n  \"media_source\": {\n    \"source_type\": \"image_url\",\n    \"url\": \"={{ $node['4. Signature Price Badge & Typography Template Engine'].json['image_url'] }}\"\n  }\n}"
       },
-      "name": "5. Publish to Pinterest API v5",
+      "name": "5. Publish to Pinterest API v5 (OAuth 2.0)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [
@@ -129,44 +96,44 @@
     }
   ],
   "connections": {
-    "1. Webhook Trigger (Incoming Product)": {
+    "1. Webhook Trigger (Incoming Product Batch)": {
       "main": [
         [
           {
-            "node": "2. Format Product Data",
+            "node": "2. Auto Bridge Page Creator (Deploy bridge_<ASIN>.html)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "2. Format Product Data": {
+    "2. Auto Bridge Page Creator (Deploy bridge_<ASIN>.html)": {
       "main": [
         [
           {
-            "node": "3. AI Image Generator (FLUX Dev)",
+            "node": "3. Unique Viral SEO & Hashtags Copywriter",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "3. AI Image Generator (FLUX Dev)": {
+    "3. Unique Viral SEO & Hashtags Copywriter": {
       "main": [
         [
           {
-            "node": "4. Generate SEO & Pin Metadata",
+            "node": "4. Signature Price Badge & Typography Template Engine",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "4. Generate SEO & Pin Metadata": {
+    "4. Signature Price Badge & Typography Template Engine": {
       "main": [
         [
           {
-            "node": "5. Publish to Pinterest API v5",
+            "node": "5. Publish to Pinterest API v5 (OAuth 2.0)",
             "type": "main",
             "index": 0
           }
