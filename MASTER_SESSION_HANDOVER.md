@@ -11,38 +11,41 @@
 
 ---
 
-## 1. Executive Summary & Core Achievements
+## 1. Last Session Summary (August 2, 2026)
 
-This session completed a **100% comprehensive audit, legal compliance hardening, and Pinterest API Standard Access re-application blueprint** for the platform.
+This session completed a **full n8n workflow redesign** — a new 3-step "Send to n8n" pipeline was built directly into the Web Console.
 
-### Key Achievements:
-1. **Resolved 100% of Pinterest Support Rejection Points (Nana's Email)**:
-   - **Company & App Name Mismatch**: Matched across [index.html](file:///G:/CLI/pinterest-auto-affiliate/index.html), [privacy-policy.html](file:///G:/CLI/pinterest-auto-affiliate/privacy-policy.html), [terms-of-service.html](file:///G:/CLI/pinterest-auto-affiliate/terms-of-service.html), and all 9 landing pages:
-     - **Company Name**: `Cozy Room Finds`
-     - **App Name**: `Cozy Room Decor Publisher Pro`
-   - **Missing Contact Email**: Added high-visibility email badge box displaying **`aditya.s.nalawade742@gmail.com`** (100% matched with Pinterest Business Account `@adityasnalawade0703`).
-   - **Perfect 10/10 Demo Video Script**: Created a user-experience & policy-compliance focused 3.5-minute video guide in [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md) featuring 60s dedicated to the uncropped browser OAuth connection flow, 10s permission hold, live redirect, connected account verification, live camera board refresh, and explicit authorization statement.
+### Key Achievements This Session:
+1. **New "📌 Send to n8n" Tab added to `admin_console.html`**:
+   - **Step 1**: User searches Amazon (any keyword, any count 1–20), gets a product grid, clicks to select/deselect products.
+   - **Step 2**: System extracts all listing photos per product. Auto-selects the best clean photo (AI pick). User can click any image to override the selection. Green ✓ CLEAN / Red ✗ BAD badge on each photo.
+   - **Step 3**: Clicks "Send to n8n Workflow" button → preps batch (downloads photos, generates unique SEO copy per product) → fires to n8n webhook → shows live status row per product.
 
-2. **Legal & Compliance Infrastructure**:
-   - Created brand-new [`terms-of-service.html`](file:///G:/CLI/pinterest-auto-affiliate/terms-of-service.html) live on GitHub Pages.
-   - Updated [`privacy-policy.html`](file:///G:/CLI/pinterest-auto-affiliate/privacy-policy.html) Section 5 and footer credits.
-   - Added single high-visibility glowing gold email badge pill across footers (`aditya.s.nalawade742@gmail.com`).
+2. **Two new Python endpoints added to `web_console_server.py`**:
+   - `POST /api/prepare_n8n_batch` — packages user-confirmed product+image selections, downloads chosen photos locally, generates unique SEO copy, returns structured payload for n8n.
+   - `POST /api/create_bridge_page` — called by n8n per-product, builds `bridge_{ASIN}.html` + renders `focus_product_{ASIN}_hook.jpg`, git-pushes live to GitHub Pages, returns `bridge_url` + `hook_image_url` back to n8n.
 
-3. **Submodule & GitHub Pages Build Self-Healing**:
-   - Fixed `mode 160000` nested submodule build failure by removing `github_pages` from tracking and updating `.gitignore`.
-   - Verified 100% automated green deployments on GitHub Pages.
+3. **Full n8n workflow JSON redesigned (`n8n_pinterest_affiliate_workflow.json`)**:
+   - Now has 6 nodes (was 5):
+     - Node 1: Webhook (receives batch from Web Console)
+     - Node 1b: Immediate ACK response (prevents timeout)
+     - Node 2: Split Items (loops 1 product at a time)
+     - Node 3: HTTP POST → `localhost:5000/api/create_bridge_page` (builds bridge + hook image per product)
+     - Node 4: Set — merges bridge_url + hook_image_url + SEO copy
+     - Node 5: POST → Pinterest API v5 (publishes pin with bridge URL as destination)
+     - Node 6: Log result
 
-4. **Clean Slate Credential Security**:
-   - Removed old expired trial token (`pina_AMARAV...`) from [`.env`](file:///G:/CLI/pinterest-auto-affiliate/.env) to prepare for fresh trial credentials.
+4. **All changes committed and pushed to GitHub Pages**:
+   - Latest commit: `2f0dff9` — *feat: new n8n Send to n8n tab with 3-step product+image review workflow, bridge page builder endpoint, and redesigned 6-node n8n workflow*
 
 ---
 
 ## 2. Live Website & Legal URLs
 
-- **Main Storefront**: [https://adityasnalawade742-design.github.io/index.html](file:///G:/CLI/pinterest-auto-affiliate/index.html)
-- **Privacy Policy**: [https://adityasnalawade742-design.github.io/privacy-policy.html](file:///G:/CLI/pinterest-auto-affiliate/privacy-policy.html)
-- **Terms of Service**: [https://adityasnalawade742-design.github.io/terms-of-service.html](file:///G:/CLI/pinterest-auto-affiliate/terms-of-service.html)
-- **Sitemap XML**: [https://adityasnalawade742-design.github.io/sitemap.xml](file:///G:/CLI/pinterest-auto-affiliate/sitemap.xml)
+- **Main Storefront**: [https://adityasnalawade742-design.github.io/index.html](https://adityasnalawade742-design.github.io/index.html)
+- **Privacy Policy**: [https://adityasnalawade742-design.github.io/privacy-policy.html](https://adityasnalawade742-design.github.io/privacy-policy.html)
+- **Terms of Service**: [https://adityasnalawade742-design.github.io/terms-of-service.html](https://adityasnalawade742-design.github.io/terms-of-service.html)
+- **Sitemap XML**: [https://adityasnalawade742-design.github.io/sitemap.xml](https://adityasnalawade742-design.github.io/sitemap.xml)
 
 ---
 
@@ -52,6 +55,7 @@ When creating a new app on [developers.pinterest.com/apps/](https://developers.p
 
 - **App Name**: `Cozy Room Decor Publisher Pro`
 - **Company Name**: `Cozy Room Finds`
+- **App ID**: `1596368`
 - **Company Website**: `https://adityasnalawade742-design.github.io/index.html`
 - **Privacy Policy Link**: `https://adityasnalawade742-design.github.io/privacy-policy.html`
 - **App Purpose**: `Personal API access (single, personal use)`
@@ -59,21 +63,34 @@ When creating a new app on [developers.pinterest.com/apps/](https://developers.p
 - **Use Cases**: Check **Pin creation & scheduling**
 - **Audience**: Check **Creators** & **Pinners**
 - **Reads Pins/Boards**: Select **Yes, mine**
+- **Pinterest Business Account**: `@adityasnalawade0703`
+- **Target Board ID**: `1092545259543920271` *(Cozy Room & Desk Decor)*
+- **Developer Contact Email**: `aditya.s.nalawade742@gmail.com`
 
 ---
 
-## 4. Master 10/10 Video Recording Blueprint
+## 4. How to Use the New n8n Workflow (Added August 2, 2026)
 
-Refer to [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md) for full script:
+### Step-by-step:
+1. Start the web console server:
+   ```powershell
+   python -u web_console_server.py
+   ```
+2. Open `http://localhost:5000` in browser.
+3. Click the **📌 Send to n8n** tab (red-tinted, top navigation).
+4. **Step 1**: Type a search keyword (e.g. "mushroom lamp"), set count (e.g. 10), click **Search Amazon**. Click product cards to select/deselect.
+5. **Step 2**: Click **Next: Review Images**. For each product, AI auto-picks best clean photo. Click any other image to override.
+6. **Step 3**: Click **Send to n8n Workflow**. System preps + fires to n8n. Status rows show per-product progress.
 
-- **Part 1 [0:00–0:20]**: Introduce App (`Cozy Room Decor Publisher Pro` by `Cozy Room Finds`).
-- **Part 2 [0:20–0:40]**: Show Website (Homepage, Privacy Policy, Terms, Contact Email).
-- **Part 3 [0:40–1:35]**: OAuth Authentication (Uncropped browser address bar ➔ `pinterest.com/oauth` ➔ Hold 8-10s on permissions ➔ Click Allow ➔ Live browser redirect ➔ Connected Successfully ➔ Authorization statement).
-- **Part 4 [1:35–1:45]**: Show Connected Account (`@adityasnalawade0703` for 3-5s).
-- **Part 5 [1:45–2:25]**: Publish a Pin (Show `Publishing...` ➔ `Success` transition).
-- **Part 6 [2:25–2:55]**: Refresh & Verify on Pinterest (Refresh browser on camera ➔ Show new Pin).
-- **Part 7 [2:55–3:25]**: Open Destination Landing Page (Click Pin link ➔ Show disclosures, privacy link, email).
-- **Finish [3:25]**: Closing statement thanking reviewer.
+### Import the workflow into n8n:
+1. Open n8n (`http://localhost:5678` or cloud)
+2. Workflows → Import from File
+3. Select `G:\CLI\pinterest-auto-affiliate\n8n_pinterest_affiliate_workflow.json`
+4. Set environment variables in n8n Settings:
+   - `PINTEREST_ACCESS_TOKEN` = your Pinterest Bearer token
+   - `PINTEREST_BOARD_ID` = `1092545259543920271`
+5. **Activate** the workflow (toggle ON)
+6. Webhook URL that Web Console calls: `http://localhost:5678/webhook/pinterest-batch`
 
 ---
 
@@ -97,6 +114,7 @@ python sync_exact_amazon_prices.py
 
 ## 6. Current Repository & Git State
 
-- **Latest Commit**: [`39d7353`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md)
+- **Latest Commit**: `2f0dff9` — feat: new n8n Send to n8n tab + bridge page builder endpoint + redesigned 6-node n8n workflow
 - **GitHub Pages Deployment Status**: 100% Active & Green.
-- **Affiliate Tag Compliance**: 100% verified across 72 outbound links.
+- **Affiliate Tag Compliance**: 100% verified across all outbound links.
+- **Working Tree**: Clean — nothing uncommitted.
