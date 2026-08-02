@@ -177,8 +177,16 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
 
         reviews = item.get("reviews", 150)
         image_url = item.get("thumbnail") or item.get("image") or item.get("original_image_url", "")
+        
+        # Pull real high-res Amazon listing hero image
         if not image_url and asin:
-            image_url = f"https://m.media-amazon.com/images/P/{asin}.01._SCLZZZZZZZ_.jpg"
+            details = get_product_details_and_photos(asin)
+            if details and details.get("original_image_url"):
+                image_url = details.get("original_image_url")
+            elif details and details.get("all_photos"):
+                image_url = details["all_photos"][0]
+            else:
+                image_url = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&MarketPlace=US&ASIN={asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL400_"
 
         affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
 
