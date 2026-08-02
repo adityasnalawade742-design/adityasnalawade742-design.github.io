@@ -5,7 +5,7 @@ from pathlib import Path
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-repo_dir = Path("G:/CLI/pinterest-auto-affiliate")
+repo_dir = Path(__file__).resolve().parent  # FIX: dynamic path, not hardcoded
 sys.path.append(str(repo_dir))
 
 from modules.html_overlay_engine import render_html_overlay

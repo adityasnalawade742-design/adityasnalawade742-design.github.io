@@ -10,6 +10,7 @@ import time
 import urllib.parse
 import subprocess
 import threading
+from collections import OrderedDict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
@@ -31,12 +32,16 @@ from modules.automated_product_selector import is_asin_published_on_homepage, sa
 
 PORT = 5000
 WORKSPACE_DIR = _PROJECT_ROOT  # C1 FIX: uses dynamic root above
-TASK_STATUS_MAP = {}
+TASK_STATUS_MAP = OrderedDict()  # OPT-2 FIX: OrderedDict for bounded eviction
+TASK_STATUS_MAX = 200            # OPT-2 FIX: evict oldest after 200 entries
 status_lock = threading.Lock()
 
 def update_task_status(key, data):
     with status_lock:
         TASK_STATUS_MAP[key] = data
+        # OPT-2 FIX: evict oldest entry if map exceeds max size
+        if len(TASK_STATUS_MAP) > TASK_STATUS_MAX:
+            TASK_STATUS_MAP.popitem(last=False)
 
 def get_task_status(key):
     with status_lock:
@@ -397,6 +402,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_sync_prices(self):
         try:
             def run_sync():
+                # BUG-8 FIX: reset status first so re-runs don't get instant false-positive 'completed'
+                update_task_status('global_sync', {'status': 'idle', 'message': 'Initializing...'})
                 update_task_status('global_sync', {'status': 'running', 'message': 'Launching 21-Domain Price Sync...'})
                 sync_script = str(WORKSPACE_DIR / "sync_all_regional_prices_master.py")
                 log_file_path = WORKSPACE_DIR / "server.log"
@@ -460,7 +467,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
     def handle_api_audit_links(self):
         try:
-            audit_script = str(WORKSPACE_DIR / "scratch" / "master_zero_404_audit.py")
+            # BUG-3 FIX: was pointing to non-existent scratch/master_zero_404_audit.py
+            audit_script = str(WORKSPACE_DIR / "validate_all_affiliate_urls.py")
             # BUG FIX: was blocking server thread — now runs in background, returns task key for polling
             task_key = 'audit_links'
             update_task_status(task_key, {'status': 'running', 'message': 'Audit started...'})
@@ -659,6 +667,15 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         data = json.loads(body.decode('utf-8'))
         asins = data.get('asins', [])
 
+        # BUG-1 FIX: load registry to get real title/price instead of generic placeholders
+        reg_path = WORKSPACE_DIR / "product_price_registry.json"
+        reg_data = {}
+        if reg_path.exists():
+            try:
+                reg_data = json.loads(reg_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
         from modules.amazon_extractor import fetch_all_product_images
 
         def _get_best_fallback_image(asin, title=''):
@@ -701,10 +718,11 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 if not winner_photo and photos:
                     winner_photo = photos[0]
 
+                meta = reg_data.get(asin, {})  # BUG-1 FIX: merge registry data
                 extracted_batch.append({
                     'asin': asin,
-                    'title': f'Product {asin}',
-                    'price': '$19.99',
+                    'title': meta.get('title') or f'Product {asin}',
+                    'price': (meta.get('current_price') or meta.get('regional_prices', {}).get('US') or '$19.99'),
                     'rating': '4.5',
                     'winner_photo': winner_photo or (photos[0] if photos else ''),
                     'should_skip': skip,
@@ -781,13 +799,17 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             body = self.rfile.read(content_length)
             data = json.loads(body.decode('utf-8'))
 
+            # BUG-2 FIX: load saved global defaults as fallback so user-saved settings are respected
+            defaults_path = WORKSPACE_DIR / "global_tag_defaults.json"
+            g_def = json.loads(defaults_path.read_text(encoding="utf-8")) if defaults_path.exists() else {}
+
             asin = data.get('asin')
-            tag_width = int(data.get('tag_width', 380))
-            tag_height = int(data.get('tag_height', 285))
-            tag_rotation = int(data.get('tag_rotation', -6))
+            tag_width = int(data.get('tag_width', g_def.get('tag_width', 380)))
+            tag_height = int(data.get('tag_height', g_def.get('tag_height', 514)))
+            tag_rotation = int(data.get('tag_rotation', g_def.get('tag_rotation', -6)))
             tag_color = data.get('tag_color', None)
             price_text_color = data.get('price_text_color', None)
-            price_font_scale = float(data.get('price_font_scale', 0.38))
+            price_font_scale = float(data.get('price_font_scale', g_def.get('price_font_scale', 0.24)))
             price_text_offset_x = int(data.get('price_text_offset_x', 0))
             price_text_offset_y = int(data.get('price_text_offset_y', 15))
             tag_pos_x = float(data['tag_pos_x']) if 'tag_pos_x' in data and data['tag_pos_x'] is not None else None

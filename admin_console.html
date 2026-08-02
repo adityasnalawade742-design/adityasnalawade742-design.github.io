@@ -534,6 +534,9 @@
         }
 
         function switchTab(tab) {
+            // BUG-7 FIX: stop any active status polling when leaving the n8n tab
+            if (_n8nStatusPollTimer) { clearInterval(_n8nStatusPollTimer); _n8nStatusPollTimer = null; }
+
             document.getElementById('tabN8nContent').style.display = tab === 'n8n' ? 'block' : 'none';
             document.getElementById('tabHomepageContent').style.display = tab === 'homepage' ? 'block' : 'none';
 
@@ -596,6 +599,9 @@
                 const fallbackUrl = `https://placehold.co/300x300/1e1a2e/ffb703?text=${encodeURIComponent(titleStr.substring(0, 25))}`;
                 const thumbSrc = isValidThumb ? item.thumbnail : fallbackUrl;
 
+                // BUG-11 FIX: show 'already published' badge so users don't re-select live products
+                const alreadyLive = item.is_already_published === true;
+
                 const card = document.createElement('div');
                 card.id = `card-${asin}`;
                 card.className = 'product-card';
@@ -606,6 +612,7 @@
                              data-asin="${escapeHTML(asin)}"
                              class="product-thumb"
                              onerror="this.src='${escapeHTML(fallbackUrl)}';this.onerror=null;" />
+                        ${alreadyLive ? '<div style="position:absolute;top:6px;left:6px;background:rgba(16,185,129,0.92);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:10px;">🏠 LIVE</div>' : ''}
                     </div>
                     <div class="product-title">${escapeHTML(titleStr)}</div>
                     <div class="product-price">${escapeHTML(item.price || '$19.99')}</div>
@@ -950,8 +957,12 @@
                 if (d.status === 'success') {
                     if (cardEl) cardEl.remove();
                     showToast(`Product ${asin} deleted!`, '✅');
+                } else {
+                    // BUG-6 FIX: show error toast instead of silently failing
+                    showToast(`Delete failed: ${d.message || 'Unknown error'}`, '❌');
                 }
-            });
+            })
+            .catch(err => showToast(`Network error: ${err}`, '❌'));
         }
 
         function loadMatrixTable() {

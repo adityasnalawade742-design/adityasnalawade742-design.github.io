@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-repo = Path("G:/CLI/pinterest-auto-affiliate")
+repo = Path(__file__).resolve().parent  # FIX: dynamic path, not hardcoded
 index_file = repo / "index.html"
 
 print("🔍 AUDITING ALL PRODUCTS ON HOMEPAGE & LANDING PAGES FOR AFFILIATE TAG 'smartdeal0358-21'...\n")

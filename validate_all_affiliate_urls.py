@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-repo = Path("G:/CLI/pinterest-auto-affiliate")
+repo = Path(__file__).resolve().parent  # FIX: dynamic path, not hardcoded
 bridge_files = sorted(list(repo.glob("bridge_*.html")))
 
 print("=========================================================================")

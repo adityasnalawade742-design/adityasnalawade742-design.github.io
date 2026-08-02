@@ -13,7 +13,7 @@ if hasattr(sys.stdout, "buffer"):
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 from modules.amazon_extractor import get_product_details_and_photos
-from modules.automated_product_selector import get_next_automated_product, save_processed_asin
+from modules.automated_product_selector import get_next_automated_product, save_processed_asin, is_asin_published_on_homepage
 from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
 from modules.html_overlay_engine import render_html_overlay
 from modules.vision_prompt import generate_cozy_image_prompt
