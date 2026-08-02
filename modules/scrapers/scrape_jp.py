@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-repo = Path("G:/CLI/pinterest-auto-affiliate")
+repo = Path(__file__).resolve().parent.parent.parent  # C6 FIX: dynamic path
 registry_file = repo / "product_price_registry.json"
 
 def scrape_jp_prices():

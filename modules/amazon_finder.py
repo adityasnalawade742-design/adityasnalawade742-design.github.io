@@ -12,7 +12,7 @@ from config import NICHE, AMAZON_ASSOCIATE_TAG, SERPAPI_KEY
 from modules.automated_product_selector import is_asin_published_on_homepage
 from modules.amazon_extractor import is_adult_aesthetic_product, select_clean_photo_or_skip, get_product_details_and_photos
 
-CACHE_FILE = Path("G:/CLI/pinterest-auto-affiliate/serpapi_cache.json")
+CACHE_FILE = Path(__file__).resolve().parent.parent / "serpapi_cache.json"  # C5 FIX: dynamic path
 
 TRENDING_PINTEREST_KEYWORDS = [
     "aesthetic glass mushroom table lamp",
@@ -180,7 +180,8 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
         
         # Pull real high-res Amazon listing hero image
         if not image_url and asin:
-            details = get_product_details_and_photos(asin)
+            amazon_url_for_details = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+            details = get_product_details_and_photos(amazon_url_for_details)  # M3 FIX: pass full URL not bare ASIN
             if details and details.get("original_image_url"):
                 image_url = details.get("original_image_url")
             elif details and details.get("all_photos"):
@@ -199,7 +200,11 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             "reviews_count": reviews,
             "affiliate_url": affiliate_url,
             "original_image_url": image_url,
-            "features": f"Highly rated {title} with {rating_num}★ stars and {reviews} customer reviews."
+            "features": [  # H3 FIX: must be a list, not a string
+                f"{rating_num}★ Amazon Rating",
+                f"{reviews} Customer Reviews",
+                title[:45]
+            ]
         })
 
         if len(parsed_products) >= num_results:

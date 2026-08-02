@@ -6,7 +6,7 @@ from pathlib import Path
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-repo = Path("G:/CLI/pinterest-auto-affiliate")
+repo = Path(__file__).resolve().parent  # C3 FIX: dynamic path
 
 print("=========================================================================")
 print("🚀 MASTER SEQUENTIAL REGIONAL PRICE SYNC & DIAGNOSTIC SUITE")
@@ -25,7 +25,7 @@ scrapers = [
 
 for name, script_path in scrapers:
     print(f"🔄 Executing Domain Scraper for {name}...")
-    res = subprocess.run(["python", script_path], cwd=str(repo), capture_output=True, text=True, encoding="utf-8", errors="replace")
+    res = subprocess.run([sys.executable, script_path], cwd=str(repo), capture_output=True, text=True, encoding="utf-8", errors="replace")  # M4 FIX: sys.executable ensures correct venv
     if res.returncode == 0:
         print(f"✅ {name} Scraping Finished Successfully.")
     else:

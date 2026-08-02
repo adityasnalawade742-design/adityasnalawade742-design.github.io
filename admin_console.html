@@ -419,6 +419,13 @@
                 </div>
 
                 <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;margin-bottom:20px;">
+                    <!-- M1 FIX: editable webhook URL so users don't need to touch source code -->
+                    <div style="margin-bottom:14px;">
+                        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;">n8n Webhook URL</label>
+                        <input id="n8nWebhookUrlInput" type="text" value="http://localhost:5678/webhook/pinterest-batch"
+                            style="width:100%;margin-top:6px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:12px;font-family:monospace;box-sizing:border-box;"
+                            placeholder="http://localhost:5678/webhook/pinterest-batch" />
+                    </div>
                     <div id="n8nStatusHeading" style="color:var(--gold-primary);font-size:16px;font-weight:800;margin-bottom:16px;">⏳ Dispatching batch to n8n...</div>
                     <div id="n8nStatusRows" style="display:flex;flex-direction:column;gap:12px;"></div>
                 </div>
@@ -487,7 +494,11 @@
         let n8nSelectedAsins = new Set();
         let n8nExtractedItems = [];
         let n8nChosenPhotos = {};
-        const n8nWebhookUrl = 'http://localhost:5678/webhook/pinterest-batch';
+        const N8N_WEBHOOK_DEFAULT = 'http://localhost:5678/webhook/pinterest-batch';
+        function getN8nWebhookUrl() {
+            const inp = document.getElementById('n8nWebhookUrlInput');
+            return (inp && inp.value.trim()) ? inp.value.trim() : N8N_WEBHOOK_DEFAULT;
+        }
 
         function escapeHTML(str) {
             if (!str) return '';
@@ -717,12 +728,18 @@
                 </div>
             `).join('');
 
+            const n8nWebhookUrl = getN8nWebhookUrl();
             try {
-                await fetch(n8nWebhookUrl, {
+                const n8nRes = await fetch(n8nWebhookUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ items: preparedItems })
                 });
+                // C8 FIX: fetch() doesn't throw on HTTP 4xx/5xx — must check .ok manually
+                if (!n8nRes.ok) {
+                    const errText = await n8nRes.text();
+                    throw new Error(`n8n returned HTTP ${n8nRes.status}: ${errText.slice(0, 120)}`);
+                }
                 document.getElementById('n8nStatusHeading').innerText = `✅ Batch of ${preparedItems.length} Products Dispatched to n8n!`;
                 document.getElementById('n8nStatusHeading').style.color = '#4ade80';
                 showToast(`Batch dispatched to n8n! ${preparedItems.length} Pins publishing.`, '📌');
@@ -815,7 +832,7 @@
                         card.className = 'product-card';
                         card.style.cursor = 'default';
                         card.innerHTML = `
-                            <img src="${escapeHTML(p.image)}" class="product-thumb" />
+                            <img src="${escapeHTML(p.image)}" class="product-thumb" onerror="this.src='https://placehold.co/200x200/12101a/ffb703?text=No+Hook+Image'" />  <!-- BUG I FIX: show placeholder if hook image missing -->
                             <div class="product-title">${escapeHTML(p.title)}</div>
                             <div class="product-price">${escapeHTML(p.price)}</div>
                             <div style="display:flex;gap:8px;margin-top:10px;">

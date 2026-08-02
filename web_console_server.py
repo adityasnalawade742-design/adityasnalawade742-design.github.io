@@ -16,7 +16,9 @@ from pathlib import Path
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(line_buffering=True, encoding="utf-8")
 
-sys.path.append("G:/CLI/pinterest-auto-affiliate")
+_PROJECT_ROOT = Path(__file__).resolve().parent  # C1 FIX: dynamic — works regardless of where project lives
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 from modules.amazon_extractor import (
     get_product_details_and_photos,
     select_clean_photo_or_skip,
@@ -28,7 +30,7 @@ from modules.amazon_finder import fetch_amazon_products, TRENDING_PINTEREST_KEYW
 from modules.automated_product_selector import is_asin_published_on_homepage, save_processed_asin
 
 PORT = 5000
-WORKSPACE_DIR = Path("G:/CLI/pinterest-auto-affiliate")
+WORKSPACE_DIR = _PROJECT_ROOT  # C1 FIX: uses dynamic root above
 TASK_STATUS_MAP = {}
 status_lock = threading.Lock()
 
@@ -67,7 +69,7 @@ def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt
         subtitle="",
         badge_text=seo_data.get('badge_hook', "VIRAL ROOM FIND"),
         price_str=prod['price'],
-        features=prod.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]),
+        features=seo_data.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]),  # BUG H FIX: use product-specific features from seo_copywriter
         output_path=hook_img_path
     )
     generate_bridge_page(prod, seo_data, asin)
@@ -336,13 +338,25 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
         try:
             from modules.html_overlay_engine import render_html_overlay
+            import urllib.request as _urlreq
             scratch_dir = WORKSPACE_DIR / "scratch"
             scratch_dir.mkdir(parents=True, exist_ok=True)
             preview_img = scratch_dir / "preview_overlay.jpg"
 
+            # BUG C FIX: render_html_overlay expects a LOCAL file path, not a remote URL.
+            # Download the remote image to a temp file first if it is a URL.
+            if image_url.startswith('http'):
+                tmp_src = scratch_dir / "preview_source_tmp.jpg"
+                req = _urlreq.Request(image_url, headers={'User-Agent': 'Mozilla/5.0'})
+                with _urlreq.urlopen(req, timeout=12) as resp:
+                    tmp_src.write_bytes(resp.read())
+                local_image_path = str(tmp_src)
+            else:
+                local_image_path = image_url  # already a local path
+
             # BUG 2 FIX: pass features= and output_path= as kwargs to avoid positional mismatch
             render_html_overlay(
-                image_path=image_url,
+                image_path=local_image_path,
                 headline=title,
                 subtitle=subtitle,
                 badge_text=badge,
@@ -514,8 +528,12 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             return
 
         if target.startswith('http'):
+            # BUG G FIX: return a clear error instead of silently using a hardcoded fallback ASIN
+            if '/dp/' not in target:
+                self.send_json({'status': 'error', 'message': 'Invalid URL — must contain /dp/{ASIN}. Please paste a direct Amazon product URL (e.g. https://www.amazon.com/dp/B0DZD1X83N).'})
+                return
             amazon_url = target
-            asin = target.split('/dp/')[1].split('?')[0].split('/')[0] if '/dp/' in target else 'B0DZD1X83N'
+            asin = target.split('/dp/')[1].split('?')[0].split('/')[0]
         else:
             asin = target.upper()
             amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
@@ -577,14 +595,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 prod = get_product_details_and_photos(amazon_url)
 
                 # BUG 3 FIX: when SerpAPI quota is exhausted and BS4 scrape fails,
-                # construct known high-res CDN URLs directly so Step 2 always has at least 1 photo.
+                # construct a known valid CDN URL so Step 2 always has at least 1 photo.
                 if not prod or not prod.get('all_photos'):
                     print(f"[Batch Extract] SerpAPI/scrape returned no photos for {asin}. Using CDN fallback.")
+                    # BUG B FIX: The media-amazon URLs require a real IMAGE ID, not the ASIN.
+                    # Using the ASIN directly generates 404s. Only the ws-na widget URL is reliably valid.
                     cdn_base = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&MarketPlace=US&ASIN={asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL1500_"
                     fallback_photos = [cdn_base]
-                    # Also try standard media-amazon pattern (commonly works without API)
-                    for suffix in ["_SL1500_", "_SX679_", "_SX425_"]:
-                        fallback_photos.append(f"https://m.media-amazon.com/images/I/{asin}._AC_{suffix}.jpg")
                     prod = prod or {
                         'title': f'Product {asin}',
                         'price': '$19.99',
@@ -721,7 +738,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             raw_img = meta.get('raw_image') or f"raw_images/raw_{asin}.jpg"
             raw_full = WORKSPACE_DIR / raw_img
             if not raw_full.exists():
-                raw_img = "raw_images/birds_cute.jpg" if asin == "B0D8P8CSYP" else "raw_images/raw_B0BZXNSW5K.jpg"
+                # BUG D FIX: Use consistent raw_{ASIN}.jpg pattern. birds_cute.jpg doesn't exist.
+                raw_img = f"raw_images/raw_{asin}.jpg"
+                if not (WORKSPACE_DIR / raw_img).exists():
+                    raw_img = "raw_images/raw_B0BZXNSW5K.jpg"  # last-resort generic fallback
 
             output_img = meta.get('hook_image') or f"focus_product_{asin}_hook.jpg"
 
@@ -879,7 +899,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     'image_hook': seo.get('image_hook', title[:30]),
                     'bridge_url': f'https://adityasnalawade742-design.github.io/bridge_{asin}.html',
                     'hook_image_url': f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg',
-                    'create_bridge_endpoint': 'http://localhost:5000/api/create_bridge_page'
+                    # BUG E FIX: use actual running port (server may have started on 5001/8080 if 5000 was busy)
+                    'create_bridge_endpoint': f'http://localhost:{self.server.server_address[1]}/api/create_bridge_page'
                 })
 
             print(f'[Prepare n8n Batch] 📦 Packaged {len(prepared)} products ready for n8n.')
@@ -923,19 +944,23 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             from modules.html_overlay_engine import render_html_overlay
             from modules.seo_copywriter import generate_pin_seo_data
 
+            # BUG H FIX: generate product-specific features from seo_copywriter instead of generic strings
+            _seo_for_features = generate_pin_seo_data(product_title=title, price=price)
+
             seo_data = {
                 'pin_title': pin_title,
                 'description': pin_description,
                 'image_hook': image_hook,
                 'subtitle_hook': '',
                 'badge_hook': badge_hook,
+                'features': _seo_for_features.get('features', ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP']),
             }
 
             prod = {
                 'title': title,
                 'price': price,
                 'rating': '4.8',
-                'features': ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP'],
+                'features': seo_data['features'],  # BUG H FIX: product-specific, not generic
                 'category': 'decor',
             }
 
@@ -961,6 +986,15 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             # 3. Git add + commit + push (background thread so n8n doesn't time out)
             bridge_url = f'https://adityasnalawade742-design.github.io/bridge_{asin}.html'
             hook_image_url = f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg'
+
+            # BUG A FIX: Update TASK_STATUS_MAP so Step 3 polling (/api/task_status?asin=X)
+            # resolves from ⏳ to ✅ as soon as bridge page + hook image are built.
+            update_task_status(asin, {
+                'status': 'success',
+                'bridge_url': bridge_url,
+                'hook_image_url': hook_image_url,
+                'message': f'Bridge page and hook image built for {asin}. Deploying to GitHub Pages...'
+            })
 
             def push_live(target_asin):
                 try:
@@ -1041,7 +1075,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     if chosen_photo and chosen_photo.startswith('http'):
                         try:
                             req = urllib.request.Request(chosen_photo, headers={'User-Agent': 'Mozilla/5.0'})
-                            with urllib.request.urlopen(req) as resp, open(raw_img_path, 'wb') as f:
+                            with urllib.request.urlopen(req, timeout=15) as resp, open(raw_img_path, 'wb') as f:  # H6 FIX: timeout prevents infinite hang
                                 f.write(resp.read())
                         except Exception as e_dl:
                             print(f"[n8n Dispatcher] Warning downloading photo: {e_dl}")
@@ -1050,7 +1084,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     render_html_overlay(
                         image_path=raw_img_path if Path(raw_img_path).exists() else str(WORKSPACE_DIR / "raw_images/raw_B0BZXNSW5K.jpg"),
                         headline=seo_data.get("image_hook") or "COZY ROOM FIND",
-                        subtitle=seo_data.get("subtitle_hook") or "AESTHETIC DECOR",
+                        subtitle="",  # BUG F FIX: Rule 7 — subtitles MUST always be empty ("") unless explicitly requested
                         badge_text=seo_data.get("badge_hook") or "VIRAL FIND",
                         price_str=price,
                         features=prod.get('features', []),

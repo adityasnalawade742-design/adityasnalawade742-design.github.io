@@ -34,6 +34,7 @@ def delete_product(product_id: str):
         project_root / f"bridge_{product_id}.html",
         project_root / f"focus_product_{product_id}_hook.jpg",
         project_root / f"focus_product_{product_id}.jpg",
+        project_root / "raw_images" / f"raw_{product_id}.jpg",  # M6 FIX: also delete raw source image
         output_dir / "bridge_pages" / f"bridge_{product_id}.html",
         output_dir / "images" / f"focus_product_{product_id}_hook.jpg",
         output_dir / "images" / f"focus_product_{product_id}.jpg",
@@ -47,20 +48,20 @@ def delete_product(product_id: str):
             print(f"  ✓ Deleted file: {file_path.name}")
             removed_count += 1
 
-    # Remove card from index.html
+    # H4 FIX: BeautifulSoup reliably removes deeply-nested card HTML.
+    # The old regex approach only expected 2 closing </div> tags but cards are 5+ levels deep.
     index_file = project_root / "index.html"
     if index_file.exists():
-        with open(index_file, "r", encoding="utf-8") as f:
-            html = f.read()
-
-        card_pattern = rf'(<!--\s*Card\s+{product_id}[\s\S]*?-->\s*)?<div\s+class="card-wrapper"[^>]*id="card-{product_id}"[^>]*>[\s\S]*?</div>\s*</div>\s*'
-        updated_html = re.sub(card_pattern, '', html, flags=re.IGNORECASE)
-
-
-        if updated_html != html:
-            with open(index_file, "w", encoding="utf-8") as f:
-                f.write(updated_html)
+        from bs4 import BeautifulSoup
+        html = index_file.read_text(encoding="utf-8")
+        soup = BeautifulSoup(html, "html.parser")
+        card_wrapper = soup.find("div", id=f"card-{product_id}")
+        if card_wrapper:
+            card_wrapper.decompose()
+            index_file.write_text(str(soup), encoding="utf-8")
             print(f"  ✓ Removed product card from index.html!")
+        else:
+            print(f"  ⚠️ Card id='card-{product_id}' not found in index.html (may already be removed).")
 
     # Remove from product_price_registry.json
     registry_file = project_root / "product_price_registry.json"

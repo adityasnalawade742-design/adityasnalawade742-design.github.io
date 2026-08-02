@@ -9,7 +9,7 @@ if hasattr(sys.stdout, "reconfigure"):
 
 from modules.bridge_creator import generate_bridge_page
 
-repo_dir = Path("G:/CLI/pinterest-auto-affiliate")
+repo_dir = Path(__file__).resolve().parent  # C7 FIX: dynamic path
 
 # Find all bridge_*.html files
 bridge_files = list(repo_dir.glob("bridge_*.html"))
@@ -87,7 +87,7 @@ master_catalog = {
         "features": ["K9 CRYSTAL PRISMS", "RAINBOW MAKER REFLECTIONS", "GOLD HANGING CHAIN", "WINDOW & GARDEN ACCENT"],
         "category": "decor",
         "description": "Transform sunlight into vibrant room rainbows with these handcrafted K9 crystal suncatchers.",
-        "direct_regions": ["US", "IN", "GB", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"]  # H2 FIX: removed duplicate 'GB' (only 'UK' used by geo-redirector)
     },
     "B0D8P8CSYP": {
         "search_keywords": "Cute Bird Touch Dimmable Nightstand Lamp",
@@ -173,6 +173,9 @@ if sub_dir.exists():
                 "description": item["description"]
             }
             res_html = generate_bridge_page(item, seo_data, asin)
+            if not res_html:  # L6 FIX: guard against None return value before open()
+                print(f" ⚠️ generate_bridge_page returned None for sub-dir {asin}, skipping copy.")
+                continue
             # Copy to sub_dir
             with open(res_html, "r", encoding="utf-8") as f_src:
                 content = f_src.read()
@@ -202,9 +205,9 @@ except Exception as e_sm:
 
 print("\n[Master Rebuilder] Pushing 100% of rebuilt bridge pages live to GitHub Pages...")
 try:
-    subprocess.run(["git", "add", "-A"], check=True)
-    subprocess.run(["git", "commit", "-m", "rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector"], check=True)
-    subprocess.run(["git", "push", "origin", "main"], check=True)
+    subprocess.run(["git", "add", "-A"], check=True, cwd=str(repo_dir))  # C7 FIX: explicit cwd
+    subprocess.run(["git", "commit", "-m", "rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector"], check=True, cwd=str(repo_dir))
+    subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(repo_dir))
     print(" ✅ Git Commit & Push 100% Successful!")
 except Exception as e:
     print(f" ⚠️ Git push warning: {e}")

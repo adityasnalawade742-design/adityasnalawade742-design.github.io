@@ -122,7 +122,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "flower" in t_lower or "lily" in t_lower:
         clean_name = "Lily of the Valley Flower Lamp"
         pin_title = "Fairy Tale Room Vibe 🌸 Lily of the Valley Flower Lamp"
-        subtitle_hook = "FLORAL AMBIENT ELEGANCE"
+        subtitle_hook = ""  # H1 FIX: Rule 7 — subtitles MUST always be empty
         badge_hook = "ROOM TRANSFORMATION"
         features = ["HANDCRAFTED GLASS PETALS", "WARM FLORAL GLOW", "VINTAGE GREEN STEM", "NIGHTSTAND ACCENT"]
         theme_style = "floating_luxury"
@@ -137,7 +137,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     elif "bird" in t_lower:
         clean_name = "Cute Bird Dimmable Touch Night Lamp"
         pin_title = "Aesthetic Nightstand Find 🐦 Cute Bird Touch Night Lamp"
-        subtitle_hook = "CHARMING BIRD ILLUMINATION"
+        subtitle_hook = ""  # H1 FIX: Rule 7 — subtitles MUST always be empty
         badge_hook = "BEDSIDE FAVORITE"
         features = ["TOUCH SENSOR CONTROL", "DIMMABLE NIGHT LIGHT", "RECHARGEABLE BATTERY", "CHARMING BIRD SHAPE"]
         theme_style = "floating_luxury"
@@ -152,7 +152,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
     else:
         clean_name = "Fenmzee Bedside Table Touch Lamp"
         pin_title = "Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp"
-        subtitle_hook = "WARM BEDTIME AMBIANCE"
+        subtitle_hook = ""  # H1 FIX: Rule 7 — subtitles MUST always be empty
         badge_hook = "BEDSIDE FAVORITE"
         features = ["3 WAY TOUCH DIMMER", "WARM AMBER GLOW", "USB CHARGING PORT", "FABRIC SHADE FINISH"]
         theme_style = "floating_luxury"

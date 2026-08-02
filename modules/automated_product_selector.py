@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from config import AMAZON_ASSOCIATE_TAG
 
-PROJECT_ROOT = Path("G:/CLI/pinterest-auto-affiliate")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent  # C4 FIX: dynamic path
 PROCESSED_FILE = PROJECT_ROOT / "processed_asins.json"
 INDEX_FILE = PROJECT_ROOT / "index.html"
 REGISTRY_FILE = PROJECT_ROOT / "product_price_registry.json"

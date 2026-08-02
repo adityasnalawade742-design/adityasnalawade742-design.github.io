@@ -36,19 +36,26 @@ def publish_pin_to_pinterest(
     token = access_token or PINTEREST_ACCESS_TOKEN
     target_board_id = board_id or PINTEREST_BOARD_ID
 
-    # Media URL for Pinterest pin creation
-    media_url = image_url or destination_url
+    # M8 FIX: if no image URL, refuse to publish — Pinterest API rejects HTML page URLs
+    if not image_url:
+        print(f"[Pinterest Publisher] ⚠️ No image_url provided. Skipping live publish — Pinterest API requires a direct .jpg/.png URL.")
+        return {"status": "SKIPPED_NO_IMAGE", "reason": "image_url is required for Pinterest API", "title": title}
 
+    # Media URL for Pinterest pin creation
+    media_url = image_url
+
+    # H5 FIX: only include board_id in payload when it is a real ID (not a placeholder or empty)
     pin_payload = {
-        "title": title[:100], # Pinterest max title length
+        "title": title[:100],  # Pinterest max title length
         "description": description[:800],
         "link": destination_url,
-        "board_id": target_board_id or "COZY_ROOM_DECOR_BOARD_ID",
         "media_source": {
             "source_type": "image_url",
             "url": media_url
         }
     }
+    if target_board_id:
+        pin_payload["board_id"] = target_board_id
 
     if token and target_board_id and target_board_id != "COZY_ROOM_DECOR_BOARD_ID":
         print(f"[Pinterest Publisher] 🚀 Attempting live API pin publish to board '{target_board_id}'...")

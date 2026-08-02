@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-repo = Path("G:/CLI/pinterest-auto-affiliate")
+repo = Path(__file__).resolve().parent  # C2 FIX: dynamic path
 index_file = repo / "index.html"
 registry_file = repo / "product_price_registry.json"
 bridge_files = sorted(list(repo.glob("bridge_*.html")))
@@ -56,11 +56,20 @@ for card in cards:
     rp = registry[asin].get("regional_prices", {})
     raw_usd = registry[asin].get("current_price", "$19.99")
     base_usd = re.sub(r"[^\d.]", "", raw_usd)
-    if not base_usd or float(base_usd) > 500:
-        if asin == "B0C2YLN3H4": base_usd = "28.99"
-        elif asin == "B07HP22QTZ": base_usd = "12.99"
-        elif asin == "B0BZXNSW5K": base_usd = "19.99"
-        elif asin == "B0D8P8CSYP": base_usd = "18.99"
+    if not base_usd or (base_usd and float(base_usd) > 500):
+        # H7 FIX: fallbacks for ALL 9 ASINs in the portfolio
+        fallback_prices = {
+            "B0C2YLN3H4":  "28.99",
+            "B07HP22QTZ":  "12.99",
+            "B0BZXNSW5K":  "19.99",
+            "B0D8P8CSYP":  "18.99",
+            "B0DZD1X83N":  "20.00",
+            "B0GYDXHF4G":  "35.00",
+            "B0FXLYXM32":  "76.49",
+            "B0D1FRDFFX":  "35.98",
+            "B0DXKGL1T2":  "38.57",
+        }
+        base_usd = fallback_prices.get(asin, "19.99")
 
     clean_us_price = f"${base_usd}" if not raw_usd.startswith("$") else raw_usd
     if "," in clean_us_price or (base_usd and float(base_usd) > 500):
@@ -94,9 +103,18 @@ for card in cards:
         pt.string = rp.get("US", f"${base_usd}")
         index_modified = True
 
-if index_modified:
+if index_modified or healed_count > 0:
     index_file.write_text(str(soup), encoding="utf-8")
     print("✅ Saved self-healed index.html!")
+    # M5 FIX: push healed changes live so the site doesn't stay broken until next scheduled sync
+    try:
+        import subprocess
+        subprocess.run(["git", "add", "index.html", "product_price_registry.json"], cwd=str(repo), check=False)
+        subprocess.run(["git", "commit", "-m", "auto: zero-drift health check self-heal"], cwd=str(repo), check=False)
+        subprocess.run(["git", "push", "origin", "main"], cwd=str(repo), check=False)
+        print("✅ Self-healed changes pushed live to GitHub Pages!")
+    except Exception as e_git:
+        print(f"⚠️ Git push after health-check warning: {e_git}")
 
 print(f"\n=========================================================================")
 print(f"🏆 ZERO-DRIFT HEALTH CHECK COMPLETE: Healed {healed_count} items!")
