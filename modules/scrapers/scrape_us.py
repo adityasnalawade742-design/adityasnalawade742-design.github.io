@@ -60,8 +60,8 @@ def scrape_us_prices():
                         f = frac.inner_text().strip() if frac else "00"
                         if w.isdigit() and len(w) <= 3:
                             price_str = f"${w}.{f}"
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"  ⚠️ Scrape page error for {asin}: {e}")
 
             # Sanity ceiling check
             if price_str:

@@ -383,7 +383,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_delete_homepage_product(self):
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length)
-        data = json.loads(body.decode('utf-8'))
+        data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
         asin = data.get('asin', '').strip()
 
         if not asin:
@@ -1220,7 +1220,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             # 2. Render hook image (price badge overlay)
             from modules.amazon_extractor import get_best_image_for_asin
-            img_res = get_best_image_for_asin(asin, title=item.get('title', ''), save_to_disk=True)
+            img_res = get_best_image_for_asin(asin, title=data.get('title', title), save_to_disk=True)
             raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
             source_img = str(raw_img_path) if raw_img_path.exists() else (img_res.get("local_path") or str(raw_img_path))
             hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
@@ -1281,7 +1281,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             body = self.rfile.read(content_length)
             data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
             items = data.get('items', [])
-            n8n_webhook_url = data.get('n8n_webhook_url', 'http://localhost:5678/webhook/process-product')
+            n8n_webhook_url = data.get('n8n_webhook_url', 'http://localhost:5678/webhook/pinterest-batch')
 
             if not items:
                 self.send_json({"status": "error", "message": "No items selected in batch."})

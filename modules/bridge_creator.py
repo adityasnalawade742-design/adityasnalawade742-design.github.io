@@ -420,7 +420,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         <div class="rating-box">
             <span class="rating-stars">★★★★★</span>
             <span>{{ product.rating or '4.9' }}</span>
-            <span class="rating-count">(1,240+ Verified Reviews)</span>
+            <span class="rating-count">({{ product.reviews or '1,200' }}+ Verified Reviews)</span>
         </div>
 
         <h1>{{ product.title }}</h1>

@@ -73,30 +73,6 @@ DEFAULT_REGISTRY = {
         "hook_image": "focus_product_B07HP22QTZ_hook.jpg",
         "bridge_page": "bridge_B07HP22QTZ.html"
     },
-    "B0BDRSG2BT": {
-        "title": "Tsrarey Sunset Projection Lamp Light",
-        "url": "https://www.amazon.com/dp/B0BDRSG2BT?tag=smartdeal0358-21",
-        "current_price": "$16.99",
-        "headline": "21-Color Sunset Projection Lamp",
-        "subtitle": "GOLDEN HOUR VIBES",
-        "badge": "🌇 AMBIENT LIGHTING",
-        "features": ["21 COLOR MODES", "360 DEGREE ROTATION", "USB POWERED", "COZY READING LIGHT"],
-        "raw_image": "raw_images/raw_B0BDRSG2BT.jpg",
-        "hook_image": "focus_product_B0BDRSG2BT_hook.jpg",
-        "bridge_page": "bridge_B0BDRSG2BT.html"
-    },
-    "B0GGHJ1J4L": {
-        "title": "LED Acrylic Glowing Desktop Note Board",
-        "url": "https://www.amazon.com/dp/B0GGHJ1J4L?tag=smartdeal0358-21",
-        "current_price": "$18.99",
-        "headline": "Glowing LED Acrylic Note Board",
-        "subtitle": "ILLUMINATED DESK MEMO",
-        "badge": "✨ DESK ESSENTIAL",
-        "features": ["COLORFUL LED GLOW", "REWRITABLE ACRYLIC", "WOODEN BASE", "INCLUDES 7 MARKERS"],
-        "raw_image": "raw_images/raw_B0GGHJ1J4L.jpg",
-        "hook_image": "focus_product_B0GGHJ1J4L_hook.jpg",
-        "bridge_page": "bridge_B0GGHJ1J4L.html"
-    },
     "B0BZXNSW5K": {
         "title": "Fenmzee Bedside Table Touch Lamp",
         "url": "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-21",
@@ -225,10 +201,6 @@ def update_homepage_price(asin: str, new_price: str, timestamp: str):
     pattern = rf'(<div class="card-wrapper" id="card-{asin}">[\s\S]*?<div class="card-price-tag">)([^<]+)(</div>)'
     updated = re.sub(pattern, rf'\g<1>{new_price}\g<3>', content)
     
-    # Also update image src version query param
-    pattern_img = rf'(id="card-{asin}"[\s\S]*?<img src="\./focus_product_{asin}_hook[^"]*")'
-    updated = re.sub(pattern_img, f'id="card-{asin}"\n            <a class="card" href="./bridge_{asin}.html">\n                <div class="card-img-container">\n                    <div class="card-price-tag">{new_price}</div>\n                    <div class="card-rating">★ 4.8</div>\n                    <img src="./focus_product_{asin}_hook.jpg?v={timestamp}"', updated)
-    
     filepath.write_text(updated, encoding="utf-8")
     print(f"  └─ Updated Homepage (index.html) card-{asin}: {new_price}")
 
@@ -279,7 +251,10 @@ def run_daily_price_update_check(auto_git_push: bool = True):
     for asin, data in registry.items():
         title = data.get("title", asin)
         old_price = data.get("current_price", "$0.00")
-        url = data["url"]
+        url = data.get("url", "")
+        if not url:
+            print(f"\n🔍 Skipping ASIN: {asin} (No URL configured)")
+            continue
         
         print(f"\n🔍 Checking ASIN: {asin} - '{title[:45]}...'")
         print(f"   Registered Price: {old_price}")
@@ -299,7 +274,7 @@ def run_daily_price_update_check(auto_git_push: bool = True):
             regenerate_clean_graphic_with_new_price(asin, data, extracted_price, timestamp)
             
             # 2. Update Landing Page
-            update_landing_page_price(data["bridge_page"], old_price, extracted_price)
+            update_landing_page_price(data.get("bridge_page", f"bridge_{asin}.html"), old_price, extracted_price)
             
             # 3. Update Homepage
             update_homepage_price(asin, extracted_price, timestamp)
@@ -323,9 +298,10 @@ def run_daily_price_update_check(auto_git_push: bool = True):
             
         if auto_git_push:
             print("\n🚀 Committing and pushing price updates to GitHub Pages...")
-            os.system('git add index.html bridge_*.html focus_product_* product_price_registry.json raw_images/')
-            os.system(f'git commit -m "Automated Daily Price Sync: Updated {len(updated_asins)} product prices"')
-            os.system('git push origin main')
+            import subprocess
+            subprocess.run(["git", "add", "-A"], cwd=str(BASE_DIR), check=False)
+            subprocess.run(["git", "commit", "-m", f"Automated Daily Price Sync: Updated {len(updated_asins)} product prices"], cwd=str(BASE_DIR), check=False)
+            subprocess.run(["git", "push", "origin", "main"], cwd=str(BASE_DIR), check=False)
             print("✅ Pushed live to GitHub Pages!")
     else:
         print("\n✨ All product prices are 100% verified & accurate. No updates needed today!")

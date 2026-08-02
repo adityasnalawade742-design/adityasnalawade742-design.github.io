@@ -10,10 +10,15 @@ from bs4 import BeautifulSoup
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-p = Path("G:/CLI/pinterest-auto-affiliate")
-sys.path.append(str(p))
+p = Path(__file__).resolve().parent
+if str(p) not in sys.path:
+    sys.path.append(str(p))
 
 registry_path = p / "product_price_registry.json"
+
+if not registry_path.exists():
+    print("⚠️ Registry file missing. Skipping sync.")
+    sys.exit(0)
 
 with open(registry_path, "r", encoding="utf-8") as f:
     registry = json.load(f)
@@ -99,7 +104,7 @@ for asin, item in master_catalog.items():
 print("\n🚀 Pushing daily price sync live to GitHub Pages...")
 try:
     subprocess.run(["git", "add", "-A"], cwd=str(p), check=True)
-    subprocess.run(["git", "commit", "-m", "daily price sync: update multi-region prices for all 21 Amazon domains"], cwd=str(p), check=True)
+    subprocess.run(["git", "commit", "-m", "daily price sync: update multi-region prices for all 21 Amazon domains"], cwd=str(p), check=False)
     subprocess.run(["git", "push", "origin", "main"], cwd=str(p), check=True)
     print(" ✅ Git Commit & Push 100% Successful!")
 except Exception as e:

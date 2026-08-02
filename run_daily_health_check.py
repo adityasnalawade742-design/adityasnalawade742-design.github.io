@@ -16,6 +16,10 @@ print("=========================================================================
 print("🛡️ RUNNING AUTOMATED ZERO-DRIFT SELF-HEALING HEALTH CHECK")
 print("=========================================================================\n")
 
+if not registry_file.exists() or not index_file.exists():
+    print("⚠️ Registry or index.html missing. Aborting health check.")
+    sys.exit(0)
+
 registry = json.loads(registry_file.read_text(encoding="utf-8"))
 index_html = index_file.read_text(encoding="utf-8")
 soup = BeautifulSoup(index_html, "html.parser")

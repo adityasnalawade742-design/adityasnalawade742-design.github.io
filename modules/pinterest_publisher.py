@@ -75,6 +75,7 @@ def publish_pin_to_pinterest(
                 return {"status": "API_ERROR", "status_code": res.status_code, "error": res.text, "payload": pin_payload}
         except Exception as e:
             print(f"[Pinterest Publisher] ❌ Exception connecting to Pinterest API: {e}")
+            return {"status": "API_ERROR", "error": str(e), "payload": pin_payload}
 
     # Ready payload output for manual / buffer / n8n / make publishing
     report = {
