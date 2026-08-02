@@ -39,7 +39,7 @@ with sync_playwright() as p:
         
         for cc, exp_domain, exp_tag in test_countries:
             page.goto(f"{file_url}?country={cc}")
-            page.wait_for_timeout(50)
+            page.wait_for_timeout(400)
             
             href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
             total_links_tested += 1

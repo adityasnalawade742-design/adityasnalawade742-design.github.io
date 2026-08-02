@@ -56,7 +56,12 @@ for card in cards:
     rp = registry[asin].get("regional_prices", {})
     raw_usd = registry[asin].get("current_price", "$19.99")
     base_usd = re.sub(r"[^\d.]", "", raw_usd)
-    if not base_usd or (base_usd and float(base_usd) > 500):
+    try:
+        base_usd_float = float(base_usd) if base_usd else 0.0
+    except ValueError:
+        base_usd_float = 0.0
+
+    if not base_usd or base_usd_float > 500 or base_usd_float <= 0:
         # H7 FIX: fallbacks for ALL 9 ASINs in the portfolio
         fallback_prices = {
             "B0C2YLN3H4":  "28.99",
@@ -72,7 +77,7 @@ for card in cards:
         base_usd = fallback_prices.get(asin, "19.99")
 
     clean_us_price = f"${base_usd}" if not raw_usd.startswith("$") else raw_usd
-    if "," in clean_us_price or (base_usd and float(base_usd) > 500):
+    if "," in clean_us_price or base_usd_float > 500:
         clean_us_price = f"${base_usd}"
 
     matrix_regs = direct_matrix.get(asin, ["US"])
@@ -99,8 +104,10 @@ for card in cards:
             print(f"  🔧 Healed index.html card [{asin}] {k} -> '{v}'")
 
     pt = card.find("div", class_="card-price-tag")
-    if pt and pt.string != rp.get("US", f"${base_usd}"):
-        pt.string = rp.get("US", f"${base_usd}")
+    expected_pt_str = str(rp.get("US", f"${base_usd}"))
+    if pt and pt.get_text(strip=True) != expected_pt_str:
+        pt.clear()
+        pt.string = expected_pt_str
         index_modified = True
 
 if index_modified or healed_count > 0:

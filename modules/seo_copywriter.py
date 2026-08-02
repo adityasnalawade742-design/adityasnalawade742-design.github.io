@@ -65,7 +65,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
         subtitle_hook = ""
         badge_hook = "RAINBOW MAKER"
         features = ["K9 CRYSTAL PRISM", "RAINBOW REFLECTIONS", "WINDOW HANGING CHAIN", "SUNLIGHT SPECTRUM"]
-        theme_style = "sunlight_crystal"
+        theme_style = "prismatic_sunlight"
         description = (
             "Transform plain morning sunlight into magical room rainbows! This viral Crystal Prism Window Suncatcher "
             "catches natural sunlight and projects dazzling color spectrums across your walls and ceiling. "

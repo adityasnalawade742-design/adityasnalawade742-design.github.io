@@ -520,21 +520,26 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 📖 Why You'll Love This Room Accent
             </h3>
             <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.65; margin-bottom: 16px;">
-                Designed for contemporary nightstands and cozy living room spaces, this piece combines aesthetic warmth with daily functional convenience. Whether you are creating a relaxing evening atmosphere or upgrading your bedside charging setup, it delivers soft, flicker-free illumination with zero glare.
+                {{ seo.description or product.description or "Designed for contemporary nightstands and cozy living room spaces, this piece combines aesthetic warmth with daily functional convenience." }}
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #94a3b8;">
+                {% if product.features and (product.features is sequence) and (product.features is not string) and product.features|length > 0 %}
+                {% for feat in product.features[:3] %}
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Eye-Care Soft Glow:</strong> Premium fabric shade diffuses harsh light for golden hour ambience.</span>
+                    <span><strong>Feature {{ loop.index }}:</strong> {{ feat }}</span>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div style="display: flex; gap: 8px;">
+                    <span style="color: var(--accent-gold);">✓</span>
+                    <span><strong>Aesthetic Design:</strong> Blends effortlessly into modern, boho, and cozy room decor themes.</span>
                 </div>
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Nightstand Declutter:</strong> Integrated fast-charging ports keep your phone and watch charged.</span>
+                    <span><strong>Premium Quality:</strong> Built with high quality materials for daily functionality and durability.</span>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Flicker-Free LED:</strong> Includes energy-saving LED bulb with long-lasting warm light.</span>
-                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -643,12 +648,11 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             {% set search_phrase = product.get('search_keywords') or (product.title.split()[:4] | join(' ')) %}
             const currentAsin = "{{ product.get('target_asin', asin) }}";
             const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
-            const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN"]) | tojson }};
+            const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN", "UK", "GB"]) | tojson }};
             const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
             const regionalAsins = {{ (product.regional_asins if product.regional_asins is defined else {}) | tojson }};
 
-            
-                        let exchangeRates = { 
+            let exchangeRates = { 
                 "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, 
                 "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "NOK": 10.80, 
                 "DKK": 6.85, "PLN": 3.95, "CZK": 23.50, "HUF": 360.0, "RON": 4.56, "BGN": 1.80, "TRY": 32.50, 
@@ -722,14 +726,14 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 if (regSel && countryMap[targetCC]) {
                     regSel.value = targetCC;
                 }
-                const isDirectListing = directRegions.includes(targetCC);
+                const isDirectListing = directRegions.includes(targetCC) || (targetCC === 'GB' && directRegions.includes('UK')) || (targetCC === 'UK' && directRegions.includes('GB'));
                 
                 // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
-                const regPrice = regionalMatrix[targetCC] || regionalMatrix[targetCC.toLowerCase()] || regionalMatrix[regKey];
+                const regPrice = regionalMatrix[targetCC] || regionalMatrix[targetCC.toLowerCase()] || regionalMatrix[regKey] || (targetCC === 'GB' ? (regionalMatrix['UK'] || regionalMatrix['uk']) : null);
                 const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
-                const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au'];
+                const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au', 'gb'];
                 const isExplicitScrapedMatch = (targetCC === 'US' && regKey === 'us') || (explicitScrapedRegions.includes(regKey) && explicitScrapedRegions.includes(targetCC.toLowerCase())) || Boolean(regPrice);
 
                 if (isExplicitScrapedMatch && regPrice === 'Not Available') {
@@ -776,7 +780,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 }
 
                 // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling (ASIN Variant Mapper + Zero-404 Fallback)
-                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (isDirectListing ? currentAsin : null);
+                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
 
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');
@@ -913,37 +917,44 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 </body>
 """
 
+_MODULE_DIR = Path(__file__).resolve().parent.parent
+
 def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
     """
     Generates a mobile-first, high-converting Pinterest affiliate bridge page.
     Saves file to root repository directory as bridge_{asin}.html.
     """
+    import time
     output_filename = f"bridge_{asin}.html"
     
-    # Absolute file path for writing
-    output_filepath = Path("G:/CLI/pinterest-auto-affiliate") / output_filename
+    # Absolute file path for writing (dynamically resolved to project root)
+    output_filepath = _MODULE_DIR / output_filename
     
-    # Form relative image paths for HTML display
-    hook_img_rel = f"./focus_product_{asin}_hook.jpg?v=3"
+    # Form relative image paths for HTML display with dynamic timestamp cache-busting
+    hook_img_rel = f"./focus_product_{asin}_hook.jpg?v={int(time.time())}"
     
     raw_images_rel = []
-    if "images" in product_data and product_data["images"]:
-        for i, img_path in enumerate(product_data["images"][:3]):
-            raw_images_rel.append(f"./output/images/raw_amazon_{asin}_{i}.jpg")
+    if "images" in product_data and isinstance(product_data["images"], list):
+        for img_path in product_data["images"][:3]:
+            if isinstance(img_path, str) and Path(img_path).exists():
+                raw_images_rel.append(img_path)
     
     # Load exact verified direct regions from global_direct_matrix.json
-    matrix_file = Path("G:/CLI/pinterest-auto-affiliate/global_direct_matrix.json")
+    matrix_file = _MODULE_DIR / "global_direct_matrix.json"
     if matrix_file.exists():
-        with open(matrix_file, "r", encoding="utf-8") as f:
-            g_matrix = json.load(f)
-            product_data["direct_regions"] = g_matrix.get(asin, ["US"])
+        try:
+            with open(matrix_file, "r", encoding="utf-8") as f:
+                g_matrix = json.load(f)
+                product_data["direct_regions"] = g_matrix.get(asin, ["US"])
+        except Exception:
+            pass
 
     # Template rendering
     aff_url = product_data.get("affiliate_url") or f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
     template = Template(BRIDGE_PAGE_TEMPLATE)
     rendered_html = template.render(
-        product=product_data,
-        seo=seo_data,
+        product=dict(product_data),
+        seo=dict(seo_data) if seo_data else {},
         asin=asin,
         affiliate_url=aff_url,
         hook_image_rel=hook_img_rel,
@@ -968,7 +979,8 @@ def update_showcase_index_page(product_data: dict, asin: str):
     """
     Ensures newly processed products automatically appear on index.html grid.
     """
-    index_path = Path("G:/CLI/pinterest-auto-affiliate/index.html")
+    import time
+    index_path = _MODULE_DIR / "index.html"
     if not index_path.exists():
         return
 
@@ -986,7 +998,7 @@ def update_showcase_index_page(product_data: dict, asin: str):
                 <div class="card-img-container">
                     <div class="card-price-tag">{product_data.get('price', '$19.99')}</div>
                     <div class="card-rating">★ 4.5</div>
-                    <img src="./focus_product_{asin}_hook.jpg?v=3" alt="{product_data.get('title', 'Product')}">
+                    <img src="./focus_product_{asin}_hook.jpg?v={int(time.time())}" alt="{product_data.get('title', 'Product')}">
                 </div>
                 <div class="card-content">
                     <h2>{product_data.get('title', 'Cozy Room Find')[:50]}...</h2>

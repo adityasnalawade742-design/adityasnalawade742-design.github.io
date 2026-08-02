@@ -206,7 +206,7 @@ except Exception as e_sm:
 print("\n[Master Rebuilder] Pushing 100% of rebuilt bridge pages live to GitHub Pages...")
 try:
     subprocess.run(["git", "add", "-A"], check=True, cwd=str(repo_dir))  # C7 FIX: explicit cwd
-    subprocess.run(["git", "commit", "-m", "rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector"], check=True, cwd=str(repo_dir))
+    subprocess.run(["git", "commit", "-m", "rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector"], check=False, cwd=str(repo_dir))
     subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(repo_dir))
     print(" ✅ Git Commit & Push 100% Successful!")
 except Exception as e:

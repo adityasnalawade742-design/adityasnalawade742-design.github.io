@@ -427,12 +427,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0GYDXHF4G_hook.jpg?v=3" alt="Flame Aroma Essential Oil Diffuser">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0GYDXHF4G_hook.jpg?v=1785696309" alt="Flame Aroma Essential Oil Diffuser">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0GYDXHF4G_hook.jpg?v=3', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0GYDXHF4G_hook.jpg?v=1785696309', this)">✨ Commercial View</button>
             
         </div>
 
@@ -507,21 +507,27 @@
                 📖 Why You'll Love This Room Accent
             </h3>
             <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.65; margin-bottom: 16px;">
-                Designed for contemporary nightstands and cozy living room spaces, this piece combines aesthetic warmth with daily functional convenience. Whether you are creating a relaxing evening atmosphere or upgrading your bedside charging setup, it delivers soft, flicker-free illumination with zero glare.
+                Cozy ambient flame effect humidifier and essential oil diffuser in dark crackle finish. Realistic flame glow for bedroom relaxation.
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #94a3b8;">
+                
+                
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Eye-Care Soft Glow:</strong> Premium fabric shade diffuses harsh light for golden hour ambience.</span>
+                    <span><strong>Feature 1:</strong> REALISTIC FLAME EFFECT</span>
                 </div>
+                
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Nightstand Declutter:</strong> Integrated fast-charging ports keep your phone and watch charged.</span>
+                    <span><strong>Feature 2:</strong> ULTRASONIC MIST HUMIDIFIER</span>
                 </div>
+                
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Flicker-Free LED:</strong> Includes energy-saving LED bulb with long-lasting warm light.</span>
+                    <span><strong>Feature 3:</strong> SILENT SLEEP OPERATION</span>
                 </div>
+                
+                
             </div>
         </div>
 
@@ -574,7 +580,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Flame Aroma Essential Oil Diffuser");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0GYDXHF4G_hook.jpg?v=3";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0GYDXHF4G_hook.jpg?v=1785696309";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -634,8 +640,7 @@
             const regionalMatrix = {"AE": "Not Available", "AU": "Not Available", "BE": "Not Available", "BR": "Not Available", "CA": "Not Available", "DE": "Not Available", "EG": "Not Available", "ES": "Not Available", "FR": "Not Available", "IN": "Not Available", "IT": "Not Available", "JP": "Not Available", "MX": "Not Available", "NL": "Not Available", "PL": "Not Available", "SA": "Not Available", "SE": "Not Available", "SG": "Not Available", "TR": "Not Available", "UK": "Not Available", "US": "$35.00"};
             const regionalAsins = {"US": "B0GYDXHF4G"};
 
-            
-                        let exchangeRates = { 
+            let exchangeRates = { 
                 "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, 
                 "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "NOK": 10.80, 
                 "DKK": 6.85, "PLN": 3.95, "CZK": 23.50, "HUF": 360.0, "RON": 4.56, "BGN": 1.80, "TRY": 32.50, 
@@ -709,14 +714,14 @@
                 if (regSel && countryMap[targetCC]) {
                     regSel.value = targetCC;
                 }
-                const isDirectListing = directRegions.includes(targetCC);
+                const isDirectListing = directRegions.includes(targetCC) || (targetCC === 'GB' && directRegions.includes('UK')) || (targetCC === 'UK' && directRegions.includes('GB'));
                 
                 // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
-                const regPrice = regionalMatrix[targetCC] || regionalMatrix[targetCC.toLowerCase()] || regionalMatrix[regKey];
+                const regPrice = regionalMatrix[targetCC] || regionalMatrix[targetCC.toLowerCase()] || regionalMatrix[regKey] || (targetCC === 'GB' ? (regionalMatrix['UK'] || regionalMatrix['uk']) : null);
                 const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
-                const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au'];
+                const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au', 'gb'];
                 const isExplicitScrapedMatch = (targetCC === 'US' && regKey === 'us') || (explicitScrapedRegions.includes(regKey) && explicitScrapedRegions.includes(targetCC.toLowerCase())) || Boolean(regPrice);
 
                 if (isExplicitScrapedMatch && regPrice === 'Not Available') {
@@ -763,7 +768,7 @@
                 }
 
                 // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling (ASIN Variant Mapper + Zero-404 Fallback)
-                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (isDirectListing ? currentAsin : null);
+                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
 
                 if (targetCC === 'US') {
                     const buyBtn = document.getElementById('buyBtn');

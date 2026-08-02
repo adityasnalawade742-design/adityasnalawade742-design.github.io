@@ -18,14 +18,14 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ status: 'received', count: $json.body.items.length, message: 'Batch accepted. Processing ' + $json.body.items.length + ' products...' }) }}"
+        "responseBody": "={{ JSON.stringify({ status: 'received', count: ($json.body && $json.body.items ? $json.body.items.length : ($json.items ? $json.items.length : 0)), message: 'Batch accepted. Processing products in background...' }) }}"
       },
       "id": "node_1b_respond",
       "name": "1b. Respond to Web Console Immediately",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [200, 480],
-      "notes": "Immediately ACK the web console so it doesn't time out. Processing continues in background."
+      "position": [400, 300],
+      "notes": "Immediately ACK the web console so it doesn't time out. Processing continues in sequence."
     },
     {
       "parameters": {
@@ -36,7 +36,7 @@
       "name": "2. Split Items — Process One Product at a Time",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
-      "position": [440, 300],
+      "position": [600, 300],
       "notes": "Splits the incoming items array so nodes 3-5 run once per product sequentially."
     },
     {
@@ -50,7 +50,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ asin: $json.asin, title: $json.title, price: $json.price, pin_title: $json.pin_title, pin_description: $json.pin_description, badge_hook: $json.badge_hook, image_hook: $json.image_hook }) }}",
+        "jsonBody": "={{ JSON.stringify({ asin: $json.asin, title: $json.title, price: $json.price, pin_title: $json.pin_title, pin_description: $json.pin_description, badge_hook: $json.badge_hook, image_hook: $json.image_hook, chosen_photo_url: $json.chosen_photo_url }) }}",
         "options": {
           "timeout": 120000
         }
@@ -59,7 +59,7 @@
       "name": "3. Build Bridge Page + Hook Image (Local Server)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [680, 300],
+      "position": [800, 300],
       "notes": "Calls your local Python server to: (1) generate bridge_{ASIN}.html landing page, (2) render focus_product_{ASIN}_hook.jpg with price badge overlay, (3) push both live to GitHub Pages. Returns bridge_url + hook_image_url."
     },
     {
@@ -94,7 +94,7 @@
       "name": "4. Merge — Combine SEO Copy + Bridge URL + Image URL",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [920, 300],
+      "position": [1000, 300],
       "notes": "Collects bridge_url from node 3 response and SEO data from node 2. All fields are now ready for the Pinterest pin POST."
     },
     {
@@ -115,7 +115,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ title: $json.final_pin_title.substring(0, 100), description: $json.final_pin_description.substring(0, 800), link: $json.final_bridge_url, board_id: $env.PINTEREST_BOARD_ID, media_source: { source_type: 'image_url', url: $json.final_hook_image_url } }) }}",
+        "jsonBody": "={{ JSON.stringify({ title: ($json.final_pin_title || '').substring(0, 100), description: ($json.final_pin_description || '').substring(0, 800), link: $json.final_bridge_url, board_id: $env.PINTEREST_BOARD_ID, media_source: { source_type: 'image_url', url: $json.final_hook_image_url } }) }}",
         "options": {
           "timeout": 30000
         }
@@ -124,7 +124,7 @@
       "name": "5. Post Pin to Pinterest API v5",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [1160, 300],
+      "position": [1200, 300],
       "notes": "POSTs the pin to Pinterest API v5. Destination link = bridge_{ASIN}.html. Media = focus_product_{ASIN}_hook.jpg. Uses your Bearer token and Board ID from n8n env variables."
     },
     {
@@ -133,7 +133,7 @@
           "string": [
             {
               "name": "result",
-              "value": "={{ 'Pin posted for ' + $node['4. Merge — Combine SEO Copy + Bridge URL + Image URL'].json.final_asin + ' — Pin ID: ' + ($json.id || 'N/A') + ' | Bridge: ' + $node['4. Merge — Combine SEO Copy + Bridge URL + Image URL'].json.final_bridge_url }}"
+              "value": "={{ 'Pin posted for ' + $json.final_asin + ' — Pin ID: ' + ($json.id || 'N/A') + ' | Bridge: ' + $json.final_bridge_url }}"
             }
           ]
         },
@@ -144,14 +144,20 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
       "position": [1400, 300],
-      "notes": "Logs the Pin ID and bridge URL for each product. You can connect this to a Google Sheets or Telegram node for monitoring."
+      "notes": "Logs the Pin ID and bridge URL for each product."
     }
   ],
   "connections": {
     "1. Webhook — Receive Batch from Web Console": {
       "main": [
         [
-          { "node": "1b. Respond to Web Console Immediately", "type": "main", "index": 0 },
+          { "node": "1b. Respond to Web Console Immediately", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "1b. Respond to Web Console Immediately": {
+      "main": [
+        [
           { "node": "2. Split Items — Process One Product at a Time", "type": "main", "index": 0 }
         ]
       ]
