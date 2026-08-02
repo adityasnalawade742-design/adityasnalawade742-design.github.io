@@ -99,6 +99,10 @@ def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: fl
             print(f"[Amazon Finder] Selected {len(verified_winners)} verified clean winning products!")
             return verified_winners
 
+    # If photo filters filtered out too many, return all live items matching criteria
+    if live_items:
+        return live_items[:num_results]
+
     print("[Amazon Finder] Falling back to curated high-converting niche products...")
     return fetch_sample_amazon_products()
 
@@ -122,11 +126,9 @@ def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_pric
     
     for key_idx, current_key in enumerate(keys_to_try, 1):
         params = {
-            "engine": "amazon",
-            "k": query,
-            "q": query,
-            "api_key": current_key,
-            "amazon_domain": "amazon.com"
+            "engine": "google",
+            "q": f"site:amazon.com/dp/ {query}",
+            "api_key": current_key
         }
         
         try:
@@ -164,7 +166,12 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
     for item in results:
         asin = item.get("asin") or item.get("product_id")
         if not asin or len(asin) != 10:
-            continue
+            link = item.get("link", "")
+            match = re.search(r'/(?:dp|gp/product)/([A-Z0-9]{10})', link, re.IGNORECASE)
+            if match:
+                asin = match.group(1).upper()
+            else:
+                continue
 
         title = item.get("title", "Aesthetic Room Decor Find")
 
