@@ -317,6 +317,24 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             self.send_json({'status': 'error', 'message': 'Missing ASIN'})
             return
 
+        # BUG FIX: verify ASIN exists in registry before attempting delete
+        # Previously delete_product() silently did nothing for unknown ASINs and we still returned success
+        reg_file = WORKSPACE_DIR / 'product_price_registry.json'
+        try:
+            reg = json.loads(reg_file.read_text(encoding='utf-8')) if reg_file.exists() else {}
+        except Exception:
+            reg = {}
+        index_file = WORKSPACE_DIR / 'index.html'
+        in_index = False
+        if index_file.exists():
+            try:
+                in_index = f'id="card-{asin}"' in index_file.read_text(encoding='utf-8')
+            except Exception:
+                pass
+        if asin not in reg and not in_index:
+            self.send_json({'status': 'error', 'message': f'Product {asin} not found in homepage or registry. Nothing to delete.'})
+            return
+
         try:
             from delete_product import delete_product
             delete_product(asin)
@@ -335,6 +353,11 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         badge = data.get('badge', 'VIRAL ROOM FIND')
         price = data.get('price', '$19.99')
         features = data.get('features', [])
+
+        # BUG FIX: guard against empty image_url before attempting download/render
+        if not image_url:
+            self.send_json({'status': 'error', 'message': 'Missing image_url. Please provide a photo URL to preview the overlay.'})
+            return
 
         try:
             from modules.html_overlay_engine import render_html_overlay
@@ -504,18 +527,23 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             raw_items = fetch_amazon_products(query=kw, num_results=count)
             items = []
             for item in raw_items:
-                asin = item.get('id')
+                asin = item.get('id') or item.get('asin', '')
+                # BUG FIX: skip items with missing/invalid ASINs (can happen with SerpAPI organic results
+                # parsed from Google URLs — cache may return entries where ASIN extraction failed)
+                if not asin or len(asin) != 10:
+                    print(f"[Web Console] Skipping discover result with invalid ASIN: '{asin}' (title: {str(item.get('title',''))[:40]})")
+                    continue
                 already_pub = is_asin_published_on_homepage(asin)
                 items.append({
                     'asin': asin,
-                    'title': item.get('title'),
-                    'price': item.get('price'),
-                    'rating': item.get('rating'),
+                    'title': item.get('title', 'Unknown Product'),
+                    'price': item.get('price', 'N/A'),
+                    'rating': item.get('rating', '4.5'),
                     'reviews_count': item.get('reviews_count', 100),
-                    'thumbnail': item.get('original_image_url'),
+                    'thumbnail': item.get('original_image_url') or item.get('thumbnail', ''),
                     'is_already_published': already_pub
                 })
-            self.send_json({'status': 'success', 'query': kw, 'items': items})
+            self.send_json({'status': 'success', 'query': kw, 'items': items, 'total_raw': len(raw_items), 'valid': len(items)})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
