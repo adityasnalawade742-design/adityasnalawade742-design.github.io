@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinterest Auto-Affiliate | Master Web Console</title>
+    <title>Cozy Room Finds | Master Web Console 3.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #07060a;
-            --card-glass: rgba(18, 16, 26, 0.88);
+            --card-glass: rgba(18, 16, 26, 0.92);
             --card-border: rgba(255, 255, 255, 0.12);
             --gold-primary: #ffb703;
             --gold-glow: #fb8500;
+            --pink-accent: #e60023;
             --green-success: #10b981;
-            --red-danger: #ef4444;
             --text-main: #f8f9fa;
-            --text-sub: #a0a5b5;
+            --text-sub: #9ca3af;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,10 +28,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px 20px 80px;
+            padding: 24px 20px 80px;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(251, 133, 0, 0.15), transparent 60%),
-                radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.08), transparent 50%);
+                radial-gradient(circle at 50% 0%, rgba(251, 133, 0, 0.18), transparent 60%),
+                radial-gradient(circle at 90% 80%, rgba(230, 0, 35, 0.10), transparent 50%);
             background-attachment: fixed;
         }
 
@@ -41,9 +41,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 30px;
+            padding: 16px 28px;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(24px);
             border-radius: 50px;
             margin-bottom: 24px;
@@ -77,16 +77,26 @@
             font-family: 'Outfit', sans-serif;
             font-size: 13px;
             font-weight: 700;
-            padding: 8px 20px;
+            padding: 10px 22px;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.25s ease;
         }
 
+        .tab-btn:hover {
+            color: #fff;
+        }
+
         .tab-btn.active {
+            background: linear-gradient(135deg, var(--pink-accent), #ff4757);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(230, 0, 35, 0.4);
+        }
+
+        .tab-btn.active-gold {
             background: linear-gradient(135deg, var(--gold-glow), var(--gold-primary));
-            color: #0b0a0f;
-            box-shadow: 0 4px 15px rgba(251, 133, 0, 0.35);
+            color: #000000;
+            box-shadow: 0 4px 20px rgba(251, 133, 0, 0.4);
         }
 
         .container {
@@ -97,343 +107,218 @@
             gap: 24px;
         }
 
-        .step-bar {
-            display: flex;
-            justify-content: space-between;
-            background: var(--card-glass);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 16px 28px;
-            backdrop-filter: blur(20px);
-        }
-
-        .step-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-sub);
-        }
-
-        .step-item.active { color: var(--gold-primary); }
-
-        .step-num {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-        }
-
-        .step-item.active .step-num { background: var(--gold-primary); color: #0b0a0f; }
-
         .card-box {
             background: var(--card-glass);
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 28px;
             padding: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+            backdrop-filter: blur(28px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
 
         .card-header-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gold-primary);
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
-        .input-group { display: flex; gap: 14px; }
+        .step-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
 
-        .input-field {
+        .step-item {
             flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            color: var(--text-sub);
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active {
+            background: rgba(230, 0, 35, 0.12);
+            border-color: rgba(230, 0, 35, 0.4);
+            color: #fff;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .step-item.active .step-num {
+            background: var(--pink-accent);
+            color: #fff;
+        }
+
+        .input-field, .select-field {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 50px;
             padding: 14px 24px;
             color: #fff;
             font-family: 'Outfit', sans-serif;
-            font-size: 15px;
-            outline: none;
-            transition: all 0.25s ease;
-        }
-
-        .input-field:focus {
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 20px rgba(255, 183, 3, 0.2);
-        }
-
-        .select-field {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 50px;
-            padding: 14px 20px;
-            color: #fff;
-            font-family: 'Outfit', sans-serif;
             font-size: 14px;
             outline: none;
-            cursor: pointer;
-        }
-
-        .select-field option { background: #121018; color: #fff; }
-
-        .btn-action {
-            background: linear-gradient(135deg, var(--gold-glow), var(--gold-primary));
-            border: 1.5px solid #ffffff;
-            color: #0b0a0f;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 15px;
-            padding: 14px 32px;
-            border-radius: 50px;
-            cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 10px 25px rgba(251, 133, 0, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
         }
 
-        .btn-action:hover {
+        .input-field:focus, .select-field:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 20px rgba(255, 183, 3, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pink-accent), #ff4757);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 25px rgba(230, 0, 35, 0.35);
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 14px 35px rgba(251, 133, 0, 0.6);
+            box-shadow: 0 12px 30px rgba(230, 0, 35, 0.5);
         }
 
-        .btn-success { background: linear-gradient(135deg, #10b981, #059669); border-color: #ffffff; }
-        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; border-color: #fff; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4); }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 14px 28px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-        .discover-grid {
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Product Grid Cards */
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
         }
 
-        .discover-card {
+        .product-card {
             background: rgba(255, 255, 255, 0.04);
             border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            overflow: hidden;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             display: flex;
             flex-direction: column;
-            transition: all 0.25s ease;
         }
 
-        .discover-card.selected {
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 183, 3, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-card.selected {
             border-color: var(--gold-primary);
             background: rgba(255, 183, 3, 0.08);
-            box-shadow: 0 0 25px rgba(255, 183, 3, 0.25);
         }
 
-        .discover-card.published { opacity: 0.65; }
-
-        .discover-thumb {
+        .product-thumb {
             width: 100%;
-            height: 200px;
-            object-fit: contain;
-            background: #09080d;
-            padding: 10px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            background: #12101a;
         }
 
-        .discover-body {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-            justify-content: space-between;
-        }
-
-        .discover-title {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1.35;
+        .product-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .discover-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .discover-price { font-weight: 800; color: var(--gold-primary); font-size: 16px; }
-        .discover-rating { color: #facc15; font-weight: 700; }
-
-        .pub-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(16, 185, 129, 0.85);
-            color: #fff;
-            font-size: 10px;
+        .product-price {
+            color: var(--gold-primary);
             font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 50px;
-            text-transform: uppercase;
+            font-size: 15px;
         }
 
-        .select-cb {
+        .check-badge {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 24px;
-            height: 24px;
-            accent-color: var(--gold-primary);
-            cursor: pointer;
-        }
-
-        .batch-product-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .batch-prod-header { display: flex; justify-content: space-between; align-items: center; }
-        .batch-prod-title { font-size: 16px; font-weight: 700; }
-
-        .photos-row {
-            display: flex;
-            gap: 14px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-
-        .photo-pill-card {
-            min-width: 170px;
-            max-width: 170px;
-            background: rgba(12, 10, 18, 0.9);
-            border: 2px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.25s ease;
-        }
-
-        .photo-pill-card.selected {
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 20px rgba(255, 183, 3, 0.35);
-        }
-
-        .photo-pill-img { width: 100%; height: 170px; object-fit: cover; }
-
-        .photo-pill-badge {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            font-size: 9px;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 50px;
-            text-transform: uppercase;
-        }
-
-        .photo-pill-badge.winner { background: var(--gold-primary); color: #0b0a0f; }
-        .photo-pill-badge.clean { background: var(--green-success); color: #fff; }
-        .photo-pill-badge.discarded { background: var(--red-danger); color: #fff; }
-
-        .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .preview-card {
-            background: var(--card-glass);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 16px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .preview-img {
-            width: 100%;
-            aspect-ratio: 3/4;
-            object-fit: cover;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2.5px solid rgba(255,255,255,0.3);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
             border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 0.8s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
-
+        /* Toast Notifications */
         .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
             background: rgba(18, 16, 26, 0.95);
-            border: 1.5px solid var(--gold-primary);
-            color: #fff;
-            padding: 16px 28px;
-            border-radius: 16px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-            backdrop-filter: blur(20px);
+            border: 1px solid var(--gold-primary);
+            padding: 14px 28px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             display: none;
             align-items: center;
             gap: 12px;
+            font-weight: 700;
             z-index: 9999;
-        }
-
-        /* Modal Overlay Preview */
-        .modal {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(15px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .modal-content {
-            background: var(--card-glass);
-            border: 1px solid var(--gold-primary);
-            border-radius: 24px;
-            padding: 24px;
-            max-width: 480px;
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            align-items: center;
         }
     </style>
 </head>
 <body>
 
+    <!-- Top Navigation Header -->
     <header class="header">
         <div>
             <div class="brand-title">
@@ -444,44 +329,44 @@
             </div>
         </div>
         <div class="mode-tabs">
-            <button class="tab-btn active" id="tabBatch" onclick="switchMode('batch')">📦 10-Product Selector</button>
-            <button class="tab-btn" id="tabHomepage" onclick="switchMode('homepage')">🏠 Homepage Manager</button>
-            <button class="tab-btn" id="tabSingle" onclick="switchMode('single')">🔍 Single ASIN Quick Inspector</button>
-            <button class="tab-btn" id="tabN8n" onclick="switchMode('n8n')" style="background: linear-gradient(135deg, rgba(230,0,35,0.18), rgba(230,0,35,0.08)); border-color: rgba(230,0,35,0.5); color: #ff6b7a;">📌 Send to n8n</button>
+            <button class="tab-btn active" id="tabN8n" onclick="switchTab('n8n')">📌 Send to n8n Workflow</button>
+            <button class="tab-btn" id="tabHomepage" onclick="switchTab('homepage')">🏠 Homepage Manager</button>
             <a href="/api/auth/pinterest" class="tab-btn" style="background: linear-gradient(135deg, #e60023, #ff4757); color: #ffffff; text-decoration: none; border-color: #ffffff; font-weight: 800;" target="_blank">🔌 Connect Pinterest OAuth 2.0</a>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- ========================================================================= -->
-        <!-- MODE B: 10-PRODUCT BATCH SELECTOR & PHOTO VERIFICATION WORKFLOW -->
-        <!-- ========================================================================= -->
-        <div id="modeBatch">
+        <!-- ============================================================ -->
+        <!-- TAB 1: SEND TO N8N WORKFLOW -->
+        <!-- ============================================================ -->
+        <div id="tabN8nContent">
 
+            <!-- Step Bar -->
             <div class="step-bar">
-                <div class="step-item active" id="stepIndicator1">
+                <div class="step-item active" id="step1Nav">
                     <div class="step-num">1</div>
-                    <span>Discover & Select Products (10 Items)</span>
+                    <span>Discover &amp; Select Products</span>
                 </div>
-                <div class="step-item" id="stepIndicator2">
+                <div class="step-item" id="step2Nav">
                     <div class="step-num">2</div>
-                    <span>Multi-Photo Verification & Headline Editor</span>
+                    <span>Review &amp; Override Images</span>
                 </div>
-                <div class="step-item" id="stepIndicator3">
+                <div class="step-item" id="step3Nav">
                     <div class="step-num">3</div>
-                    <span>Batch Run & Live Graphic Overlay Preview</span>
+                    <span>Send to n8n &amp; Monitor</span>
                 </div>
             </div>
 
-            <!-- STEP 1: DISCOVER PRODUCTS PANEL -->
-            <div class="card-box" id="panelStep1">
+            <!-- STEP 1: Discover & Select Products -->
+            <div class="card-box" id="n8nStep1Panel">
                 <div class="card-header-title">
-                    <span>🔍 Step 1: Discover & Select Products for Processing</span>
-                    <span style="font-size: 13px; color: var(--text-sub); font-weight: 400;">Live Amazon search across Pinterest trend categories</span>
+                    <span>🔍 Step 1: Discover &amp; Select Candidate Products</span>
+                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Search Amazon or pick a Pinterest trend category below</span>
                 </div>
-                <div class="input-group">
-                    <select id="trendCategorySelect" class="select-field" onchange="onTrendCategoryChange(this.value)">
+                
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+                    <select id="n8nCategorySelect" class="select-field" style="min-width:240px;" onchange="document.getElementById('n8nSearchKw').value=''">
                         <option value="aesthetic glass mushroom table lamp">🍄 Mushroom Ambient Lamps</option>
                         <option value="lily of the valley flower lamp bedside">🌸 Lily Flower Table Lamps</option>
                         <option value="sunset lamp projection light golden hour">🌅 Sunset Projection Lamps</option>
@@ -489,409 +374,125 @@
                         <option value="white ceramic donut vase pampas grass set">🏺 Ceramic Donut Vases</option>
                         <option value="abstract thinker statue bookshelf decor">🗿 Abstract Thinker Statues</option>
                         <option value="wavy vanity wall mirror aesthetic cream">🪞 Wavy Vanity Wall Mirrors</option>
-                        <option value="framed neutral botanical print set black frame">🖼️ Framed Botanical Art Sets</option>
-                        <option value="water hyacinth storage basket set natural">🧺 Natural Woven Hyacinth Baskets</option>
                     </select>
-                    <input type="text" id="customSearchInput" class="input-field" placeholder="Or enter custom Amazon search keyword...">
-                    <button class="btn-action" onclick="discoverProducts()">
-                        <div class="spinner" id="discoverSpinner"></div>
-                        <span>Discover 10 Products</span>
-                    </button>
+                    <input id="n8nSearchKw" type="text" placeholder="Or type custom search term..." class="input-field" style="flex:1;min-width:220px;" />
+                    <input id="n8nFetchCount" type="number" value="10" min="1" max="20" class="input-field" style="width:90px;" title="Products to fetch" />
+                    <button class="btn-primary" onclick="n8nDiscoverProducts()">🔍 Discover Products</button>
                 </div>
 
-                <div class="discover-grid" id="discoverGrid"></div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                    <div id="selectionCounter" style="font-weight: 700; color: var(--gold-primary);">0 Products Selected</div>
-                    <button class="btn-action btn-success" onclick="proceedToStep2PhotoVerification()">
-                        <span>Proceed to Step 2: Photo & Headline Editor ➔</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 2: MULTI-PHOTO VERIFICATION & HEADLINE EDITOR -->
-            <div class="card-box" id="panelStep2" style="display: none;">
-                <div class="card-header-title">
-                    <span>📸 Step 2: Multi-Photo Verification, Winner Selection & Custom Badge Editor</span>
-                    <span style="font-size: 13px; color: var(--text-sub); font-weight: 400;">Gold border indicates AI-chosen winner. Customize headlines & badges below.</span>
+                <div id="n8nDiscoverLoader" style="display:none;text-align:center;padding:30px;color:var(--gold-primary);font-weight:700;">
+                    ⏳ Searching Amazon catalog for live products...
                 </div>
 
-                <div id="batchPhotoBoards" style="display: flex; flex-direction: column; gap: 20px;"></div>
+                <div class="product-grid" id="n8nDiscoverGrid"></div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 12px;">
-                    <button class="btn-action" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" onclick="backToStep1()">
-                        <span>← Back to Step 1</span>
-                    </button>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn-action btn-success" onclick="launchBatchGeneration()">
-                            <div class="spinner" id="batchLaunchSpinner"></div>
-                            <span>🎨 Generate Overlays (Local FLUX)</span>
-                        </button>
-                        <button class="btn-action" id="n8nDispatchBtn" style="background: linear-gradient(135deg, rgba(229,57,53,0.25), rgba(255,183,3,0.15)); border-color: #e53935; color: #ff7b7b;" onclick="sendBatchToN8n()">
-                            <div class="spinner" id="n8nDispatchSpinner"></div>
-                            <span>🚀 Send Selected Batch to n8n Workflow</span>
-                        </button>
-                    </div>
+                <div id="n8nStep1Footer" style="display:none;margin-top:24px;text-align:center;">
+                    <div style="margin-bottom:12px;color:var(--gold-primary);font-size:16px;font-weight:800;" id="n8nSelectedCounter">0 products selected</div>
+                    <button class="btn-primary" onclick="n8nGoToStep2()" style="background:linear-gradient(135deg,#fb8500,#ffb703);color:#000;font-size:16px;padding:14px 44px;">Proceed to Image Review →</button>
                 </div>
             </div>
 
-            <!-- STEP 3: BATCH GENERATION PROGRESS & LIVE GRAPHIC OVERLAY PREVIEW -->
-            <div class="card-box" id="panelStep3" style="display: none;">
+            <!-- STEP 2: Review & Override Images -->
+            <div class="card-box" id="n8nStep2Panel" style="display:none;">
                 <div class="card-header-title">
-                    <span>🚀 Step 3: Batch Run Progress & Live Graphic Overlay Preview</span>
-                    <span id="batchProgressBadge" style="font-size: 14px; color: var(--gold-primary); font-weight: 700;">Processing 0 of 0...</span>
+                    <span>📸 Step 2: Review &amp; Pick Best Photo per Product</span>
+                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">AI auto-picks the best photo. Click any image below to override it.</span>
                 </div>
 
-                <div style="background: rgba(255,183,3,0.1); border: 1px solid var(--gold-primary); padding: 14px 20px; border-radius: 16px; font-weight: 700;" id="batchStatusText">
-                    Initializing batch campaign generation engine...
+                <div id="n8nExtractLoader" style="display:none;text-align:center;padding:40px;color:var(--gold-primary);font-weight:700;">
+                    ⏳ Extracting listing photo suites for all selected items... This takes ~20 seconds.
                 </div>
 
-                <div class="preview-grid" id="previewGrid"></div>
+                <div id="n8nPhotoReviewList" style="display:flex;flex-direction:column;gap:24px;"></div>
+
+                <div style="display:flex;gap:14px;margin-top:28px;justify-content:center;">
+                    <button class="btn-secondary" onclick="n8nBackToStep1()">← Back to Step 1</button>
+                    <button class="btn-primary" id="n8nSubmitBtn" onclick="n8nSubmitBatch()" style="font-size:16px;padding:14px 44px;">📌 Send to n8n Workflow</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: n8n Live Status -->
+            <div class="card-box" id="n8nStep3Panel" style="display:none;">
+                <div class="card-header-title">
+                    <span>🚀 Step 3: n8n Workflow Execution Monitor</span>
+                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Batch dispatched! n8n is building landing pages and publishing Pins live.</span>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;margin-bottom:20px;">
+                    <div id="n8nStatusHeading" style="color:var(--gold-primary);font-size:16px;font-weight:800;margin-bottom:16px;">⏳ Dispatching batch to n8n...</div>
+                    <div id="n8nStatusRows" style="display:flex;flex-direction:column;gap:12px;"></div>
+                </div>
+
+                <div style="text-align:center;">
+                    <button class="btn-secondary" onclick="n8nResetBatch()">🔄 Start New Batch</button>
+                </div>
             </div>
 
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- MODE C: LIVE HOMEPAGE SHOWCASE MANAGER & 1-CLICK DELETE -->
-        <!-- ========================================================================= -->
-        <div id="modeHomepage" style="display: none;">
+        <!-- ============================================================ -->
+        <!-- TAB 2: HOMEPAGE MANAGER -->
+        <!-- ============================================================ -->
+        <div id="tabHomepageContent" style="display:none;">
+
             <div class="card-box">
                 <div class="card-header-title">
-                    <span>🏠 Live Portfolio Homepage Showcase & Controls</span>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" onclick="loadHomepageProducts()">
-                            <span>📥 Refresh Products</span>
-                        </button>
-                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(255, 183, 3, 0.2); border-color: var(--gold-primary);" onclick="runPriceSync()">
-                            <div class="spinner" id="syncSpinner"></div>
-                            <span id="priceSyncText">🔄 1-Click Daily Price Synchronizer</span>
-                        </button>
-                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(16, 185, 129, 0.2); border-color: var(--green-success);" onclick="runRerenderBadges()">
-                            <span>🎨 Re-render All Price Badges</span>
-                        </button>
-                        <button class="btn-action" style="padding: 8px 18px; font-size: 13px; background: rgba(59, 130, 246, 0.2); border-color: #3b82f6;" onclick="runZero404Audit()">
-                            <span>⚡ Run Zero-404 Audit</span>
-                        </button>
+                    <span>🏠 Live Homepage Showcase Manager</span>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn-secondary" onclick="loadHomepageManager()">📥 Refresh List</button>
                     </div>
                 </div>
 
-                <div class="preview-grid" id="homepageProductsGrid"></div>
+                <div class="product-grid" id="homepageShowcaseGrid"></div>
             </div>
 
-            <!-- 21-REGION AVAILABILITY MATRIX GRID -->
-            <div class="card-box" style="margin-top: 24px;">
+            <!-- 21-Region Matrix Table -->
+            <div class="card-box" style="margin-top:24px;">
                 <div class="card-header-title">
-                    <span>📊 21-Region Storefront Availability & Direct Link Matrix Grid</span>
-                    <span style="font-size: 12px; color: var(--text-sub);"><span style="color:#10b981; font-weight:800;">DP</span> = Direct Product Page | <span style="color:#3b82f6; font-weight:800;">S</span> = Search Fallback</span>
+                    <span>📊 21-Region Global Storefront Matrix Grid</span>
+                    <span style="font-size:12px;color:var(--text-sub);"><span style="color:#10b981;font-weight:800;">DP</span> = Direct Product Page | <span style="color:#3b82f6;font-weight:800;">S</span> = Search Fallback</span>
                 </div>
-                <div style="overflow-x: auto; max-width: 100%;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 12px; font-family: 'Outfit', sans-serif;">
+                <div style="overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;text-align:center;font-size:12px;">
                         <thead>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.15); color: var(--gold-primary);">
-                                <th style="padding: 10px; text-align: left;">Product ASIN / Title</th>
-                                <th style="padding: 6px;">US</th>
-                                <th style="padding: 6px;">UK</th>
-                                <th style="padding: 6px;">IN</th>
-                                <th style="padding: 6px;">DE</th>
-                                <th style="padding: 6px;">FR</th>
-                                <th style="padding: 6px;">ES</th>
-                                <th style="padding: 6px;">IT</th>
-                                <th style="padding: 6px;">CA</th>
-                                <th style="padding: 6px;">AU</th>
-                                <th style="padding: 6px;">JP</th>
-                                <th style="padding: 6px;">SE</th>
-                                <th style="padding: 6px;">NL</th>
-                                <th style="padding: 6px;">PL</th>
-                                <th style="padding: 6px;">TR</th>
-                                <th style="padding: 6px;">BE</th>
-                                <th style="padding: 6px;">MX</th>
-                                <th style="padding: 6px;">BR</th>
-                                <th style="padding: 6px;">SG</th>
-                                <th style="padding: 6px;">AE</th>
-                                <th style="padding: 6px;">SA</th>
-                                <th style="padding: 6px;">EG</th>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.15);color:var(--gold-primary);">
+                                <th style="padding:10px;text-align:left;">Product ASIN / Title</th>
+                                <th style="padding:6px;">US</th><th style="padding:6px;">UK</th><th style="padding:6px;">IN</th><th style="padding:6px;">DE</th>
+                                <th style="padding:6px;">FR</th><th style="padding:6px;">ES</th><th style="padding:6px;">IT</th><th style="padding:6px;">CA</th>
+                                <th style="padding:6px;">AU</th><th style="padding:6px;">JP</th><th style="padding:6px;">SE</th><th style="padding:6px;">NL</th>
+                                <th style="padding:6px;">PL</th><th style="padding:6px;">TR</th><th style="padding:6px;">BE</th><th style="padding:6px;">MX</th>
+                                <th style="padding:6px;">BR</th><th style="padding:6px;">SG</th><th style="padding:6px;">AE</th><th style="padding:6px;">SA</th>
+                                <th style="padding:6px;">EG</th>
                             </tr>
                         </thead>
                         <tbody id="matrixTableBody">
-                            <tr><td colspan="22" style="padding: 20px; color: var(--text-sub);">Loading 21-Region Matrix Grid...</td></tr>
+                            <tr><td colspan="22" style="padding:20px;color:var(--text-sub);">Loading 21-Region Matrix Grid...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- REAL-TIME TERMINAL LOG STREAMER -->
-            <div class="card-box" style="margin-top: 24px;">
-                <div class="card-header-title">
-                    <span>🖥️ Real-Time System & Scraper Terminal Streamer</span>
-                    <span style="font-size: 12px; color: var(--text-sub);">Auto-refreshing every 3s</span>
-                </div>
-                <div id="terminalLogBox" style="background: #000; color: #10b981; font-family: 'Courier New', monospace; font-size: 12.5px; padding: 16px; border-radius: 12px; height: 180px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; border: 1px solid rgba(255,255,255,0.1);">
-                    System running smoothly...
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================================================= -->
-        <!-- MODE A: SINGLE ASIN QUICK EXTRACTOR -->
-        <!-- ========================================================================= -->
-        <div id="modeSingle" style="display: none;">
-            <div class="card-box">
-                <div class="card-header-title">
-                    <span>🔍 Single Amazon ASIN / URL Quick Inspector</span>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="targetInput" class="input-field" placeholder="Enter Amazon ASIN (e.g. B0DZD1X83N) or full product URL..." value="B0DZD1X83N">
-                    <button class="btn-action" onclick="fetchSingleProductSuite()">
-                        <div class="spinner" id="extractSpinner"></div>
-                        <span>Extract & Inspect Photos</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="card-box" id="productMetaPanel" style="display: none; grid-template-columns: 2fr 1fr 1fr; align-items: center;">
-                <div>
-                    <h2 id="metaTitle" style="font-family: 'Playfair Display', serif; font-size: 20px;">Title...</h2>
-                    <p id="metaAsin" style="color: var(--text-sub); font-size: 13px;">ASIN: --</p>
-                </div>
-                <div style="font-size: 18px; font-weight: 800; color: var(--gold-primary);" id="metaPrice">$12.99</div>
-                <div style="font-size: 18px; font-weight: 800; color: var(--gold-primary);" id="metaRating">★ 4.6</div>
-            </div>
-
-            <div id="photosSection" style="display: none; flex-direction: column; gap: 16px;">
-                <div class="discover-grid" id="photosGrid"></div>
-                <button class="btn-action btn-success" onclick="approveAndPublishSingleCampaign()">
-                    <div class="spinner" id="publishSpinner"></div>
-                    <span>🚀 Approve & Generate Campaign Live</span>
-                </button>
-            </div>
         </div>
 
     </div>
 
-    <!-- Live Graphic Overlay Preview Modal -->
-    <div class="modal" id="overlayModal">
-        <div class="modal-content" style="max-width: 960px; width: 92vw; max-height: 90vh; overflow-y: auto; scrollbar-width: thin; padding: 24px;">
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
-                <h3 style="color: var(--gold-primary); font-size: 20px; margin: 0;">🖼️ Canva Studio Pro Overlay Editor</h3>
-                <button type="button" class="btn-action" style="padding: 6px 16px; font-size: 13px; background: rgba(255,255,255,0.1);" onclick="closeOverlayModal()">✕ Close Window</button>
-            </div>
-
-            <!-- 2-Column Pro Studio Layout -->
-            <div style="display: grid; grid-template-columns: minmax(320px, 440px) 1fr; gap: 24px; align-items: start;">
-                
-                <!-- LEFT COLUMN: HUGE HIGH-DEF 3:4 PREVIEW CANVAS -->
-                <div>
-                    <div style="font-size: 12px; color: var(--gold-primary); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
-                        📸 High-Definition Canvas (Drag Price Tag Below)
-                    </div>
-                    <div id="previewCanvasContainer" style="position: relative; width: 100%; aspect-ratio: 3/4; border-radius: 18px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.7); user-select: none; border: 2px solid rgba(255,255,255,0.15);">
-                        <img id="overlayModalImg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" src="" alt="Overlay Preview">
-
-                        <!-- Draggable Price Tag Graphic -->
-                        <div id="liveTagOverlay" style="position: absolute; bottom: 8%; right: 5%; width: 34%; transform: rotate(-6deg); cursor: grab; pointer-events: auto; z-index: 30; filter: drop-shadow(0 14px 28px rgba(0,0,0,0.8));">
-                            <img id="liveTagImg" src="./price tags/tag 1.png" style="width: 100%; height: auto; display: block; object-fit: contain; pointer-events: none;">
-                            <div id="liveTagPriceText" style="position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 900; color: #111827; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(255,255,255,0.6);">$20.56</div>
-                            <div style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: #fb8500; color: #000; font-size: 10.5px; font-weight: 800; padding: 3px 10px; border-radius: 20px; white-space: nowrap; pointer-events: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">🖐️ DRAG TAG</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT COLUMN: SCROLLABLE CANVA CONTROLS SIDEBAR -->
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-                    <div style="background: rgba(255,255,255,0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                            <div style="color: var(--gold-primary); font-size: 15px; font-weight: 800;">⚙️ Price Tag Controls</div>
-                            <div style="display: flex; gap: 8px; align-items: center;">
-                                <button type="button" onclick="resetTagControlsToDefault()" style="font-size: 11px; background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-weight: 700; cursor: pointer;">🔄 Reset Default</button>
-                                <span id="dragPosBadge" style="font-size: 11.5px; background: rgba(255,183,3,0.2); color: var(--gold-primary); padding: 4px 12px; border-radius: 20px; font-weight: 700;">📍 Tag: Default</span>
-                            </div>
-                        </div>
-
-                        <!-- 1. Tag Size Scale -->
-                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">1. Tag Badge Scale:</label>
-                            <select id="tagScaleSelect" class="input-field" style="padding: 8px 12px; font-size: 13.5px; width: 100%;" onchange="updateLiveTagPreview()">
-                                <option value="260x352">Small (260px × 352px)</option>
-                                <option value="320x433">Medium (320px × 433px)</option>
-                                <option value="380x514" selected>Large (380px × 514px) [Default]</option>
-                                <option value="450x609">Extra Large (450px × 609px)</option>
-                                <option value="520x704">Jumbo Bold (520px × 704px)</option>
-                            </select>
-                        </div>
-
-                        <!-- 2. Tag Rotation Angle -->
-                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">2. Tag Rotation Tilt:</label>
-                                <span id="tagRotationVal" style="font-size: 13px; color: var(--gold-primary); font-weight: 800;">-6°</span>
-                            </div>
-                            <input type="range" id="tagRotationRange" min="-15" max="15" value="-6" style="width: 100%;" oninput="updateLiveTagPreview()">
-                        </div>
-
-                        <!-- 3. Tag Background Color -->
-                        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #cbd5e1;">3. Tag Card Theme Color:</label>
-                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <button type="button" title="Amber Gold" style="width: 28px; height: 28px; border-radius: 50%; background: #fb8500; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#fb8500')"></button>
-                                <button type="button" title="Cyber Coral" style="width: 28px; height: 28px; border-radius: 50%; background: #ff0055; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#ff0055')"></button>
-                                <button type="button" title="Royal Violet" style="width: 28px; height: 28px; border-radius: 50%; background: #7a00ff; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#7a00ff')"></button>
-                                <button type="button" title="Emerald Mint" style="width: 28px; height: 28px; border-radius: 50%; background: #10b981; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#10b981')"></button>
-                                <button type="button" title="Pearl White" style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#ffffff')"></button>
-                                <button type="button" title="Obsidian Dark" style="width: 28px; height: 28px; border-radius: 50%; background: #111827; border: 2px solid #fff; cursor: pointer;" onclick="setTagColor('#111827')"></button>
-                                <input type="color" id="tagCustomColorInput" value="#fb8500" style="width: 34px; height: 28px; border: none; cursor: pointer; background: none;" onchange="setTagColor(this.value)">
-                            </div>
-                        </div>
-
-                        <!-- 4. Price Text Size & Position Controls -->
-                        <div style="background: rgba(251, 133, 0, 0.1); border: 1px solid rgba(251, 133, 0, 0.3); padding: 12px; border-radius: 12px; margin-bottom: 14px;">
-                            <div style="color: var(--gold-primary); font-size: 13px; font-weight: 800; margin-bottom: 8px;">💰 Price Text ($20.56) Size & Position</div>
-                            
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <label style="font-size: 12px; color: #cbd5e1;">Price Text Size:</label>
-                                <span id="priceTextScaleVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">20%</span>
-                            </div>
-                            <input type="range" id="priceTextScaleRange" min="10" max="45" value="20" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
-
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <label style="font-size: 12px; color: #cbd5e1;">Vertical Shift (Up / Down):</label>
-                                <span id="priceTextOffsetYVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">0px</span>
-                            </div>
-                            <input type="range" id="priceTextOffsetYRange" min="-30" max="40" value="0" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
-
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <label style="font-size: 12px; color: #cbd5e1;">Horizontal Shift (Left / Right):</label>
-                                <span id="priceTextOffsetXVal" style="font-size: 12px; color: var(--gold-primary); font-weight: 800;">0px</span>
-                            </div>
-                            <input type="range" id="priceTextOffsetXRange" min="-30" max="30" value="0" style="width: 100%; margin-bottom: 10px;" oninput="updateLiveTagPreview()">
-
-                            <div style="display: flex; gap: 8px; align-items: center;">
-                                <label style="font-size: 12px; color: #cbd5e1;">Text Color:</label>
-                                <button type="button" title="Dark Obsidian" style="width: 22px; height: 22px; border-radius: 50%; background: #111827; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#111827')"></button>
-                                <button type="button" title="Pure White" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ffffff')"></button>
-                                <button type="button" title="Amber Gold" style="width: 22px; height: 22px; border-radius: 50%; background: #fb8500; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#fb8500')"></button>
-                                <button type="button" title="Cyber Pink" style="width: 22px; height: 22px; border-radius: 50%; background: #ff0055; border: 1px solid #fff; cursor: pointer;" onclick="setPriceTextColor('#ff0055')"></button>
-                                <input type="color" id="priceTextColorInput" value="#111827" style="width: 28px; height: 22px; border: none; cursor: pointer; background: none;" onchange="setPriceTextColor(this.value)">
-                            </div>
-                        </div>
-
-                        <!-- Save Global Defaults Button -->
-                        <button type="button" id="saveDefaultBtn" onclick="saveAsGlobalSystemDefault()" style="width: 100%; margin-bottom: 12px; padding: 10px; background: rgba(255, 183, 3, 0.15); color: var(--gold-primary); border: 1px dashed var(--gold-primary); border-radius: 12px; font-weight: 800; font-size: 12.5px; cursor: pointer; transition: all 0.2s ease;">
-                            ⭐ Save Layout as Default for ALL Future Products
-                        </button>
-                    </div>
-
-                    <!-- Save Action Button -->
-                    <div id="modalSaveActionBox"></div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div class="toast" id="toast">
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
         <span id="toastIcon">✨</span>
-        <span id="toastMsg">Operation successful!</span>
+        <span id="toastMsg">Notification message</span>
     </div>
-
-        <!-- ============================================================ -->
-        <!-- MODE N8N: SEND TO N8N WORKFLOW PANEL -->
-        <!-- ============================================================ -->
-        <div id="modeN8n" style="display:none;">
-
-            <!-- Step Bar -->
-            <div class="step-bar">
-                <div class="step-item active" id="n8nStep1Indicator">
-                    <div class="step-num">1</div>
-                    <span>Select Products</span>
-                </div>
-                <div class="step-item" id="n8nStep2Indicator">
-                    <div class="step-num">2</div>
-                    <span>Review &amp; Pick Images</span>
-                </div>
-                <div class="step-item" id="n8nStep3Indicator">
-                    <div class="step-num">3</div>
-                    <span>Send to n8n &amp; Monitor</span>
-                </div>
-            </div>
-
-            <!-- n8n STEP 1: Product Selection -->
-            <div class="card-box" id="n8nPanelStep1">
-                <div class="card-header-title">
-                    <span>🔍 Step 1: Discover &amp; Select Products to Publish via n8n</span>
-                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Search Amazon, pick 1–15 products. System auto-selects best image per product.</span>
-                </div>
-                <div class="input-group" style="display:flex;gap:12px;flex-wrap:wrap;">
-                    <input id="n8nSearchInput" type="text" placeholder="Search keyword (e.g. mushroom lamp, donut vase)" class="input-field" style="flex:1;min-width:220px;" />
-                    <input id="n8nCountInput" type="number" value="10" min="1" max="20" class="input-field" style="width:90px;" title="Number of products to fetch" />
-                    <button class="btn-primary" onclick="n8nDiscoverProducts()">🔍 Search Amazon</button>
-                </div>
-                <div id="n8nDiscoverSpinner" style="display:none;margin-top:12px;color:var(--gold-primary);font-weight:700;">⏳ Discovering products...</div>
-                <div id="n8nDiscoverGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:18px;"></div>
-                <div id="n8nStep1Footer" style="display:none;margin-top:18px;text-align:center;">
-                    <div style="margin-bottom:10px;color:var(--gold-primary);font-weight:700;" id="n8nSelectCount">0 products selected</div>
-                    <button class="btn-primary" onclick="n8nGoToStep2()" style="background:linear-gradient(135deg,#fb8500,#ffb703);font-size:16px;padding:14px 40px;">Next: Review Images →</button>
-                </div>
-            </div>
-
-            <!-- n8n STEP 2: Image Review per product -->
-            <div class="card-box" id="n8nPanelStep2" style="display:none;">
-                <div class="card-header-title">
-                    <span>📸 Step 2: Review &amp; Confirm Best Image per Product</span>
-                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Our AI picked the best photo. Click any image to override the selection.</span>
-                </div>
-                <div id="n8nExtractSpinner" style="display:none;text-align:center;padding:24px;color:var(--gold-primary);font-weight:700;">⏳ Extracting photos for all selected products... This may take 30–60 seconds.</div>
-                <div id="n8nImageReviewList" style="display:flex;flex-direction:column;gap:28px;"></div>
-                <div style="display:flex;gap:14px;margin-top:24px;justify-content:center;">
-                    <button class="btn-secondary" onclick="n8nBackToStep1()">← Back</button>
-                    <button class="btn-primary" id="n8nSendBtn" onclick="n8nSendToWorkflow()" style="background:linear-gradient(135deg,#e60023,#ff4757);font-size:16px;padding:14px 40px;min-width:240px;">📌 Send to n8n Workflow</button>
-                </div>
-            </div>
-
-            <!-- n8n STEP 3: Live Status Monitor -->
-            <div class="card-box" id="n8nPanelStep3" style="display:none;">
-                <div class="card-header-title">
-                    <span>🚀 Step 3: n8n Workflow Live Status</span>
-                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Batch dispatched! n8n is building bridge pages and posting pins one by one.</span>
-                </div>
-                <div id="n8nStatusBox" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:22px;margin-bottom:18px;">
-                    <div id="n8nStatusMsg" style="color:var(--gold-primary);font-size:15px;font-weight:700;margin-bottom:14px;">⏳ Sending to n8n...</div>
-                    <div id="n8nItemStatusList" style="display:flex;flex-direction:column;gap:10px;"></div>
-                </div>
-                <div style="text-align:center;margin-top:16px;">
-                    <button class="btn-secondary" onclick="n8nResetAll()">🔄 Start New Batch</button>
-                </div>
-            </div>
-
-        </div>
-        <!-- END MODE N8N -->
 
     <script>
-        let discoveredItems = [];
-        let selectedAsins = new Set();
-        let extractedBatchDetails = [];
-        let batchSelectedPhotos = {};
-        let batchCustomData = {}; // asin -> {title, badge, price}
-        let currentBatchId = null;
-        let homepageProductsMap = {}; // asin -> product metadata
+        let n8nDiscoveredItems = [];
+        let n8nSelectedAsins = new Set();
+        let n8nExtractedItems = [];
+        let n8nChosenPhotos = {};
+        const n8nWebhookUrl = 'http://localhost:5678/webhook/pinterest-batch';
 
         function escapeHTML(str) {
             if (!str) return '';
-            return String(str).replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
+            return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
         }
-
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeOverlayModal();
-            }
-        });
 
         function showToast(msg, icon = '✨') {
             const toast = document.getElementById('toast');
@@ -901,158 +502,146 @@
             setTimeout(() => { toast.style.display = 'none'; }, 4000);
         }
 
-        function switchMode(mode) {
-            document.getElementById('modeBatch').style.display = mode === 'batch' ? 'block' : 'none';
-            document.getElementById('modeHomepage').style.display = mode === 'homepage' ? 'block' : 'none';
-            document.getElementById('modeSingle').style.display = mode === 'single' ? 'block' : 'none';
-            document.getElementById('modeN8n').style.display = mode === 'n8n' ? 'block' : 'none';
+        function switchTab(tab) {
+            document.getElementById('tabN8nContent').style.display = tab === 'n8n' ? 'block' : 'none';
+            document.getElementById('tabHomepageContent').style.display = tab === 'homepage' ? 'block' : 'none';
 
-            document.getElementById('tabBatch').classList.toggle('active', mode === 'batch');
-            document.getElementById('tabHomepage').classList.toggle('active', mode === 'homepage');
-            document.getElementById('tabSingle').classList.toggle('active', mode === 'single');
-            document.getElementById('tabN8n').classList.toggle('active', mode === 'n8n');
+            document.getElementById('tabN8n').classList.toggle('active', tab === 'n8n');
+            document.getElementById('tabHomepage').classList.toggle('active', tab === 'homepage');
 
-            if (mode === 'homepage') {
-                loadHomepageProducts();
+            if (tab === 'homepage') {
+                loadHomepageManager();
             }
         }
 
-        // ============================================================
-        // n8n WORKFLOW TAB — STATE + FUNCTIONS
-        // ============================================================
-        let n8nDiscoveredItems = [];
-        let n8nSelectedAsins = new Set(); // asin -> true
-        let n8nExtractedItems = [];       // [{asin, title, price, winner_photo, photos}]
-        let n8nChosenPhotos = {};         // asin -> chosen photo URL
-        let n8nWebhookUrl = 'http://localhost:5678/webhook/pinterest-batch';
-
+        // STEP 1: DISCOVER PRODUCTS
         function n8nDiscoverProducts() {
-            const kw = document.getElementById('n8nSearchInput').value.trim() || 'aesthetic room decor lamp';
-            const count = parseInt(document.getElementById('n8nCountInput').value) || 10;
-            document.getElementById('n8nDiscoverSpinner').style.display = 'block';
+            const customKw = document.getElementById('n8nSearchKw').value.trim();
+            const selectKw = document.getElementById('n8nCategorySelect').value;
+            const query = customKw || selectKw;
+            const count = parseInt(document.getElementById('n8nFetchCount').value) || 10;
+
+            document.getElementById('n8nDiscoverLoader').style.display = 'block';
             document.getElementById('n8nDiscoverGrid').innerHTML = '';
             document.getElementById('n8nStep1Footer').style.display = 'none';
             n8nSelectedAsins.clear();
 
-            fetch(`/api/discover?query=${encodeURIComponent(kw)}&count=${count}`)
+            fetch(`/api/discover?query=${encodeURIComponent(query)}&count=${count}`)
                 .then(r => r.json())
                 .then(data => {
-                    document.getElementById('n8nDiscoverSpinner').style.display = 'none';
+                    document.getElementById('n8nDiscoverLoader').style.display = 'none';
                     if (data.status === 'error') { showToast('Error: ' + data.message, '❌'); return; }
                     n8nDiscoveredItems = data.items || [];
-                    n8nRenderDiscoverGrid(n8nDiscoveredItems);
+                    renderDiscoverGrid(n8nDiscoveredItems);
+                    showToast(`Discovered ${n8nDiscoveredItems.length} candidate products!`, '🔍');
                 })
                 .catch(() => {
-                    document.getElementById('n8nDiscoverSpinner').style.display = 'none';
-                    showToast('Cannot reach server. Is web_console_server.py running?', '❌');
+                    document.getElementById('n8nDiscoverLoader').style.display = 'none';
+                    showToast('Server error. Is web_console_server.py running?', '❌');
                 });
         }
 
-        function n8nRenderDiscoverGrid(items) {
+        function renderDiscoverGrid(items) {
             const grid = document.getElementById('n8nDiscoverGrid');
             grid.innerHTML = '';
             items.forEach(item => {
                 const asin = item.asin;
                 const card = document.createElement('div');
-                card.id = `n8n-card-${asin}`;
-                card.style.cssText = 'background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:14px;cursor:pointer;transition:all 0.2s;position:relative;';
+                card.id = `card-${asin}`;
+                card.className = 'product-card';
                 card.innerHTML = `
-                    <img src="${escapeHTML(item.thumbnail || '')}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin-bottom:10px;" onerror="this.src='https://placehold.co/200x200/1a1a2e/ffb703?text=No+Image'" />
-                    <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px;">${escapeHTML((item.title||'').substring(0,60))}...</div>
-                    <div style="color:var(--gold-primary);font-weight:800;font-size:14px;">${escapeHTML(item.price||'N/A')}</div>
-                    <div style="font-size:11px;color:var(--text-sub);margin-top:4px;">⭐ ${escapeHTML(String(item.rating||'4.5'))} · ${item.is_already_published ? '<span style="color:#fb8500;">Already Live</span>' : '<span style="color:#4ade80;">New</span>'}</div>
-                    <div id="n8n-check-${asin}" style="display:none;position:absolute;top:10px;right:10px;width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#22c55e);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:16px;">✓</div>
+                    <img src="${escapeHTML(item.thumbnail || '')}" class="product-thumb" onerror="this.src='https://placehold.co/200x200/12101a/ffb703?text=Amazon+Product'" />
+                    <div class="product-title">${escapeHTML(item.title || '')}</div>
+                    <div class="product-price">${escapeHTML(item.price || '$19.99')}</div>
+                    <div id="badge-${asin}" class="check-badge" style="display:none;">✓</div>
                 `;
-                card.onclick = () => n8nToggleProduct(asin, card);
+                card.onclick = () => toggleSelectProduct(asin, card);
                 grid.appendChild(card);
             });
             document.getElementById('n8nStep1Footer').style.display = 'block';
-            n8nUpdateSelectCount();
+            updateSelectedCounter();
         }
 
-        function n8nToggleProduct(asin, card) {
+        function toggleSelectProduct(asin, card) {
+            const badge = document.getElementById(`badge-${asin}`);
             if (n8nSelectedAsins.has(asin)) {
                 n8nSelectedAsins.delete(asin);
-                card.style.border = '2px solid rgba(255,255,255,0.1)';
-                card.style.background = 'rgba(255,255,255,0.05)';
-                const chk = document.getElementById(`n8n-check-${asin}`);
-                if (chk) chk.style.display = 'none';
+                card.classList.remove('selected');
+                if (badge) badge.style.display = 'none';
             } else {
                 n8nSelectedAsins.add(asin);
-                card.style.border = '2px solid var(--gold-primary)';
-                card.style.background = 'rgba(255,183,3,0.1)';
-                const chk = document.getElementById(`n8n-check-${asin}`);
-                if (chk) chk.style.display = 'flex';
+                card.classList.add('selected');
+                if (badge) badge.style.display = 'flex';
             }
-            n8nUpdateSelectCount();
+            updateSelectedCounter();
         }
 
-        function n8nUpdateSelectCount() {
-            const el = document.getElementById('n8nSelectCount');
-            if (el) el.innerText = `${n8nSelectedAsins.size} product${n8nSelectedAsins.size !== 1 ? 's' : ''} selected`;
+        function updateSelectedCounter() {
+            document.getElementById('n8nSelectedCounter').innerText = `${n8nSelectedAsins.size} product${n8nSelectedAsins.size !== 1 ? 's' : ''} selected`;
         }
 
+        // STEP 2: REVIEW & OVERRIDE IMAGES
         function n8nGoToStep2() {
-            if (n8nSelectedAsins.size === 0) { showToast('Please select at least 1 product!', '⚠️'); return; }
-            // Show step 2
-            document.getElementById('n8nPanelStep1').style.display = 'none';
-            document.getElementById('n8nPanelStep2').style.display = 'block';
-            document.getElementById('n8nStep1Indicator').classList.remove('active');
-            document.getElementById('n8nStep2Indicator').classList.add('active');
-            document.getElementById('n8nExtractSpinner').style.display = 'block';
-            document.getElementById('n8nImageReviewList').innerHTML = '';
+            if (n8nSelectedAsins.size === 0) { showToast('Please click at least 1 product card to select!', '⚠️'); return; }
+
+            document.getElementById('n8nStep1Panel').style.display = 'none';
+            document.getElementById('n8nStep2Panel').style.display = 'block';
+            document.getElementById('step1Nav').classList.remove('active');
+            document.getElementById('step2Nav').classList.add('active');
+
+            document.getElementById('n8nExtractLoader').style.display = 'block';
+            document.getElementById('n8nPhotoReviewList').innerHTML = '';
 
             const asins = [...n8nSelectedAsins];
-            // Extract photos for all selected products
             fetch('/api/batch_extract', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({asins})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ asins })
             })
             .then(r => r.json())
             .then(data => {
-                document.getElementById('n8nExtractSpinner').style.display = 'none';
+                document.getElementById('n8nExtractLoader').style.display = 'none';
                 n8nExtractedItems = data.items || [];
                 n8nChosenPhotos = {};
-                // Pre-select winner_photo per product
                 n8nExtractedItems.forEach(item => {
                     n8nChosenPhotos[item.asin] = item.winner_photo || (item.photos && item.photos[0] ? item.photos[0].url : '');
                 });
-                n8nRenderImageReview(n8nExtractedItems);
+                renderImageReviewRows(n8nExtractedItems);
             })
             .catch(err => {
-                document.getElementById('n8nExtractSpinner').style.display = 'none';
-                showToast('Photo extraction failed: ' + err, '❌');
+                document.getElementById('n8nExtractLoader').style.display = 'none';
+                showToast('Photo extraction error: ' + err, '❌');
             });
         }
 
-        function n8nRenderImageReview(items) {
-            const list = document.getElementById('n8nImageReviewList');
+        function renderImageReviewRows(items) {
+            const list = document.getElementById('n8nPhotoReviewList');
             list.innerHTML = '';
             items.forEach(item => {
                 const asin = item.asin;
                 const row = document.createElement('div');
-                row.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:18px;';
+                row.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;';
+                
                 const photosHtml = (item.photos || []).map((ph, idx) => `
-                    <div onclick="n8nSelectPhoto('${asin}', '${escapeHTML(ph.url)}', this)" id="n8n-ph-${asin}-${idx}"
-                         style="flex:0 0 110px;cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid ${ph.url === n8nChosenPhotos[asin] ? 'var(--gold-primary)' : 'rgba(255,255,255,0.12)'};transition:all 0.2s;position:relative;">
-                        <img src="${escapeHTML(ph.url)}" style="width:110px;height:110px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'" />
-                        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);font-size:10px;font-weight:700;text-align:center;padding:3px;
-                            color:${ph.is_clean ? '#4ade80' : '#f87171'}">${ph.is_clean ? '✓ CLEAN' : '✗ BAD'}</div>
-                        ${ph.url === n8nChosenPhotos[asin] ? '<div style="position:absolute;top:4px;right:4px;background:var(--gold-primary);color:#000;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;">AI PICK ✓</div>' : ''}
+                    <div onclick="selectOverridePhoto('${asin}', '${escapeHTML(ph.url)}')"
+                         style="flex:0 0 110px;cursor:pointer;border-radius:14px;overflow:hidden;border:3px solid ${ph.url === n8nChosenPhotos[asin] ? 'var(--gold-primary)' : 'rgba(255,255,255,0.15)'};position:relative;transition:all 0.2s;">
+                        <img src="${escapeHTML(ph.url)}" style="width:110px;height:110px;object-fit:cover;display:block;" />
+                        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.75);font-size:10px;font-weight:800;text-align:center;padding:3px;color:${ph.is_clean ? '#4ade80' : '#f87171'}">${ph.is_clean ? '✓ CLEAN' : '✗ BAD'}</div>
+                        ${ph.url === n8nChosenPhotos[asin] ? '<div style="position:absolute;top:4px;right:4px;background:var(--gold-primary);color:#000;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;">PICK ✓</div>' : ''}
                     </div>
                 `).join('');
+
                 row.innerHTML = `
-                    <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
-                        <div style="flex:0 0 auto;">
-                            <img src="${escapeHTML(n8nChosenPhotos[asin] || '')}" id="n8n-preview-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:14px;border:2px solid var(--gold-primary);" />
-                            <div style="font-size:11px;color:var(--gold-primary);font-weight:700;text-align:center;margin-top:4px;">Selected</div>
+                    <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+                        <div style="flex:0 0 auto;text-align:center;">
+                            <img src="${escapeHTML(n8nChosenPhotos[asin] || '')}" id="prev-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:16px;border:3px solid var(--gold-primary);" />
+                            <div style="font-size:12px;color:var(--gold-primary);font-weight:800;margin-top:6px;">Chosen Photo</div>
                         </div>
-                        <div style="flex:1;min-width:180px;">
-                            <div style="font-weight:800;font-size:15px;color:#fff;margin-bottom:4px;">${escapeHTML((item.title||'').substring(0,70))}</div>
-                            <div style="color:var(--gold-primary);font-weight:700;margin-bottom:10px;">${escapeHTML(item.price||'$19.99')} · ASIN: ${asin}</div>
-                            <div style="font-size:12px;color:var(--text-sub);margin-bottom:8px;">📸 Click any image below to override AI selection:</div>
-                            <div style="display:flex;gap:8px;flex-wrap:wrap;">${photosHtml}</div>
+                        <div style="flex:1;min-width:200px;">
+                            <div style="font-weight:800;font-size:16px;color:#fff;margin-bottom:6px;">${escapeHTML(item.title || '')}</div>
+                            <div style="color:var(--gold-primary);font-weight:800;margin-bottom:12px;">${escapeHTML(item.price || '$19.99')} · ASIN: ${asin}</div>
+                            <div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">Click any photo to set as winner:</div>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;">${photosHtml}</div>
                         </div>
                     </div>
                 `;
@@ -1060,28 +649,23 @@
             });
         }
 
-        function n8nSelectPhoto(asin, url, el) {
+        function selectOverridePhoto(asin, url) {
             n8nChosenPhotos[asin] = url;
-            // Update preview
-            const preview = document.getElementById(`n8n-preview-${asin}`);
-            if (preview) preview.src = url;
-            // Re-render to update border highlights
-            n8nRenderImageReview(n8nExtractedItems);
+            renderImageReviewRows(n8nExtractedItems);
         }
 
         function n8nBackToStep1() {
-            document.getElementById('n8nPanelStep2').style.display = 'none';
-            document.getElementById('n8nPanelStep1').style.display = 'block';
-            document.getElementById('n8nStep2Indicator').classList.remove('active');
-            document.getElementById('n8nStep1Indicator').classList.add('active');
+            document.getElementById('n8nStep2Panel').style.display = 'none';
+            document.getElementById('n8nStep1Panel').style.display = 'block';
+            document.getElementById('step2Nav').classList.remove('active');
+            document.getElementById('step1Nav').classList.add('active');
         }
 
-        async function n8nSendToWorkflow() {
-            if (n8nExtractedItems.length === 0) { showToast('No products extracted!', '⚠️'); return; }
-            document.getElementById('n8nSendBtn').disabled = true;
-            document.getElementById('n8nSendBtn').innerText = '⏳ Preparing & Sending...';
+        // STEP 3: SUBMIT BATCH TO N8N
+        async function n8nSubmitBatch() {
+            document.getElementById('n8nSubmitBtn').disabled = true;
+            document.getElementById('n8nSubmitBtn').innerText = '⏳ Preparing Batch...';
 
-            // Build items array with chosen photos
             const items = n8nExtractedItems.map(item => ({
                 asin: item.asin,
                 title: item.title,
@@ -1089,1004 +673,137 @@
                 chosen_photo_url: n8nChosenPhotos[item.asin] || item.winner_photo || ''
             }));
 
-            // Step A: Call our server to prep the batch (download photos, generate SEO)
             let preparedItems = [];
             try {
                 const prepRes = await fetch('/api/prepare_n8n_batch', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({items})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items })
                 });
                 const prepData = await prepRes.json();
                 if (prepData.status !== 'success') throw new Error(prepData.message);
                 preparedItems = prepData.items;
-                showToast(`✅ ${preparedItems.length} products packaged! Sending to n8n...`, '📦');
-            } catch(e) {
-                showToast('Prep failed: ' + e.message, '❌');
-                document.getElementById('n8nSendBtn').disabled = false;
-                document.getElementById('n8nSendBtn').innerText = '📌 Send to n8n Workflow';
+            } catch (e) {
+                showToast('Batch prep error: ' + e.message, '❌');
+                document.getElementById('n8nSubmitBtn').disabled = false;
+                document.getElementById('n8nSubmitBtn').innerText = '📌 Send to n8n Workflow';
                 return;
             }
 
-            // Step B: Show step 3
-            document.getElementById('n8nPanelStep2').style.display = 'none';
-            document.getElementById('n8nPanelStep3').style.display = 'block';
-            document.getElementById('n8nStep2Indicator').classList.remove('active');
-            document.getElementById('n8nStep3Indicator').classList.add('active');
-            document.getElementById('n8nStatusMsg').innerText = `🚀 Sending ${preparedItems.length} products to n8n webhook...`;
+            document.getElementById('n8nStep2Panel').style.display = 'none';
+            document.getElementById('n8nStep3Panel').style.display = 'block';
+            document.getElementById('step2Nav').classList.remove('active');
+            document.getElementById('step3Nav').classList.add('active');
 
-            // Render status rows (pending)
-            const statusList = document.getElementById('n8nItemStatusList');
-            statusList.innerHTML = preparedItems.map(it => `
-                <div id="n8n-status-row-${it.asin}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.04);border-radius:12px;">
-                    <div id="n8n-status-icon-${it.asin}" style="font-size:20px;">⏳</div>
+            const rowsContainer = document.getElementById('n8nStatusRows');
+            rowsContainer.innerHTML = preparedItems.map(it => `
+                <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:rgba(255,255,255,0.04);border-radius:14px;">
+                    <div style="font-size:20px;">⏳</div>
                     <div>
-                        <div style="font-weight:700;font-size:13px;color:#fff;">${escapeHTML(it.title.substring(0,55))}</div>
-                        <div id="n8n-status-text-${it.asin}" style="font-size:12px;color:var(--text-sub);">Queued — waiting for n8n...</div>
+                        <div style="font-weight:700;font-size:14px;color:#fff;">${escapeHTML(it.title)}</div>
+                        <div style="font-size:12px;color:var(--text-sub);">Queued — firing to n8n pipeline...</div>
                     </div>
                 </div>
             `).join('');
 
-            // Step C: Fire to n8n webhook
-            const webhookUrl = document.getElementById('n8nWebhookUrlInput') ?
-                document.getElementById('n8nWebhookUrlInput').value.trim() : n8nWebhookUrl;
             try {
-                const n8nRes = await fetch(webhookUrl, {
+                const n8nRes = await fetch(n8nWebhookUrl, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({items: preparedItems})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: preparedItems })
                 });
-                const n8nData = await n8nRes.json().catch(() => ({}));
-                document.getElementById('n8nStatusMsg').innerHTML =
-                    `✅ Batch accepted by n8n! (${preparedItems.length} products) — n8n is now building bridge pages &amp; posting pins one by one.`;
-                document.getElementById('n8nStatusMsg').style.color = '#4ade80';
-                // Mark all as dispatched
-                preparedItems.forEach(it => {
-                    const icon = document.getElementById(`n8n-status-icon-${it.asin}`);
-                    const text = document.getElementById(`n8n-status-text-${it.asin}`);
-                    if (icon) icon.innerText = '📌';
-                    if (text) text.innerText = 'Dispatched to n8n — bridge page building + pin posting in progress';
-                });
-                showToast(`Batch sent to n8n! ${preparedItems.length} pins being published.`, '📌');
-            } catch(e) {
-                document.getElementById('n8nStatusMsg').innerText = `⚠️ n8n webhook not reachable (${webhookUrl}). Make sure n8n is running and the workflow is active.`;
-                document.getElementById('n8nStatusMsg').style.color = '#fb8500';
-                preparedItems.forEach(it => {
-                    const icon = document.getElementById(`n8n-status-icon-${it.asin}`);
-                    const text = document.getElementById(`n8n-status-text-${it.asin}`);
-                    if (icon) icon.innerText = '⚠️';
-                    if (text) text.innerText = 'n8n webhook unreachable. Check n8n is running.';
-                });
+                document.getElementById('n8nStatusHeading').innerText = `✅ Batch of ${preparedItems.length} Products Dispatched to n8n!`;
+                document.getElementById('n8nStatusHeading').style.color = '#4ade80';
+                showToast(`Batch dispatched to n8n! ${preparedItems.length} Pins publishing.`, '📌');
+            } catch (e) {
+                document.getElementById('n8nStatusHeading').innerText = `⚠️ n8n webhook unreachable (${n8nWebhookUrl}). Please ensure n8n is running.`;
+                document.getElementById('n8nStatusHeading').style.color = '#fb8500';
             }
         }
 
-        function n8nResetAll() {
+        function n8nResetBatch() {
             n8nDiscoveredItems = [];
             n8nSelectedAsins.clear();
             n8nExtractedItems = [];
             n8nChosenPhotos = {};
-            document.getElementById('n8nPanelStep1').style.display = 'block';
-            document.getElementById('n8nPanelStep2').style.display = 'none';
-            document.getElementById('n8nPanelStep3').style.display = 'none';
+            document.getElementById('n8nStep1Panel').style.display = 'block';
+            document.getElementById('n8nStep2Panel').style.display = 'none';
+            document.getElementById('n8nStep3Panel').style.display = 'none';
             document.getElementById('n8nDiscoverGrid').innerHTML = '';
             document.getElementById('n8nStep1Footer').style.display = 'none';
-            document.getElementById('n8nStep1Indicator').classList.add('active');
-            document.getElementById('n8nStep2Indicator').classList.remove('active');
-            document.getElementById('n8nStep3Indicator').classList.remove('active');
-            document.getElementById('n8nSendBtn').disabled = false;
-            document.getElementById('n8nSendBtn').innerText = '📌 Send to n8n Workflow';
-        }
-        // END n8n TAB FUNCTIONS
-
-        function onTrendCategoryChange(val) {
-            document.getElementById('customSearchInput').value = '';
+            document.getElementById('step1Nav').classList.add('active');
+            document.getElementById('step2Nav').classList.remove('active');
+            document.getElementById('step3Nav').classList.remove('active');
+            document.getElementById('n8nSubmitBtn').disabled = false;
+            document.getElementById('n8nSubmitBtn').innerText = '📌 Send to n8n Workflow';
         }
 
-        function discoverProducts() {
-            const customKw = document.getElementById('customSearchInput').value.trim();
-            const categoryKw = document.getElementById('trendCategorySelect').value;
-            const query = customKw || categoryKw;
-
-            document.getElementById('discoverSpinner').style.display = 'inline-block';
-
-            fetch(`/api/discover?query=${encodeURIComponent(query)}&count=10`)
-                .then(r => r.json())
-                .then(data => {
-                    document.getElementById('discoverSpinner').style.display = 'none';
-                    if (data.status === 'error') { alert("Error discovering products: " + data.message); return; }
-                    discoveredItems = data.items || [];
-                    renderDiscoverGrid(discoveredItems);
-                    showToast(`Discovered ${discoveredItems.length} candidate products!`, "🔍");
-                })
-                .catch(err => {
-                    document.getElementById('discoverSpinner').style.display = 'none';
-                    alert("Error connecting to server backend.");
-                });
-        }
-
-        function renderDiscoverGrid(items) {
-            const grid = document.getElementById('discoverGrid');
-            grid.innerHTML = '';
-            selectedAsins.clear();
-
-            items.forEach((item) => {
-                const isPub = item.is_already_published;
-                const card = document.createElement('div');
-                card.className = `discover-card ${isPub ? 'published' : 'selected'}`;
-
-                if (!isPub) selectedAsins.add(item.asin);
-
-                card.innerHTML = `
-                    ${isPub ? '<div class="pub-badge">ALREADY ON HOMEPAGE</div>' : ''}
-                    <input type="checkbox" class="select-cb" ${!isPub ? 'checked' : ''} onchange="toggleProductSelection('${item.asin}', this.checked, this.parentNode)">
-                    <img class="discover-thumb" src="${item.thumbnail || ''}" alt="${item.title}">
-                    <div class="discover-body">
-                        <div class="discover-title">${item.title}</div>
-                        <div class="discover-meta">
-                            <span class="discover-price">${item.price}</span>
-                            <span class="discover-rating">★ ${item.rating}</span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-            updateCounter();
-        }
-
-        function toggleProductSelection(asin, isChecked, cardElement) {
-            if (isChecked) { selectedAsins.add(asin); cardElement.classList.add('selected'); }
-            else { selectedAsins.delete(asin); cardElement.classList.remove('selected'); }
-            updateCounter();
-        }
-
-        function updateCounter() {
-            document.getElementById('selectionCounter').innerText = `${selectedAsins.size} Products Selected`;
-        }
-
-        function proceedToStep2PhotoVerification() {
-            if (selectedAsins.size === 0) { alert("Please select at least 1 product."); return; }
-
-            document.getElementById('panelStep1').style.display = 'none';
-            document.getElementById('panelStep2').style.display = 'flex';
-            document.getElementById('stepIndicator1').classList.remove('active');
-            document.getElementById('stepIndicator2').classList.add('active');
-
-            const asinsArray = Array.from(selectedAsins);
-            showToast(`Extracting photo suites for ${asinsArray.length} products...`, "📸");
-
-            fetch('/api/batch_extract', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ asins: asinsArray })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    extractedBatchDetails = data.items || [];
-                    renderBatchPhotoBoards(extractedBatchDetails);
-                } else { alert("Error extracting batch photos: " + data.message); }
-            });
-        }
-
-        function renderBatchPhotoBoards(items) {
-            const container = document.getElementById('batchPhotoBoards');
-            container.innerHTML = '';
-            batchSelectedPhotos = {};
-            batchCustomData = {};
-
-            items.forEach((item, pIdx) => {
-                const systemWinner = item.winner_photo || (item.photos[0] ? item.photos[0].url : '');
-                batchSelectedPhotos[item.asin] = systemWinner;
-                batchCustomData[item.asin] = {
-                    title: item.title,
-                    price: item.price,
-                    badge: "VIRAL ROOM FIND"
-                };
-
-                const box = document.createElement('div');
-                box.className = 'batch-product-box';
-
-                let photosHtml = '';
-                item.photos.forEach((p, idx) => {
-                    const isWinner = p.url === systemWinner;
-                    let badgeClass = isWinner ? 'winner' : (p.status && p.status.includes('DISCARDED') ? 'discarded' : 'clean');
-                    let badgeText = isWinner ? '🏆 #1 AI Winner' : (p.status || 'Clean Photo');
-
-                    photosHtml += `
-                        <div class="photo-pill-card ${isWinner ? 'selected' : ''}" id="pill-${item.asin}-${idx}" onclick="selectBatchPhoto('${item.asin}', '${p.url}', ${idx}, this.parentNode)">
-                            <div class="photo-pill-badge ${badgeClass}">${badgeText}</div>
-                            <img class="photo-pill-img" src="${p.url}" />
-                        </div>
-                    `;
-                });
-
-                box.innerHTML = `
-                    <div class="batch-prod-header">
-                        <div class="batch-prod-title">[Product #${pIdx+1}] ${item.title.substring(0, 65)}...</div>
-                        <div style="font-weight: 800; color: var(--gold-primary);">${item.price}</div>
-                    </div>
-                    <div class="photos-row">${photosHtml}</div>
-                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-top: 8px;">
-                        <input type="text" class="input-field" style="padding: 10px 16px; font-size: 13px;" value="${item.title}" onchange="updateCustomData('${item.asin}', 'title', this.value)" placeholder="Custom Title / Image Hook">
-                        <select class="select-field" style="padding: 10px; font-size: 13px;" onchange="updateCustomData('${item.asin}', 'badge', this.value)">
-                            <option value="VIRAL ROOM FIND">✨ VIRAL ROOM FIND</option>
-                            <option value="HOT DECOR FIND">🔥 HOT DECOR FIND</option>
-                            <option value="BESTSELLER">🏆 BESTSELLER</option>
-                            <option value="MUST HAVE">⭐ MUST HAVE</option>
-                        </select>
-                        <button class="btn-action" style="padding: 10px 16px; font-size: 13px; background: rgba(255,255,255,0.1);" onclick="previewOverlayLive('${item.asin}')">
-                            👁️ Preview Overlay
-                        </button>
-                    </div>
-                `;
-                container.appendChild(box);
-            });
-        }
-
-        function updateCustomData(asin, key, value) {
-            if (!batchCustomData[asin]) batchCustomData[asin] = {};
-            batchCustomData[asin][key] = value;
-        }
-
-        function previewOverlayLive(asin) {
-            const photo = batchSelectedPhotos[asin];
-            const custom = batchCustomData[asin] || {};
-
-            showToast("Rendering 1200x1600 Graphic Overlay Preview...", "🎨");
-            fetch('/api/preview_overlay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    image_url: photo,
-                    title: custom.title || "VIRAL ROOM FIND",
-                    badge: custom.badge || "VIRAL ROOM FIND",
-                    price: custom.price || "$19.99"
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    document.getElementById('overlayModalImg').src = data.preview_url;
-                    document.getElementById('overlayModal').style.display = 'flex';
-                } else { alert("Overlay preview error: " + data.message); }
-            });
-        }
-
-        function closeOverlayModal() {
-            document.getElementById('overlayModal').style.display = 'none';
-        }
-
-        function selectBatchPhoto(asin, photoUrl, cardIdx, rowContainer) {
-            batchSelectedPhotos[asin] = photoUrl;
-            rowContainer.querySelectorAll('.photo-pill-card').forEach(c => c.classList.remove('selected'));
-            const selectedCard = rowContainer.children[cardIdx];
-            if (selectedCard) selectedCard.classList.add('selected');
-            showToast(`Selected photo for ASIN ${asin}`, "🖼️");
-        }
-
-        function backToStep1() {
-            document.getElementById('panelStep2').style.display = 'none';
-            document.getElementById('panelStep1').style.display = 'flex';
-            document.getElementById('stepIndicator2').classList.remove('active');
-            document.getElementById('stepIndicator1').classList.add('active');
-        }
-
-        function sendBatchToN8n() {
-            if (!extractedBatchDetails || extractedBatchDetails.length === 0) {
-                alert("No products in batch. Please go back and select products first.");
-                return;
-            }
-
-            const btn = document.getElementById('n8nDispatchBtn');
-            const spinner = document.getElementById('n8nDispatchSpinner');
-            if (spinner) spinner.style.display = 'inline-block';
-            if (btn) btn.disabled = true;
-
-            const itemsPayload = extractedBatchDetails.map(item => ({
-                asin: item.asin,
-                title: batchCustomData[item.asin]?.title || item.title,
-                price: batchCustomData[item.asin]?.price || item.price,
-                chosen_photo_url: batchSelectedPhotos[item.asin] || item.winner_photo,
-                winner_photo: item.winner_photo
-            }));
-
-            showToast(`Dispatching ${itemsPayload.length} products to n8n workflow...`, "🚀");
-
-            fetch('/api/n8n/dispatch-batch', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items: itemsPayload })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (spinner) spinner.style.display = 'none';
-                if (btn) btn.disabled = false;
-
-                if (data.status === 'success') {
-                    showToast(`✅ ${data.message}`, "🏆");
-
-                    // Show success panel
-                    document.getElementById('panelStep2').style.display = 'none';
-                    document.getElementById('panelStep3').style.display = 'flex';
-                    document.getElementById('stepIndicator2').classList.remove('active');
-                    document.getElementById('stepIndicator3').classList.add('active');
-                    document.getElementById('batchProgressBadge').innerText = `⏳ n8n Processing ${data.batch_count} Products...`;
-                    document.getElementById('batchStatusText').innerText = `🚀 Products dispatched to n8n pipeline! Bridge pages are being auto-created, SEO copy generated, price badges rendered, and Pins published to Pinterest API v5. Check your Pinterest board!`;
-                } else {
-                    alert("n8n Dispatch Error: " + (data.message || "Unknown error"));
-                }
-            })
-            .catch(err => {
-                if (spinner) spinner.style.display = 'none';
-                if (btn) btn.disabled = false;
-                alert("Error connecting to n8n dispatch endpoint: " + err.message);
-            });
-        }
-
-        function launchBatchGeneration() {
-            const itemsToRun = extractedBatchDetails.map(item => ({
-                asin: item.asin,
-                title: batchCustomData[item.asin]?.title || item.title,
-                price: batchCustomData[item.asin]?.price || item.price,
-                selected_photo: batchSelectedPhotos[item.asin] || item.winner_photo,
-                prompt_strength: 0.35
-            }));
-
-            if (itemsToRun.length === 0) return;
-
-            document.getElementById('batchLaunchSpinner').style.display = 'inline-block';
-            document.getElementById('panelStep2').style.display = 'none';
-            document.getElementById('panelStep3').style.display = 'flex';
-            document.getElementById('stepIndicator2').classList.remove('active');
-            document.getElementById('stepIndicator3').classList.add('active');
-
-            fetch('/api/batch_generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items: itemsToRun })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.status === 'processing') {
-                    currentBatchId = data.batch_id;
-                    showToast("Batch generation launched in background!", "⏳");
-                    pollBatchStatus(currentBatchId);
-                } else { alert("Error: " + data.message); }
-            });
-        }
-
-        function pollBatchStatus(batchId) {
-            const interval = setInterval(() => {
-                fetch(`/api/batch_status?batch_id=${encodeURIComponent(batchId)}`)
-                    .then(r => r.json())
-                    .then(data => {
-                        if (data.status === 'processing') {
-                            document.getElementById('batchProgressBadge').innerText = `Processing ${data.current_index} of ${data.total}...`;
-                            document.getElementById('batchStatusText').innerText = data.step || "Processing batch products...";
-                            if (data.completed_items) renderBatchPreviews(data.completed_items);
-                        } else if (data.status === 'success') {
-                            clearInterval(interval);
-                            document.getElementById('batchProgressBadge').innerText = `✅ Batch Complete (${data.completed_items ? data.completed_items.length : 0} Products Published)`;
-                            document.getElementById('batchStatusText').innerText = data.step || "Batch run completed!";
-                            showToast("All selected products published live to GitHub Pages!", "🚀");
-                            if (data.completed_items) renderBatchPreviews(data.completed_items);
-                        }
-                    });
-            }, 3000);
-        }
-
-        function renderBatchPreviews(completedItems) {
-            const grid = document.getElementById('previewGrid');
-            grid.innerHTML = '';
-            completedItems.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'preview-card';
-                card.innerHTML = `
-                    <div style="font-weight: 800; font-size: 15px;">${item.title}</div>
-                    <img class="preview-img" src="${item.hook_image}?v=${Date.now()}" alt="${item.title}" />
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 800; color: var(--gold-primary); font-size: 16px;">${item.price}</span>
-                        <a href="${item.bridge_url}" target="_blank" class="btn-action" style="padding: 8px 16px; font-size: 12px; text-decoration: none;">
-                            🔗 View Live Landing Page
-                        </a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // =========================================================================
-        // MODE C: HOMEPAGE SHOWCASE MANAGER & 1-CLICK DELETE
-        // =========================================================================
-        function loadHomepageProducts() {
-            showToast("Loading active homepage products...", "🏠");
+        // HOMEPAGE MANAGER TAB
+        function loadHomepageManager() {
             fetch('/api/homepage_products')
                 .then(r => r.json())
                 .then(data => {
-                    if (data.status === 'success') {
-                        homepageProductsMap = {};
-                        (data.products || []).forEach(p => { homepageProductsMap[p.asin] = p; });
-                        renderHomepageGrid(data.products || []);
-                        loadMatrixGrid();
-                        showToast(`Loaded ${data.count || 0} homepage products!`, "✨");
-                    } else {
-                        alert("Error loading homepage products: " + (data.message || "Unknown error"));
-                    }
-                })
-                .catch(err => alert("Error communicating with local server backend."));
+                    const grid = document.getElementById('homepageShowcaseGrid');
+                    grid.innerHTML = '';
+                    (data.products || []).forEach(p => {
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        card.style.cursor = 'default';
+                        card.innerHTML = `
+                            <img src="${escapeHTML(p.image)}" class="product-thumb" />
+                            <div class="product-title">${escapeHTML(p.title)}</div>
+                            <div class="product-price">${escapeHTML(p.price)}</div>
+                            <div style="display:flex;gap:8px;margin-top:10px;">
+                                <a href="${p.bridge_url}" target="_blank" class="btn-secondary" style="padding:6px 12px;font-size:11px;text-decoration:none;flex:1;text-align:center;">🔗 Live Link</a>
+                                <button onclick="deleteProduct('${p.asin}', this.parentNode.parentNode)" class="btn-secondary" style="padding:6px 12px;font-size:11px;background:rgba(239,68,68,0.2);border-color:#ef4444;color:#ef4444;">🗑️</button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    loadMatrixTable();
+                });
         }
 
-        function renderHomepageGrid(products) {
-            const grid = document.getElementById('homepageProductsGrid');
-            grid.innerHTML = '';
-
-            if (products.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-sub); background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.15);">📦 No products currently published on your homepage.<br><br>Use <b>Step 1 & Step 2</b> above to discover winning products and publish them live!</div>';
-                return;
-            }
-
-            products.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'preview-card';
-                card.id = `hp-card-${p.asin}`;
-                const safeTitle = escapeHTML(p.title).replace(/'/g, "\\'");
-                card.innerHTML = `
-                    <div style="font-weight: 800; font-size: 14px;">${escapeHTML(p.title)}</div>
-                    <img class="preview-img" id="hp-img-${p.asin}" src="${p.image}" alt="${escapeHTML(p.title)}" />
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 800; color: var(--gold-primary);">${p.price}</span>
-                        <a href="${p.bridge_url}" target="_blank" style="color: var(--gold-primary); font-size: 12px; text-decoration: none;">🔗 Open Page</a>
-                    </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn-action" style="padding: 8px; font-size: 12px; flex: 1;" onclick="openTagEditorModal('${p.asin}', '${safeTitle}', '${p.price}')">
-                            🏷️ Edit Price Tag Size
-                        </button>
-                        <button class="btn-action btn-danger" style="padding: 8px; font-size: 12px; width: 42px;" onclick="deleteHomepageProduct('${p.asin}')">
-                            🗑️
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function deleteHomepageProduct(asin) {
-            if (!confirm(`Are you sure you want to delete Product ASIN ${asin} from your homepage showcase?`)) return;
-
-            showToast(`Deleting product ${asin} from homepage...`, "🗑️");
+        function deleteProduct(asin, cardEl) {
+            if (!confirm(`Delete product ${asin} from homepage?`)) return;
             fetch('/api/delete_homepage_product', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ asin: asin })
+                body: JSON.stringify({ asin })
             })
             .then(r => r.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    const card = document.getElementById(`hp-card-${asin}`);
-                    if (card) card.remove();
-                    showToast(`Product ${asin} deleted and unblocked successfully!`, "✅");
-                } else { alert("Delete error: " + data.message); }
+            .then(d => {
+                if (d.status === 'success') {
+                    if (cardEl) cardEl.remove();
+                    showToast(`Product ${asin} deleted!`, '✅');
+                }
             });
         }
 
-        function runPriceSync() {
-            document.getElementById('syncSpinner').style.display = 'inline-block';
-            const btnText = document.getElementById('priceSyncText');
-            if (btnText) btnText.innerText = "⏳ Launching 21-Domain Price Sync...";
-            showToast("Scraping 21 global Amazon domains & re-rendering badges...", "🔍");
-
-            fetch('/api/sync_prices', { method: 'POST' })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        // Poll live task status
-                        const pollInterval = setInterval(() => {
-                            fetch('/api/status?asin=global_sync')
-                                .then(res => res.json())
-                                .then(sData => {
-                                    if (sData.message && btnText) {
-                                        btnText.innerText = "⏳ " + sData.message;
-                                    }
-                                    if (sData.status === 'completed') {
-                                        clearInterval(pollInterval);
-                                        document.getElementById('syncSpinner').style.display = 'none';
-                                        if (btnText) btnText.innerText = "✅ Price Sync Complete!";
-                                        showToast("Daily prices synchronized live across 21 global storefronts!", "🔄");
-                                        loadHomepageProducts();
-                                        setTimeout(() => {
-                                            if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
-                                        }, 5000);
-                                    } else if (sData.status === 'error') {
-                                        clearInterval(pollInterval);
-                                        document.getElementById('syncSpinner').style.display = 'none';
-                                        if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
-                                        alert("Price sync notice: " + (sData.message || "Error"));
-                                    }
-                                }).catch(() => {});
-                        }, 2000);
-                    } else {
-                        document.getElementById('syncSpinner').style.display = 'none';
-                        if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
-                        alert("Price sync notice: " + (data.message || "Done"));
-                    }
-                })
-                .catch(err => {
-                    document.getElementById('syncSpinner').style.display = 'none';
-                    if (btnText) btnText.innerText = "🔄 1-Click Daily Price Synchronizer";
-                    alert("Error executing price synchronization.");
-                });
-        }
-
-        function runRerenderBadges() {
-            showToast("Re-rendering Playwright graphic price badges...", "🎨");
-            fetch('/api/rerender_badges', { method: 'POST' })
-                .then(r => r.json())
-                .then(d => {
-                    if (d.status === 'success') {
-                        showToast("All graphic price badges re-rendered successfully!", "✅");
-                        loadHomepageProducts();
-                    } else {
-                        alert("Notice: " + (d.message || "Done"));
-                    }
-                }).catch(e => alert("Error re-rendering badges: " + e));
-        }
-
-        function runZero404Audit() {
-            showToast("Auditing 189 regional product links...", "⚡");
-            fetch('/api/audit_links', { method: 'POST' })
-                .then(r => r.json())
-                .then(d => {
-                    if (d.status === 'success') {
-                        showToast("Audit Complete: 189/189 PASSED (Zero 404s)!", "🏆");
-                        alert(d.output || "Audit Passed 100%");
-                    } else {
-                        alert("Audit notice: " + d.message);
-                    }
-                }).catch(e => alert("Error running audit: " + e));
-        }
-
-        function loadMatrixGrid() {
-            const tbody = document.getElementById('matrixTableBody');
-            if (!tbody) return;
+        function loadMatrixTable() {
             fetch('/api/matrix')
                 .then(r => r.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        const mat = data.matrix || {};
-                        const reg = data.registry || {};
-                        const ccs = ["US","UK","IN","DE","FR","ES","IT","CA","AU","JP","SE","NL","PL","TR","BE","MX","BR","SG","AE","SA","EG"];
-                        let html = '';
-                        for (const asin in reg) {
-                            const title = (reg[asin].title || asin).substring(0, 25) + '...';
-                            const directList = mat[asin] || [];
-                            html += `<tr><td style="padding: 10px; text-align: left; font-weight: 700;">${asin} <br><span style="font-size:11px; font-weight:400; color:var(--text-sub);">${title}</span></td>`;
-                            ccs.forEach(cc => {
-                                const isDirect = directList.includes(cc);
-                                const badgeColor = isDirect ? '#10b981' : '#3b82f6';
-                                const badgeText = isDirect ? 'DP' : 'S';
-                                html += `<td style="padding: 6px;"><span style="background:${badgeColor}; color:#fff; padding: 2px 6px; border-radius: 4px; font-size:10px; font-weight:800;" title="${isDirect ? 'Direct /dp/ link' : 'Search /s?k= fallback'}">${badgeText}</span></td>`;
-                            });
-                            html += `</tr>`;
-                        }
-                        tbody.innerHTML = html;
-                    }
-                }).catch(() => {});
-        }
-
-        // Auto load matrix grid when mode changes
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMatrixGrid();
-            setInterval(() => {
-                fetch('/api/logs').then(r => r.json()).then(d => {
-                    const box = document.getElementById('terminalLogBox');
-                    if (box && d.logs) box.innerText = d.logs;
-                }).catch(() => {});
-            }, 3000);
-        });
-
-        // =========================================================================
-        // MODE A SINGLE ASIN EXTRACTION
-        // =========================================================================
-        function fetchSingleProductSuite() {
-            const input = document.getElementById('targetInput').value.trim();
-            if (!input) return;
-            document.getElementById('extractSpinner').style.display = 'inline-block';
-
-            fetch(`/api/extract?target=${encodeURIComponent(input)}`)
-                .then(r => r.json())
-                .then(data => {
-                    document.getElementById('extractSpinner').style.display = 'none';
-                    if (data.status === 'error') { alert(data.message); return; }
-                    document.getElementById('metaTitle').innerText = data.title;
-                    document.getElementById('metaAsin').innerText = `ASIN: ${data.asin}`;
-                    document.getElementById('metaPrice').innerText = data.price;
-                    document.getElementById('metaRating').innerText = `★ ${data.rating}`;
-                    document.getElementById('productMetaPanel').style.display = 'grid';
-                    showToast("Extracted single product photos!", "📸");
-                });
-        }
-
-        let activeTagAsin = null;
-        let currentTagPosX = null; // percentage left 0-100
-        let currentTagPosY = null; // percentage top 0-100
-        let isDraggingTag = false;
-        let dragStartX, dragStartY, initialTagLeft, initialTagTop;
-
-        let selectedTagColor = '#fb8500';
-        let selectedPriceTextColor = '#111827';
-        let selectedHeadlineColor = '#ffffff';
-        let currentHeadlinePosY = null; // percentage top 0-100
-        let isDraggingHeadline = false;
-        let hlDragStartY, hlInitialTop;
-
-        function setTagColor(hex) {
-            selectedTagColor = hex;
-            document.getElementById('tagCustomColorInput').value = hex;
-            
-            const tagOverlay = document.getElementById('liveTagOverlay');
-            if (tagOverlay) {
-                tagOverlay.style.borderColor = hex;
-            }
-
-            const liveTagImg = document.getElementById('liveTagImg');
-            if (liveTagImg) {
-                // Apply instant live CSS visual tint filter to price tag badge preview
-                if (hex === '#fb8500') liveTagImg.style.filter = 'hue-rotate(0deg) saturate(1)';
-                else if (hex === '#ff0055') liveTagImg.style.filter = 'hue-rotate(-35deg) saturate(2.5)';
-                else if (hex === '#7a00ff') liveTagImg.style.filter = 'hue-rotate(85deg) saturate(2.5)';
-                else if (hex === '#10b981') liveTagImg.style.filter = 'hue-rotate(140deg) saturate(2.5)';
-                else if (hex === '#ffffff') liveTagImg.style.filter = 'brightness(1.6) contrast(1.2)';
-                else if (hex === '#111827') liveTagImg.style.filter = 'brightness(0.15) contrast(1.5)';
-                else liveTagImg.style.filter = 'sepia(0.5) saturate(2)';
-            }
-            showToast(`Tag color set to ${hex}`, "🎨");
-        }
-
-        function setPriceTextColor(hex) {
-            selectedPriceTextColor = hex;
-            document.getElementById('priceTextColorInput').value = hex;
-            const priceEl = document.getElementById('liveTagPriceText');
-            if (priceEl) priceEl.style.color = hex;
-            showToast(`Price text color set to ${hex}`, "🎨");
-        }
-
-        function updateLiveTagPreview() {
-            const scaleEl = document.getElementById('tagScaleSelect');
-            if (!scaleEl) return;
-            const scaleVal = scaleEl.value; // e.g. 380x285
-            const [w, h] = scaleVal.split('x').map(Number);
-            const rot = parseInt(document.getElementById('tagRotationRange')?.value || '-6');
-            const fontScale = parseFloat(document.getElementById('priceTextScaleRange')?.value || '38') / 100.0;
-            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '15');
-            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
-
-            if (document.getElementById('tagRotationVal')) document.getElementById('tagRotationVal').innerText = `${rot}°`;
-            if (document.getElementById('priceTextScaleVal')) document.getElementById('priceTextScaleVal').innerText = `${Math.round(fontScale * 100)}%`;
-            if (document.getElementById('priceTextOffsetYVal')) document.getElementById('priceTextOffsetYVal').innerText = `${offsetY >= 0 ? '+' : ''}${offsetY}px`;
-            if (document.getElementById('priceTextOffsetXVal')) document.getElementById('priceTextOffsetXVal').innerText = `${offsetX >= 0 ? '+' : ''}${offsetX}px`;
-
-            // Calculate width percentage relative to 1200px master canvas
-            const widthPct = (w / 1200) * 100;
-            const liveTag = document.getElementById('liveTagOverlay');
-            if (liveTag) {
-                liveTag.style.width = `${widthPct}%`;
-                liveTag.style.transform = `rotate(${rot}deg)`;
-            }
-
-            const priceEl = document.getElementById('liveTagPriceText');
-            if (priceEl) {
-                const liveTag = document.getElementById('liveTagOverlay');
-                const tagPx = liveTag ? (liveTag.offsetWidth || 130) : 130;
-                const calculatedPx = Math.round(tagPx * fontScale * 0.45);
-                priceEl.style.fontSize = `${calculatedPx}px`;
-                priceEl.style.color = selectedPriceTextColor;
-                
-                // Real-time visual position shift inside the tag badge
-                const shiftYPercent = 58 + offsetY * 0.30;
-                const shiftXPercent = 50 + offsetX * 0.30;
-                priceEl.style.top = `${shiftYPercent}%`;
-                priceEl.style.left = `${shiftXPercent}%`;
-            }
-        }
-
-        function initDragAndDrop() {
-            const tag = document.getElementById('liveTagOverlay');
-            const container = document.getElementById('previewCanvasContainer');
-            if (!tag || !container) return;
-
-            function startDrag(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                isDraggingTag = true;
-                tag.style.cursor = 'grabbing';
-                tag.style.transition = 'none';
-
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-                dragStartX = clientX;
-                dragStartY = clientY;
-
-                const cRect = container.getBoundingClientRect();
-                const tRect = tag.getBoundingClientRect();
-
-                initialTagLeft = ((tRect.left - cRect.left) / cRect.width) * 100;
-                initialTagTop = ((tRect.top - cRect.top) / cRect.height) * 100;
-            }
-
-            function moveDrag(e) {
-                if (!isDraggingTag) return;
-                e.preventDefault();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-                const cRect = container.getBoundingClientRect();
-                const deltaX = ((clientX - dragStartX) / cRect.width) * 100;
-                const deltaY = ((clientY - dragStartY) / cRect.height) * 100;
-
-                let newLeft = Math.max(0, Math.min(75, initialTagLeft + deltaX));
-                let newTop = Math.max(0, Math.min(85, initialTagTop + deltaY));
-
-                currentTagPosX = parseFloat(newLeft.toFixed(1));
-                currentTagPosY = parseFloat(newTop.toFixed(1));
-
-                tag.style.left = `${currentTagPosX}%`;
-                tag.style.top = `${currentTagPosY}%`;
-                tag.style.right = 'auto';
-                tag.style.bottom = 'auto';
-
-                if (document.getElementById('dragPosBadge')) {
-                    document.getElementById('dragPosBadge').innerText = `📍 Position: X=${currentTagPosX}%, Y=${currentTagPosY}%`;
-                }
-            }
-
-            function endDrag(e) {
-                if (isDraggingTag) {
-                    isDraggingTag = false;
-                    tag.style.cursor = 'grab';
-                    showToast(`Placed tag at X=${currentTagPosX}%, Y=${currentTagPosY}%`, "📍");
-                }
-            }
-
-            tag.removeEventListener('mousedown', startDrag);
-            tag.removeEventListener('touchstart', startDrag);
-
-            tag.addEventListener('mousedown', startDrag, false);
-            tag.addEventListener('touchstart', startDrag, { passive: false });
-
-            document.removeEventListener('mousemove', moveDrag);
-            document.removeEventListener('touchmove', moveDrag);
-            document.removeEventListener('mouseup', endDrag);
-            document.removeEventListener('touchend', endDrag);
-
-            document.addEventListener('mousemove', moveDrag, { passive: false });
-            document.addEventListener('touchmove', moveDrag, { passive: false });
-            document.addEventListener('mouseup', endDrag, false);
-            document.addEventListener('touchend', endDrag, false);
-        }
-
-        function resetTagControlsToDefault() {
-            fetch('/api/global_tag_defaults')
-                .then(r => r.json())
                 .then(d => {
-                    if (d.status === 'success' && d.defaults) {
-                        const g = d.defaults;
-                        if (document.getElementById('tagScaleSelect')) document.getElementById('tagScaleSelect').value = `${g.tag_width}x${g.tag_height}`;
-                        if (document.getElementById('tagRotationRange')) document.getElementById('tagRotationRange').value = g.tag_rotation;
-                        if (document.getElementById('priceTextScaleRange')) document.getElementById('priceTextScaleRange').value = Math.round(g.price_font_scale * 100);
-                        if (document.getElementById('priceTextOffsetYRange')) document.getElementById('priceTextOffsetYRange').value = g.price_text_offset_y;
-                        if (document.getElementById('priceTextOffsetXRange')) document.getElementById('priceTextOffsetXRange').value = g.price_text_offset_x;
-                        selectedTagColor = g.tag_color || '#fb8500';
-                        selectedPriceTextColor = g.price_text_color || '#111827';
-                        currentTagPosX = g.tag_pos_x || 61.0;
-                        currentTagPosY = g.tag_pos_y || 75.0;
+                    const tbody = document.getElementById('matrixTableBody');
+                    if (!tbody) return;
+                    const mat = d.matrix || {};
+                    const reg = d.registry || {};
+                    const ccs = ["US","UK","IN","DE","FR","ES","IT","CA","AU","JP","SE","NL","PL","TR","BE","MX","BR","SG","AE","SA","EG"];
+                    let html = '';
+                    for (const asin in reg) {
+                        const title = (reg[asin].title || asin).substring(0, 22) + '...';
+                        const directList = mat[asin] || [];
+                        let rowHtml = `<tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:10px;text-align:left;font-weight:700;">${escapeHTML(title)}<br><span style="font-size:10px;color:var(--text-sub);">${asin}</span></td>`;
+                        ccs.forEach(cc => {
+                            const isDirect = directList.includes(cc);
+                            rowHtml += `<td style="padding:6px;"><span style="padding:3px 7px;border-radius:10px;font-weight:800;font-size:10px;background:${isDirect ? 'rgba(16,185,129,0.2)' : 'rgba(59,130,246,0.2)'};color:${isDirect ? '#10b981' : '#3b82f6'};">${isDirect ? 'DP' : 'S'}</span></td>`;
+                        });
+                        rowHtml += `</tr>`;
+                        html += rowHtml;
                     }
-                    updateLiveTagPreview();
-                    showToast("Reset price tag to saved system defaults", "🔄");
-                })
-                .catch(() => {
-                    updateLiveTagPreview();
+                    tbody.innerHTML = html || '<tr><td colspan="22" style="padding:20px;color:var(--text-sub);">No active products</td></tr>';
                 });
         }
-
-        function saveAsGlobalSystemDefault() {
-            const scaleVal = document.getElementById('tagScaleSelect').value;
-            const [w, h] = scaleVal.split('x').map(Number);
-            const rot = parseInt(document.getElementById('tagRotationRange')?.value || '-6');
-            const fontScale = parseFloat(document.getElementById('priceTextScaleRange')?.value || '20') / 100.0;
-            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '0');
-            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
-            const textPosY = 58.0 + (offsetY * 0.30);
-            const textPosX = 50.0 + (offsetX * 0.30);
-
-            const saveBtn = document.getElementById('saveDefaultBtn');
-            if (saveBtn) {
-                saveBtn.innerText = "⏳ Saving Default Preset...";
-            }
-
-            showToast("Saving layout as system default for all future products...", "⭐");
-
-            fetch('/api/save_global_defaults', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    tag_width: w,
-                    tag_height: h,
-                    tag_rotation: rot,
-                    tag_color: selectedTagColor,
-                    price_text_color: selectedPriceTextColor,
-                    price_font_scale: fontScale,
-                    price_text_offset_x: offsetX,
-                    price_text_offset_y: offsetY,
-                    price_text_pos_x: textPosX,
-                    price_text_pos_y: textPosY,
-                    tag_pos_x: currentTagPosX,
-                    tag_pos_y: currentTagPosY
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showToast("⭐ Saved! All future products will use this default layout.", "✨");
-                    if (saveBtn) {
-                        saveBtn.style.background = 'rgba(16, 185, 129, 0.2)';
-                        saveBtn.style.color = '#10b981';
-                        saveBtn.style.borderColor = '#10b981';
-                        saveBtn.innerText = "✅ Saved as System Default!";
-                        setTimeout(() => {
-                            saveBtn.style.background = 'rgba(255, 183, 3, 0.15)';
-                            saveBtn.style.color = 'var(--gold-primary)';
-                            saveBtn.style.borderColor = 'var(--gold-primary)';
-                            saveBtn.innerText = "⭐ Save Layout as Default for ALL Future Products";
-                        }, 3000);
-                    }
-                } else {
-                    if (saveBtn) saveBtn.innerText = "⭐ Save Layout as Default for ALL Future Products";
-                    alert("Error saving global defaults: " + data.message);
-                }
-            })
-            .catch(e => {
-                if (saveBtn) saveBtn.innerText = "⭐ Save Layout as Default for ALL Future Products";
-                console.error("[Save Global Defaults Error]", e);
-                alert("Error saving defaults: " + e.message);
-            });
-        }
-
-        function openTagEditorModal(asin, title, price) {
-            activeTagAsin = asin;
-            currentTagPosX = 61.0;
-            currentTagPosY = 75.0;
-            if (document.getElementById('dragPosBadge')) {
-                document.getElementById('dragPosBadge').innerText = "📍 Tag: Default (X=61%, Y=75%)";
-            }
-
-            const tag = document.getElementById('liveTagOverlay');
-            if (tag) {
-                tag.style.left = 'auto';
-                tag.style.top = 'auto';
-                tag.style.right = '5%';
-                tag.style.bottom = '8%';
-            }
-
-            const pMeta = homepageProductsMap[asin] || {};
-            const activePrice = price || pMeta.price || "$19.99";
-
-            const pTxt = document.getElementById('liveTagPriceText');
-            if (pTxt) pTxt.innerText = activePrice;
-
-            document.getElementById('overlayModalImg').src = `./focus_product_${asin}_hook.jpg?t=${Date.now()}`;
-            document.getElementById('overlayModal').style.display = 'flex';
-            updateLiveTagPreview();
-            setTimeout(initDragAndDrop, 100);
-            
-            // Set save button inside modal action box
-            let saveBtn = document.getElementById('saveTagBtn');
-            const actionBox = document.getElementById('modalSaveActionBox') || document.querySelector('#overlayModal .modal-content');
-            if (!saveBtn) {
-                saveBtn = document.createElement('button');
-                saveBtn.id = 'saveTagBtn';
-                saveBtn.className = 'btn-action btn-success';
-                saveBtn.style.width = '100%';
-                saveBtn.style.padding = '12px 20px';
-                saveBtn.style.fontSize = '14px';
-                saveBtn.innerHTML = '<div class="spinner" id="tagSaveSpinner"></div><span>🚀 Re-Render & Save Graphic Live</span>';
-                saveBtn.onclick = saveTagCustomization;
-                actionBox.appendChild(saveBtn);
-            }
-        }
-
-        function saveTagCustomization() {
-            if (!activeTagAsin) return;
-            const scaleVal = document.getElementById('tagScaleSelect').value; // e.g. 380x285
-            const [w, h] = scaleVal.split('x').map(Number);
-            const rot = parseInt(document.getElementById('tagRotationRange')?.value || '-6');
-            const fontScale = parseFloat(document.getElementById('priceTextScaleRange')?.value || '38') / 100.0;
-            const offsetY = parseInt(document.getElementById('priceTextOffsetYRange')?.value || '15');
-            const offsetX = parseInt(document.getElementById('priceTextOffsetXRange')?.value || '0');
-
-            const saveSpinner = document.getElementById('tagSaveSpinner');
-            if (saveSpinner) saveSpinner.style.display = 'inline-block';
-            showToast(`Rendering Canva graphic via Playwright (${w}x${h}px, ${rot}°, ${selectedTagColor})...`, "🎨");
-
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-            const textPosY = 58.0 + (offsetY * 0.30);
-            const textPosX = 50.0 + (offsetX * 0.30);
-
-            fetch('/api/customize_tag', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                signal: controller.signal,
-                body: JSON.stringify({
-                    asin: activeTagAsin,
-                    tag_width: w,
-                    tag_height: h,
-                    tag_rotation: rot,
-                    tag_color: selectedTagColor,
-                    price_text_color: selectedPriceTextColor,
-                    price_font_scale: fontScale,
-                    price_text_offset_x: offsetX,
-                    price_text_offset_y: offsetY,
-                    price_text_pos_x: textPosX,
-                    price_text_pos_y: textPosY,
-                    tag_pos_x: currentTagPosX,
-                    tag_pos_y: currentTagPosY
-                })
-            })
-            .then(r => {
-                clearTimeout(timeoutId);
-                if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
-                return r.json();
-            })
-            .then(data => {
-                if (saveSpinner) saveSpinner.style.display = 'none';
-                if (data.status === 'success') {
-                    const newSrc = `${data.image}&t=${Date.now()}`;
-                    document.getElementById('overlayModalImg').src = newSrc;
-                    
-                    // Dynamically update all matching card images on page
-                    document.querySelectorAll('img').forEach(img => {
-                        if (img.src.includes(activeTagAsin) || (img.id && img.id.includes(activeTagAsin))) {
-                            img.src = newSrc;
-                        }
-                    });
-                    
-                    showToast("changed published", "✨");
-
-                    // Insert prominent success banner inside modal
-                    const actionBox = document.getElementById('modalSaveActionBox') || document.querySelector('#overlayModal .modal-content');
-                    let pubBanner = document.getElementById('publishedNoticeBanner');
-                    if (!pubBanner) {
-                        pubBanner = document.createElement('div');
-                        pubBanner.id = 'publishedNoticeBanner';
-                        actionBox.appendChild(pubBanner);
-                    }
-                    pubBanner.style.cssText = "margin-top: 12px; padding: 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 12px; text-align: center; color: #10b981; font-weight: 800; font-size: 13.5px;";
-                    const ghUrl = data.github_url || `https://adityasnalawade742-design.github.io/bridge_${activeTagAsin}.html?t=${Date.now()}`;
-                    pubBanner.innerHTML = `
-                        <div>✨ changed published</div>
-                        <div style="font-size: 11.5px; color: #a7f3d0; margin-top: 4px; font-weight: 600;">Deploying automatically to GitHub Pages live!</div>
-                        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
-                            <a href="./bridge_${activeTagAsin}.html?t=${Date.now()}" target="_blank" style="padding: 8px 12px; background: #10b981; color: #000; font-weight: 800; border-radius: 8px; text-decoration: none; font-size: 12px;">🏠 Local Bridge Page</a>
-                            <a href="${ghUrl}" target="_blank" style="padding: 8px 12px; background: #3b82f6; color: #fff; font-weight: 800; border-radius: 8px; text-decoration: none; font-size: 12px;">🚀 GitHub Pages Live →</a>
-                        </div>
-                    `;
-                } else {
-                    alert("Error customizing tag: " + data.message);
-                }
-            })
-            .catch(e => {
-                clearTimeout(timeoutId);
-                if (saveSpinner) saveSpinner.style.display = 'none';
-                console.error("[Customize Tag Error]", e);
-                alert("Error communicating with server: " + e.message);
-            });
-        }
-
-        window.onload = function() {
-            discoverProducts();
-        };
     </script>
 </body>
 </html>
