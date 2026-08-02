@@ -832,29 +832,33 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             window.applyGeoRedirect = applyGeoRedirect;
 
             // ⚡ Phase 0: Check URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN, ?country=US)
+            let isForced = false;
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const forcedCountry = urlParams.get('country') || urlParams.get('geo');
                 if (forcedCountry) {
                     applyGeoRedirect(forcedCountry.toUpperCase());
+                    isForced = true;
                 }
             } catch(e) {}
 
-            // ⚡ Phase 1: Unblockable Cache-Bypassing Cloudflare Network Trace (Detects VPN exit node IP 100%)
-            fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
-                .then(res => res.text())
-                .then(text => {
-                    const locMatch = text.match(/^loc=(.+)$/m);
-                    if (locMatch && locMatch[1]) {
-                        const country = locMatch[1].trim().toUpperCase();
-                        if (country && country.length === 2 && country !== 'XX') {
-                            applyGeoRedirect(country);
-                            return;
+            if (!isForced) {
+                // ⚡ Phase 1: Unblockable Cache-Bypassing Cloudflare Network Trace (Detects VPN exit node IP 100%)
+                fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
+                    .then(res => res.text())
+                    .then(text => {
+                        const locMatch = text.match(/^loc=(.+)$/m);
+                        if (locMatch && locMatch[1]) {
+                            const country = locMatch[1].trim().toUpperCase();
+                            if (country && country.length === 2 && country !== 'XX') {
+                                applyGeoRedirect(country);
+                                return;
+                            }
                         }
-                    }
-                    fallbackFetchIP();
-                })
-                .catch(() => fallbackFetchIP());
+                        fallbackFetchIP();
+                    })
+                    .catch(() => fallbackFetchIP());
+            }
 
             function fallbackFetchIP() {
                 const ipProviders = [

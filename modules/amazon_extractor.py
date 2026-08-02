@@ -185,39 +185,164 @@ def calculate_cozy_vibe_score(image_url: str) -> float:
         print(f"[Cozy Vibe Scorer Error] {e}")
         return 5.0
 
-def select_clean_photo_or_skip(photos: list) -> tuple:
+def score_product_photo(image_url: str, title: str = "") -> dict:
     """
-    Iterates through Amazon listing photos:
-      1. Filters out photos containing seller text overlays/infographics.
-      2. Scores remaining clean photos by Cozy Vibe Aesthetics (warmth, lighting, depth).
-      3. Selects the #1 highest scoring cozy photo!
-      4. If ALL photos contain text overlays, returns ("", True) to SKIP the product!
+    Scores an Amazon product photo on a 0-100 Quality Scale & pre-computes optimal prompt strength:
+      - 90-100: Pure white studio cutout (Prompt strength = 0.82 for scratch synthesis)
+      - 75-89: Clean single-item lifestyle photo (Prompt strength = 0.48 for room enhancement)
+      - 60-74: Clean multi-pack / set / delicate item (Prompt strength = 0.28 to preserve item count)
+      - 25-59: Usable photo with minor edge callout (Prompt strength = 0.20 for safe touch-up)
+      - 0: Unusable (split grid collage or heavy human face/body presence)
+    """
+    if not image_url or not image_url.startswith("http"):
+        return {"score": 0, "prompt_strength": 0.48, "is_white_bg": False, "reason": "invalid_url"}
+
+    # 1. Hard Disqualifiers
+    if is_grid_collage(image_url):
+        return {"score": 0, "prompt_strength": 0.48, "is_white_bg": False, "reason": "grid_collage"}
+    
+    if has_human_presence(image_url):
+        return {"score": 0, "prompt_strength": 0.48, "is_white_bg": False, "reason": "human_presence"}
+
+    has_text = has_text_annotation(image_url)
+    is_lifestyle = is_lifestyle_photo(image_url)
+    is_white_bg = not is_lifestyle
+
+    title_lwr = (title or "").lower()
+    is_set_or_multi = any(kw in title_lwr for kw in ["set of", "pack of", " 2 ", " 3 ", " 4 ", "pcs", "pair", "crystal", "prism", "vases"])
+
+    if not has_text:
+        if is_white_bg:
+            return {"score": 95, "prompt_strength": 0.82, "is_white_bg": True, "reason": "clean_white_cutout"}
+        elif is_set_or_multi:
+            return {"score": 75, "prompt_strength": 0.28, "is_white_bg": False, "reason": "clean_lifestyle_multipack"}
+        else:
+            vibe = calculate_cozy_vibe_score(image_url)
+            score = max(70, min(90, int(60 + (vibe * 3.0))))
+            return {"score": score, "prompt_strength": 0.48, "is_white_bg": False, "reason": "clean_lifestyle_single"}
+    else:
+        # Minor overlay present — still usable at low transformation strength instead of binary discard
+        return {"score": 35, "prompt_strength": 0.20, "is_white_bg": is_white_bg, "reason": "minor_text_overlay"}
+
+
+def select_clean_photo_or_skip(photos: list, title: str = "") -> tuple:
+    """
+    Evaluates listing photos with 0-100 quality scoring.
+    Returns (best_photo_url, should_skip).
+    Only skips if zero photos have score > 0.
     """
     if not photos:
         return ("", True)
     
-    clean_photos = []
+    scored_candidates = []
     for u in photos:
         if u and u.startswith("http"):
-            if not has_text_annotation(u) and not is_grid_collage(u) and not has_human_presence(u):
-                clean_photos.append(u)
-    
-    if clean_photos:
-        # Score each clean photo for cozy room vibes
-        scored_photos = []
-        for u in clean_photos:
-            vibe_score = calculate_cozy_vibe_score(u)
-            scored_photos.append((vibe_score, u))
-            print(f"[Cozy Vibe Scorer] Photo ...{u[-30:]} | Score: {vibe_score:.1f}/10")
-        
-        # Sort descending by Cozy Vibe Score
-        scored_photos.sort(key=lambda x: x[0], reverse=True)
-        best_vibe_score, best_photo = scored_photos[0]
-        print(f"[Cozy Vibe Scorer] SELECTED BEST PHOTO: ...{best_photo[-30:]} (Score: {best_vibe_score:.1f}/10)")
+            res = score_product_photo(u, title=title)
+            if res["score"] > 0:
+                scored_candidates.append((res["score"], u, res))
+                print(f"[Photo Quality Scorer] ...{u[-30:]} | Score: {res['score']}/100 ({res['reason']})")
+
+    if scored_candidates:
+        scored_candidates.sort(key=lambda x: x[0], reverse=True)
+        best_score, best_photo, best_meta = scored_candidates[0]
+        print(f"[Photo Quality Scorer] SELECTED BEST PHOTO: ...{best_photo[-30:]} (Score: {best_score}/100)")
         return (best_photo, False)
-    
-    print("[Amazon Extractor] [WARNING] ALL listing photos contain seller text/infographics! Product will be SKIPPED per text-free policy.")
+
+    print("[Amazon Extractor] [WARNING] No usable photos found (all collages/models). Product flagged for fallback.")
     return ("", True)
+
+
+def get_best_image_for_asin(asin: str, title: str = "", photos: list = None, save_to_disk: bool = True) -> dict:
+    """
+    UNIFIED IMAGE EXTRACTION ENGINE
+    Single authoritative contract used by Discovery, Batch Extract, Web Console, and n8n.
+      1. Checks local raw_images/raw_{ASIN}.jpg
+      2. Checks SQLite image_cache.db
+      3. Scrapes/Scores Amazon listing photos (0-100 scale)
+      4. CDN Fallback (never cross-contaminates with another product's photo)
+      5. Downloads to raw_images/ and saves to SQLite cache
+    """
+    from pathlib import Path
+    import requests
+    
+    clean_asin = (asin or "").strip().upper()
+    if not clean_asin:
+        return None
+
+    repo_dir = Path(__file__).resolve().parent.parent
+    raw_dir = repo_dir / "raw_images"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    target_raw_file = raw_dir / f"raw_{clean_asin}.jpg"
+
+    # 1. Local Disk Check
+    if target_raw_file.exists() and target_raw_file.stat().st_size > 5000:
+        from modules.image_cache_db import get_cached_image
+        cached_url = get_cached_image(clean_asin) or f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&ServiceVersion=20070822&MarketPlace=US&ID=AsinImage&WS=1&Format=_SL1500_&ASIN={clean_asin}"
+        score_res = score_product_photo(cached_url, title=title) if cached_url.startswith("http") else {"prompt_strength": 0.48, "is_white_bg": False}
+        return {
+            "asin": clean_asin,
+            "image_url": cached_url,
+            "local_path": str(target_raw_file),
+            "quality_score": 90,
+            "prompt_strength": score_res.get("prompt_strength", 0.48),
+            "is_white_bg": score_res.get("is_white_bg", False),
+            "source": "local_disk"
+        }
+
+    # 2. SQLite Cache Check
+    from modules.image_cache_db import get_cached_image, set_cached_image
+    cached_url = get_cached_image(clean_asin)
+    winning_url = ""
+    winning_source = "cache"
+    best_meta = {"score": 50, "prompt_strength": 0.48, "is_white_bg": False}
+
+    if cached_url and cached_url.startswith("http") and "amazon-adsystem" not in cached_url:
+        winning_url = cached_url
+        best_meta = score_product_photo(winning_url, title=title)
+    else:
+        # 3. Listing Photos Scrape & Quality Scoring
+        candidate_photos = photos or fetch_all_product_images(clean_asin)
+        scored = []
+        for p_url in candidate_photos:
+            if p_url and p_url.startswith("http"):
+                res = score_product_photo(p_url, title=title)
+                if res["score"] > 0:
+                    scored.append((res["score"], p_url, res))
+
+        if scored:
+            scored.sort(key=lambda x: x[0], reverse=True)
+            best_score, winning_url, best_meta = scored[0]
+            winning_source = "scraped_listing"
+        else:
+            # 4. Product-Specific CDN Fallback (Never generic cross-product image!)
+            winning_url = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&ServiceVersion=20070822&MarketPlace=US&ID=AsinImage&WS=1&Format=_SL1500_&ASIN={clean_asin}"
+            winning_source = "amazon_cdn_fallback"
+            best_meta = {"score": 30, "prompt_strength": 0.48, "is_white_bg": True}
+
+    # Save to SQLite Cache
+    set_cached_image(clean_asin, winning_url, source=winning_source)
+
+    # 5. Stream download to raw_images/raw_{ASIN}.jpg
+    if save_to_disk and winning_url.startswith("http"):
+        try:
+            resp = requests.get(winning_url, headers={"User-Agent": "Mozilla/5.0"}, stream=True, timeout=15)
+            if resp.status_code == 200:
+                with open(target_raw_file, "wb") as f_out:
+                    for chunk in resp.iter_content(chunk_size=16384):
+                        f_out.write(chunk)
+                print(f"[Unified Extractor] Downloaded raw image for {clean_asin} -> {target_raw_file.name}")
+        except Exception as e_dl:
+            print(f"[Unified Extractor Warning] Download failed for {clean_asin}: {e_dl}")
+
+    return {
+        "asin": clean_asin,
+        "image_url": winning_url,
+        "local_path": str(target_raw_file) if target_raw_file.exists() else "",
+        "quality_score": best_meta.get("score", 50),
+        "prompt_strength": best_meta.get("prompt_strength", 0.48),
+        "is_white_bg": best_meta.get("is_white_bg", False),
+        "source": winning_source
+    }
 
 EXCLUDED_KIDS_KEYWORDS = [
     "for kids", "kids", "children", "child", "toddler", "baby", "toy", "nursery toy",

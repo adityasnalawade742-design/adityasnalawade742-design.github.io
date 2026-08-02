@@ -824,13 +824,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             reg = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
             meta = reg.get(asin, {})
 
-            raw_img = meta.get('raw_image') or f"raw_images/raw_{asin}.jpg"
-            raw_full = WORKSPACE_DIR / raw_img
-            if not raw_full.exists():
-                # BUG D FIX: Use consistent raw_{ASIN}.jpg pattern. birds_cute.jpg doesn't exist.
-                raw_img = f"raw_images/raw_{asin}.jpg"
-                if not (WORKSPACE_DIR / raw_img).exists():
-                    raw_img = "raw_images/raw_B0BZXNSW5K.jpg"  # last-resort generic fallback
+            from modules.amazon_extractor import get_best_image_for_asin
+            best_res = get_best_image_for_asin(asin, title=meta.get('title', ''), save_to_disk=True)
+            raw_full = Path(best_res["local_path"]) if best_res and best_res.get("local_path") else WORKSPACE_DIR / f"raw_images/raw_{asin}.jpg"
+            raw_img = str(raw_full.relative_to(WORKSPACE_DIR)).replace("\\", "/") if raw_full.is_relative_to(WORKSPACE_DIR) else f"raw_images/raw_{asin}.jpg"
 
             output_img = meta.get('hook_image') or f"focus_product_{asin}_hook.jpg"
 
@@ -1057,9 +1054,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             generate_bridge_page(prod, seo_data, asin)
 
             # 2. Render hook image (price badge overlay)
+            from modules.amazon_extractor import get_best_image_for_asin
+            img_res = get_best_image_for_asin(asin, title=item.get('title', ''), save_to_disk=True)
             raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
-            fallback_raw = WORKSPACE_DIR / 'raw_images' / 'raw_B0BZXNSW5K.jpg'
-            source_img = str(raw_img_path) if raw_img_path.exists() else str(fallback_raw)
+            source_img = str(raw_img_path) if raw_img_path.exists() else (img_res.get("local_path") or str(raw_img_path))
             hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
 
             render_html_overlay(
@@ -1169,9 +1167,15 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                         except Exception as e_dl:
                             print(f"[n8n Dispatcher] Warning downloading photo: {e_dl}")
 
+                    if not Path(raw_img_path).exists():
+                        from modules.amazon_extractor import get_best_image_for_asin
+                        best_res = get_best_image_for_asin(asin, title=prod.get('title', ''), save_to_disk=True)
+                        if best_res and best_res.get("local_path"):
+                            raw_img_path = best_res["local_path"]
+
                     hook_img_path = str(WORKSPACE_DIR / f"focus_product_{asin}_hook.jpg")
                     render_html_overlay(
-                        image_path=raw_img_path if Path(raw_img_path).exists() else str(WORKSPACE_DIR / "raw_images/raw_B0BZXNSW5K.jpg"),
+                        image_path=str(raw_img_path),
                         headline=seo_data.get("image_hook") or "COZY ROOM FIND",
                         subtitle="",  # BUG F FIX: Rule 7 — subtitles MUST always be empty ("") unless explicitly requested
                         badge_text=seo_data.get("badge_hook") or "VIRAL FIND",

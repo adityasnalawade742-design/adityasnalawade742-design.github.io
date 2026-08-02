@@ -308,53 +308,17 @@ def _duckduckgo_image_search(asin: str, title: str = "") -> str:
 
 def fetch_product_image_for_asin(asin: str, title: str = "") -> str:
     """
-    PUBLIC API: Returns a real displayable image URL for an Amazon product ASIN.
-    Tiered Architecture:
-      Tier 0: SQLite DB lookup (instant, 0ms, 0 API credits)
-      Tier 1: Scrape Amazon product page HTML (free, no API credit)
-      Tier 2: DuckDuckGo image search (free, no API key)
-      Tier 3: SerpAPI amazon_product engine (1 credit)
-      Tier 4: SerpAPI Google Images search (1 credit)
-    Once resolved, URL is saved PERMANENTLY into SQLite image_cache.db!
+    PUBLIC API: Returns a real displayable high-res image URL for an Amazon product ASIN.
+    Delegates to unified get_best_image_for_asin in modules/amazon_extractor.py.
     """
-    from modules.image_cache_db import get_cached_image, set_cached_image
+    from modules.amazon_extractor import get_best_image_for_asin
+    res = get_best_image_for_asin(asin=asin, title=title, save_to_disk=True)
+    if res and res.get("image_url"):
+        return res["image_url"]
 
-    # Tier 0: Check SQLite cache first
-    cached_url = get_cached_image(asin)
-    if cached_url:
-        print(f"[Image Fetch] ⚡ Instant SQLite cache hit for {asin}: {cached_url[:60]}")
-        return cached_url
-
-    print(f"[Image Fetch] Strategy 1 (page scrape) for {asin}...")
-    img = _scrape_amazon_page_for_image(asin)
-    if img:
-        print(f"[Image Fetch] Got image via page scrape for {asin}")
-        set_cached_image(asin, img, source="page_scrape")
-        return img
-
-    print(f"[Image Fetch] Strategy 2 (DuckDuckGo) for {asin}...")
-    img = _duckduckgo_image_search(asin, title)
-    if img:
-        print(f"[Image Fetch] Got image via DuckDuckGo for {asin}")
-        set_cached_image(asin, img, source="duckduckgo")
-        return img
-
-    print(f"[Image Fetch] Strategy 3 (SerpAPI amazon_product) for {asin}...")
-    img = _serpapi_amazon_product_image(asin)
-    if img:
-        print(f"[Image Fetch] Got image via SerpAPI amazon_product for {asin}")
-        set_cached_image(asin, img, source="serpapi_amazon_product")
-        return img
-
-    print(f"[Image Fetch] Strategy 4 (SerpAPI Google Images) for {asin}...")
-    img = _serpapi_google_image_search(asin, title)
-    if img:
-        print(f"[Image Fetch] Got image via Google Images for {asin}")
-        set_cached_image(asin, img, source="serpapi_google_images")
-        return img
-
-    print(f"[Image Fetch] All strategies failed for {asin}")
-    return ""
+    # Fallback to direct Amazon CDN
+    clean_asin = (asin or "").strip().upper()
+    return f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&ServiceVersion=20070822&MarketPlace=US&ID=AsinImage&WS=1&Format=_SL1500_&ASIN={clean_asin}"
 
 
 def _fetch_amazon_product_image(asin: str) -> str:

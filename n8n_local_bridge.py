@@ -50,20 +50,19 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         print(json.dumps({"status": "error", "message": f"Could not extract details for ASIN {asin}"}))
         return
 
-    from modules.amazon_extractor import is_lifestyle_photo, select_clean_photo_or_skip
-
+    from modules.amazon_extractor import get_best_image_for_asin
     photos = prod.get("all_photos", [])
-    clean_photo, should_skip = select_clean_photo_or_skip(photos)
+    best_img = get_best_image_for_asin(asin, title=prod['title'], photos=photos, save_to_disk=True)
 
-    if should_skip:
-        print(f"⚠️ [Text-Free Rule] SKIPPING product {asin} ('{prod['title'][:50]}...') because ALL Amazon listing photos contain seller text/infographic overlays.")
+    if not best_img or best_img.get("quality_score", 0) == 0:
+        print(f"⚠️ [Unified Extractor] SKIPPING product {asin} ('{prod['title'][:50]}...') because zero usable photos could be resolved.")
         save_processed_asin(asin)
-        return {"status": "skipped", "asin": asin, "reason": "All listing photos contain seller text overlays"}
+        return {"status": "skipped", "asin": asin, "reason": "No usable photos found"}
 
+    init_photo = best_img["image_url"]
     ref_sheet_path = create_multi_photo_reference_sheet(photos, filename_prefix=f"product_{asin}", max_photos=6)
-    init_photo = clean_photo
-    is_lifestyle = is_lifestyle_photo(init_photo) if init_photo else False
-    is_white_bg = not is_lifestyle
+    is_white_bg = best_img.get("is_white_bg", False)
+    strength = best_img.get("prompt_strength", 0.48)
 
     # Dual-Prompt Strategy Generator
     cozy_prompt = generate_cozy_image_prompt(
@@ -73,20 +72,6 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         ref_sheet_path=ref_sheet_path,
         is_white_background=is_white_bg
     )
-    
-    # Dynamic Img2Img Prompt Strength calculation:
-    # - Plain White Cutouts (Prompt 2): strength = 0.82 (Synthesis from scratch)
-    # - Item Sets / Multi-Packs / Delicate items (Prompt 1): strength = 0.28 (100% exact count retention)
-    # - Single Items (Prompt 1): strength = 0.48 (STRICTLY CAPPED AT MAX 0.55)
-    title_lwr = prod['title'].lower()
-    is_set_or_multi = any(kw in title_lwr for kw in ["set of", "pack of", " 2 ", " 3 ", " 4 ", "pcs", "pair", "crystal", "prism"])
-    
-    if is_white_bg:
-        strength = 0.82
-    elif is_set_or_multi:
-        strength = 0.28
-    else:
-        strength = 0.48  # Single lifestyle item — moderate transformation
 
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,
@@ -104,11 +89,12 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     headline = seo_data.get("image_hook") or "Cozy Room Find"
 
     # Playwright Overlay with Dynamic Vibe, Theme Matching, and Product Features
-    hook_img_path = f"G:/CLI/pinterest-auto-affiliate/focus_product_{asin}_hook.jpg"
+    repo_dir = Path(__file__).resolve().parent
+    hook_img_path = str(repo_dir / f"focus_product_{asin}_hook.jpg")
     render_html_overlay(
         image_path=raw_image_path,
         headline=headline,
-        subtitle=seo_data.get("subtitle_hook") or "SUNLIGHT WINDOW PRISM MAGIC",
+        subtitle=seo_data.get("subtitle_hook") or "",
         badge_text=seo_data.get("badge_hook") or "RAINBOW MAKER",
         price_str=prod['price'],
         features=seo_data.get("features"),
