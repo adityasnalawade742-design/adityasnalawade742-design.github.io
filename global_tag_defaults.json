@@ -5,10 +5,8 @@
     "tag_color": "#fb8500",
     "price_text_color": "#111827",
     "price_font_scale": 0.24,
-    "price_text_offset_x": 8,
-    "price_text_offset_y": 30,
     "price_text_pos_x": 52.4,
-    "price_text_pos_y": 67,
+    "price_text_pos_y": 67.0,
     "tag_pos_x": 68.9,
     "tag_pos_y": 58.2
 }
