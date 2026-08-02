@@ -27,8 +27,6 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     if asin and not amazon_url:
         amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
     
-    from modules.automated_product_selector import is_asin_published_on_homepage, get_next_automated_product, save_processed_asin
-
     if asin and is_asin_published_on_homepage(asin):
         msg = f"⚠️ ASIN {asin} is already published on the homepage. Skipping generation until it is deleted from the homepage."
         print(msg)
@@ -88,7 +86,7 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     elif is_set_or_multi:
         strength = 0.28
     else:
-        strength = min(0.55, 0.48) # Strictly capped at max 0.55
+        strength = 0.48  # Single lifestyle item — moderate transformation
 
     raw_image_path = generate_cozy_image(
         prompt=cozy_prompt,

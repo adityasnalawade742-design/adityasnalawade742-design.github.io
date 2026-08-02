@@ -517,14 +517,20 @@
 
                 <div id="batchPhotoBoards" style="display: flex; flex-direction: column; gap: 20px;"></div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 12px;">
                     <button class="btn-action" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" onclick="backToStep1()">
                         <span>← Back to Step 1</span>
                     </button>
-                    <button class="btn-action btn-success" onclick="launchBatchGeneration()">
-                        <div class="spinner" id="batchLaunchSpinner"></div>
-                        <span>🚀 Launch Batch Generation & Graphic Overlay Preview</span>
-                    </button>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-action btn-success" onclick="launchBatchGeneration()">
+                            <div class="spinner" id="batchLaunchSpinner"></div>
+                            <span>🎨 Generate Overlays (Local FLUX)</span>
+                        </button>
+                        <button class="btn-action" id="n8nDispatchBtn" style="background: linear-gradient(135deg, rgba(229,57,53,0.25), rgba(255,183,3,0.15)); border-color: #e53935; color: #ff7b7b;" onclick="sendBatchToN8n()">
+                            <div class="spinner" id="n8nDispatchSpinner"></div>
+                            <span>🚀 Send Selected Batch to n8n Workflow</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -1027,6 +1033,58 @@
             document.getElementById('panelStep1').style.display = 'flex';
             document.getElementById('stepIndicator2').classList.remove('active');
             document.getElementById('stepIndicator1').classList.add('active');
+        }
+
+        function sendBatchToN8n() {
+            if (!extractedBatchDetails || extractedBatchDetails.length === 0) {
+                alert("No products in batch. Please go back and select products first.");
+                return;
+            }
+
+            const btn = document.getElementById('n8nDispatchBtn');
+            const spinner = document.getElementById('n8nDispatchSpinner');
+            if (spinner) spinner.style.display = 'inline-block';
+            if (btn) btn.disabled = true;
+
+            const itemsPayload = extractedBatchDetails.map(item => ({
+                asin: item.asin,
+                title: batchCustomData[item.asin]?.title || item.title,
+                price: batchCustomData[item.asin]?.price || item.price,
+                chosen_photo_url: batchSelectedPhotos[item.asin] || item.winner_photo,
+                winner_photo: item.winner_photo
+            }));
+
+            showToast(`Dispatching ${itemsPayload.length} products to n8n workflow...`, "🚀");
+
+            fetch('/api/n8n/dispatch-batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: itemsPayload })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (spinner) spinner.style.display = 'none';
+                if (btn) btn.disabled = false;
+
+                if (data.status === 'success') {
+                    showToast(`✅ ${data.message}`, "🏆");
+
+                    // Show success panel
+                    document.getElementById('panelStep2').style.display = 'none';
+                    document.getElementById('panelStep3').style.display = 'flex';
+                    document.getElementById('stepIndicator2').classList.remove('active');
+                    document.getElementById('stepIndicator3').classList.add('active');
+                    document.getElementById('batchProgressBadge').innerText = `⏳ n8n Processing ${data.batch_count} Products...`;
+                    document.getElementById('batchStatusText').innerText = `🚀 Products dispatched to n8n pipeline! Bridge pages are being auto-created, SEO copy generated, price badges rendered, and Pins published to Pinterest API v5. Check your Pinterest board!`;
+                } else {
+                    alert("n8n Dispatch Error: " + (data.message || "Unknown error"));
+                }
+            })
+            .catch(err => {
+                if (spinner) spinner.style.display = 'none';
+                if (btn) btn.disabled = false;
+                alert("Error connecting to n8n dispatch endpoint: " + err.message);
+            });
         }
 
         function launchBatchGeneration() {

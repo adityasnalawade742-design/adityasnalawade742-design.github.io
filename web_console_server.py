@@ -61,7 +61,15 @@ def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt
 
     seo_data = generate_pin_seo_data(prod['title'], prod['price'])
     hook_img_path = str(WORKSPACE_DIR / f"focus_product_{asin}_hook.jpg")
-    render_html_overlay(raw_image_path, seo_data.get('image_hook', prod['title'][:30]), "", seo_data.get('badge_hook', "VIRAL ROOM FIND"), prod['price'], hook_img_path)
+    render_html_overlay(
+        image_path=raw_image_path,
+        headline=seo_data.get('image_hook', prod['title'][:30]),
+        subtitle="",
+        badge_text=seo_data.get('badge_hook', "VIRAL ROOM FIND"),
+        price_str=prod['price'],
+        features=prod.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]),
+        output_path=hook_img_path
+    )
     generate_bridge_page(prod, seo_data, asin)
     save_processed_asin(asin)
 
@@ -152,12 +160,9 @@ def run_async_batch_generation(batch_id, items):
         'status': 'success',
         'current_index': total,
         'total': total,
-        'step': f'Batch complete! {len(completed)} products published live.',
+        'step': f'Batch complete! {len(completed)} products published live to GitHub Pages!',
         'completed_items': completed
     })
-
-    TASK_STATUS_MAP[batch_id]['status'] = 'success'
-    TASK_STATUS_MAP[batch_id]['step'] = f"Successfully generated and published {len(completed)} products live to GitHub Pages!"
 
 
 class WebConsoleHandler(SimpleHTTPRequestHandler):
@@ -746,26 +751,24 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             print(f"[n8n Dispatcher] 🚀 Dispatching batch of {len(items)} items to n8n Workflow ({n8n_webhook_url})...")
 
-            batch_results = []
-            
             def process_n8n_batch():
                 import urllib.request
+                from modules.amazon_extractor import get_product_details_and_photos
+                from modules.bridge_creator import generate_bridge_page
+                from modules.seo_copywriter import generate_pin_seo_data
+                from modules.html_overlay_engine import render_html_overlay
+                from modules.pinterest_publisher import publish_pin_to_pinterest
+                from modules.automated_product_selector import save_processed_asin
+
                 for item in items:
                     asin = item.get('asin')
                     title = item.get('title', 'Aesthetic Home Decor Find')
                     price = item.get('price', '$19.99')
                     chosen_photo = item.get('chosen_photo_url') or item.get('winner_photo')
-                    
-                    print(f"[n8n Dispatcher] ⚙️ Processing ASIN: {asin} | Chosen Photo: {chosen_photo[:40]}...")
 
-                    # 1. Generate/Deploy Bridge Page
-                    from modules.amazon_extractor import get_product_details_and_photos
-                    from modules.bridge_creator import generate_bridge_page
-                    from modules.seo_copywriter import generate_pin_seo_data
-                    from modules.html_overlay_engine import render_html_overlay
-                    from modules.pinterest_publisher import publish_pin_to_pinterest
-                    from modules.automated_product_selector import save_processed_asin
+                    print(f"[n8n Dispatcher] ⚙️ Processing ASIN: {asin} | Chosen Photo: {(chosen_photo or 'N/A')[:40]}...")
 
+                    # 1. Fetch Product Data
                     amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
                     prod = get_product_details_and_photos(amazon_url) or {
                         'title': title, 'price': price, 'features': ['Aesthetic Decor', 'Cozy Glow', 'Modern Style'],
@@ -777,8 +780,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     
                     # Ensure targeted hashtags are attached
                     category_hashtags = "#cozyroom #aestheticdecor #roomdecor #homefinds #amazonfinds"
-                    if "pin_description" in seo_data and category_hashtags not in seo_data["pin_description"]:
-                        seo_data["pin_description"] += f"\n\n{category_hashtags}"
+                    if "description" in seo_data and category_hashtags not in seo_data["description"]:
+                        seo_data["description"] += f"\n\n{category_hashtags}"
 
                     # 3. Build & Deploy Bridge Page
                     generate_bridge_page(prod, seo_data, asin)
@@ -795,7 +798,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
                     hook_img_path = str(WORKSPACE_DIR / f"focus_product_{asin}_hook.jpg")
                     render_html_overlay(
-                        image_path=raw_img_path if (WORKSPACE_DIR / raw_img_path).exists() else str(WORKSPACE_DIR / "raw_images/raw_B0BZXNSW5K.jpg"),
+                        image_path=raw_img_path if Path(raw_img_path).exists() else str(WORKSPACE_DIR / "raw_images/raw_B0BZXNSW5K.jpg"),
                         headline=seo_data.get("image_hook") or "COZY ROOM FIND",
                         subtitle=seo_data.get("subtitle_hook") or "AESTHETIC DECOR",
                         badge_text=seo_data.get("badge_hook") or "VIRAL FIND",

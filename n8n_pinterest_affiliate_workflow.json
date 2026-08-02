@@ -10,22 +10,26 @@
       "name": "1. Webhook Trigger (Incoming Product Batch)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [
-        250,
-        300
-      ]
+      "position": [250, 300]
     },
     {
       "parameters": {
-        "command": "=python G:\\CLI\\pinterest-auto-affiliate\\n8n_local_bridge.py --asin {{ $json.body.asin || 'B0FXLYXM32' }}"
+        "url": "=http://localhost:5000/api/n8n/dispatch-batch",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ items: [ { asin: $json.body.asin, title: $json.body.title, price: $json.body.price, chosen_photo_url: $json.body.chosen_photo_url } ] }) }}",
+        "options": {}
       },
-      "name": "2. Auto Bridge Page Creator (Deploy bridge_<ASIN>.html)",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        480,
-        300
-      ]
+      "name": "2. Auto Bridge Page Creator & Price Badge Renderer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [480, 300]
     },
     {
       "parameters": {
@@ -33,11 +37,11 @@
           "string": [
             {
               "name": "pin_title",
-              "value": "={{ 'Cozy Room Find: ' + ($json.body.title || 'Aesthetic Home Decor Find') }}"
+              "value": "={{ 'Cozy Room Find: ' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.title || 'Aesthetic Home Decor Find') }}"
             },
             {
               "name": "pin_description",
-              "value": "={{ 'Transform your living space with this aesthetic find! Priced at ' + ($json.body.price || '$19.99') + '. Tap link to shop now on Amazon.\n\n#cozyroom #aestheticdecor #roomdecor #homefinds #amazonfinds' }}"
+              "value": "={{ 'Transform your living space with this aesthetic find! Priced at ' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.price || '$19.99') + '. Tap link to shop now on Amazon!\n\n#cozyroom #aestheticdecor #roomdecor #homefinds #amazonfinds' }}"
             }
           ]
         },
@@ -46,10 +50,7 @@
       "name": "3. Unique Viral SEO & Hashtags Copywriter",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [
-        700,
-        300
-      ]
+      "position": [700, 300]
     },
     {
       "parameters": {
@@ -57,11 +58,11 @@
           "string": [
             {
               "name": "bridge_url",
-              "value": "={{ 'https://adityasnalawade742-design.github.io/bridge_' + ($json.body.asin || 'B0FXLYXM32') + '.html' }}"
+              "value": "={{ 'https://adityasnalawade742-design.github.io/bridge_' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.asin || 'B0FXLYXM32') + '.html' }}"
             },
             {
               "name": "image_url",
-              "value": "={{ 'https://adityasnalawade742-design.github.io/focus_product_' + ($json.body.asin || 'B0FXLYXM32') + '_hook.jpg' }}"
+              "value": "={{ 'https://adityasnalawade742-design.github.io/focus_product_' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.asin || 'B0FXLYXM32') + '_hook.jpg' }}"
             }
           ]
         },
@@ -70,10 +71,7 @@
       "name": "4. Signature Price Badge & Typography Template Engine",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [
-        920,
-        300
-      ]
+      "position": [920, 300]
     },
     {
       "parameters": {
@@ -89,56 +87,21 @@
       "name": "5. Publish to Pinterest API v5 (OAuth 2.0)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [
-        1140,
-        300
-      ]
+      "position": [1140, 300]
     }
   ],
   "connections": {
     "1. Webhook Trigger (Incoming Product Batch)": {
-      "main": [
-        [
-          {
-            "node": "2. Auto Bridge Page Creator (Deploy bridge_<ASIN>.html)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "2. Auto Bridge Page Creator & Price Badge Renderer", "type": "main", "index": 0 }]]
     },
-    "2. Auto Bridge Page Creator (Deploy bridge_<ASIN>.html)": {
-      "main": [
-        [
-          {
-            "node": "3. Unique Viral SEO & Hashtags Copywriter",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+    "2. Auto Bridge Page Creator & Price Badge Renderer": {
+      "main": [[{ "node": "3. Unique Viral SEO & Hashtags Copywriter", "type": "main", "index": 0 }]]
     },
     "3. Unique Viral SEO & Hashtags Copywriter": {
-      "main": [
-        [
-          {
-            "node": "4. Signature Price Badge & Typography Template Engine",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "4. Signature Price Badge & Typography Template Engine", "type": "main", "index": 0 }]]
     },
     "4. Signature Price Badge & Typography Template Engine": {
-      "main": [
-        [
-          {
-            "node": "5. Publish to Pinterest API v5 (OAuth 2.0)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "5. Publish to Pinterest API v5 (OAuth 2.0)", "type": "main", "index": 0 }]]
     }
   }
 }

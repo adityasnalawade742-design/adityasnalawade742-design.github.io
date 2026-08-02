@@ -5,9 +5,6 @@ import sys
 import io
 from pathlib import Path
 
-# UTF-8 stdout fix
-if hasattr(sys.stdout, "buffer"):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 def generate_pin_seo_data(product_title: str, price: str = "", category: str = "") -> dict:
     """
