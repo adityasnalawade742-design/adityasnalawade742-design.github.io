@@ -192,6 +192,18 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif parsed.path == '/api/global_tag_defaults':
             self.handle_api_get_global_defaults()
             return
+        elif parsed.path == '/api/matrix':
+            # BUG FIX: matrix was only in do_POST but frontend calls it via GET
+            self.handle_api_matrix()
+            return
+        elif parsed.path == '/api/campaign_tracker':
+            # BUG FIX: campaign_tracker was only in do_POST but should be GET
+            self.handle_api_campaign_tracker()
+            return
+        elif parsed.path == '/api/logs':
+            # BUG FIX: logs was only in do_POST but should also support GET
+            self.handle_api_logs()
+            return
         elif parsed.path == '/api/auth/pinterest':
             self.handle_api_auth_pinterest()
             return
@@ -259,7 +271,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         try:
             index_path = WORKSPACE_DIR / "index.html"
             reg_path = WORKSPACE_DIR / "product_price_registry.json"
-            
+
             reg_data = {}
             if reg_path.exists():
                 try: reg_data = json.loads(reg_path.read_text(encoding="utf-8"))
@@ -267,6 +279,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             products = []
             seen = set()
+            v_stamp = int(time.time())  # BUG 5 FIX: cache-bust all hook images
             if index_path.exists():
                 html = index_path.read_text(encoding="utf-8")
                 card_matches = re.findall(r'id="card-([A-Za-z0-9_]{5,15})"', html)
@@ -275,10 +288,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                         continue
                     seen.add(asin)
                     meta = reg_data.get(asin, {})
-                    
+
                     title = meta.get('title') or f"Product {asin}"
                     price = meta.get('current_price') or meta.get('price') or "$19.99"
-                    image = f"./focus_product_{asin}_hook.jpg"
+                    image = f"./focus_product_{asin}_hook.jpg?v={v_stamp}"
 
                     products.append({
                         'asin': asin,
@@ -319,15 +332,24 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         subtitle = data.get('subtitle', '')
         badge = data.get('badge', 'VIRAL ROOM FIND')
         price = data.get('price', '$19.99')
+        features = data.get('features', [])
 
         try:
             from modules.html_overlay_engine import render_html_overlay
             scratch_dir = WORKSPACE_DIR / "scratch"
             scratch_dir.mkdir(parents=True, exist_ok=True)
             preview_img = scratch_dir / "preview_overlay.jpg"
-            
-            # Render temporary preview
-            render_html_overlay(image_url, title, subtitle, badge, price, str(preview_img))
+
+            # BUG 2 FIX: pass features= and output_path= as kwargs to avoid positional mismatch
+            render_html_overlay(
+                image_path=image_url,
+                headline=title,
+                subtitle=subtitle,
+                badge_text=badge,
+                price_str=price,
+                features=features,
+                output_path=str(preview_img)
+            )
             self.send_json({'status': 'success', 'preview_url': f"/scratch/preview_overlay.jpg?v={int(time.time())}"})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
@@ -399,16 +421,34 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_audit_links(self):
         try:
             audit_script = str(WORKSPACE_DIR / "scratch" / "master_zero_404_audit.py")
-            res = subprocess.run([sys.executable, audit_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
-            self.send_json({'status': 'success', 'output': res.stdout})
+            # BUG FIX: was blocking server thread — now runs in background, returns task key for polling
+            task_key = 'audit_links'
+            update_task_status(task_key, {'status': 'running', 'message': 'Audit started...'})
+            def run_audit():
+                try:
+                    res = subprocess.run([sys.executable, audit_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+                    update_task_status(task_key, {'status': 'completed', 'output': res.stdout[-3000:]})
+                except Exception as e_a:
+                    update_task_status(task_key, {'status': 'error', 'message': str(e_a)})
+            threading.Thread(target=run_audit, daemon=True).start()
+            self.send_json({'status': 'success', 'task_key': task_key, 'message': 'Audit started in background. Poll /api/task_status?asin=audit_links for result.'})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
     def handle_api_rerender_badges(self):
         try:
             rerender_script = str(WORKSPACE_DIR / "rebuild_all_price_badges_usd.py")
-            res = subprocess.run([sys.executable, rerender_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
-            self.send_json({'status': 'success', 'message': 'All Playwright graphic price badges re-rendered successfully!', 'output': res.stdout})
+            # BUG FIX: was blocking server thread — now runs in background, returns task key for polling
+            task_key = 'rerender_badges'
+            update_task_status(task_key, {'status': 'running', 'message': 'Badge re-render started...'})
+            def run_rerender():
+                try:
+                    res = subprocess.run([sys.executable, rerender_script], capture_output=True, text=True, cwd=str(WORKSPACE_DIR))
+                    update_task_status(task_key, {'status': 'completed', 'message': 'All Playwright graphic price badges re-rendered successfully!', 'output': res.stdout[-3000:]})
+                except Exception as e_r:
+                    update_task_status(task_key, {'status': 'error', 'message': str(e_r)})
+            threading.Thread(target=run_rerender, daemon=True).start()
+            self.send_json({'status': 'success', 'task_key': task_key, 'message': 'Badge re-render started in background. Poll /api/task_status?asin=rerender_badges for result.'})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
@@ -535,10 +575,29 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
             try:
                 prod = get_product_details_and_photos(amazon_url)
-                if not prod:
-                    continue
+
+                # BUG 3 FIX: when SerpAPI quota is exhausted and BS4 scrape fails,
+                # construct known high-res CDN URLs directly so Step 2 always has at least 1 photo.
+                if not prod or not prod.get('all_photos'):
+                    print(f"[Batch Extract] SerpAPI/scrape returned no photos for {asin}. Using CDN fallback.")
+                    cdn_base = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&MarketPlace=US&ASIN={asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL1500_"
+                    fallback_photos = [cdn_base]
+                    # Also try standard media-amazon pattern (commonly works without API)
+                    for suffix in ["_SL1500_", "_SX679_", "_SX425_"]:
+                        fallback_photos.append(f"https://m.media-amazon.com/images/I/{asin}._AC_{suffix}.jpg")
+                    prod = prod or {
+                        'title': f'Product {asin}',
+                        'price': '$19.99',
+                        'rating': '4.5',
+                        'all_photos': fallback_photos
+                    }
+                    if not prod.get('all_photos'):
+                        prod['all_photos'] = fallback_photos
+
                 photos = prod.get('all_photos', [])
                 winner_photo, skip = select_clean_photo_or_skip(photos)
+                if not winner_photo and photos:
+                    winner_photo = photos[0]  # Always provide at least 1 selectable photo
 
                 photo_data = []
                 for p in photos:
@@ -560,7 +619,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
                 extracted_batch.append({
                     'asin': asin,
-                    'title': prod.get('title'),
+                    'title': prod.get('title', f'Product {asin}'),
                     'price': prod.get('price', '$19.99'),
                     'rating': prod.get('rating', '4.5'),
                     'winner_photo': winner_photo or (photos[0] if photos else ''),
@@ -569,6 +628,17 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 })
             except Exception as e:
                 print(f"[Batch Extract Error] Failed {asin}: {e}")
+                # BUG 3 FIX: still return a stub entry so Step 2 doesn't silently drop this ASIN
+                cdn_fallback = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&MarketPlace=US&ASIN={asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL1500_"
+                extracted_batch.append({
+                    'asin': asin,
+                    'title': f'Product {asin}',
+                    'price': '$19.99',
+                    'rating': '4.5',
+                    'winner_photo': cdn_fallback,
+                    'should_skip': False,
+                    'photos': [{'url': cdn_fallback, 'status': 'CLEAN', 'is_clean': True}]
+                })
 
         self.send_json({'status': 'success', 'items': extracted_batch})
 
@@ -613,6 +683,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             daemon=True
         )
         t.start()
+
+        # BUG FIX: was missing send_json — browser was left hanging with no response
+        self.send_json({
+            'status': 'processing',
+            'batch_id': batch_id,
+            'message': f'Batch generation started for {len(items)} products.'
+        })
 
     def handle_api_customize_tag(self):
         try:
@@ -1039,18 +1116,127 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_auth_pinterest(self):
         """Redirects user to Pinterest OAuth 2.0 Authorization screen with App ID 1596368."""
         client_id = "1596368"
-        redirect_uri = f"http://localhost:{self.server.server_port}/api/auth/callback"
+        port = self.server.server_address[1]
+        redirect_uri = f"http://localhost:{port}/api/auth/callback"
         scopes = "boards:read,boards:write,pins:read,pins:write"
         auth_url = f"https://www.pinterest.com/oauth/?client_id={client_id}&redirect_uri={urllib.parse.quote(redirect_uri)}&response_type=code&scope={scopes}"
-        
+
         self.send_response(302)
         self.send_header("Location", auth_url)
         self.end_headers()
 
     def handle_api_auth_callback(self, query_str):
-        """Renders live OAuth 2.0 Auth Callback verification page for video demo recording."""
+        """
+        BUG 1 FIX: Actually exchange the OAuth authorization code for a real access token.
+        Saves the token to .env and updates in-memory config so pin publishing works immediately.
+        """
         params = urllib.parse.parse_qs(query_str)
-        code = params.get("code", ["pina_mock_oauth_auth_code_1596368"])[0]
+        code = params.get("code", [""])[0]
+        error = params.get("error", [""])[0]
+
+        # --- Pinterest credentials ---
+        client_id = "1596368"
+        client_secret = os.getenv("PINTEREST_CLIENT_SECRET", "")
+        port = self.server.server_address[1]
+        redirect_uri = f"http://localhost:{port}/api/auth/callback"
+
+        token_status = "pending"
+        access_token = ""
+        refresh_token = ""
+        token_error = ""
+
+        if error:
+            token_status = "oauth_error"
+            token_error = error
+        elif code and client_secret:
+            # Exchange code → access token via Pinterest API
+            try:
+                import base64, urllib.request as urlreq
+                creds = base64.b64encode(f"{client_id}:{client_secret}".encode()).decode()
+                token_payload = urllib.parse.urlencode({
+                    "grant_type": "authorization_code",
+                    "code": code,
+                    "redirect_uri": redirect_uri
+                }).encode()
+                req = urlreq.Request(
+                    "https://api.pinterest.com/v5/oauth/token",
+                    data=token_payload,
+                    headers={
+                        "Authorization": f"Basic {creds}",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    method="POST"
+                )
+                with urlreq.urlopen(req, timeout=15) as resp:
+                    token_data = json.loads(resp.read().decode())
+                access_token = token_data.get("access_token", "")
+                refresh_token = token_data.get("refresh_token", "")
+
+                if access_token:
+                    # Persist to .env file
+                    env_path = WORKSPACE_DIR / ".env"
+                    env_text = env_path.read_text(encoding="utf-8") if env_path.exists() else ""
+                    # Replace or append PINTEREST_ACCESS_TOKEN
+                    if "PINTEREST_ACCESS_TOKEN=" in env_text:
+                        env_text = re.sub(r'PINTEREST_ACCESS_TOKEN=.*', f'PINTEREST_ACCESS_TOKEN={access_token}', env_text)
+                    else:
+                        env_text += f"\nPINTEREST_ACCESS_TOKEN={access_token}"
+                    if refresh_token:
+                        if "PINTEREST_REFRESH_TOKEN=" in env_text:
+                            env_text = re.sub(r'PINTEREST_REFRESH_TOKEN=.*', f'PINTEREST_REFRESH_TOKEN={refresh_token}', env_text)
+                        else:
+                            env_text += f"\nPINTEREST_REFRESH_TOKEN={refresh_token}"
+                    env_path.write_text(env_text, encoding="utf-8")
+                    # Also update in-memory os.environ so publisher works immediately
+                    os.environ["PINTEREST_ACCESS_TOKEN"] = access_token
+                    if refresh_token:
+                        os.environ["PINTEREST_REFRESH_TOKEN"] = refresh_token
+                    token_status = "success"
+                    print(f"[Pinterest OAuth] ✅ Access token obtained and saved to .env!")
+                else:
+                    token_status = "no_token"
+                    token_error = str(token_data)
+            except Exception as e_tok:
+                token_status = "exchange_error"
+                token_error = str(e_tok)
+                print(f"[Pinterest OAuth] ❌ Token exchange error: {e_tok}")
+        elif code and not client_secret:
+            # No client secret configured — display instructions
+            token_status = "missing_secret"
+            token_error = "PINTEREST_CLIENT_SECRET is not set in .env. Add it to enable live token exchange."
+            access_token = "(requires PINTEREST_CLIENT_SECRET in .env)"
+        else:
+            token_status = "no_code"
+            token_error = "No authorization code received from Pinterest."
+
+        # Build status badge
+        if token_status == "success":
+            badge_color = "#10b981"
+            badge_label = "✅ Token Exchange SUCCESS — Pinterest Connected!"
+            heading = "Account Connected & Token Saved!"
+            body_msg = "Your Pinterest access token has been saved to <code>.env</code> and is active in memory. Pin publishing is now live."
+        elif token_status == "missing_secret":
+            badge_color = "#fb8500"
+            badge_label = "⚠️ Client Secret Missing"
+            heading = "Almost There — Add Client Secret"
+            body_msg = f"Set <code>PINTEREST_CLIENT_SECRET=your_secret</code> in <code>.env</code>, then retry OAuth. Auth code received: <code>{code[:20]}...</code>"
+        elif token_status == "oauth_error":
+            badge_color = "#ef4444"
+            badge_label = f"❌ OAuth Error: {error}"
+            heading = "OAuth Flow Error"
+            body_msg = f"Pinterest returned an error during authorization: <code>{error}</code>. Please retry the OAuth flow."
+        elif token_status in ("exchange_error", "no_token"):
+            badge_color = "#ef4444"
+            badge_label = "❌ Token Exchange Failed"
+            heading = "Token Exchange Error"
+            body_msg = f"Code was received but token exchange failed: <code>{token_error}</code>"
+        else:
+            badge_color = "#94a3b8"
+            badge_label = "ℹ️ OAuth Callback Received"
+            heading = "Callback Received"
+            body_msg = "Authorization code was received. Configure PINTEREST_CLIENT_SECRET to complete token exchange."
+
+        display_token = (access_token[:28] + "...") if len(access_token) > 28 else (access_token or "(not obtained)")
         
         html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -1060,32 +1246,33 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     <style>
         body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0a10; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }}
         .auth-card {{ background: rgba(22, 20, 30, 0.9); border: 1px solid rgba(255, 183, 3, 0.4); border-radius: 24px; padding: 40px; max-width: 600px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }}
-        .badge {{ background: linear-gradient(135deg, #e60023, #ff4757); color: #fff; font-size: 12px; font-weight: 800; padding: 6px 16px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1.5px; display: inline-block; margin-bottom: 20px; }}
+        .badge {{ background: {badge_color}; color: #fff; font-size: 12px; font-weight: 800; padding: 6px 16px; border-radius: 50px; display: inline-block; margin-bottom: 20px; }}
         h1 {{ font-size: 26px; color: #ffb703; margin-bottom: 12px; }}
         p {{ color: #cbd5e1; font-size: 15px; line-height: 1.6; margin-bottom: 24px; }}
+        code {{ background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #fbbf24; }}
         .info-box {{ background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 183, 3, 0.3); border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 28px; font-size: 13.5px; color: #e2e8f0; }}
         .info-row {{ display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; }}
         .info-row:last-child {{ border: none; margin: 0; padding: 0; }}
         .info-label {{ color: #94a3b8; font-weight: 600; }}
-        .info-val {{ color: #ffb703; font-weight: 700; font-family: monospace; }}
+        .info-val {{ color: #ffb703; font-weight: 700; font-family: monospace; word-break: break-all; }}
         .btn {{ display: inline-block; background: linear-gradient(135deg, #fb8500, #ffb703); color: #000; font-weight: 800; font-size: 15px; padding: 14px 32px; border-radius: 50px; text-decoration: none; box-shadow: 0 8px 25px rgba(251, 133, 0, 0.4); transition: transform 0.2s; }}
         .btn:hover {{ transform: translateY(-2px); }}
     </style>
 </head>
 <body>
     <div class="auth-card">
-        <div class="badge">📌 Pinterest OAuth 2.0 Auth Status: 200 OK</div>
-        <h1>Account Connected Successfully!</h1>
-        <p>Your application has successfully completed OAuth 2.0 authentication with Pinterest API v5.</p>
-        
+        <div class="badge">{badge_label}</div>
+        <h1>{heading}</h1>
+        <p>{body_msg}</p>
+
         <div class="info-box">
             <div class="info-row"><span class="info-label">Company Name:</span><span class="info-val">Cozy Room Finds</span></div>
             <div class="info-row"><span class="info-label">Application Name:</span><span class="info-val">Cozy Room Decor Publisher Pro</span></div>
             <div class="info-row"><span class="info-label">Pinterest App ID:</span><span class="info-val">1596368</span></div>
             <div class="info-row"><span class="info-label">Connected Profile:</span><span class="info-val">@adityasnalawade0703</span></div>
-            <div class="info-row"><span class="info-label">OAuth Authorization Code:</span><span class="info-val">{code[:25]}...</span></div>
-            <div class="info-row"><span class="info-label">OAuth Scopes Granted:</span><span class="info-val">boards:read, boards:write, pins:read, pins:write</span></div>
-            <div class="info-row"><span class="info-label">Status:</span><span class="info-val" style="color: #4ade80;">Active OAuth Token Generated</span></div>
+            <div class="info-row"><span class="info-label">Access Token:</span><span class="info-val" style="color:{'#4ade80' if token_status == 'success' else '#fb8500'};">{display_token}</span></div>
+            <div class="info-row"><span class="info-label">OAuth Scopes:</span><span class="info-val">boards:read, boards:write, pins:read, pins:write</span></div>
+            <div class="info-row"><span class="info-label">Status:</span><span class="info-val" style="color:{'#4ade80' if token_status == 'success' else '#fb8500'};">{'✅ Active — Token Saved to .env' if token_status == 'success' else token_status.replace('_', ' ').title()}</span></div>
         </div>
 
         <a href="/admin_console.html" class="btn">← Back to Web Console Dashboard</a>

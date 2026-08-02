@@ -544,6 +544,14 @@
         function renderDiscoverGrid(items) {
             const grid = document.getElementById('n8nDiscoverGrid');
             grid.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                grid.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text-sub);font-size:15px;">⚠️ No products found for this search. Try a different keyword or category.</div>';
+                // BUG 6 FIX: hide the proceed footer when 0 results
+                document.getElementById('n8nStep1Footer').style.display = 'none';
+                return;
+            }
+
             items.forEach(item => {
                 const asin = item.asin;
                 const card = document.createElement('div');
@@ -662,6 +670,8 @@
         }
 
         // STEP 3: SUBMIT BATCH TO N8N
+        let _n8nStatusPollTimer = null;
+
         async function n8nSubmitBatch() {
             document.getElementById('n8nSubmitBtn').disabled = true;
             document.getElementById('n8nSubmitBtn').innerText = '⏳ Preparing Batch...';
@@ -697,17 +707,18 @@
 
             const rowsContainer = document.getElementById('n8nStatusRows');
             rowsContainer.innerHTML = preparedItems.map(it => `
-                <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:rgba(255,255,255,0.04);border-radius:14px;">
-                    <div style="font-size:20px;">⏳</div>
-                    <div>
+                <div id="status-row-${escapeHTML(it.asin)}" style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:rgba(255,255,255,0.04);border-radius:14px;">
+                    <div id="status-icon-${escapeHTML(it.asin)}" style="font-size:20px;">⏳</div>
+                    <div style="flex:1;">
                         <div style="font-weight:700;font-size:14px;color:#fff;">${escapeHTML(it.title)}</div>
-                        <div style="font-size:12px;color:var(--text-sub);">Queued — firing to n8n pipeline...</div>
+                        <div id="status-msg-${escapeHTML(it.asin)}" style="font-size:12px;color:var(--text-sub);">Queued — firing to n8n pipeline...</div>
                     </div>
+                    <div id="status-link-${escapeHTML(it.asin)}" style="font-size:12px;"></div>
                 </div>
             `).join('');
 
             try {
-                const n8nRes = await fetch(n8nWebhookUrl, {
+                await fetch(n8nWebhookUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ items: preparedItems })
@@ -715,13 +726,67 @@
                 document.getElementById('n8nStatusHeading').innerText = `✅ Batch of ${preparedItems.length} Products Dispatched to n8n!`;
                 document.getElementById('n8nStatusHeading').style.color = '#4ade80';
                 showToast(`Batch dispatched to n8n! ${preparedItems.length} Pins publishing.`, '📌');
+
+                // BUG 4 FIX: Start polling /api/task_status per ASIN every 5s
+                _startN8nStatusPolling(preparedItems);
             } catch (e) {
-                document.getElementById('n8nStatusHeading').innerText = `⚠️ n8n webhook unreachable (${n8nWebhookUrl}). Please ensure n8n is running.`;
+                document.getElementById('n8nStatusHeading').innerText = `⚠️ n8n webhook unreachable (${n8nWebhookUrl}). Is n8n running?`;
                 document.getElementById('n8nStatusHeading').style.color = '#fb8500';
+                // Even if n8n is unreachable, still poll /api/create_bridge_page status
+                _startN8nStatusPolling(preparedItems);
             }
         }
 
+        function _startN8nStatusPolling(preparedItems) {
+            if (_n8nStatusPollTimer) clearInterval(_n8nStatusPollTimer);
+            let completedCount = 0;
+            const total = preparedItems.length;
+
+            _n8nStatusPollTimer = setInterval(async () => {
+                let allDone = true;
+                for (const it of preparedItems) {
+                    const asin = it.asin;
+                    const iconEl = document.getElementById(`status-icon-${asin}`);
+                    const msgEl = document.getElementById(`status-msg-${asin}`);
+                    const linkEl = document.getElementById(`status-link-${asin}`);
+
+                    // Skip already-resolved rows
+                    if (iconEl && (iconEl.innerText === '✅' || iconEl.innerText === '❌')) continue;
+                    allDone = false;
+
+                    try {
+                        const res = await fetch(`/api/task_status?asin=${asin}`);
+                        const d = await res.json();
+
+                        if (d.status === 'success') {
+                            if (iconEl) iconEl.innerText = '✅';
+                            if (msgEl) msgEl.innerText = 'Bridge page built & deployed to GitHub Pages!';
+                            if (msgEl) msgEl.style.color = '#4ade80';
+                            if (linkEl && d.bridge_url) linkEl.innerHTML = `<a href="${d.bridge_url}" target="_blank" style="color:var(--gold-primary);font-weight:700;text-decoration:none;">🔗 View Live</a>`;
+                            completedCount++;
+                        } else if (d.status === 'error') {
+                            if (iconEl) iconEl.innerText = '❌';
+                            if (msgEl) msgEl.innerText = `Error: ${d.message || 'Unknown error'}`;
+                            if (msgEl) msgEl.style.color = '#f87171';
+                            completedCount++;
+                        } else if (d.status === 'processing') {
+                            if (msgEl) msgEl.innerText = d.step || d.message || 'Processing...';
+                        }
+                        // status 'not_found' = n8n hasn't called create_bridge_page yet, keep waiting
+                    } catch (_) { /* network blip, try next tick */ }
+                }
+
+                if (completedCount >= total) {
+                    clearInterval(_n8nStatusPollTimer);
+                    _n8nStatusPollTimer = null;
+                    document.getElementById('n8nStatusHeading').innerText = `🏆 All ${total} products built & deployed!`;
+                }
+            }, 5000); // poll every 5 seconds
+        }
+
         function n8nResetBatch() {
+            // BUG 4 FIX: stop any active polling from the previous batch
+            if (_n8nStatusPollTimer) { clearInterval(_n8nStatusPollTimer); _n8nStatusPollTimer = null; }
             n8nDiscoveredItems = [];
             n8nSelectedAsins.clear();
             n8nExtractedItems = [];
