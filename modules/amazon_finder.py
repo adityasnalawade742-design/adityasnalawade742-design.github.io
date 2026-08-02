@@ -104,24 +104,30 @@ def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_pric
             if response.status_code == 200:
                 data = response.json()
                 
-                # Check if SerpAPI error payload indicates quota reached
-                if "error" in data and ("search" in data["error"].lower() or "credit" in data["error"].lower() or "quota" in data["error"].lower()):
-                    print(f"[SerpAPI Quota Alert] Key #{key_idx} out of credits: {data['error']}")
-                    continue
+                # Check if SerpAPI error payload indicates quota or credit limit reached
+                if "error" in data:
+                    err_msg = str(data["error"]).lower()
+                    if any(k in err_msg for k in ["credit", "search", "quota", "limit", "out of"]):
+                        print(f"[SerpAPI Quota Alert] Key #{key_idx} out of credits: {data['error']} -> Switching to Key #{key_idx + 1}...")
+                        continue
 
                 results = data.get("amazon_results") or data.get("organic_results") or []
+                if not results:
+                    print(f"[SerpAPI Key #{key_idx}] 0 results returned. Trying next key...")
+                    continue
                 
                 # Save raw results to local cache to preserve credits for future searches
                 cache[query_key] = results
                 save_serp_cache(cache)
                 print(f"[SerpAPI Cache] 💾 Saved {len(results)} search results to local disk cache!")
                 
-                return _parse_raw_serp_results(results, num_results, min_price, max_price)
+                parsed = _parse_raw_serp_results(results, num_results, min_price, max_price)
+                if parsed:
+                    return parsed
             else:
                 print(f"[SerpAPI Key #{key_idx} Error {response.status_code}] {response.text[:100]}")
-                # Try next API key on 429 (rate limit) or 401/403 (quota exceeded)
-                if response.status_code in [401, 403, 429]:
-                    print(f"[SerpAPI Key Switch] Key #{key_idx} quota exceeded. Switching to Key #{key_idx + 1}...")
+                if response.status_code in [400, 401, 403, 429]:
+                    print(f"[SerpAPI Key Switch] Key #{key_idx} failed ({response.status_code}). Switching to Key #{key_idx + 1}...")
                     continue
         except Exception as e:
             print(f"[SerpAPI Exception Key #{key_idx}] Error: {e}")
