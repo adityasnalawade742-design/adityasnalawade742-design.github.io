@@ -185,6 +185,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif parsed.path == '/api/discover':
             self.handle_api_discover(parsed.query)
             return
+        elif parsed.path == '/api/fetch_image':
+            self.handle_api_fetch_image(parsed.query)
+            return
         elif parsed.path == '/api/task_status':
             self.handle_api_status(parsed.query)
             return
@@ -524,26 +527,66 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
         print(f"[Web Console] Discovering live items for query: '{kw}'...")
         try:
+            from modules.amazon_finder import fetch_product_image_for_asin
             raw_items = fetch_amazon_products(query=kw, num_results=count)
             items = []
+            skipped_no_image = 0
             for item in raw_items:
                 asin = item.get('id') or item.get('asin', '')
-                # BUG FIX: skip items with missing/invalid ASINs (can happen with SerpAPI organic results
-                # parsed from Google URLs — cache may return entries where ASIN extraction failed)
                 if not asin or len(asin) != 10:
-                    print(f"[Web Console] Skipping discover result with invalid ASIN: '{asin}' (title: {str(item.get('title',''))[:40]})")
+                    print(f"[Web Console] Skipping invalid ASIN: '{asin}'")
                     continue
                 already_pub = is_asin_published_on_homepage(asin)
+                thumbnail = item.get('original_image_url') or item.get('thumbnail', '')
+
+                # Run all 4 image strategies if thumbnail is missing/broken
+                bad = (
+                    not thumbnail
+                    or 'amazon-adsystem.com' in thumbnail
+                    or '/images/P/' in thumbnail
+                )
+                if bad:
+                    print(f"[Web Console] Fetching image for {asin} via 4-strategy pipeline...")
+                    thumbnail = fetch_product_image_for_asin(asin, item.get('title', ''))
+
+                # HARD FILTER: never show a product without a confirmed image
+                if not thumbnail:
+                    skipped_no_image += 1
+                    print(f"[Web Console] SKIPPED {asin} — no image found by any strategy")
+                    continue
+
                 items.append({
                     'asin': asin,
                     'title': item.get('title', 'Unknown Product'),
                     'price': item.get('price', 'N/A'),
                     'rating': item.get('rating', '4.5'),
                     'reviews_count': item.get('reviews_count', 100),
-                    'thumbnail': item.get('original_image_url') or item.get('thumbnail', ''),
+                    'thumbnail': thumbnail,
                     'is_already_published': already_pub
                 })
-            self.send_json({'status': 'success', 'query': kw, 'items': items, 'total_raw': len(raw_items), 'valid': len(items)})
+            print(f"[Web Console] Discover done: {len(items)} with images, {skipped_no_image} skipped (no image)")
+            self.send_json({'status': 'success', 'query': kw, 'items': items, 'total_raw': len(raw_items), 'valid': len(items), 'skipped_no_image': skipped_no_image})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_fetch_image(self, query_str):
+        """GET /api/fetch_image?asin=XXXXXXXXXX[&title=...]
+        Tries 3 strategies to get a real product image for a given ASIN.
+        Returns: { status, asin, image_url } or { status: 'error', message }
+        """
+        from modules.amazon_finder import fetch_product_image_for_asin
+        params = urllib.parse.parse_qs(query_str)
+        asin = params.get('asin', [''])[0].strip().upper()
+        title = params.get('title', [''])[0].strip()
+        if not asin or len(asin) != 10:
+            self.send_json({'status': 'error', 'message': 'Invalid or missing ASIN'})
+            return
+        try:
+            img = fetch_product_image_for_asin(asin, title)
+            if img:
+                self.send_json({'status': 'success', 'asin': asin, 'image_url': img})
+            else:
+                self.send_json({'status': 'not_found', 'asin': asin, 'image_url': ''})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
@@ -616,33 +659,25 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         data = json.loads(body.decode('utf-8'))
         asins = data.get('asins', [])
 
+        from modules.amazon_extractor import fetch_all_product_images
+
+        def _get_best_fallback_image(asin, title=''):
+            """Returns a real m.media-amazon.com image URL from cache or fresh fetch."""
+            from modules.image_cache_db import get_cached_image
+            from modules.amazon_finder import fetch_product_image_for_asin
+            cached = get_cached_image(asin)
+            if cached and cached.startswith('http') and 'amazon-adsystem' not in cached:
+                return cached
+            fetched = fetch_product_image_for_asin(asin, title)
+            if fetched and fetched.startswith('http') and 'amazon-adsystem' not in fetched:
+                return fetched
+            return None
+
         extracted_batch = []
         for asin in asins:
-            amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
             try:
-                prod = get_product_details_and_photos(amazon_url)
-
-                # BUG 3 FIX: when SerpAPI quota is exhausted and BS4 scrape fails,
-                # construct a known valid CDN URL so Step 2 always has at least 1 photo.
-                if not prod or not prod.get('all_photos'):
-                    print(f"[Batch Extract] SerpAPI/scrape returned no photos for {asin}. Using CDN fallback.")
-                    # BUG B FIX: The media-amazon URLs require a real IMAGE ID, not the ASIN.
-                    # Using the ASIN directly generates 404s. Only the ws-na widget URL is reliably valid.
-                    cdn_base = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&MarketPlace=US&ASIN={asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL1500_"
-                    fallback_photos = [cdn_base]
-                    prod = prod or {
-                        'title': f'Product {asin}',
-                        'price': '$19.99',
-                        'rating': '4.5',
-                        'all_photos': fallback_photos
-                    }
-                    if not prod.get('all_photos'):
-                        prod['all_photos'] = fallback_photos
-
-                photos = prod.get('all_photos', [])
-                winner_photo, skip = select_clean_photo_or_skip(photos)
-                if not winner_photo and photos:
-                    winner_photo = photos[0]  # Always provide at least 1 selectable photo
+                # fetch_all_product_images tries: SerpAPI thumbnails[] -> Amazon page scrape -> SQLite cache
+                photos = fetch_all_product_images(asin)
 
                 photo_data = []
                 for p in photos:
@@ -662,30 +697,34 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                         'is_clean': len(status_list) == 0
                     })
 
+                winner_photo, skip = select_clean_photo_or_skip(photos) if photos else ('', False)
+                if not winner_photo and photos:
+                    winner_photo = photos[0]
+
                 extracted_batch.append({
                     'asin': asin,
-                    'title': prod.get('title', f'Product {asin}'),
-                    'price': prod.get('price', '$19.99'),
-                    'rating': prod.get('rating', '4.5'),
+                    'title': f'Product {asin}',
+                    'price': '$19.99',
+                    'rating': '4.5',
                     'winner_photo': winner_photo or (photos[0] if photos else ''),
                     'should_skip': skip,
                     'photos': photo_data
                 })
             except Exception as e:
                 print(f"[Batch Extract Error] Failed {asin}: {e}")
-                # BUG 3 FIX: still return a stub entry so Step 2 doesn't silently drop this ASIN
-                cdn_fallback = f"https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF-8&MarketPlace=US&ASIN={asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL1500_"
+                fallback_url = _get_best_fallback_image(asin) or ''
                 extracted_batch.append({
                     'asin': asin,
                     'title': f'Product {asin}',
                     'price': '$19.99',
                     'rating': '4.5',
-                    'winner_photo': cdn_fallback,
+                    'winner_photo': fallback_url,
                     'should_skip': False,
-                    'photos': [{'url': cdn_fallback, 'status': 'CLEAN', 'is_clean': True}]
+                    'photos': [{'url': fallback_url, 'status': 'CLEAN', 'is_clean': True}] if fallback_url else []
                 })
 
         self.send_json({'status': 'success', 'items': extracted_batch})
+
 
     def handle_api_generate(self):
         content_length = int(self.headers.get('Content-Length', 0))

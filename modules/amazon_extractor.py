@@ -1,5 +1,6 @@
 import re
 import io
+import json
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageFilter
@@ -75,10 +76,11 @@ def has_text_annotation(image_url: str) -> bool:
         w, h = edges.size
         # Inspect top 25% margin specifically for top seller headline text callouts
         top_crop = edges.crop((0, 0, w, int(h * 0.25)))
-        top_pixels = list(top_crop.get_flattened_data())
+        top_pixels = list(top_crop.getdata())
         top_contrast = sum(1 for p in top_pixels if p > 120) / len(top_pixels)
         
-        full_contrast = sum(1 for p in list(edges.get_flattened_data()) if p > 120) / (w * h)
+        full_pixels = list(edges.getdata())
+        full_contrast = sum(1 for p in full_pixels if p > 120) / (w * h)
         
         has_txt = (top_contrast > 0.035) or (full_contrast > 0.035)
         if has_txt:
@@ -98,55 +100,58 @@ def is_grid_collage(image_url: str) -> bool:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
         raw = requests.get(image_url, headers=headers, timeout=10).content
         img = Image.open(io.BytesIO(raw)).convert('RGB').resize((200, 200))
-        gray = img.convert('L')
-        edges = gray.filter(ImageFilter.FIND_EDGES)
+        w, h = img.size
         
-        max_v_white = max((sum(1 for y in range(200) if gray.getpixel((x, y)) > 240) / 200 for x in range(90, 110)), default=0)
-        max_h_white = max((sum(1 for x in range(200) if gray.getpixel((x, y)) > 240) / 200 for y in range(90, 110)), default=0)
+        def scan_band(pixels_list, threshold=240, seam_ratio=0.80):
+            white_count = sum(1 for r, g, b in pixels_list if r > threshold and g > threshold and b > threshold)
+            return (white_count / len(pixels_list)) > seam_ratio if pixels_list else False
         
-        max_v_edge = max((sum(1 for y in range(200) if edges.getpixel((x, y)) > 40) / 200 for x in range(90, 110)), default=0)
-        max_h_edge = max((sum(1 for x in range(200) if edges.getpixel((x, y)) > 40) / 200 for y in range(90, 110)), default=0)
+        # Check horizontal center band (y = h//2 ± 3)
+        h_band = [img.getpixel((x, h // 2)) for x in range(w)]
+        h_band2 = [img.getpixel((x, h // 2 + 3)) for x in range(w)]
+        h_band3 = [img.getpixel((x, h // 2 - 3)) for x in range(w)]
         
-        is_collage = (max_v_white > 0.60 or max_v_edge > 0.60) and (max_h_white > 0.60 or max_h_edge > 0.60)
-        if is_collage:
-            print(f"[Grid Collage Scanner] DISCARDING Multi-Panel Collage (...{image_url[-30:]}) [v_w={max_v_white:.2f}, h_w={max_h_white:.2f}]")
-        return is_collage
+        # Check vertical center band (x = w//2 ± 3)
+        v_band = [img.getpixel((w // 2, y)) for y in range(h)]
+        v_band2 = [img.getpixel((w // 2 + 3, y)) for y in range(h)]
+        
+        is_h_seam = scan_band(h_band) or scan_band(h_band2) or scan_band(h_band3)
+        is_v_seam = scan_band(v_band) or scan_band(v_band2)
+        
+        result = is_h_seam and is_v_seam
+        return result
     except Exception as e:
         print(f"[is_grid_collage Error] {e}")
         return False
 
 def has_human_presence(image_url: str) -> bool:
     """
-    Detects photos containing human models, hands, or people.
-    Evaluates skin tone color spectrum ratio.
+    Detects human skin tones in image using color histogram on flesh-tone HSV range.
+    Returns True if a significant human presence (hand, face, body) is detected.
     """
+    if not image_url:
+        return False
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
-        raw = requests.get(image_url, headers=headers, timeout=10).content
-        img = Image.open(io.BytesIO(raw)).convert('RGB').resize((100, 100))
-        w, h = img.size
-        
+        res = requests.get(image_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=6)
+        if res.status_code != 200:
+            return False
+        img = Image.open(io.BytesIO(res.content)).convert('RGB').resize((100, 100))
         skin_pixels = 0
-        total = w * h
-        
-        for x in range(w):
-            for y in range(h):
+        total = 100 * 100
+        for x in range(100):
+            for y in range(100):
                 r, g, b = img.getpixel((x, y))
-                if r > 140 and g > 90 and b > 60 and (r > g + 15) and (g > b + 10):
+                # Flesh tone range: reddish-warm, moderate saturation
+                if r > 60 and g > 40 and b > 20 and r > g and r > b and (r - b) > 15 and (r - g) < 80:
                     skin_pixels += 1
-        
-        skin_ratio = skin_pixels / total
-        has_human = skin_ratio > 0.18
-        if has_human:
-            print(f"[Human/Model Scanner] DISCARDING Human Model/Hand Detected (...{image_url[-30:]}) [skin_ratio={skin_ratio:.3f}]")
-        return has_human
+        return (skin_pixels / total) > 0.08
     except Exception:
         return False
 
 def calculate_cozy_vibe_score(image_url: str) -> float:
     """
-    Evaluates cozy room aesthetic score (1.0 to 10.0) based on:
-      1. Warmth ratio (amber/gold/wood warm hues vs cold white/grey)
+    Scores an Amazon product photo on a 1-10 Cozy Vibe Aesthetics scale based on:
+      1. Warm color tones (amber, gold, terracotta)
       2. Soft contrast & ambient lighting depth
       3. Background richness
     """
@@ -180,7 +185,7 @@ def calculate_cozy_vibe_score(image_url: str) -> float:
         print(f"[Cozy Vibe Scorer Error] {e}")
         return 5.0
 
-def select_clean_photo_or_skip(photos: list) -> tuple[str, bool]:
+def select_clean_photo_or_skip(photos: list) -> tuple:
     """
     Iterates through Amazon listing photos:
       1. Filters out photos containing seller text overlays/infographics.
@@ -244,7 +249,6 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
 
     print(f"[Amazon Extractor] Extracting full photo suite for ASIN: {asin}...")
 
-    
     domain = "amazon.co.uk" if "amazon.co.uk" in url_or_asin else "amazon.com"
 
     # 1. Primary Extraction: SerpAPI Amazon Product Engine
@@ -272,7 +276,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 # Retrieve raw thumbnails and upgrade to max-resolution SL1500 images
                 raw_photos = p.get("thumbnails", []) or [p.get("thumbnail")]
                 photos = [enhance_to_max_resolution(img) for img in raw_photos if img]
-                photos = list(dict.fromkeys(photos)) # Deduplicate while preserving order
+                photos = list(dict.fromkeys(photos))  # Deduplicate while preserving order
 
                 sorted_photos = photos
                 has_lifestyle = any(is_lifestyle_photo(img) for img in sorted_photos)
@@ -333,3 +337,132 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
         print(f"[Amazon Extractor] Scraper fallback error: {e}")
 
     return None
+
+
+def fetch_all_product_images(asin: str) -> list:
+    """
+    Multi-strategy fetcher that returns ALL gallery images for a given ASIN.
+
+    Strategy order:
+      1. SerpAPI amazon_product engine (thumbnails[] key) - with key rotation
+      2. Direct Amazon page scrape - extracts colorImages JSON block embedded in page
+      3. Single cached image from image_cache_db as last resort
+
+    Returns a list of high-res m.media-amazon.com image URLs.
+    """
+    asin = asin.strip().upper()
+
+    # ── Strategy 1: SerpAPI amazon_product engine (gives full gallery) ──
+    try:
+        from config import SERPAPI_KEYS, SERPAPI_KEY as _SERPAPI_KEY
+        keys = list(SERPAPI_KEYS) if SERPAPI_KEYS else ([_SERPAPI_KEY] if _SERPAPI_KEY else [])
+        for key in keys:
+            if not key:
+                continue
+            try:
+                r = requests.get(
+                    "https://serpapi.com/search.json",
+                    params={"engine": "amazon_product", "asin": asin,
+                            "amazon_domain": "amazon.com", "api_key": key},
+                    timeout=8
+                )
+                if r.status_code == 200:
+                    data = r.json()
+                    thumbs = data.get("product_results", {}).get("thumbnails", [])
+                    if thumbs:
+                        images = [enhance_to_max_resolution(t) for t in thumbs if t]
+                        images = list(dict.fromkeys(images))
+                        images = [img for img in images if img and "amazon-adsystem" not in img]
+                        if images:
+                            print(f"[fetch_all_product_images] SerpAPI returned {len(images)} images for {asin}")
+                            return images
+            except Exception as e:
+                print(f"[fetch_all_product_images] SerpAPI key failed: {e}")
+                continue
+    except Exception as e:
+        print(f"[fetch_all_product_images] SerpAPI block error: {e}")
+
+    # ── Strategy 2: Scrape Amazon page for embedded colorImages JSON ──
+    try:
+        user_agents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+            "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",
+        ]
+        for ua in user_agents:
+            try:
+                res = requests.get(
+                    f"https://www.amazon.com/dp/{asin}",
+                    headers={"User-Agent": ua,
+                             "Accept-Language": "en-US,en;q=0.9",
+                             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
+                    timeout=10
+                )
+                if res.status_code != 200:
+                    continue
+
+                html = res.text
+                all_images = []
+
+                # Amazon embeds all product images in a JS variable 'colorImages'
+                color_match = re.search(r"'colorImages'\s*:\s*\{[^}]*'initial'\s*:\s*(\[.*?\])\s*\}", html, re.DOTALL)
+                if not color_match:
+                    color_match = re.search(r'"colorImages"\s*:\s*\{\s*"initial"\s*:\s*(\[.*?\])\s*\}', html, re.DOTALL)
+
+                if color_match:
+                    try:
+                        img_entries = json.loads(color_match.group(1))
+                        for entry in img_entries:
+                            for res_key in ("hiRes", "large", "main"):
+                                url = entry.get(res_key)
+                                if url and "m.media-amazon.com" in url:
+                                    all_images.append(enhance_to_max_resolution(url))
+                                    break
+                    except Exception:
+                        pass
+
+                if not all_images:
+                    # Fallback: regex scan all media-amazon /I/ URLs in the page
+                    found = re.findall(r'https://m\.media-amazon\.com/images/I/[A-Za-z0-9+_%.-]+', html)
+                    all_images = [enhance_to_max_resolution(u) for u in found]
+
+                # Deduplicate, strip ad URLs, filter out tiny icon sprites
+                all_images = list(dict.fromkeys(all_images))
+                all_images = [u for u in all_images if u and "amazon-adsystem" not in u]
+
+                def _is_product_img(url):
+                    if not url: return False
+                    lower = url.lower()
+                    if lower.endswith('.js') or lower.endswith('.css') or '._rc' in lower or '._png' in lower and not lower.endswith('.png'):
+                        return False
+                    m = re.search(r'/images/I/([A-Za-z0-9+%-]+)\.', url)
+                    return bool(m and len(m.group(1)) > 10)
+
+                all_images = [u for u in all_images if _is_product_img(u)]
+
+                if all_images:
+                    print(f"[fetch_all_product_images] Page scrape returned {len(all_images)} images for {asin}")
+                    return all_images[:12]
+
+            except Exception as e:
+                print(f"[fetch_all_product_images] Page scrape UA failed: {e}")
+                continue
+    except Exception as e:
+        print(f"[fetch_all_product_images] Page scrape block error: {e}")
+
+    # ── Strategy 3: Single cached image as last resort ──
+    try:
+        from modules.image_cache_db import get_cached_image
+        from modules.amazon_finder import fetch_product_image_for_asin
+        cached = get_cached_image(asin)
+        if cached and cached.startswith("http") and "amazon-adsystem" not in cached:
+            print(f"[fetch_all_product_images] Using single cached image for {asin}")
+            return [cached]
+        fetched = fetch_product_image_for_asin(asin)
+        if fetched and fetched.startswith("http") and "amazon-adsystem" not in fetched:
+            return [fetched]
+    except Exception as e:
+        print(f"[fetch_all_product_images] Cache fallback error: {e}")
+
+    print(f"[fetch_all_product_images] No images found for {asin}")
+    return []

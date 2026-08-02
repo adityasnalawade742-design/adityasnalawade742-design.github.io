@@ -263,6 +263,26 @@
             background: #12101a;
         }
 
+        .retry-img-btn {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 183, 3, 0.92);
+            color: #12101a;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s, transform 0.15s;
+            z-index: 2;
+        }
+        .retry-img-btn:hover { background: #ffd03d; transform: translateX(-50%) scale(1.05); }
+        .retry-img-btn:disabled { opacity: 0.6; cursor: wait; }
+
         .product-title {
             font-size: 13px;
             font-weight: 700;
@@ -565,12 +585,29 @@
 
             items.forEach(item => {
                 const asin = item.asin;
+                const titleStr = item.title || 'Amazon Product';
+                const isValidThumb = Boolean(
+                    item.thumbnail 
+                    && typeof item.thumbnail === 'string' 
+                    && item.thumbnail.startsWith('http') 
+                    && !item.thumbnail.includes('amazon-adsystem')
+                );
+                
+                const fallbackUrl = `https://placehold.co/300x300/1e1a2e/ffb703?text=${encodeURIComponent(titleStr.substring(0, 25))}`;
+                const thumbSrc = isValidThumb ? item.thumbnail : fallbackUrl;
+
                 const card = document.createElement('div');
                 card.id = `card-${asin}`;
                 card.className = 'product-card';
                 card.innerHTML = `
-                    <img src="${escapeHTML(item.thumbnail || '')}" class="product-thumb" onerror="this.src='https://placehold.co/200x200/12101a/ffb703?text=Amazon+Product'" />
-                    <div class="product-title">${escapeHTML(item.title || '')}</div>
+                    <div class="product-thumb-wrap" style="position:relative;">
+                        <img src="${escapeHTML(thumbSrc)}"
+                             id="thumb-${escapeHTML(asin)}"
+                             data-asin="${escapeHTML(asin)}"
+                             class="product-thumb"
+                             onerror="this.src='${escapeHTML(fallbackUrl)}';this.onerror=null;" />
+                    </div>
+                    <div class="product-title">${escapeHTML(titleStr)}</div>
                     <div class="product-price">${escapeHTML(item.price || '$19.99')}</div>
                     <div id="badge-${asin}" class="check-badge" style="display:none;">✓</div>
                 `;
@@ -579,6 +616,61 @@
             });
             document.getElementById('n8nStep1Footer').style.display = 'block';
             updateSelectedCounter();
+        }
+
+        function autoFetchImageForCard(asin, imgEl) {
+            if (!imgEl || imgEl.dataset.autoTried) return;
+            imgEl.dataset.autoTried = '1';
+            const card = imgEl.closest('.product-card');
+            const title = encodeURIComponent(card?.querySelector('.product-title')?.textContent || '');
+            fetch(`/api/fetch_image?asin=${asin}&title=${title}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success' && data.image_url) {
+                        imgEl.src = data.image_url;
+                    } else {
+                        imgEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%231a1829"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%23ffb703" font-family="sans-serif" font-size="28">🛍️</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%238a84a3" font-family="sans-serif" font-size="12">Amazon Product</text></svg>';
+                    }
+                })
+                .catch(() => {
+                    imgEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%231a1829"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%23ffb703" font-family="sans-serif" font-size="28">🛍️</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%238a84a3" font-family="sans-serif" font-size="12">Amazon Product</text></svg>';
+                });
+        }
+
+        function handleImageLoadError(asin, imgEl) {
+            if (!imgEl.dataset.autoTried) {
+                autoFetchImageForCard(asin, imgEl);
+            } else {
+                imgEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%231a1829"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%23ffb703" font-family="sans-serif" font-size="28">🛍️</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%238a84a3" font-family="sans-serif" font-size="12">Amazon Product</text></svg>';
+            }
+        }
+
+        function fetchImageForCard(asin, btn) {
+            const title = encodeURIComponent(btn.closest('.product-card')?.querySelector('.product-title')?.textContent || '');
+            btn.textContent = '...';
+            btn.disabled = true;
+            fetch(`/api/fetch_image?asin=${asin}&title=${title}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success' && data.image_url) {
+                        const img = document.getElementById('thumb-' + asin);
+                        if (img) {
+                            img.src = data.image_url;
+                            img.onerror = () => { img.src = 'https://placehold.co/200x200/12101a/ffb703?text=No+Image'; };
+                        }
+                        btn.remove();
+                        showToast('Image loaded for ' + asin, '');
+                    } else {
+                        btn.textContent = '↻ Get Image';
+                        btn.disabled = false;
+                        showToast('Could not find image for ' + asin, '');
+                    }
+                })
+                .catch(() => {
+                    btn.textContent = '↻ Get Image';
+                    btn.disabled = false;
+                    showToast('Server error fetching image', '');
+                });
         }
 
         function toggleSelectProduct(asin, card) {
