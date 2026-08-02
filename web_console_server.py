@@ -7,7 +7,9 @@ import os
 import re
 import json
 import time
+import urllib
 import urllib.parse
+import urllib.request
 import subprocess
 import threading
 from collections import OrderedDict
@@ -170,6 +172,63 @@ def run_async_batch_generation(batch_id, items):
         'step': f'Batch complete! {len(completed)} products published live to GitHub Pages!',
         'completed_items': completed
     })
+
+
+def _scrape_first_product_image(asin: str) -> str:
+    """
+    Fast scraper — grabs the FIRST hero image from the Amazon product page.
+    No pixel analysis, no scoring, no detection. Just the raw image URL.
+    Used during discovery so the response is instant.
+    Returns a https://m.media-amazon.com/... URL or empty string on failure.
+    """
+    import urllib.request as _urlreq
+    clean = asin.strip().upper()
+    url = f"https://www.amazon.com/dp/{clean}"
+    user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+    ]
+    for ua in user_agents:
+        try:
+            req = _urlreq.Request(url, headers={"User-Agent": ua, "Accept-Language": "en-US,en;q=0.9"})
+            with _urlreq.urlopen(req, timeout=10) as resp:
+                html = resp.read().decode("utf-8", errors="ignore")
+
+            # Strategy A: og:image meta tag — most reliable, always high-res
+            og = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\'<>]+)["\']', html)
+            if og:
+                img = og.group(1).strip()
+                if "m.media-amazon.com" in img:
+                    # Strip resize tokens to get full SL1500 resolution
+                    img = re.sub(r'\._[A-Za-z0-9_,%-]+\.', '._AC_SL1500_.', img)
+                    print(f"[Fast Scraper] og:image found for {clean}: ...{img[-40:]}")
+                    return img
+
+            # Strategy B: data-a-dynamic-image JSON blob
+            dyn = re.search(r'data-a-dynamic-image=["\']({[^"\'<>]+})["\']', html)
+            if dyn:
+                try:
+                    img_map = json.loads(dyn.group(1).replace("&quot;", '"'))
+                    if img_map:
+                        # Pick the entry with the largest width dimension
+                        best = max(img_map.items(), key=lambda kv: (kv[1][0] if isinstance(kv[1], list) and kv[1] else 0))
+                        best_url = re.sub(r'\._[A-Za-z0-9_,%-]+\.', '._AC_SL1500_.', best[0])
+                        print(f"[Fast Scraper] dynamic-image found for {clean}: ...{best_url[-40:]}")
+                        return best_url
+                except Exception:
+                    pass
+
+            # Strategy C: first m.media-amazon.com /images/I/ URL in page HTML
+            med = re.search(r"(https://m\.media-amazon\.com/images/I/[A-Za-z0-9%_\-\.]+\.jpg)", html)
+            if med:
+                img = re.sub(r'\._[A-Za-z0-9_,%-]+\.', '._AC_SL1500_.', med.group(0))
+                print(f"[Fast Scraper] regex match found for {clean}: ...{img[-40:]}")
+                return img
+        except Exception as e:
+            print(f"[Fast Scraper] attempt failed for {clean} ({ua[:30]}...): {e}")
+
+    print(f"[Fast Scraper] No image found for {clean}")
+    return ""
 
 
 class WebConsoleHandler(SimpleHTTPRequestHandler):
@@ -541,37 +600,87 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
         print(f"[Web Console] Discovering live items for query: '{kw}'...")
         try:
-            from modules.amazon_finder import fetch_product_image_for_asin
             from modules.product_registry import get_blocked_asins
             blocked_asins = get_blocked_asins()
 
             raw_items = fetch_amazon_products(query=kw, num_results=count)
             items = []
-            skipped_no_image = 0
+
+            raw_dir = WORKSPACE_DIR / "raw_images"
+            raw_dir.mkdir(parents=True, exist_ok=True)
+
+            def _bg_download(target_asin, src_url, dest_path):
+                """Background thread: download image to raw_images/ for future use."""
+                try:
+                    req = urllib.request.Request(src_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                    with urllib.request.urlopen(req, timeout=12) as resp:
+                        data = resp.read()
+                    if len(data) > 5000:
+                        dest_path.write_bytes(data)
+                        print(f"[Web Console] Cached {target_asin} image ({len(data)//1024}KB) -> {dest_path.name}")
+                except Exception as e_dl:
+                    print(f"[Web Console] BG download warning for {target_asin}: {e_dl}")
+
             for item in raw_items:
                 asin = item.get('id') or item.get('asin', '')
                 if not asin or len(asin) != 10:
-                    print(f"[Web Console] Skipping invalid ASIN: '{asin}'")
                     continue
-
                 if asin in blocked_asins:
-                    print(f"[Web Console] Skipping blocked ASIN (already published or rejected): '{asin}'")
                     continue
 
                 already_pub = is_asin_published_on_homepage(asin)
-                local_raw = WORKSPACE_DIR / f"raw_images/raw_{asin}.jpg"
+                local_raw = raw_dir / f"raw_{asin}.jpg"
+                v = int(time.time())
 
+                # ---- THUMBNAIL STRATEGY ----
+                # Priority 1: local file already cached -> serve it instantly
                 if local_raw.exists() and local_raw.stat().st_size > 5000:
-                    thumbnail = f"/raw_images/raw_{asin}.jpg?v={int(time.time())}"
-                else:
-                    thumbnail = fetch_product_image_for_asin(asin, item.get('title', ''))
-                    if local_raw.exists() and local_raw.stat().st_size > 5000:
-                        thumbnail = f"/raw_images/raw_{asin}.jpg?v={int(time.time())}"
+                    thumbnail = f"/raw_images/raw_{asin}.jpg?v={v}"
+                    print(f"[Web Console] Serving cached local image for {asin}")
 
-                if not thumbnail:
-                    skipped_no_image += 1
-                    print(f"[Web Console] SKIPPED {asin} — no image found by any strategy")
-                    continue
+                else:
+                    # Priority 2: use URL already in SerpAPI result (validated HTTP 200 above)
+                    candidate_url = (
+                        item.get('original_image_url') or
+                        item.get('thumbnail') or
+                        item.get('image') or
+                        ''
+                    )
+
+                    # Reject tracker/ad pixel URLs (will 1x1 or CORS-fail in browser)
+                    bad = (
+                        not candidate_url
+                        or 'amazon-adsystem.com' in candidate_url
+                        or 'ws-na.amazon-adsystem' in candidate_url
+                        or '_SP100' in candidate_url
+                        or '_SP200' in candidate_url
+                    )
+
+                    if bad:
+                        # Priority 3: fast scrape (no scoring, no pixel analysis)
+                        candidate_url = _scrape_first_product_image(asin)
+
+                    if not candidate_url:
+                        # Priority 4: SerpAPI amazon_product engine (uses 1 credit but reliable)
+                        from modules.amazon_extractor import fetch_all_product_images
+                        imgs = fetch_all_product_images(asin)
+                        candidate_url = imgs[0] if imgs else ''
+
+                    if not candidate_url:
+                        print(f"[Web Console] No image found for {asin} — skipping")
+                        continue
+
+                    # SERVE THE CDN URL DIRECTLY TO BROWSER
+                    # m.media-amazon.com URLs load fine in <img> tags with referrerpolicy=no-referrer
+                    # No need to wait for local download — show image immediately.
+                    thumbnail = candidate_url
+
+                    # Download to raw_images/ in background for caching (used later by bridge builder)
+                    threading.Thread(
+                        target=_bg_download,
+                        args=(asin, candidate_url, local_raw),
+                        daemon=True
+                    ).start()
 
                 items.append({
                     'asin': asin,
@@ -582,17 +691,19 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     'thumbnail': thumbnail,
                     'is_already_published': already_pub
                 })
-            print(f"[Web Console] Discover done: {len(items)} with images, {skipped_no_image} skipped (no image)")
-            self.send_json({'status': 'success', 'query': kw, 'items': items, 'total_raw': len(raw_items), 'valid': len(items), 'skipped_no_image': skipped_no_image})
+
+            print(f"[Web Console] Discover done: {len(items)} items ready")
+            self.send_json({'status': 'success', 'query': kw, 'items': items,
+                            'total_raw': len(raw_items), 'valid': len(items)})
         except Exception as e:
+            import traceback; traceback.print_exc()
             self.send_json({'status': 'error', 'message': str(e)})
 
     def handle_api_fetch_image(self, query_str):
         """GET /api/fetch_image?asin=XXXXXXXXXX[&title=...]
-        Tries 3 strategies to get a real product image for a given ASIN.
+        Fast image fetch — no scoring/detection, just gets the first real product image.
         Returns: { status, asin, image_url } or { status: 'error', message }
         """
-        from modules.amazon_finder import fetch_product_image_for_asin
         params = urllib.parse.parse_qs(query_str)
         asin = params.get('asin', [''])[0].strip().upper()
         title = params.get('title', [''])[0].strip()
@@ -600,11 +711,18 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             self.send_json({'status': 'error', 'message': 'Invalid or missing ASIN'})
             return
         try:
-            img = fetch_product_image_for_asin(asin, title)
+            # Use the fast scraper first (no credits used, no pixel analysis)
+            img = _scrape_first_product_image(asin)
             if img:
                 self.send_json({'status': 'success', 'asin': asin, 'image_url': img})
-            else:
-                self.send_json({'status': 'not_found', 'asin': asin, 'image_url': ''})
+                return
+            # Fallback: SerpAPI amazon_product engine
+            from modules.amazon_extractor import fetch_all_product_images
+            imgs = fetch_all_product_images(asin)
+            if imgs:
+                self.send_json({'status': 'success', 'asin': asin, 'image_url': imgs[0]})
+                return
+            self.send_json({'status': 'not_found', 'asin': asin, 'image_url': ''})
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 

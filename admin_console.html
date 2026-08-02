@@ -334,6 +334,106 @@
             font-weight: 700;
             z-index: 9999;
         }
+        /* Photo Zoom Lightbox Modal */
+        .zoom-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(4, 3, 8, 0.92);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .zoom-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        .zoom-modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: rgba(18, 16, 26, 0.96);
+            border: 1px solid var(--gold-primary);
+            border-radius: 28px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.9), 0 0 40px rgba(255, 183, 3, 0.2);
+            transform: scale(0.92);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .zoom-modal.active .zoom-modal-content {
+            transform: scale(1);
+        }
+        .zoom-close-btn {
+            position: absolute;
+            top: 14px; right: 18px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 20px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .zoom-close-btn:hover {
+            background: rgba(239, 68, 68, 0.9);
+            transform: scale(1.1);
+        }
+        .zoom-img-container {
+            max-width: 82vw;
+            max-height: 70vh;
+            overflow: hidden;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        .zoom-img-container img {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 16px;
+        }
+        .zoom-modal-footer {
+            margin-top: 18px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        .zoom-btn-overlay {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            color: var(--gold-primary);
+            border: 1px solid rgba(255, 183, 3, 0.4);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 4;
+        }
+        .zoom-btn-overlay:hover {
+            background: var(--gold-primary);
+            color: #000;
+            transform: scale(1.15);
+        }
     </style>
 </head>
 <body>
@@ -509,6 +609,25 @@
         <span id="toastMsg">Notification message</span>
     </div>
 
+    <!-- Photo Zoom Lightbox Modal -->
+    <div id="imageZoomModal" class="zoom-modal" onclick="closeZoomModal(event)">
+        <div class="zoom-modal-content" onclick="event.stopPropagation()">
+            <button class="zoom-close-btn" onclick="closeZoomModal()">&times;</button>
+            <div class="zoom-img-container">
+                <img id="zoomModalImg" src="" alt="Zoomed Photo" referrerpolicy="no-referrer" />
+            </div>
+            <div class="zoom-modal-footer">
+                <div>
+                    <div id="zoomModalTitle" style="font-weight:800;font-size:15px;color:#fff;margin-bottom:4px;">Product Title</div>
+                    <div id="zoomModalInfo" style="font-size:13px;color:var(--gold-primary);font-weight:700;">Photo Details</div>
+                </div>
+                <button id="zoomPickBtn" class="btn-primary" style="font-size:14px;padding:10px 24px;display:none;">
+                    ✓ Pick This Photo
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let n8nDiscoveredItems = [];
         let n8nSelectedAsins = new Set();
@@ -586,17 +705,12 @@
                 return;
             }
 
+
             items.forEach(item => {
                 const asin = item.asin;
                 const titleStr = item.title || 'Amazon Product';
-                const isValidThumb = Boolean(
-                    item.thumbnail 
-                    && typeof item.thumbnail === 'string' 
-                    && (item.thumbnail.startsWith('http') || item.thumbnail.startsWith('/'))
-                );
                 
                 const fallbackUrl = `https://placehold.co/300x300/1e1a2e/ffb703?text=${encodeURIComponent(titleStr.substring(0, 25))}`;
-                const thumbSrc = isValidThumb ? item.thumbnail : fallbackUrl;
 
                 // BUG-11 FIX: show 'already published' badge so users don't re-select live products
                 const alreadyLive = item.is_already_published === true;
@@ -604,19 +718,23 @@
                 const card = document.createElement('div');
                 card.id = `card-${asin}`;
                 card.className = 'product-card';
-                const safeSrc = thumbSrc.replace(/"/g, '%22');
+                const safeSrc = (item.thumbnail || '').replace(/"/g, '%22');
                 const safeFallback = fallbackUrl.replace(/"/g, '%22');
                 card.innerHTML = `
                     <div class="product-thumb-wrap" style="position:relative;">
                         <img src="${safeSrc}"
                              id="thumb-${escapeHTML(asin)}"
                              data-asin="${escapeHTML(asin)}"
+                             data-retries="0"
+                             data-src="${safeSrc}"
+                             data-fallback="${safeFallback}"
                              class="product-thumb"
                              referrerpolicy="no-referrer"
-                             onerror="this.src='${safeFallback}';this.onerror=null;" />
+                             onload="this.dataset.loaded='1'"
+                             onerror="retryProductImage(this)" />
                         ${alreadyLive ? '<div style="position:absolute;top:6px;left:6px;background:rgba(16,185,129,0.92);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:10px;">🏠 LIVE</div>' : ''}
-                        <button onclick="dismissProduct(event, '${escapeHTML(asin)}', '${escapeHTML(titleStr).replace(/'/g, "\\'")}')"
-                                title="Dismiss product (never show again & delete image)"
+                        <button onclick="dismissProduct(event, '${escapeHTML(asin)}', '${escapeHTML(titleStr).replace(/'/g, "\\'")}')" 
+                                title="Dismiss product"
                                 style="position:absolute;top:6px;right:6px;background:rgba(239,68,68,0.85);color:#fff;border:none;border-radius:10px;padding:3px 7px;font-size:11px;font-weight:800;cursor:pointer;z-index:5;transition:transform 0.1s;"
                                 onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1.0)'">
                             🚫
@@ -634,6 +752,39 @@
             });
             document.getElementById('n8nStep1Footer').style.display = 'block';
             updateSelectedCounter();
+        }
+
+        /**
+         * Image error handler: if the CDN URL fails (rare CORS edge case),
+         * call /api/fetch_image to get a fresh URL as fallback.
+         */
+        function retryProductImage(imgEl) {
+            if (imgEl.dataset.retried) {
+                // Already tried once — show placeholder
+                imgEl.onerror = null;
+                imgEl.src = imgEl.dataset.fallback || '';
+                return;
+            }
+            imgEl.dataset.retried = '1';
+            const asin = imgEl.dataset.asin || '';
+            if (!asin) { imgEl.src = imgEl.dataset.fallback || ''; return; }
+
+            // Call the fast fetch_image endpoint for a fresh URL
+            fetch(`/api/fetch_image?asin=${asin}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success' && data.image_url) {
+                        imgEl.onerror = null;
+                        imgEl.src = data.image_url;
+                    } else {
+                        imgEl.onerror = null;
+                        imgEl.src = imgEl.dataset.fallback || '';
+                    }
+                })
+                .catch(() => {
+                    imgEl.onerror = null;
+                    imgEl.src = imgEl.dataset.fallback || '';
+                });
         }
 
         function dismissProduct(event, asin, title) {
@@ -777,31 +928,43 @@
             list.innerHTML = '';
             items.forEach(item => {
                 const asin = item.asin;
+                const titleStr = item.title || '';
                 const row = document.createElement('div');
                 row.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;';
                 
                 const photosHtml = (item.photos || []).map((ph, idx) => {
                     const phSrc = (ph.url || '').replace(/"/g, '%22');
                     const isChosen = ph.url === n8nChosenPhotos[asin];
+                    const safeTitle = escapeHTML(titleStr).replace(/'/g, "\\'");
                     return `
                     <div onclick="selectOverridePhoto('${asin}', '${phSrc}')"
-                         style="flex:0 0 110px;cursor:pointer;border-radius:14px;overflow:hidden;border:3px solid ${isChosen ? 'var(--gold-primary)' : 'rgba(255,255,255,0.15)'};position:relative;transition:all 0.2s;">
-                        <img src="${phSrc}" style="width:110px;height:110px;object-fit:cover;display:block;" referrerpolicy="no-referrer" />
+                         style="flex:0 0 110px;cursor:pointer;border-radius:14px;overflow:hidden;border:3px solid ${isChosen ? 'var(--gold-primary)' : 'rgba(255,255,255,0.15)'};position:relative;transition:all 0.2s;"
+                         title="Click to select | Click 🔍 icon or double-click to zoom">
+                        <img src="${phSrc}" style="width:110px;height:110px;object-fit:cover;display:block;" referrerpolicy="no-referrer"
+                             ondblclick="event.stopPropagation(); openZoomModal('${asin}', '${phSrc}', '${safeTitle}', ${ph.is_clean ? 'true' : 'false'}, ${isChosen ? 'true' : 'false'})" />
+                        <div class="zoom-btn-overlay" title="Zoom Photo"
+                             onclick="event.stopPropagation(); openZoomModal('${asin}', '${phSrc}', '${safeTitle}', ${ph.is_clean ? 'true' : 'false'}, ${isChosen ? 'true' : 'false'})">🔍</div>
                         <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.75);font-size:10px;font-weight:800;text-align:center;padding:3px;color:${ph.is_clean ? '#4ade80' : '#f87171'}">${ph.is_clean ? '✓ CLEAN' : '✗ BAD'}</div>
                         ${isChosen ? '<div style="position:absolute;top:4px;right:4px;background:var(--gold-primary);color:#000;font-size:10px;font-weight:900;padding:2px 6px;border-radius:10px;">PICK ✓</div>' : ''}
                     </div>
                 `}).join('');
 
+                const chosenSrc = (n8nChosenPhotos[asin] || '').replace(/"/g, '%22');
+                const safeTitle = escapeHTML(titleStr).replace(/'/g, "\\'");
+
                 row.innerHTML = `
                     <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
                         <div style="flex:0 0 auto;text-align:center;">
-                            <img src="${(n8nChosenPhotos[asin] || '').replace(/"/g, '%22')}" id="prev-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:16px;border:3px solid var(--gold-primary);" referrerpolicy="no-referrer" />
+                            <div style="position:relative;cursor:pointer;" onclick="openZoomModal('${asin}', '${chosenSrc.replace(/'/g, "\\'")}', '${safeTitle}', true, true)" title="Click to zoom image">
+                                <img src="${chosenSrc}" id="prev-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:16px;border:3px solid var(--gold-primary);" referrerpolicy="no-referrer" />
+                                <div class="zoom-btn-overlay" style="top:6px;right:6px;left:auto;" title="Zoom Photo">🔍</div>
+                            </div>
                             <div style="font-size:12px;color:var(--gold-primary);font-weight:800;margin-top:6px;">Chosen Photo</div>
                         </div>
                         <div style="flex:1;min-width:200px;">
-                            <div style="font-weight:800;font-size:16px;color:#fff;margin-bottom:6px;">${escapeHTML(item.title || '')}</div>
+                            <div style="font-weight:800;font-size:16px;color:#fff;margin-bottom:6px;">${escapeHTML(titleStr)}</div>
                             <div style="color:var(--gold-primary);font-weight:800;margin-bottom:12px;">${escapeHTML(item.price || '$19.99')} · ASIN: ${asin}</div>
-                            <div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">Click any photo to set as winner:</div>
+                            <div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">Click photo to select · Click 🔍 icon or double-click photo to zoom:</div>
                             <div style="display:flex;gap:10px;flex-wrap:wrap;">${photosHtml}</div>
                         </div>
                     </div>
@@ -814,6 +977,52 @@
             n8nChosenPhotos[asin] = url;
             renderImageReviewRows(n8nExtractedItems);
         }
+
+        function openZoomModal(asin, url, title, isClean, isChosen) {
+            const modal = document.getElementById('imageZoomModal');
+            const modalImg = document.getElementById('zoomModalImg');
+            const modalTitle = document.getElementById('zoomModalTitle');
+            const modalInfo = document.getElementById('zoomModalInfo');
+            const pickBtn = document.getElementById('zoomPickBtn');
+
+            if (!modal || !modalImg) return;
+
+            modalImg.src = url;
+            modalTitle.textContent = title || ('ASIN: ' + asin);
+            modalInfo.innerHTML = `ASIN: <b>${asin}</b> · ${isClean ? '🟢 Clean Photo' : '🔴 Annotation/Overlay'} ${isChosen ? ' · ⭐ Currently Selected' : ''}`;
+
+            if (isChosen) {
+                pickBtn.style.display = 'none';
+            } else {
+                pickBtn.style.display = 'block';
+                pickBtn.onclick = function() {
+                    selectOverridePhoto(asin, url);
+                    closeZoomModal();
+                    showToast(`Selected photo for ${asin}!`, '📸');
+                };
+            }
+
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeZoomModal(event) {
+            if (event && event.target && event.target.id !== 'imageZoomModal' && !event.target.classList.contains('zoom-close-btn')) {
+                return;
+            }
+            const modal = document.getElementById('imageZoomModal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                const modalImg = document.getElementById('zoomModalImg');
+                if (modalImg) modalImg.src = '';
+            }, 250);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeZoomModal();
+        });
 
         function n8nBackToStep1() {
             document.getElementById('n8nStep2Panel').style.display = 'none';

@@ -3,6 +3,7 @@ import io
 import re
 import json
 import requests
+import urllib.parse
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -94,51 +95,41 @@ def _fetch_from_serpapi_with_filters(query: str, num_results: int = 10, min_pric
         print("[SerpAPI Warning] No SERPAPI_KEYS configured.")
         return None
 
-    url = "https://serpapi.com/search.json"
-
     for key_idx, current_key in enumerate(keys_to_try, 1):
-        params = {
-            "engine": "google",
-            "q": f"site:amazon.com/dp {query} buy",
-            "api_key": current_key,
-            "gl": "us",
-            "hl": "en",
-            "num": 20
-        }
-
+        # ── PRIMARY: Amazon engine — returns ASIN + thumbnail + price + rating for every result ──
         try:
-            print(f"[SerpAPI Request] Calling SerpAPI (Key #{key_idx}/{len(keys_to_try)}) for: '{query}'...")
-            response = requests.get(url, params=params, timeout=4)
-            if response.status_code == 200:
-                data = response.json()
-
-                # Check if SerpAPI error payload indicates quota or credit limit reached
+            print(f"[SerpAPI Amazon Engine] Calling (Key #{key_idx}/{len(keys_to_try)}) for: '{query}'...")
+            resp = requests.get(
+                "https://serpapi.com/search.json",
+                params={
+                    "engine": "amazon",
+                    "k": query,
+                    "api_key": current_key,
+                    "amazon_domain": "amazon.com",
+                },
+                timeout=12
+            )
+            if resp.status_code == 200:
+                data = resp.json()
                 if "error" in data:
                     err_msg = str(data["error"]).lower()
-                    if any(k in err_msg for k in ["credit", "search", "quota", "limit", "out of"]):
-                        print(f"[SerpAPI Quota Alert] Key #{key_idx} out of credits: {data['error']} -> Switching to Key #{key_idx + 1}...")
+                    if any(k in err_msg for k in ["credit", "quota", "limit", "out of"]):
+                        print(f"[SerpAPI Quota] Key #{key_idx} exhausted -> trying next key...")
                         continue
-
-                results = data.get("organic_results") or data.get("amazon_results") or []
-                if not results:
-                    print(f"[SerpAPI Key #{key_idx}] 0 results returned. Trying next key...")
-                    continue
-
-                # Save raw results to local cache to preserve credits for future searches
-                cache[query_key] = results
-                save_serp_cache(cache)
-                print(f"[SerpAPI Cache] Saved {len(results)} search results to local disk cache!")
-
-                parsed = _parse_raw_serp_results(results, num_results, min_price, max_price)
-                if parsed:
-                    return parsed
-            else:
-                print(f"[SerpAPI Key #{key_idx} Error {response.status_code}] {response.text[:100]}")
-                if response.status_code in [400, 401, 403, 429]:
-                    print(f"[SerpAPI Key Switch] Key #{key_idx} failed ({response.status_code}). Switching to Key #{key_idx + 1}...")
-                    continue
+                results = data.get("organic_results", [])
+                if results:
+                    # Save to cache
+                    cache[query_key] = results
+                    save_serp_cache(cache)
+                    print(f"[SerpAPI Cache] Saved {len(results)} Amazon results to cache.")
+                    parsed = _parse_raw_serp_results(results, num_results, min_price, max_price)
+                    if parsed:
+                        return parsed
+            elif resp.status_code in [400, 401, 403, 429]:
+                print(f"[SerpAPI Key #{key_idx}] HTTP {resp.status_code} -> trying next key...")
+                continue
         except Exception as e:
-            print(f"[SerpAPI Exception Key #{key_idx}] Error: {e}")
+            print(f"[SerpAPI Amazon Engine Error Key #{key_idx}] {e}")
 
     return None
 
@@ -410,10 +401,16 @@ def _fetch_amazon_product_image(asin: str) -> str:
 
 
 def _parse_raw_serp_results(results, num_results: int, min_price: float, max_price: float):
+    """
+    Parses SerpAPI Amazon engine results.
+    Each result has: asin, title, price, rating, reviews, thumbnail — all ready to use.
+    """
     parsed_products = []
     for item in results:
-        asin = item.get("asin") or item.get("product_id")
+        # ── ASIN ──
+        asin = item.get("asin") or item.get("product_id") or ""
         if not asin or len(asin) != 10:
+            # Fallback: try to extract ASIN from link for google engine results
             link = item.get("link", "") or item.get("product_link", "")
             match = re.search(r'/(?:dp|gp/product)/([A-Z0-9]{10})', link, re.IGNORECASE)
             if match:
@@ -421,52 +418,51 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             else:
                 continue
 
+        # ── Title ──
         title = item.get("title", "Aesthetic Room Decor Find")
-
-        # Adult aesthetics check
         if not is_adult_aesthetic_product(title):
-            print(f"[Amazon Finder Filter] Discarded Kids/Toy product: '{title[:40]}'")
+            print(f"[Amazon Finder Filter] Discarded kids/toy product: '{title[:40]}'")
             continue
 
+        # ── Price ──
         price_val = item.get("price")
         if isinstance(price_val, dict):
             price_str = price_val.get("raw") or str(price_val.get("extracted", "$24.99"))
         elif isinstance(price_val, str):
             price_str = price_val
+        elif isinstance(price_val, (int, float)):
+            price_str = f"${price_val:.2f}"
         else:
             price_str = "$24.99"
 
         price_num = parse_price_float(price_str)
         if price_num > 0 and (price_num < min_price or price_num > max_price):
-            print(f"[Amazon Finder Filter] Price ${price_num:.2f} outside ${min_price}-${max_price} target range for '{title[:35]}'")
+            print(f"[Amazon Finder Filter] Price ${price_num:.2f} out of ${min_price}-${max_price} range for '{title[:35]}'")
             continue
 
+        # ── Rating ──
         try:
             rating_num = float(item.get("rating", 4.5))
         except (ValueError, TypeError):
             rating_num = 4.5
-
         if rating_num < 4.2:
-            print(f"[Amazon Finder Filter] Rating {rating_num} below 4.2 threshold for '{title[:35]}'")
+            print(f"[Amazon Finder Filter] Rating {rating_num} below 4.2 for '{title[:35]}'")
             continue
 
+        # ── Reviews ──
         reviews = item.get("reviews", 150)
 
-        # Get thumbnail — google organic results rarely have this; scraper fills the gap
+        # ── Thumbnail — Amazon engine provides this directly ──
         image_url = item.get("thumbnail") or item.get("image") or item.get("original_image_url", "")
 
-        # Reject broken ad-widget tracker URLs, 1x1 GIF patterns, and tiny resize thumbnails
-        bad_url = (
-            not image_url
-            or "amazon-adsystem.com" in image_url
-            or "ws-na.amazon" in image_url
-            or "_SP" in image_url          # tracking sprites (_SP100, _SP200)
-            or "_AC_SR" in image_url       # tiny resize tokens (_AC_SR38,50_ etc)
-            or ("/images/P/" in image_url and ".01._" in image_url)
-        )
-        if bad_url and asin:
-            print(f"[Amazon Image] Thumbnail missing/broken for {asin}, fetching via scraper...")
-            image_url = _fetch_amazon_product_image(asin)
+        # Upgrade to higher resolution (_AC_SL1500_ instead of _AC_UL320_)
+        if image_url and "m.media-amazon.com" in image_url:
+            image_url = re.sub(r'\._AC_[A-Za-z0-9_,%-]+\.', '._AC_SL1500_.', image_url)
+
+        # Skip items with no image — never block the thread with scraping here
+        if not image_url or "amazon-adsystem.com" in image_url:
+            print(f"[Amazon Finder] Skipping {asin} — no thumbnail in result")
+            continue
 
         affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
 
@@ -479,7 +475,8 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             "reviews_count": reviews,
             "affiliate_url": affiliate_url,
             "original_image_url": image_url,
-            "features": [  # H3 FIX: must be a list, not a string
+            "thumbnail": image_url,
+            "features": [
                 f"{rating_num} Amazon Rating",
                 f"{reviews} Customer Reviews",
                 title[:45]
@@ -490,6 +487,7 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             break
 
     return parsed_products
+
 
 def fetch_sample_amazon_products(niche: str = NICHE):
     """Fallback sample products formatted with user affiliate tag and official Amazon Associates links."""
