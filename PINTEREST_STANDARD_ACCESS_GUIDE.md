@@ -18,7 +18,7 @@ Currently, Pinterest tokens generated without explicit write permissions will fa
 ### Step-by-Step Instructions:
 
 1. Open the [Pinterest Developer Portal Apps Dashboard](https://developers.pinterest.com/apps/).
-2. Click on your application: **`Cozy Room Decor Publisher Pro`** (App ID: `1594896`).
+2. Click on your application: **`Cozy Room Decor Publisher Pro`** (App ID: `1596368`).
 3. In the left navigation menu, click **"Generate access token"** (or **"OAuth Tokens"**).
 4. Under **Select Scopes**, check the following 4 boxes:
    - `boards:read`
@@ -77,9 +77,9 @@ Record using **Loom**, **OBS Studio**, or **Windows Game Bar** (`Win + Alt + R`)
 ### ⏱️ Minute-by-Minute Recording Workflow:
 
 #### **[0:00 – 0:15] Developer Portal Setup**
-- **Action**: Display browser tab showing `developers.pinterest.com/apps/1594896`. Point your cursor to **App ID: 1594896** and **App Name: Cozy Room Decor Publisher Pro**.
+- **Action**: Display browser tab showing `developers.pinterest.com/apps/1596368`. Point your cursor to **App ID: 1596368** and **App Name: Cozy Room Decor Publisher Pro**.
 - **Voiceover / Script**:
-  > *"Hello Pinterest API Review Team. This is a live demonstration of our automated content publishing integration for our app Cozy Room Decor Publisher Pro, App ID 1594896."*
+  > *"Hello Pinterest API Review Team. This is a live demonstration of our automated content publishing integration for our app Cozy Room Decor Publisher Pro, App ID 1596368."*
 
 #### **[0:15 – 0:45] Workflow & API Request Execution**
 - **Action**: Switch to n8n (or PowerShell terminal). Click on the **Publish Pin to Pinterest API v5** node (or run the python command). Click **Execute Node**.

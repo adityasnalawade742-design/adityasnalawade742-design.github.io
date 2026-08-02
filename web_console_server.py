@@ -730,8 +730,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             self.send_json({"status": "error", "message": str(e)})
 
     def handle_api_auth_pinterest(self):
-        """Redirects user to Pinterest OAuth 2.0 Authorization screen with App ID 1594896."""
-        client_id = "1594896"
+        """Redirects user to Pinterest OAuth 2.0 Authorization screen with App ID 1596368."""
+        client_id = "1596368"
         redirect_uri = f"http://localhost:{self.server.server_port}/api/auth/callback"
         scopes = "boards:read,boards:write,pins:read,pins:write"
         auth_url = f"https://www.pinterest.com/oauth/?client_id={client_id}&redirect_uri={urllib.parse.quote(redirect_uri)}&response_type=code&scope={scopes}"
@@ -743,7 +743,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_auth_callback(self, query_str):
         """Renders live OAuth 2.0 Auth Callback verification page for video demo recording."""
         params = urllib.parse.parse_qs(query_str)
-        code = params.get("code", ["pina_mock_oauth_auth_code_1594896"])[0]
+        code = params.get("code", ["pina_mock_oauth_auth_code_1596368"])[0]
         
         html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -774,7 +774,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         <div class="info-box">
             <div class="info-row"><span class="info-label">Company Name:</span><span class="info-val">Cozy Room Finds</span></div>
             <div class="info-row"><span class="info-label">Application Name:</span><span class="info-val">Cozy Room Decor Publisher Pro</span></div>
-            <div class="info-row"><span class="info-label">Pinterest App ID:</span><span class="info-val">1594896</span></div>
+            <div class="info-row"><span class="info-label">Pinterest App ID:</span><span class="info-val">1596368</span></div>
             <div class="info-row"><span class="info-label">Connected Profile:</span><span class="info-val">@adityasnalawade0703</span></div>
             <div class="info-row"><span class="info-label">OAuth Authorization Code:</span><span class="info-val">{code[:25]}...</span></div>
             <div class="info-row"><span class="info-label">OAuth Scopes Granted:</span><span class="info-val">boards:read, boards:write, pins:read, pins:write</span></div>

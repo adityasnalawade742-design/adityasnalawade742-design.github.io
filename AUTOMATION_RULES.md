@@ -44,7 +44,7 @@ Every Amazon listing photo suite (5–9 photos) MUST undergo the following 4-lay
 
 ## 4. 📌 Pinterest API v5 Integration
 
-- **App ID**: `1594896` (Trial Access Active)
+- **App ID**: `1596368` (Trial Access Pending)
 - **Authenticated Account**: `@adityasnalawade0703` (Business Account)
 - **Target Board ID**: `1092545259543920271` (*Cozy Room & Desk Decor*)
 - **Required Scopes**: `boards:read`, `boards:write`, `pins:read`, `pins:write`
