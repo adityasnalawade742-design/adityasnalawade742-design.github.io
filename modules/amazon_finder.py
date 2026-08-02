@@ -63,45 +63,12 @@ def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: fl
     search_query = query or NICHE
     print(f"[Amazon Finder Engine] Searching LIVE Amazon catalog for: '{search_query}'...")
 
-    live_items = _fetch_from_serpapi_with_filters(search_query, num_results=num_results*3, min_price=min_price, max_price=max_price)
+    live_items = _fetch_from_serpapi_with_filters(search_query, num_results=num_results*2, min_price=min_price, max_price=max_price)
     if live_items:
-        # Filter and verify clean photo availability
-        verified_winners = []
-        for item in live_items:
-            asin = item["id"]
-            
-            # 1. Skip if already published on homepage
-            if is_asin_published_on_homepage(asin):
-                print(f"[Amazon Finder] Skipping ASIN {asin} (Already published on homepage)")
-                continue
-
-            # 2. Extract full photo suite & verify clean photo
-            full_details = get_product_details_and_photos(asin)
-            if not full_details:
-                continue
-
-            photos = full_details.get("all_photos", [])
-            winner_photo, skip = select_clean_photo_or_skip(photos)
-
-            if skip or not winner_photo:
-                print(f"[Amazon Finder] Skipping ASIN {asin} (All listing photos contain seller text/infographics)")
-                continue
-
-            item["original_image_url"] = winner_photo
-            item["all_photos"] = photos
-            item["features"] = full_details.get("features", item["features"])
-            verified_winners.append(item)
-
-            if len(verified_winners) >= num_results:
-                break
-
-        if verified_winners:
-            print(f"[Amazon Finder] Selected {len(verified_winners)} verified clean winning products!")
-            return verified_winners
-
-    # If photo filters filtered out too many, return all live items matching criteria
-    if live_items:
-        return live_items[:num_results]
+        unpub_items = [it for it in live_items if not is_asin_published_on_homepage(it["id"])]
+        result_set = unpub_items[:num_results] if unpub_items else live_items[:num_results]
+        print(f"[Amazon Finder] Found {len(result_set)} live Amazon products for query: '{search_query}'")
+        return result_set
 
     print("[Amazon Finder] Falling back to curated high-converting niche products...")
     return fetch_sample_amazon_products()
