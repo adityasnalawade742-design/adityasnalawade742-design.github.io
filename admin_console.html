@@ -1507,6 +1507,7 @@
                         homepageProductsMap = {};
                         (data.products || []).forEach(p => { homepageProductsMap[p.asin] = p; });
                         renderHomepageGrid(data.products || []);
+                        loadMatrixGrid();
                         showToast(`Loaded ${data.count || 0} homepage products!`, "✨");
                     } else {
                         alert("Error loading homepage products: " + (data.message || "Unknown error"));
