@@ -222,26 +222,15 @@ def fetch_sample_amazon_products(niche: str = NICHE):
     tag = AMAZON_ASSOCIATE_TAG
     return [
         {
-            "id": "B0FC2DV6FP",
-            "title": "Rain Cloud Raindrop Humidifier & Relaxing Sound Machine",
-            "category": "Bedroom Wellness Decor",
-            "price": "$33.99",
+            "id": "B0BQBKWSKK",
+            "title": "Volcano Erupting Flame Essential Oil Diffuser with Warm LED Glow",
+            "category": "Home Fragrance & Room Decor",
+            "price": "$25.99",
             "rating": "4.7",
             "reviews_count": 1420,
-            "affiliate_url": f"https://www.amazon.com/dp/B0FC2DV6FP?tag={tag}",
+            "affiliate_url": f"https://www.amazon.com/dp/B0BQBKWSKK?tag={tag}",
             "original_image_url": "https://m.media-amazon.com/images/I/71qCnqRyWHL._AC_SL1500_.jpg",
-            "features": "Raindrop water drip sound effect, 7 glowing ambient light colors, essential oil diffuser."
-        },
-        {
-            "id": "B0DZFGTCLR",
-            "title": "Flameless Top-Down Candle Warmer Melting Lamp with Timer",
-            "category": "Cozy Scented Decor",
-            "price": "$12.99",
-            "rating": "4.8",
-            "reviews_count": 890,
-            "affiliate_url": f"https://www.amazon.com/dp/B0DZFGTCLR?tag={tag}",
-            "original_image_url": "https://m.media-amazon.com/images/I/61SsDfH706L._AC_SL1254_.jpg",
-            "features": "Top-down halogen candle melting lamp, dimmable timer switch, wood base."
+            "features": "Volcano flame mist effect, 7 glowing ambient light colors, essential oil diffuser."
         }
     ]
 

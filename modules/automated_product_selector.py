@@ -18,20 +18,6 @@ VIRAL_HOME_DECOR_QUEUE = [
         "target_price": "$25.99"
     },
     {
-        "id": "B0FC2DV6FP",
-        "url": f"https://www.amazon.com/dp/B0FC2DV6FP?tag={AMAZON_ASSOCIATE_TAG}",
-        "niche": "Bedroom Wellness Decor",
-        "title": "Rain Cloud Raindrop Humidifier & Relaxing Sound Machine",
-        "target_price": "$33.99"
-    },
-    {
-        "id": "B0DZFGTCLR",
-        "url": f"https://www.amazon.com/dp/B0DZFGTCLR?tag={AMAZON_ASSOCIATE_TAG}",
-        "niche": "Cozy Living Room Scented Decor",
-        "title": "Flameless Top-Down Candle Warmer Melting Lamp with Timer",
-        "target_price": "$12.99"
-    },
-    {
         "id": "B0FRS84KT9",
         "url": f"https://www.amazon.com/dp/B0FRS84KT9?tag={AMAZON_ASSOCIATE_TAG}",
         "niche": "Nightstand & Desk Decor",
