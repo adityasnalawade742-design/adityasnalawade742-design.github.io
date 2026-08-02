@@ -392,7 +392,28 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <div class="container">
         <div class="top-bar">
             <a href="./index.html" class="back-link">← Back to Showcase</a>
-            <div class="tag">✨ VIRAL FIND</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <select id="bridgeRegionSelect" onchange="applyGeoRedirect(this.value)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); color: var(--accent-gold); font-family: inherit; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 50px; outline: none; cursor: pointer; backdrop-filter: blur(12px);">
+                    <option value="US">🇺🇸 US ($)</option>
+                    <option value="IN">🇮🇳 IN (₹)</option>
+                    <option value="GB">🇬🇧 UK (£)</option>
+                    <option value="DE">🇩🇪 DE (€)</option>
+                    <option value="CA">🇨🇦 CA (CA$)</option>
+                    <option value="AU">🇦🇺 AU (A$)</option>
+                    <option value="JP">🇯🇵 JP (¥)</option>
+                    <option value="FR">🇫🇷 FR (€)</option>
+                    <option value="ES">🇪🇸 ES (€)</option>
+                    <option value="IT">🇮🇹 IT (€)</option>
+                    <option value="SE">🇸🇪 SE (kr)</option>
+                    <option value="NL">🇳🇱 NL (€)</option>
+                    <option value="BR">🇧🇷 BR (R$)</option>
+                    <option value="MX">🇲🇽 MX (Mex$)</option>
+                    <option value="SG">🇸🇬 SG (S$)</option>
+                    <option value="AE">🇦🇪 AE (AED)</option>
+                    <option value="SA">🇸🇦 SA (SAR)</option>
+                </select>
+                <div class="tag">✨ VIRAL FIND</div>
+            </div>
         </div>
 
         <!-- Rating Box -->
@@ -697,6 +718,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
                 window.currentAppliedCC = targetCC;
+                const regSel = document.getElementById('bridgeRegionSelect');
+                if (regSel && countryMap[targetCC]) {
+                    regSel.value = targetCC;
+                }
                 const isDirectListing = directRegions.includes(targetCC);
                 
                 // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
@@ -804,82 +829,79 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     }
                 }
             }
+            window.applyGeoRedirect = applyGeoRedirect;
 
-            // ⚡ Phase 0: Instant URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN, ?country=US)
-            let isGeoOverridden = false;
+            // ⚡ Phase 0: Check URL Test Parameter Override (?country=SE, ?country=DE, ?country=IN, ?country=US)
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const forcedCountry = urlParams.get('country') || urlParams.get('geo');
                 if (forcedCountry) {
                     applyGeoRedirect(forcedCountry.toUpperCase());
-                    isGeoOverridden = true;
                 }
             } catch(e) {}
 
-            if (!isGeoOverridden) {
-                // ⚡ Phase 1: Unblockable Cloudflare Network Trace (Detects VPN exit node IP 100%)
-                fetch('https://www.cloudflare.com/cdn-cgi/trace')
-                    .then(res => res.text())
-                    .then(text => {
-                        const locMatch = text.match(/^loc=(.+)$/m);
-                        if (locMatch && locMatch[1]) {
-                            const country = locMatch[1].trim().toUpperCase();
-                            if (country && country.length === 2 && country !== 'XX') {
-                                applyGeoRedirect(country);
-                                return;
-                            }
-                        }
-                        fallbackFetchIP();
-                    })
-                    .catch(() => fallbackFetchIP());
-
-                function fallbackFetchIP() {
-                    const ipProviders = [
-                        'https://ipwho.is/',
-                        'https://freeipapi.com/api/json',
-                        'https://api.country.is',
-                        'https://ipapi.co/json/'
-                    ];
-
-                    function tryFetchIP(index) {
-                        if (index >= ipProviders.length) {
-                            // Last Resort Offline Fallback (Timezone & Browser Language Check)
-                            try {
-                                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                                const lang = (navigator.language || '').toLowerCase();
-                                if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('hi')) {
-                                    applyGeoRedirect('IN');
-                                } else if (tz.includes('singapore') || lang.includes('sg')) {
-                                    applyGeoRedirect('SG');
-                                } else if (tz.includes('stockholm') || lang.includes('sv') || lang.includes('se')) {
-                                    applyGeoRedirect('SE');
-                                } else if (tz.includes('london') || lang.includes('en-gb')) {
-                                    applyGeoRedirect('GB');
-                                } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
-                                    applyGeoRedirect('DE');
-                                } else if (tz.includes('tokyo') || lang.includes('ja') || lang.includes('jp')) {
-                                    applyGeoRedirect('JP');
-                                } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('en-au')) {
-                                    applyGeoRedirect('AU');
-                                }
-                            } catch(e) {}
+            // ⚡ Phase 1: Unblockable Cache-Bypassing Cloudflare Network Trace (Detects VPN exit node IP 100%)
+            fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
+                .then(res => res.text())
+                .then(text => {
+                    const locMatch = text.match(/^loc=(.+)$/m);
+                    if (locMatch && locMatch[1]) {
+                        const country = locMatch[1].trim().toUpperCase();
+                        if (country && country.length === 2 && country !== 'XX') {
+                            applyGeoRedirect(country);
                             return;
                         }
-
-                        fetch(ipProviders[index])
-                            .then(r => r.json())
-                            .then(d => {
-                                const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
-                                if (c && c.length === 2) {
-                                    applyGeoRedirect(c);
-                                } else {
-                                    tryFetchIP(index + 1);
-                                }
-                            })
-                            .catch(() => tryFetchIP(index + 1));
                     }
-                    tryFetchIP(0);
+                    fallbackFetchIP();
+                })
+                .catch(() => fallbackFetchIP());
+
+            function fallbackFetchIP() {
+                const ipProviders = [
+                    'https://ipwho.is/',
+                    'https://freeipapi.com/api/json',
+                    'https://api.country.is',
+                    'https://ipapi.co/json/'
+                ];
+
+                function tryFetchIP(index) {
+                    if (index >= ipProviders.length) {
+                        // Last Resort Offline Fallback (Timezone & Browser Language Check)
+                        try {
+                            const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                            const lang = (navigator.language || '').toLowerCase();
+                            if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('hi')) {
+                                applyGeoRedirect('IN');
+                            } else if (tz.includes('singapore') || lang.includes('sg')) {
+                                applyGeoRedirect('SG');
+                            } else if (tz.includes('stockholm') || lang.includes('sv') || lang.includes('se')) {
+                                applyGeoRedirect('SE');
+                            } else if (tz.includes('london') || lang.includes('en-gb')) {
+                                applyGeoRedirect('GB');
+                            } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
+                                applyGeoRedirect('DE');
+                            } else if (tz.includes('tokyo') || lang.includes('ja') || lang.includes('jp')) {
+                                applyGeoRedirect('JP');
+                            } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('en-au')) {
+                                applyGeoRedirect('AU');
+                            }
+                        } catch(e) {}
+                        return;
+                    }
+
+                    fetch(ipProviders[index] + '?t=' + Date.now(), { cache: 'no-store' })
+                        .then(r => r.json())
+                        .then(d => {
+                            const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
+                            if (c && c.length === 2) {
+                                applyGeoRedirect(c);
+                            } else {
+                                tryFetchIP(index + 1);
+                            }
+                        })
+                        .catch(() => tryFetchIP(index + 1));
                 }
+                tryFetchIP(0);
             }
         })();
     </script>
