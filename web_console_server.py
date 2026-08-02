@@ -214,6 +214,14 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/n8n/dispatch-batch'):
             self.handle_api_dispatch_n8n_batch()
             return
+        elif self.path.startswith('/api/prepare_n8n_batch'):
+            # NEW: Packages user-confirmed selections into a clean n8n payload (no generation)
+            self.handle_api_prepare_n8n_batch()
+            return
+        elif self.path.startswith('/api/create_bridge_page'):
+            # NEW: Called by n8n per-product to build bridge page + hook image then push live
+            self.handle_api_create_bridge_page()
+            return
         elif self.path.startswith('/api/delete_homepage_product'):
             self.handle_api_delete_homepage_product()
             return
@@ -736,6 +744,171 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             self.send_json({"status": "success", "message": "Saved as default for all future products!"})
         except Exception as e:
             self.send_json({"status": "error", "message": str(e)})
+
+    def handle_api_prepare_n8n_batch(self):
+        """
+        NEW ENDPOINT — Called by the Web Console 'Send to n8n' button.
+        Receives user-confirmed product + image selections.
+        Downloads chosen photos to raw_images/, generates SEO copy,
+        then returns a structured payload list for n8n to iterate.
+        Does NOT generate AI images or bridge pages — that happens inside n8n.
+        """
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
+            items = data.get('items', [])  # [{asin, title, price, chosen_photo_url}, ...]
+
+            if not items:
+                self.send_json({'status': 'error', 'message': 'No items in batch.'})
+                return
+
+            from modules.seo_copywriter import generate_pin_seo_data
+            import urllib.request
+
+            prepared = []
+            for item in items:
+                asin = item.get('asin', '').strip().upper()
+                title = item.get('title', f'Product {asin}')
+                price = item.get('price', '$19.99')
+                chosen_photo = item.get('chosen_photo_url', '')
+
+                # Download chosen photo locally so n8n bridge builder can use it
+                raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
+                raw_img_path.parent.mkdir(parents=True, exist_ok=True)
+                download_ok = False
+                if chosen_photo and chosen_photo.startswith('http'):
+                    try:
+                        req = urllib.request.Request(chosen_photo, headers={'User-Agent': 'Mozilla/5.0'})
+                        with urllib.request.urlopen(req, timeout=10) as resp:
+                            raw_img_path.write_bytes(resp.read())
+                        download_ok = True
+                        print(f'[Prepare n8n Batch] ✅ Downloaded photo for {asin} -> {raw_img_path.name}')
+                    except Exception as e_dl:
+                        print(f'[Prepare n8n Batch] ⚠️ Photo download warning for {asin}: {e_dl}')
+
+                # Generate unique SEO copy per product
+                seo = generate_pin_seo_data(product_title=title, price=price)
+
+                prepared.append({
+                    'asin': asin,
+                    'title': title,
+                    'price': price,
+                    'chosen_photo_url': chosen_photo,
+                    'raw_image_local': str(raw_img_path) if download_ok else '',
+                    'pin_title': seo.get('pin_title', title),
+                    'pin_description': seo.get('description', ''),
+                    'badge_hook': seo.get('badge_hook', 'VIRAL ROOM FIND'),
+                    'image_hook': seo.get('image_hook', title[:30]),
+                    'bridge_url': f'https://adityasnalawade742-design.github.io/bridge_{asin}.html',
+                    'hook_image_url': f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg',
+                    'create_bridge_endpoint': 'http://localhost:5000/api/create_bridge_page'
+                })
+
+            print(f'[Prepare n8n Batch] 📦 Packaged {len(prepared)} products ready for n8n.')
+            self.send_json({
+                'status': 'success',
+                'message': f'✅ {len(prepared)} products packaged and ready for n8n!',
+                'count': len(prepared),
+                'items': prepared
+            })
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_create_bridge_page(self):
+        """
+        NEW ENDPOINT — Called by n8n per-product (HTTP Request node).
+        Builds the bridge landing page + renders the hook image with price overlay,
+        commits to git, pushes to GitHub Pages, and returns the live URLs.
+        n8n then uses bridge_url + hook_image_url as the pin destination + media.
+        """
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
+
+            asin = data.get('asin', '').strip().upper()
+            title = data.get('title', f'Product {asin}')
+            price = data.get('price', '$19.99')
+            pin_title = data.get('pin_title', title)
+            badge_hook = data.get('badge_hook', 'VIRAL ROOM FIND')
+            image_hook = data.get('image_hook', title[:30])
+            pin_description = data.get('pin_description', '')
+
+            if not asin:
+                self.send_json({'status': 'error', 'message': 'Missing ASIN'})
+                return
+
+            print(f'[Create Bridge Page] 🔨 Building bridge_{asin}.html + hook image...')
+
+            from modules.bridge_creator import generate_bridge_page
+            from modules.html_overlay_engine import render_html_overlay
+            from modules.seo_copywriter import generate_pin_seo_data
+
+            seo_data = {
+                'pin_title': pin_title,
+                'description': pin_description,
+                'image_hook': image_hook,
+                'subtitle_hook': '',
+                'badge_hook': badge_hook,
+            }
+
+            prod = {
+                'title': title,
+                'price': price,
+                'rating': '4.8',
+                'features': ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP'],
+                'category': 'decor',
+            }
+
+            # 1. Generate bridge page
+            generate_bridge_page(prod, seo_data, asin)
+
+            # 2. Render hook image (price badge overlay)
+            raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
+            fallback_raw = WORKSPACE_DIR / 'raw_images' / 'raw_B0BZXNSW5K.jpg'
+            source_img = str(raw_img_path) if raw_img_path.exists() else str(fallback_raw)
+            hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
+
+            render_html_overlay(
+                image_path=source_img,
+                headline=image_hook,
+                subtitle='',
+                badge_text=badge_hook,
+                price_str=price,
+                features=prod['features'],
+                output_path=hook_img_path
+            )
+
+            # 3. Git add + commit + push (background thread so n8n doesn't time out)
+            bridge_url = f'https://adityasnalawade742-design.github.io/bridge_{asin}.html'
+            hook_image_url = f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg'
+
+            def push_live(target_asin):
+                try:
+                    subprocess.run(['git', 'add', '-A'], cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(['git', 'commit', '-m',
+                        f'feat: n8n auto-published bridge_{target_asin} + hook image'],
+                        cwd=str(WORKSPACE_DIR), check=False)
+                    subprocess.run(['git', 'push', 'origin', 'main'],
+                        cwd=str(WORKSPACE_DIR), check=False)
+                    print(f'[Create Bridge Page] ✅ Pushed bridge_{target_asin}.html live!')
+                except Exception as eg:
+                    print(f'[Create Bridge Page] Git push warning: {eg}')
+
+            threading.Thread(target=push_live, args=(asin,), daemon=True).start()
+
+            self.send_json({
+                'status': 'success',
+                'asin': asin,
+                'bridge_url': bridge_url,
+                'hook_image_url': hook_image_url,
+                'message': f'Bridge page and hook image created for {asin}. Deploying to GitHub Pages...'
+            })
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            self.send_json({'status': 'error', 'message': str(e)})
 
     def handle_api_dispatch_n8n_batch(self):
         try:

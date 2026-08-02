@@ -1,20 +1,47 @@
 {
-  "name": "Pinterest Auto Affiliate Machine",
+  "name": "Pinterest Auto Affiliate Machine v2",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "process-product",
+        "path": "pinterest-batch",
+        "responseMode": "responseNode",
         "options": {}
       },
-      "name": "1. Webhook Trigger (Incoming Product Batch)",
+      "id": "node_1_webhook",
+      "name": "1. Webhook — Receive Batch from Web Console",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [250, 300]
+      "position": [200, 300],
+      "notes": "Web Console calls this after user confirms product + image selections. Body: { items: [{asin, title, price, pin_title, pin_description, badge_hook, image_hook, chosen_photo_url, bridge_url, hook_image_url, create_bridge_endpoint}] }"
     },
     {
       "parameters": {
-        "url": "=http://localhost:5000/api/n8n/dispatch-batch",
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'received', count: $json.body.items.length, message: 'Batch accepted. Processing ' + $json.body.items.length + ' products...' }) }}"
+      },
+      "id": "node_1b_respond",
+      "name": "1b. Respond to Web Console Immediately",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [200, 480],
+      "notes": "Immediately ACK the web console so it doesn't time out. Processing continues in background."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "body.items",
+        "options": {}
+      },
+      "id": "node_2_split",
+      "name": "2. Split Items — Process One Product at a Time",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [440, 300],
+      "notes": "Splits the incoming items array so nodes 3-5 run once per product sequentially."
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.create_bridge_endpoint || 'http://localhost:5000/api/create_bridge_page' }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -23,85 +50,134 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ items: [ { asin: $json.body.asin, title: $json.body.title, price: $json.body.price, chosen_photo_url: $json.body.chosen_photo_url } ] }) }}",
-        "options": {}
+        "jsonBody": "={{ JSON.stringify({ asin: $json.asin, title: $json.title, price: $json.price, pin_title: $json.pin_title, pin_description: $json.pin_description, badge_hook: $json.badge_hook, image_hook: $json.image_hook }) }}",
+        "options": {
+          "timeout": 120000
+        }
       },
-      "name": "2. Auto Bridge Page Creator & Price Badge Renderer",
+      "id": "node_3_bridge",
+      "name": "3. Build Bridge Page + Hook Image (Local Server)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [480, 300]
+      "position": [680, 300],
+      "notes": "Calls your local Python server to: (1) generate bridge_{ASIN}.html landing page, (2) render focus_product_{ASIN}_hook.jpg with price badge overlay, (3) push both live to GitHub Pages. Returns bridge_url + hook_image_url."
     },
     {
       "parameters": {
         "values": {
           "string": [
             {
-              "name": "pin_title",
-              "value": "={{ 'Cozy Room Find: ' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.title || 'Aesthetic Home Decor Find') }}"
+              "name": "final_bridge_url",
+              "value": "={{ $node['3. Build Bridge Page + Hook Image (Local Server)'].json.bridge_url || $node['2. Split Items — Process One Product at a Time'].json.bridge_url }}"
             },
             {
-              "name": "pin_description",
-              "value": "={{ 'Transform your living space with this aesthetic find! Priced at ' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.price || '$19.99') + '. Tap link to shop now on Amazon!\n\n#cozyroom #aestheticdecor #roomdecor #homefinds #amazonfinds' }}"
+              "name": "final_hook_image_url",
+              "value": "={{ $node['3. Build Bridge Page + Hook Image (Local Server)'].json.hook_image_url || $node['2. Split Items — Process One Product at a Time'].json.hook_image_url }}"
+            },
+            {
+              "name": "final_pin_title",
+              "value": "={{ $node['2. Split Items — Process One Product at a Time'].json.pin_title }}"
+            },
+            {
+              "name": "final_pin_description",
+              "value": "={{ $node['2. Split Items — Process One Product at a Time'].json.pin_description }}"
+            },
+            {
+              "name": "final_asin",
+              "value": "={{ $node['2. Split Items — Process One Product at a Time'].json.asin }}"
             }
           ]
         },
         "options": {}
       },
-      "name": "3. Unique Viral SEO & Hashtags Copywriter",
+      "id": "node_4_merge",
+      "name": "4. Merge — Combine SEO Copy + Bridge URL + Image URL",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [700, 300]
+      "position": [920, 300],
+      "notes": "Collects bridge_url from node 3 response and SEO data from node 2. All fields are now ready for the Pinterest pin POST."
     },
     {
       "parameters": {
-        "values": {
-          "string": [
-            {
-              "name": "bridge_url",
-              "value": "={{ 'https://adityasnalawade742-design.github.io/bridge_' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.asin || 'B0FXLYXM32') + '.html' }}"
-            },
-            {
-              "name": "image_url",
-              "value": "={{ 'https://adityasnalawade742-design.github.io/focus_product_' + ($node['1. Webhook Trigger (Incoming Product Batch)'].json.body.asin || 'B0FXLYXM32') + '_hook.jpg' }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "name": "4. Signature Price Badge & Typography Template Engine",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 1,
-      "position": [920, 300]
-    },
-    {
-      "parameters": {
-        "requestMethod": "POST",
         "url": "https://api.pinterest.com/v5/pins",
-        "allowUnauthorizedCerts": false,
-        "responseFormat": "json",
-        "jsonParameters": true,
-        "options": {},
-        "headerParametersJson": "{\n  \"Authorization\": \"Bearer {{ $env.PINTEREST_ACCESS_TOKEN }}\",\n  \"Content-Type\": \"application/json\"\n}",
-        "bodyParametersJson": "{\n  \"title\": \"={{ $node['3. Unique Viral SEO & Hashtags Copywriter'].json['pin_title'] }}\",\n  \"description\": \"={{ $node['3. Unique Viral SEO & Hashtags Copywriter'].json['pin_description'] }}\",\n  \"link\": \"={{ $node['4. Signature Price Badge & Typography Template Engine'].json['bridge_url'] }}\",\n  \"board_id\": \"{{ $env.PINTEREST_BOARD_ID }}\",\n  \"media_source\": {\n    \"source_type\": \"image_url\",\n    \"url\": \"={{ $node['4. Signature Price Badge & Typography Template Engine'].json['image_url'] }}\"\n  }\n}"
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.PINTEREST_ACCESS_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ title: $json.final_pin_title.substring(0, 100), description: $json.final_pin_description.substring(0, 800), link: $json.final_bridge_url, board_id: $env.PINTEREST_BOARD_ID, media_source: { source_type: 'image_url', url: $json.final_hook_image_url } }) }}",
+        "options": {
+          "timeout": 30000
+        }
       },
-      "name": "5. Publish to Pinterest API v5 (OAuth 2.0)",
+      "id": "node_5_pinterest",
+      "name": "5. Post Pin to Pinterest API v5",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [1140, 300]
+      "position": [1160, 300],
+      "notes": "POSTs the pin to Pinterest API v5. Destination link = bridge_{ASIN}.html. Media = focus_product_{ASIN}_hook.jpg. Uses your Bearer token and Board ID from n8n env variables."
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "result",
+              "value": "={{ 'Pin posted for ' + $node['4. Merge — Combine SEO Copy + Bridge URL + Image URL'].json.final_asin + ' — Pin ID: ' + ($json.id || 'N/A') + ' | Bridge: ' + $node['4. Merge — Combine SEO Copy + Bridge URL + Image URL'].json.final_bridge_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node_6_log",
+      "name": "6. Log Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1400, 300],
+      "notes": "Logs the Pin ID and bridge URL for each product. You can connect this to a Google Sheets or Telegram node for monitoring."
     }
   ],
   "connections": {
-    "1. Webhook Trigger (Incoming Product Batch)": {
-      "main": [[{ "node": "2. Auto Bridge Page Creator & Price Badge Renderer", "type": "main", "index": 0 }]]
+    "1. Webhook — Receive Batch from Web Console": {
+      "main": [
+        [
+          { "node": "1b. Respond to Web Console Immediately", "type": "main", "index": 0 },
+          { "node": "2. Split Items — Process One Product at a Time", "type": "main", "index": 0 }
+        ]
+      ]
     },
-    "2. Auto Bridge Page Creator & Price Badge Renderer": {
-      "main": [[{ "node": "3. Unique Viral SEO & Hashtags Copywriter", "type": "main", "index": 0 }]]
+    "2. Split Items — Process One Product at a Time": {
+      "main": [
+        [{ "node": "3. Build Bridge Page + Hook Image (Local Server)", "type": "main", "index": 0 }]
+      ]
     },
-    "3. Unique Viral SEO & Hashtags Copywriter": {
-      "main": [[{ "node": "4. Signature Price Badge & Typography Template Engine", "type": "main", "index": 0 }]]
+    "3. Build Bridge Page + Hook Image (Local Server)": {
+      "main": [
+        [{ "node": "4. Merge — Combine SEO Copy + Bridge URL + Image URL", "type": "main", "index": 0 }]
+      ]
     },
-    "4. Signature Price Badge & Typography Template Engine": {
-      "main": [[{ "node": "5. Publish to Pinterest API v5 (OAuth 2.0)", "type": "main", "index": 0 }]]
+    "4. Merge — Combine SEO Copy + Bridge URL + Image URL": {
+      "main": [
+        [{ "node": "5. Post Pin to Pinterest API v5", "type": "main", "index": 0 }]
+      ]
+    },
+    "5. Post Pin to Pinterest API v5": {
+      "main": [
+        [{ "node": "6. Log Result", "type": "main", "index": 0 }]
+      ]
     }
+  },
+  "settings": {
+    "executionOrder": "v1"
   }
 }

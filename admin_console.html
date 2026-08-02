@@ -447,6 +447,7 @@
             <button class="tab-btn active" id="tabBatch" onclick="switchMode('batch')">📦 10-Product Selector</button>
             <button class="tab-btn" id="tabHomepage" onclick="switchMode('homepage')">🏠 Homepage Manager</button>
             <button class="tab-btn" id="tabSingle" onclick="switchMode('single')">🔍 Single ASIN Quick Inspector</button>
+            <button class="tab-btn" id="tabN8n" onclick="switchMode('n8n')" style="background: linear-gradient(135deg, rgba(230,0,35,0.18), rgba(230,0,35,0.08)); border-color: rgba(230,0,35,0.5); color: #ff6b7a;">📌 Send to n8n</button>
             <a href="/api/auth/pinterest" class="tab-btn" style="background: linear-gradient(135deg, #e60023, #ff4757); color: #ffffff; text-decoration: none; border-color: #ffffff; font-weight: 800;" target="_blank">🔌 Connect Pinterest OAuth 2.0</a>
         </div>
     </header>
@@ -798,6 +799,78 @@
         <span id="toastMsg">Operation successful!</span>
     </div>
 
+        <!-- ============================================================ -->
+        <!-- MODE N8N: SEND TO N8N WORKFLOW PANEL -->
+        <!-- ============================================================ -->
+        <div id="modeN8n" style="display:none;">
+
+            <!-- Step Bar -->
+            <div class="step-bar">
+                <div class="step-item active" id="n8nStep1Indicator">
+                    <div class="step-num">1</div>
+                    <span>Select Products</span>
+                </div>
+                <div class="step-item" id="n8nStep2Indicator">
+                    <div class="step-num">2</div>
+                    <span>Review &amp; Pick Images</span>
+                </div>
+                <div class="step-item" id="n8nStep3Indicator">
+                    <div class="step-num">3</div>
+                    <span>Send to n8n &amp; Monitor</span>
+                </div>
+            </div>
+
+            <!-- n8n STEP 1: Product Selection -->
+            <div class="card-box" id="n8nPanelStep1">
+                <div class="card-header-title">
+                    <span>🔍 Step 1: Discover &amp; Select Products to Publish via n8n</span>
+                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Search Amazon, pick 1–15 products. System auto-selects best image per product.</span>
+                </div>
+                <div class="input-group" style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <input id="n8nSearchInput" type="text" placeholder="Search keyword (e.g. mushroom lamp, donut vase)" class="input-field" style="flex:1;min-width:220px;" />
+                    <input id="n8nCountInput" type="number" value="10" min="1" max="20" class="input-field" style="width:90px;" title="Number of products to fetch" />
+                    <button class="btn-primary" onclick="n8nDiscoverProducts()">🔍 Search Amazon</button>
+                </div>
+                <div id="n8nDiscoverSpinner" style="display:none;margin-top:12px;color:var(--gold-primary);font-weight:700;">⏳ Discovering products...</div>
+                <div id="n8nDiscoverGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:18px;"></div>
+                <div id="n8nStep1Footer" style="display:none;margin-top:18px;text-align:center;">
+                    <div style="margin-bottom:10px;color:var(--gold-primary);font-weight:700;" id="n8nSelectCount">0 products selected</div>
+                    <button class="btn-primary" onclick="n8nGoToStep2()" style="background:linear-gradient(135deg,#fb8500,#ffb703);font-size:16px;padding:14px 40px;">Next: Review Images →</button>
+                </div>
+            </div>
+
+            <!-- n8n STEP 2: Image Review per product -->
+            <div class="card-box" id="n8nPanelStep2" style="display:none;">
+                <div class="card-header-title">
+                    <span>📸 Step 2: Review &amp; Confirm Best Image per Product</span>
+                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Our AI picked the best photo. Click any image to override the selection.</span>
+                </div>
+                <div id="n8nExtractSpinner" style="display:none;text-align:center;padding:24px;color:var(--gold-primary);font-weight:700;">⏳ Extracting photos for all selected products... This may take 30–60 seconds.</div>
+                <div id="n8nImageReviewList" style="display:flex;flex-direction:column;gap:28px;"></div>
+                <div style="display:flex;gap:14px;margin-top:24px;justify-content:center;">
+                    <button class="btn-secondary" onclick="n8nBackToStep1()">← Back</button>
+                    <button class="btn-primary" id="n8nSendBtn" onclick="n8nSendToWorkflow()" style="background:linear-gradient(135deg,#e60023,#ff4757);font-size:16px;padding:14px 40px;min-width:240px;">📌 Send to n8n Workflow</button>
+                </div>
+            </div>
+
+            <!-- n8n STEP 3: Live Status Monitor -->
+            <div class="card-box" id="n8nPanelStep3" style="display:none;">
+                <div class="card-header-title">
+                    <span>🚀 Step 3: n8n Workflow Live Status</span>
+                    <span style="font-size:13px;color:var(--text-sub);font-weight:400;">Batch dispatched! n8n is building bridge pages and posting pins one by one.</span>
+                </div>
+                <div id="n8nStatusBox" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:22px;margin-bottom:18px;">
+                    <div id="n8nStatusMsg" style="color:var(--gold-primary);font-size:15px;font-weight:700;margin-bottom:14px;">⏳ Sending to n8n...</div>
+                    <div id="n8nItemStatusList" style="display:flex;flex-direction:column;gap:10px;"></div>
+                </div>
+                <div style="text-align:center;margin-top:16px;">
+                    <button class="btn-secondary" onclick="n8nResetAll()">🔄 Start New Batch</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- END MODE N8N -->
+
     <script>
         let discoveredItems = [];
         let selectedAsins = new Set();
@@ -832,15 +905,278 @@
             document.getElementById('modeBatch').style.display = mode === 'batch' ? 'block' : 'none';
             document.getElementById('modeHomepage').style.display = mode === 'homepage' ? 'block' : 'none';
             document.getElementById('modeSingle').style.display = mode === 'single' ? 'block' : 'none';
+            document.getElementById('modeN8n').style.display = mode === 'n8n' ? 'block' : 'none';
 
             document.getElementById('tabBatch').classList.toggle('active', mode === 'batch');
             document.getElementById('tabHomepage').classList.toggle('active', mode === 'homepage');
             document.getElementById('tabSingle').classList.toggle('active', mode === 'single');
+            document.getElementById('tabN8n').classList.toggle('active', mode === 'n8n');
 
             if (mode === 'homepage') {
                 loadHomepageProducts();
             }
         }
+
+        // ============================================================
+        // n8n WORKFLOW TAB — STATE + FUNCTIONS
+        // ============================================================
+        let n8nDiscoveredItems = [];
+        let n8nSelectedAsins = new Set(); // asin -> true
+        let n8nExtractedItems = [];       // [{asin, title, price, winner_photo, photos}]
+        let n8nChosenPhotos = {};         // asin -> chosen photo URL
+        let n8nWebhookUrl = 'http://localhost:5678/webhook/pinterest-batch';
+
+        function n8nDiscoverProducts() {
+            const kw = document.getElementById('n8nSearchInput').value.trim() || 'aesthetic room decor lamp';
+            const count = parseInt(document.getElementById('n8nCountInput').value) || 10;
+            document.getElementById('n8nDiscoverSpinner').style.display = 'block';
+            document.getElementById('n8nDiscoverGrid').innerHTML = '';
+            document.getElementById('n8nStep1Footer').style.display = 'none';
+            n8nSelectedAsins.clear();
+
+            fetch(`/api/discover?query=${encodeURIComponent(kw)}&count=${count}`)
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('n8nDiscoverSpinner').style.display = 'none';
+                    if (data.status === 'error') { showToast('Error: ' + data.message, '❌'); return; }
+                    n8nDiscoveredItems = data.items || [];
+                    n8nRenderDiscoverGrid(n8nDiscoveredItems);
+                })
+                .catch(() => {
+                    document.getElementById('n8nDiscoverSpinner').style.display = 'none';
+                    showToast('Cannot reach server. Is web_console_server.py running?', '❌');
+                });
+        }
+
+        function n8nRenderDiscoverGrid(items) {
+            const grid = document.getElementById('n8nDiscoverGrid');
+            grid.innerHTML = '';
+            items.forEach(item => {
+                const asin = item.asin;
+                const card = document.createElement('div');
+                card.id = `n8n-card-${asin}`;
+                card.style.cssText = 'background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:14px;cursor:pointer;transition:all 0.2s;position:relative;';
+                card.innerHTML = `
+                    <img src="${escapeHTML(item.thumbnail || '')}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin-bottom:10px;" onerror="this.src='https://placehold.co/200x200/1a1a2e/ffb703?text=No+Image'" />
+                    <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px;">${escapeHTML((item.title||'').substring(0,60))}...</div>
+                    <div style="color:var(--gold-primary);font-weight:800;font-size:14px;">${escapeHTML(item.price||'N/A')}</div>
+                    <div style="font-size:11px;color:var(--text-sub);margin-top:4px;">⭐ ${escapeHTML(String(item.rating||'4.5'))} · ${item.is_already_published ? '<span style="color:#fb8500;">Already Live</span>' : '<span style="color:#4ade80;">New</span>'}</div>
+                    <div id="n8n-check-${asin}" style="display:none;position:absolute;top:10px;right:10px;width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#22c55e);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:16px;">✓</div>
+                `;
+                card.onclick = () => n8nToggleProduct(asin, card);
+                grid.appendChild(card);
+            });
+            document.getElementById('n8nStep1Footer').style.display = 'block';
+            n8nUpdateSelectCount();
+        }
+
+        function n8nToggleProduct(asin, card) {
+            if (n8nSelectedAsins.has(asin)) {
+                n8nSelectedAsins.delete(asin);
+                card.style.border = '2px solid rgba(255,255,255,0.1)';
+                card.style.background = 'rgba(255,255,255,0.05)';
+                const chk = document.getElementById(`n8n-check-${asin}`);
+                if (chk) chk.style.display = 'none';
+            } else {
+                n8nSelectedAsins.add(asin);
+                card.style.border = '2px solid var(--gold-primary)';
+                card.style.background = 'rgba(255,183,3,0.1)';
+                const chk = document.getElementById(`n8n-check-${asin}`);
+                if (chk) chk.style.display = 'flex';
+            }
+            n8nUpdateSelectCount();
+        }
+
+        function n8nUpdateSelectCount() {
+            const el = document.getElementById('n8nSelectCount');
+            if (el) el.innerText = `${n8nSelectedAsins.size} product${n8nSelectedAsins.size !== 1 ? 's' : ''} selected`;
+        }
+
+        function n8nGoToStep2() {
+            if (n8nSelectedAsins.size === 0) { showToast('Please select at least 1 product!', '⚠️'); return; }
+            // Show step 2
+            document.getElementById('n8nPanelStep1').style.display = 'none';
+            document.getElementById('n8nPanelStep2').style.display = 'block';
+            document.getElementById('n8nStep1Indicator').classList.remove('active');
+            document.getElementById('n8nStep2Indicator').classList.add('active');
+            document.getElementById('n8nExtractSpinner').style.display = 'block';
+            document.getElementById('n8nImageReviewList').innerHTML = '';
+
+            const asins = [...n8nSelectedAsins];
+            // Extract photos for all selected products
+            fetch('/api/batch_extract', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({asins})
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('n8nExtractSpinner').style.display = 'none';
+                n8nExtractedItems = data.items || [];
+                n8nChosenPhotos = {};
+                // Pre-select winner_photo per product
+                n8nExtractedItems.forEach(item => {
+                    n8nChosenPhotos[item.asin] = item.winner_photo || (item.photos && item.photos[0] ? item.photos[0].url : '');
+                });
+                n8nRenderImageReview(n8nExtractedItems);
+            })
+            .catch(err => {
+                document.getElementById('n8nExtractSpinner').style.display = 'none';
+                showToast('Photo extraction failed: ' + err, '❌');
+            });
+        }
+
+        function n8nRenderImageReview(items) {
+            const list = document.getElementById('n8nImageReviewList');
+            list.innerHTML = '';
+            items.forEach(item => {
+                const asin = item.asin;
+                const row = document.createElement('div');
+                row.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:18px;';
+                const photosHtml = (item.photos || []).map((ph, idx) => `
+                    <div onclick="n8nSelectPhoto('${asin}', '${escapeHTML(ph.url)}', this)" id="n8n-ph-${asin}-${idx}"
+                         style="flex:0 0 110px;cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid ${ph.url === n8nChosenPhotos[asin] ? 'var(--gold-primary)' : 'rgba(255,255,255,0.12)'};transition:all 0.2s;position:relative;">
+                        <img src="${escapeHTML(ph.url)}" style="width:110px;height:110px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'" />
+                        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);font-size:10px;font-weight:700;text-align:center;padding:3px;
+                            color:${ph.is_clean ? '#4ade80' : '#f87171'}">${ph.is_clean ? '✓ CLEAN' : '✗ BAD'}</div>
+                        ${ph.url === n8nChosenPhotos[asin] ? '<div style="position:absolute;top:4px;right:4px;background:var(--gold-primary);color:#000;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;">AI PICK ✓</div>' : ''}
+                    </div>
+                `).join('');
+                row.innerHTML = `
+                    <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+                        <div style="flex:0 0 auto;">
+                            <img src="${escapeHTML(n8nChosenPhotos[asin] || '')}" id="n8n-preview-${asin}" style="width:130px;height:130px;object-fit:cover;border-radius:14px;border:2px solid var(--gold-primary);" />
+                            <div style="font-size:11px;color:var(--gold-primary);font-weight:700;text-align:center;margin-top:4px;">Selected</div>
+                        </div>
+                        <div style="flex:1;min-width:180px;">
+                            <div style="font-weight:800;font-size:15px;color:#fff;margin-bottom:4px;">${escapeHTML((item.title||'').substring(0,70))}</div>
+                            <div style="color:var(--gold-primary);font-weight:700;margin-bottom:10px;">${escapeHTML(item.price||'$19.99')} · ASIN: ${asin}</div>
+                            <div style="font-size:12px;color:var(--text-sub);margin-bottom:8px;">📸 Click any image below to override AI selection:</div>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;">${photosHtml}</div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function n8nSelectPhoto(asin, url, el) {
+            n8nChosenPhotos[asin] = url;
+            // Update preview
+            const preview = document.getElementById(`n8n-preview-${asin}`);
+            if (preview) preview.src = url;
+            // Re-render to update border highlights
+            n8nRenderImageReview(n8nExtractedItems);
+        }
+
+        function n8nBackToStep1() {
+            document.getElementById('n8nPanelStep2').style.display = 'none';
+            document.getElementById('n8nPanelStep1').style.display = 'block';
+            document.getElementById('n8nStep2Indicator').classList.remove('active');
+            document.getElementById('n8nStep1Indicator').classList.add('active');
+        }
+
+        async function n8nSendToWorkflow() {
+            if (n8nExtractedItems.length === 0) { showToast('No products extracted!', '⚠️'); return; }
+            document.getElementById('n8nSendBtn').disabled = true;
+            document.getElementById('n8nSendBtn').innerText = '⏳ Preparing & Sending...';
+
+            // Build items array with chosen photos
+            const items = n8nExtractedItems.map(item => ({
+                asin: item.asin,
+                title: item.title,
+                price: item.price,
+                chosen_photo_url: n8nChosenPhotos[item.asin] || item.winner_photo || ''
+            }));
+
+            // Step A: Call our server to prep the batch (download photos, generate SEO)
+            let preparedItems = [];
+            try {
+                const prepRes = await fetch('/api/prepare_n8n_batch', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({items})
+                });
+                const prepData = await prepRes.json();
+                if (prepData.status !== 'success') throw new Error(prepData.message);
+                preparedItems = prepData.items;
+                showToast(`✅ ${preparedItems.length} products packaged! Sending to n8n...`, '📦');
+            } catch(e) {
+                showToast('Prep failed: ' + e.message, '❌');
+                document.getElementById('n8nSendBtn').disabled = false;
+                document.getElementById('n8nSendBtn').innerText = '📌 Send to n8n Workflow';
+                return;
+            }
+
+            // Step B: Show step 3
+            document.getElementById('n8nPanelStep2').style.display = 'none';
+            document.getElementById('n8nPanelStep3').style.display = 'block';
+            document.getElementById('n8nStep2Indicator').classList.remove('active');
+            document.getElementById('n8nStep3Indicator').classList.add('active');
+            document.getElementById('n8nStatusMsg').innerText = `🚀 Sending ${preparedItems.length} products to n8n webhook...`;
+
+            // Render status rows (pending)
+            const statusList = document.getElementById('n8nItemStatusList');
+            statusList.innerHTML = preparedItems.map(it => `
+                <div id="n8n-status-row-${it.asin}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.04);border-radius:12px;">
+                    <div id="n8n-status-icon-${it.asin}" style="font-size:20px;">⏳</div>
+                    <div>
+                        <div style="font-weight:700;font-size:13px;color:#fff;">${escapeHTML(it.title.substring(0,55))}</div>
+                        <div id="n8n-status-text-${it.asin}" style="font-size:12px;color:var(--text-sub);">Queued — waiting for n8n...</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Step C: Fire to n8n webhook
+            const webhookUrl = document.getElementById('n8nWebhookUrlInput') ?
+                document.getElementById('n8nWebhookUrlInput').value.trim() : n8nWebhookUrl;
+            try {
+                const n8nRes = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({items: preparedItems})
+                });
+                const n8nData = await n8nRes.json().catch(() => ({}));
+                document.getElementById('n8nStatusMsg').innerHTML =
+                    `✅ Batch accepted by n8n! (${preparedItems.length} products) — n8n is now building bridge pages &amp; posting pins one by one.`;
+                document.getElementById('n8nStatusMsg').style.color = '#4ade80';
+                // Mark all as dispatched
+                preparedItems.forEach(it => {
+                    const icon = document.getElementById(`n8n-status-icon-${it.asin}`);
+                    const text = document.getElementById(`n8n-status-text-${it.asin}`);
+                    if (icon) icon.innerText = '📌';
+                    if (text) text.innerText = 'Dispatched to n8n — bridge page building + pin posting in progress';
+                });
+                showToast(`Batch sent to n8n! ${preparedItems.length} pins being published.`, '📌');
+            } catch(e) {
+                document.getElementById('n8nStatusMsg').innerText = `⚠️ n8n webhook not reachable (${webhookUrl}). Make sure n8n is running and the workflow is active.`;
+                document.getElementById('n8nStatusMsg').style.color = '#fb8500';
+                preparedItems.forEach(it => {
+                    const icon = document.getElementById(`n8n-status-icon-${it.asin}`);
+                    const text = document.getElementById(`n8n-status-text-${it.asin}`);
+                    if (icon) icon.innerText = '⚠️';
+                    if (text) text.innerText = 'n8n webhook unreachable. Check n8n is running.';
+                });
+            }
+        }
+
+        function n8nResetAll() {
+            n8nDiscoveredItems = [];
+            n8nSelectedAsins.clear();
+            n8nExtractedItems = [];
+            n8nChosenPhotos = {};
+            document.getElementById('n8nPanelStep1').style.display = 'block';
+            document.getElementById('n8nPanelStep2').style.display = 'none';
+            document.getElementById('n8nPanelStep3').style.display = 'none';
+            document.getElementById('n8nDiscoverGrid').innerHTML = '';
+            document.getElementById('n8nStep1Footer').style.display = 'none';
+            document.getElementById('n8nStep1Indicator').classList.add('active');
+            document.getElementById('n8nStep2Indicator').classList.remove('active');
+            document.getElementById('n8nStep3Indicator').classList.remove('active');
+            document.getElementById('n8nSendBtn').disabled = false;
+            document.getElementById('n8nSendBtn').innerText = '📌 Send to n8n Workflow';
+        }
+        // END n8n TAB FUNCTIONS
 
         function onTrendCategoryChange(val) {
             document.getElementById('customSearchInput').value = '';
