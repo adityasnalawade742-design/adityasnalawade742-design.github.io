@@ -170,7 +170,9 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             continue
 
         reviews = item.get("reviews", 150)
-        image_url = item.get("thumbnail") or item.get("image", "")
+        image_url = item.get("thumbnail") or item.get("image") or item.get("original_image_url", "")
+        if not image_url and asin:
+            image_url = f"https://m.media-amazon.com/images/P/{asin}.01._SCLZZZZZZZ_.jpg"
 
         affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
 
