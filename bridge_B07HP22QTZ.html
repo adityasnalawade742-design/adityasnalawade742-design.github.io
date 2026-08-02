@@ -804,51 +804,69 @@
             } catch(e) {}
 
             if (!isGeoOverridden) {
-                // ⚡ Phase 1: INSTANT Offline Fallback (0ms - Timezone & Browser Language Check)
-                try {
-                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                    const lang = (navigator.language || '').toLowerCase();
-                    
-                    if (tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia') || lang.includes('in') || lang.includes('hi')) {
-                        applyGeoRedirect('IN');
-                    } else if (tz.includes('singapore') || lang.includes('sg')) {
-                        applyGeoRedirect('SG');
-                    } else if (tz.includes('stockholm') || lang.includes('sv') || lang.includes('se')) {
-                        applyGeoRedirect('SE');
-                    } else if (tz.includes('london') || lang.includes('en-gb')) {
-                        applyGeoRedirect('GB');
-                    } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
-                        applyGeoRedirect('DE');
-                    } else if (tz.includes('tokyo') || lang.includes('ja') || lang.includes('jp')) {
-                        applyGeoRedirect('JP');
-                    } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('en-au')) {
-                        applyGeoRedirect('AU');
-                    }
-                } catch(e) {}
-
-                // ⚡ Phase 2: Multi-Provider Robust IP Resolution (Works inside Opera VPN & Adblockers)
-                const ipProviders = [
-                    'https://ipwho.is/',
-                    'https://freeipapi.com/api/json',
-                    'https://api.country.is',
-                    'https://ipapi.co/json/'
-                ];
-
-                function tryFetchIP(index) {
-                    if (index >= ipProviders.length) return;
-                    fetch(ipProviders[index])
-                        .then(r => r.json())
-                        .then(d => {
-                            const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
-                            if (c && c.length === 2) {
-                                applyGeoRedirect(c);
-                            } else {
-                                tryFetchIP(index + 1);
+                // ⚡ Phase 1: Unblockable Cloudflare Network Trace (Detects VPN exit node IP 100%)
+                fetch('https://www.cloudflare.com/cdn-cgi/trace')
+                    .then(res => res.text())
+                    .then(text => {
+                        const locMatch = text.match(/^loc=(.+)$/m);
+                        if (locMatch && locMatch[1]) {
+                            const country = locMatch[1].trim().toUpperCase();
+                            if (country && country.length === 2 && country !== 'XX') {
+                                applyGeoRedirect(country);
+                                return;
                             }
-                        })
-                        .catch(() => tryFetchIP(index + 1));
+                        }
+                        fallbackFetchIP();
+                    })
+                    .catch(() => fallbackFetchIP());
+
+                function fallbackFetchIP() {
+                    const ipProviders = [
+                        'https://ipwho.is/',
+                        'https://freeipapi.com/api/json',
+                        'https://api.country.is',
+                        'https://ipapi.co/json/'
+                    ];
+
+                    function tryFetchIP(index) {
+                        if (index >= ipProviders.length) {
+                            // Last Resort Offline Fallback (Timezone & Browser Language Check)
+                            try {
+                                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                                const lang = (navigator.language || '').toLowerCase();
+                                if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('hi')) {
+                                    applyGeoRedirect('IN');
+                                } else if (tz.includes('singapore') || lang.includes('sg')) {
+                                    applyGeoRedirect('SG');
+                                } else if (tz.includes('stockholm') || lang.includes('sv') || lang.includes('se')) {
+                                    applyGeoRedirect('SE');
+                                } else if (tz.includes('london') || lang.includes('en-gb')) {
+                                    applyGeoRedirect('GB');
+                                } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('de') || lang.includes('fr')) {
+                                    applyGeoRedirect('DE');
+                                } else if (tz.includes('tokyo') || lang.includes('ja') || lang.includes('jp')) {
+                                    applyGeoRedirect('JP');
+                                } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('en-au')) {
+                                    applyGeoRedirect('AU');
+                                }
+                            } catch(e) {}
+                            return;
+                        }
+
+                        fetch(ipProviders[index])
+                            .then(r => r.json())
+                            .then(d => {
+                                const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
+                                if (c && c.length === 2) {
+                                    applyGeoRedirect(c);
+                                } else {
+                                    tryFetchIP(index + 1);
+                                }
+                            })
+                            .catch(() => tryFetchIP(index + 1));
+                    }
+                    tryFetchIP(0);
                 }
-                tryFetchIP(0);
             }
         })();
     </script>
