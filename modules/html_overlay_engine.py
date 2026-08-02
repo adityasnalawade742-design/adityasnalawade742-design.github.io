@@ -289,7 +289,8 @@ def render_html_overlay(
     # Download image if remote URL
     if str(image_path).startswith("http://") or str(image_path).startswith("https://"):
         try:
-            local_tmp_path = WORKSPACE_DIR / f"tmp_remote_{int(time.time())}.jpg" if 'WORKSPACE_DIR' in globals() else Path("G:/CLI/pinterest-auto-affiliate") / f"tmp_remote_{int(time.time())}.jpg"
+            _module_root = Path(__file__).resolve().parent.parent
+            local_tmp_path = WORKSPACE_DIR / f"tmp_remote_{int(time.time())}.jpg" if 'WORKSPACE_DIR' in globals() else _module_root / f"tmp_remote_{int(time.time())}.jpg"
             r_img = requests.get(image_path, timeout=15)
             local_tmp_path.write_bytes(r_img.content)
             image_path = str(local_tmp_path)
@@ -332,8 +333,7 @@ def render_html_overlay(
     top_op = scrim["top_opacity"]
     bot_op = scrim["bot_opacity"]
     # Load system-wide saved layout defaults if present
-    # Load system-wide saved layout defaults if present
-    defaults_file = Path("G:/CLI/pinterest-auto-affiliate/global_tag_defaults.json")
+    defaults_file = Path(__file__).resolve().parent.parent / "global_tag_defaults.json"
     if defaults_file.exists():
         try:
             g_def = json.loads(defaults_file.read_text(encoding="utf-8"))
@@ -350,7 +350,7 @@ def render_html_overlay(
             print(f"[HTML Overlay Engine] ⚠️ Failed reading global defaults: {e_def}")
 
     tag_accent_hex = tag_bg_hex if tag_bg_hex else (ai_recommendation.get("accent_color", "#ff9900") if ai_recommendation else "#ff9900")
-    custom_tag_path = Path("G:/CLI/pinterest-auto-affiliate/price tags/tag 1.png")
+    custom_tag_path = Path(__file__).resolve().parent.parent / "price tags" / "tag 1.png"
     if custom_tag_path.exists():
         # Recolored tag PNG without text bitmap stamping
         stamped_tag_file = stamp_price_onto_tag_image(str(custom_tag_path), price_str="", tag_bg_hex=tag_accent_hex, price_text_color=price_text_color, price_font_scale=price_font_scale)
