@@ -51,6 +51,62 @@ def parse_price_float(price_str: str) -> float:
     except ValueError:
         return 0.0
 
+def parse_reviews_int(reviews_val) -> int:
+    """Parses review count integer from int, float, or string formats like '1,420' or '1.4k'."""
+    if not reviews_val:
+        return 0
+    val_str = str(reviews_val).lower().replace(",", "").strip()
+    m_k = re.search(r'([\d.]+)\s*k', val_str)
+    if m_k:
+        try:
+            return int(float(m_k.group(1)) * 1000)
+        except ValueError:
+            pass
+    cleaned = re.sub(r'[^\d]', '', val_str)
+    try:
+        return int(cleaned) if cleaned else 0
+    except ValueError:
+        return 0
+
+def is_pinterest_aesthetic_gemini(title: str, price_str: str = "") -> bool:
+    """
+    Uses Gemini AI (via REST API) to judge if a candidate Amazon product fits a cozy aesthetic Pinterest home decor board.
+    Returns True if score >= 7.0 & verdict == 'YES', False otherwise.
+    """
+    from config import GEMINI_API_KEY
+    if not GEMINI_API_KEY:
+        return True  # Fallback if key missing
+    
+    prompt = (
+        f"You are a Pinterest Home Decor Curator. Evaluate if this product title fits a 'Cozy Aesthetic Room Decor & Lighting' Pinterest board:\n"
+        f"Product Title: '{title}'\n"
+        f"Price: {price_str}\n\n"
+        f"Reject non-aesthetic items (e.g. kitchen strainers, heavy tools, car parts, plain office stationery, medical supplies, cheap plastic toys, cables, adapters, phone cases).\n"
+        f"Accept aesthetic room finds (e.g. ambient lamps, ceramic vases, suncatchers, mirrors, diffusers, aesthetic candle warmers, wall art, cozy blankets, ambient neon signs).\n\n"
+        f"Return ONLY a JSON object with format:\n"
+        f'{{"verdict": "YES" or "NO", "score": 1 to 10, "reason": "short explanation"}}'
+    )
+    
+    try:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+        resp = requests.post(url, json={"contents": [{"parts": [{"text": prompt}]}]}, timeout=6)
+        if resp.status_code == 200:
+            res_json = resp.json()
+            text = res_json["candidates"][0]["content"]["parts"][0]["text"]
+            m = re.search(r'\{.*\}', text, re.DOTALL)
+            if m:
+                eval_data = json.loads(m.group(0))
+                verdict = str(eval_data.get("verdict", "")).upper()
+                score = float(eval_data.get("score", 5))
+                reason = eval_data.get("reason", "")
+                print(f"[Gemini AI Judge] '{title[:35]}...' ➔ Score: {score}/10 ({verdict}) | {reason}")
+                return (verdict == "YES" and score >= 7.0)
+    except Exception as e:
+        print(f"[Gemini AI Judge Warning] Could not evaluate '{title[:30]}': {e}")
+    
+    return True
+
+
 def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: float = 10.0, max_price: float = 50.0):
     """
     Intelligent Live Amazon Product Finder with SerpAPI Quota Protection & Multi-Criteria Quality Filters:
@@ -185,6 +241,23 @@ def _scrape_amazon_search(query: str, num_results: int = 10, min_price: float = 
             if rating_val < 4.2:
                 continue
 
+            # Reviews minimum threshold filter (min 100 reviews)
+            reviews_el = card.find("span", {"class": "a-size-base", "dir": "auto"}) or card.find("span", {"class": "s-underline-text"})
+            reviews_str = reviews_el.get_text().strip() if reviews_el else "250"
+            reviews_num = parse_reviews_int(reviews_str)
+            if reviews_num < 100:
+                print(f"[Amazon Finder Scraper Filter] Discarded low review item ({reviews_num} reviews < 100): '{title[:35]}'")
+                continue
+
+            # Gemini AI Pinterest-Worthy Judge
+            if not is_pinterest_aesthetic_gemini(title, price_str=price_str):
+                print(f"[Amazon Finder Scraper Filter] Gemini AI rejected non-aesthetic item: '{title[:35]}'")
+                continue
+
+            # Viral Score Calculation
+            eff_price = price_num if price_num > 0 else 20.0
+            viral_score = round((rating_val * reviews_num) / eff_price, 2)
+
             # Image
             img_el = card.find("img", {"class": "s-image"})
             thumb_url = img_el.get("src", "") if img_el else ""
@@ -197,16 +270,15 @@ def _scrape_amazon_search(query: str, num_results: int = 10, min_price: float = 
                 "category": "Cozy Room Decor & Lighting",
                 "price": price_str or "$24.99",
                 "rating": str(rating_val),
-                "reviews_count": 250,
+                "reviews_count": reviews_num,
+                "viral_score": viral_score,
                 "affiliate_url": affiliate_url,
                 "original_image_url": thumb_url,
-                "features": [f"{rating_val} Amazon Rating", title[:45]]
+                "features": [f"{rating_val} Amazon Rating", f"{reviews_num} Reviews", title[:45]]
             })
 
-            if len(results) >= num_results:
-                break
-
-        return results
+        results.sort(key=lambda x: x.get("viral_score", 0), reverse=True)
+        return results[:num_results]
     except Exception as e:
         print(f"[Amazon Search Scraper Error] {e}")
         return []
@@ -449,8 +521,21 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             print(f"[Amazon Finder Filter] Rating {rating_num} below 4.2 for '{title[:35]}'")
             continue
 
-        # ── Reviews ──
-        reviews = item.get("reviews", 150)
+        # ── Reviews Minimum Threshold Guard (Min 100 Reviews) ──
+        reviews_val = item.get("reviews", 150)
+        reviews_num = parse_reviews_int(reviews_val)
+        if reviews_num < 100:
+            print(f"[Amazon Finder Filter] Discarded low-social-proof product ({reviews_num} reviews < 100): '{title[:35]}'")
+            continue
+
+        # ── Gemini AI Pinterest-Worthy Judge ──
+        if not is_pinterest_aesthetic_gemini(title, price_str=price_str):
+            print(f"[Amazon Finder Filter] Gemini AI rejected non-aesthetic item: '{title[:35]}'")
+            continue
+
+        # ── Viral Score Calculation ──
+        effective_price = price_num if price_num > 0 else 20.0
+        viral_score = round((rating_num * reviews_num) / effective_price, 2)
 
         # ── Thumbnail — Amazon engine provides this directly ──
         image_url = item.get("thumbnail") or item.get("image") or item.get("original_image_url", "")
@@ -472,21 +557,25 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             "category": "Cozy Room Decor & Lighting",
             "price": price_str,
             "rating": str(rating_num),
-            "reviews_count": reviews,
+            "reviews_count": reviews_num,
+            "viral_score": viral_score,
             "affiliate_url": affiliate_url,
             "original_image_url": image_url,
             "thumbnail": image_url,
             "features": [
                 f"{rating_num} Amazon Rating",
-                f"{reviews} Customer Reviews",
+                f"{reviews_num} Customer Reviews",
                 title[:45]
             ]
         })
 
-        if len(parsed_products) >= num_results:
-            break
+    # Sort candidates by Viral Score descending
+    parsed_products.sort(key=lambda x: x.get("viral_score", 0), reverse=True)
+    if parsed_products:
+        print(f"[Amazon Finder] Ranked {len(parsed_products)} candidates by Viral Score (Top: '{parsed_products[0]['title'][:35]}' | Score: {parsed_products[0]['viral_score']})")
 
     return parsed_products
+
 
 
 def fetch_sample_amazon_products(niche: str = NICHE):

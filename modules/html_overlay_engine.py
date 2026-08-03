@@ -360,7 +360,12 @@ def render_html_overlay(
         posY = tag_pos_y if tag_pos_y is not None else 75.0
         pos_style = f"position: absolute; left: {posX}%; top: {posY}%; z-index: 20;"
 
-        calc_height_px = int(tag_width_px * (406.0 / 300.0))
+        try:
+            with Image.open(custom_tag_path) as _timg:
+                real_ratio = _timg.height / _timg.width if _timg.width > 0 else (406.0 / 300.0)
+        except Exception:
+            real_ratio = 406.0 / 300.0
+        calc_height_px = int(tag_width_px * real_ratio)
         
         # Calculate HTML CSS text properties matching admin_console.html 1:1
         f_scale = float(price_font_scale or 0.20)
@@ -444,9 +449,8 @@ def render_html_overlay(
         .feat-card span {{ color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 1.2px; }}
         """
 
+    elif theme == "prismatic_sunlight":
         # Prismatic Sunlight Crystal Glass Theme (For Suncatchers & Window Decor)
-
-
         theme_css = """
         .scrim-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 38%;
@@ -767,8 +771,12 @@ def render_html_overlay(
                 context = browser.new_context(viewport={"width": 1200, "height": 1600}, device_scale_factor=1.5)
                 page = context.new_page()
 
-                page.goto(temp_html.resolve().as_uri())
-                page.wait_for_timeout(1000)
+                page.goto(temp_html.resolve().as_uri(), wait_until="networkidle")
+                try:
+                    page.evaluate("document.fonts.ready")
+                except Exception:
+                    pass
+                page.wait_for_timeout(500)
                 page.screenshot(path=str(output_path), type="jpeg", quality=88)
                 browser.close()
                 rendered = True

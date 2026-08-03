@@ -44,10 +44,13 @@ def publish_pin_to_pinterest(
     # Media URL for Pinterest pin creation
     media_url = image_url
 
+    safe_title = (title or "")[:100]
+    safe_desc = (description or "")[:800]
+
     # H5 FIX: only include board_id in payload when it is a real ID (not a placeholder or empty)
     pin_payload = {
-        "title": title[:100],  # Pinterest max title length
-        "description": description[:800],
+        "title": safe_title,  # Pinterest max title length
+        "description": safe_desc,
         "link": destination_url,
         "media_source": {
             "source_type": "image_url",
@@ -67,9 +70,12 @@ def publish_pin_to_pinterest(
             res = requests.post(PINTEREST_API_ENDPOINT, headers=headers, json=pin_payload, timeout=15)
             print(f"[Pinterest Publisher] API Status Code: {res.status_code}")
             if res.status_code in (200, 201):
-                data = res.json()
-                print(f"[Pinterest Publisher] ✅ Successfully posted Pin ID: {data.get('id', 'N/A')}")
-                return {"status": "PUBLISHED_LIVE", "pin_id": data.get("id"), "response": data}
+                try:
+                    data = res.json()
+                    print(f"[Pinterest Publisher] ✅ Successfully posted Pin ID: {data.get('id', 'N/A')}")
+                    return {"status": "PUBLISHED_LIVE", "pin_id": data.get("id"), "response": data}
+                except Exception:
+                    return {"status": "PUBLISHED_LIVE", "pin_id": "UNKNOWN", "response": res.text}
             else:
                 print(f"[Pinterest Publisher] ⚠️ API returned error ({res.status_code}): {res.text}")
                 return {"status": "API_ERROR", "status_code": res.status_code, "error": res.text, "payload": pin_payload}

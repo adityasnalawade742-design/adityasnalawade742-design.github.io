@@ -152,7 +152,7 @@ def run_async_batch_generation(batch_id, items):
                 'total': total,
                 'current_asin': asin,
                 'step': f"[{idx}/{total}] Completed ASIN {asin}",
-                'completed_items': completed
+                'completed_items': list(completed)
             })
         except Exception as e:
             print(f"[Batch Generator Error] Failed ASIN {asin}: {e}")
@@ -1327,12 +1327,20 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     # 4. Render Luxury Price Badge & Typography Template
                     raw_img_path = str(WORKSPACE_DIR / f"raw_images/raw_{asin}.jpg")
                     if chosen_photo and chosen_photo.startswith('http'):
+                        tmp_download_path = str(WORKSPACE_DIR / f"raw_images/tmp_raw_{asin}.jpg")
                         try:
                             req = urllib.request.Request(chosen_photo, headers={'User-Agent': 'Mozilla/5.0'})
-                            with urllib.request.urlopen(req, timeout=15) as resp, open(raw_img_path, 'wb') as f:  # H6 FIX: timeout prevents infinite hang
+                            with urllib.request.urlopen(req, timeout=15) as resp, open(tmp_download_path, 'wb') as f:
                                 f.write(resp.read())
+                            if Path(tmp_download_path).exists() and Path(tmp_download_path).stat().st_size > 0:
+                                os.replace(tmp_download_path, raw_img_path)
+                            else:
+                                if Path(tmp_download_path).exists():
+                                    Path(tmp_download_path).unlink(missing_ok=True)
                         except Exception as e_dl:
                             print(f"[n8n Dispatcher] Warning downloading photo: {e_dl}")
+                            if Path(tmp_download_path).exists():
+                                Path(tmp_download_path).unlink(missing_ok=True)
 
                     if not Path(raw_img_path).exists():
                         from modules.amazon_extractor import get_best_image_for_asin

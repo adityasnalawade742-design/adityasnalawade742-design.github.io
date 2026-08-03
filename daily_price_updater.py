@@ -129,7 +129,8 @@ def load_registry() -> dict:
             with open(REGISTRY_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            print(f"[Price Updater] Error loading registry JSON: {e}")
+            print(f"[Price Updater Critical] Error loading registry JSON: {e}")
+            return {}
     save_registry(DEFAULT_REGISTRY)
     return DEFAULT_REGISTRY
 
@@ -237,6 +238,7 @@ def regenerate_clean_graphic_with_new_price(asin: str, item_data: dict, new_pric
     
     # Copy to output/images directory
     out_img = BASE_DIR / "output" / "images" / item_data["hook_image"]
+    out_img.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(output_path, out_img)
 
 def run_daily_price_update_check(auto_git_push: bool = True):
@@ -301,8 +303,11 @@ def run_daily_price_update_check(auto_git_push: bool = True):
             import subprocess
             subprocess.run(["git", "add", "-A"], cwd=str(BASE_DIR), check=False)
             subprocess.run(["git", "commit", "-m", f"Automated Daily Price Sync: Updated {len(updated_asins)} product prices"], cwd=str(BASE_DIR), check=False)
-            subprocess.run(["git", "push", "origin", "main"], cwd=str(BASE_DIR), check=False)
-            print("✅ Pushed live to GitHub Pages!")
+            res_push = subprocess.run(["git", "push", "origin", "main"], cwd=str(BASE_DIR), check=False)
+            if res_push.returncode == 0:
+                print("✅ Pushed live to GitHub Pages!")
+            else:
+                print("⚠️ Git push encountered an issue. Manual push may be required.")
     else:
         print("\n✨ All product prices are 100% verified & accurate. No updates needed today!")
 

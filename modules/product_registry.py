@@ -22,28 +22,27 @@ _sync_lock = threading.Lock()
 
 def init_registry_db():
     """Initializes SQLite tables for published and rejected products."""
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS published_products (
-            asin TEXT PRIMARY KEY,
-            title TEXT,
-            price TEXT,
-            pinterest_pin_id TEXT,
-            image_url TEXT,
-            published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS rejected_products (
-            asin TEXT PRIMARY KEY,
-            title TEXT,
-            reason TEXT,
-            rejected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    conn.commit()
-    conn.close()
+    with sqlite3.connect(DB_PATH) as conn:
+        c = conn.cursor()
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS published_products (
+                asin TEXT PRIMARY KEY,
+                title TEXT,
+                price TEXT,
+                pinterest_pin_id TEXT,
+                image_url TEXT,
+                published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS rejected_products (
+                asin TEXT PRIMARY KEY,
+                title TEXT,
+                reason TEXT,
+                rejected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.commit()
 
 
 # Initialize on import
@@ -57,26 +56,18 @@ def get_blocked_asins() -> set:
     """
     blocked = set()
     try:
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("SELECT asin FROM published_products")
-        for row in c.fetchall():
-            if row[0]:
-                blocked.add(row[0].strip().upper())
-        c.execute("SELECT asin FROM rejected_products")
-        for row in c.fetchall():
-            if row[0]:
-                blocked.add(row[0].strip().upper())
-        conn.close()
+        with sqlite3.connect(DB_PATH) as conn:
+            c = conn.cursor()
+            c.execute("SELECT asin FROM published_products")
+            for row in c.fetchall():
+                if row[0]:
+                    blocked.add(row[0].strip().upper())
+            c.execute("SELECT asin FROM rejected_products")
+            for row in c.fetchall():
+                if row[0]:
+                    blocked.add(row[0].strip().upper())
     except Exception as e:
         print(f"[Registry DB Error] Failed to read blocked ASINs: {e}")
-
-    # Also include existing published ASINs from product_price_registry.json if present
-    try:
-        from modules.automated_product_selector import is_asin_published_on_homepage
-        # Handled at discover endpoint level
-    except Exception:
-        pass
 
     return blocked
 
@@ -91,14 +82,13 @@ def mark_as_rejected(asin: str, title: str = "", reason: str = "user_skip"):
         return
 
     try:
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("""
-            INSERT OR REPLACE INTO rejected_products (asin, title, reason, rejected_at)
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-        """, (asin, title or f"Product {asin}", reason))
-        conn.commit()
-        conn.close()
+        with sqlite3.connect(DB_PATH) as conn:
+            c = conn.cursor()
+            c.execute("""
+                INSERT OR REPLACE INTO rejected_products (asin, title, reason, rejected_at)
+                VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+            """, (asin, title or f"Product {asin}", reason))
+            conn.commit()
         print(f"[Registry] Marked ASIN {asin} as REJECTED ({reason})")
     except Exception as e:
         print(f"[Registry Error] Failed to mark {asin} as rejected: {e}")
@@ -120,14 +110,13 @@ def mark_as_published(asin: str, title: str = "", price: str = "", pinterest_pin
         return
 
     try:
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("""
-            INSERT OR REPLACE INTO published_products (asin, title, price, pinterest_pin_id, image_url, published_at)
-            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        """, (asin, title or f"Product {asin}", price or "$19.99", pinterest_pin_id or "", image_url or ""))
-        conn.commit()
-        conn.close()
+        with sqlite3.connect(DB_PATH) as conn:
+            c = conn.cursor()
+            c.execute("""
+                INSERT OR REPLACE INTO published_products (asin, title, price, pinterest_pin_id, image_url, published_at)
+                VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """, (asin, title or f"Product {asin}", price or "$19.99", pinterest_pin_id or "", image_url or ""))
+            conn.commit()
         print(f"[Registry] Marked ASIN {asin} as PUBLISHED (Pin ID: {pinterest_pin_id or 'Pending'})")
     except Exception as e:
         print(f"[Registry Error] Failed to mark {asin} as published: {e}")
@@ -196,16 +185,14 @@ def sync_to_excel():
             return
 
         try:
-            conn = sqlite3.connect(DB_PATH)
-            c = conn.cursor()
+            with sqlite3.connect(DB_PATH) as conn:
+                c = conn.cursor()
 
-            c.execute("SELECT asin, title, price, pinterest_pin_id, image_url, published_at FROM published_products ORDER BY published_at DESC")
-            pub_rows = c.fetchall()
+                c.execute("SELECT asin, title, price, pinterest_pin_id, image_url, published_at FROM published_products ORDER BY published_at DESC")
+                pub_rows = c.fetchall()
 
-            c.execute("SELECT asin, title, reason, rejected_at FROM rejected_products ORDER BY rejected_at DESC")
-            rej_rows = c.fetchall()
-
-            conn.close()
+                c.execute("SELECT asin, title, reason, rejected_at FROM rejected_products ORDER BY rejected_at DESC")
+                rej_rows = c.fetchall()
         except Exception as e:
             print(f"[Registry Error] Could not read SQLite DB for Excel sync: {e}")
             return

@@ -155,8 +155,8 @@ def generate_cozy_image(
     STRICT: Zero silent fallbacks. Must render via Replicate black-forest-labs/flux-dev.
     """
     token = os.getenv("REPLICATE_API_TOKEN", "")
-    if not token and hasattr(config, "REPLICATE_API_TOKEN"):
-        token = config.REPLICATE_API_TOKEN
+    if not token and REPLICATE_API_TOKEN:
+        token = REPLICATE_API_TOKEN
 
     if not token:
         raise ValueError("REPLICATE_API_TOKEN is missing! Set REPLICATE_API_TOKEN in your .env file.")

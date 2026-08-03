@@ -80,13 +80,13 @@ def get_processed_asins() -> list:
             with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 if isinstance(data, list):
-                    processed_set.update(data)
+                    processed_set.update([str(a).upper().strip() for a in data if a])
         except Exception:
             pass
             
     # Combine with currently active homepage ASINs
     homepage_asins = get_active_homepage_asins()
-    processed_set.update(homepage_asins)
+    processed_set.update([str(a).upper().strip() for a in homepage_asins if a])
     
     return sorted(list(processed_set))
 
@@ -98,14 +98,18 @@ def is_asin_published_on_homepage(asin: str) -> bool:
     return asin.upper().strip() in active
 
 def save_processed_asin(asin: str):
-    """Saves a newly processed ASIN to processed_asins.json."""
+    """Saves a newly processed ASIN to processed_asins.json safely using atomic replacement."""
     if not asin:
         return
     asin_clean = asin.upper().strip()
     processed = set(get_processed_asins())
     processed.add(asin_clean)
-    with open(PROCESSED_FILE, "w", encoding="utf-8") as f:
+    
+    tmp_file = PROCESSED_FILE.parent / f"tmp_{PROCESSED_FILE.name}"
+    with open(tmp_file, "w", encoding="utf-8") as f:
         json.dump(sorted(list(processed)), f, indent=2)
+    import os
+    os.replace(tmp_file, PROCESSED_FILE)
     print(f"[Automated Selector] Saved ASIN {asin_clean} to processed history.")
 
 def remove_processed_asin(asin: str):
@@ -117,11 +121,16 @@ def remove_processed_asin(asin: str):
         try:
             with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            if isinstance(data, list) and asin_clean in data:
-                data.remove(asin_clean)
-                with open(PROCESSED_FILE, "w", encoding="utf-8") as f:
-                    json.dump(sorted(data), f, indent=2)
-                print(f"[Automated Selector] Removed ASIN {asin_clean} from processed history.")
+            if isinstance(data, list):
+                data = [str(a).upper().strip() for a in data]
+                if asin_clean in data:
+                    data.remove(asin_clean)
+                    tmp_file = PROCESSED_FILE.parent / f"tmp_{PROCESSED_FILE.name}"
+                    with open(tmp_file, "w", encoding="utf-8") as f:
+                        json.dump(sorted(data), f, indent=2)
+                    import os
+                    os.replace(tmp_file, PROCESSED_FILE)
+                    print(f"[Automated Selector] Removed ASIN {asin_clean} from processed history.")
         except Exception as e:
             print(f"[Automated Selector Error] Failed removing ASIN {asin_clean}: {e}")
 

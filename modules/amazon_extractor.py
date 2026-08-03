@@ -20,12 +20,10 @@ def extract_asin_from_url(url: str) -> str:
 
 def enhance_to_max_resolution(image_url: str) -> str:
     """Converts low-res Amazon thumbnail URLs into maximum high-res SL1500 master images."""
-    if not image_url:
-        return ""
+    if not image_url or "SL1500" in image_url:
+        return image_url or ""
     # Strip Amazon dynamic resizing tokens (e.g. ._AC_SX342_SY445_QL70_FMwebp_ -> ._AC_SL1500_)
-    high_res = re.sub(r'\._AC_[A-Za-z0-9_,-]+\.', '._AC_SL1500_.', image_url)
-    high_res = re.sub(r'\._[A-Za-z0-9_,-]+\.', '._AC_SL1500_.', high_res)
-    return high_res
+    return re.sub(r'\._(?:AC_)?[A-Za-z0-9_,-]+\.', '._AC_SL1500_.', image_url)
 
 def is_lifestyle_photo(image_url: str) -> bool:
     """
@@ -282,7 +280,7 @@ def get_best_image_for_asin(asin: str, title: str = "", photos: list = None, sav
     
     clean_asin = (asin or "").strip().upper()
     if not clean_asin:
-        return None
+        return {"asin": "", "image_url": "", "local_path": "", "quality_score": 0, "prompt_strength": 0.48, "is_white_bg": False, "source": "none"}
 
     repo_dir = Path(__file__).resolve().parent.parent
     raw_dir = repo_dir / "raw_images"
@@ -450,7 +448,8 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 photos = list(dict.fromkeys(photos))  # Deduplicate while preserving order
 
                 sorted_photos = photos
-                has_lifestyle = any(is_lifestyle_photo(img) for img in sorted_photos)
+                lifestyle_flags = [is_lifestyle_photo(img) for img in sorted_photos]
+                has_lifestyle = any(lifestyle_flags)
                 
                 affiliate_url = f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
                 
@@ -460,7 +459,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 else:
                     features_str = str(features_list)[:200]
 
-                lifestyle_cnt = sum(1 for img in sorted_photos if is_lifestyle_photo(img))
+                lifestyle_cnt = sum(1 for f in lifestyle_flags if f)
                 print(f"[Amazon Extractor] Extracted {len(sorted_photos)} photos ({lifestyle_cnt} lifestyle backgrounds) for: {title[:40]}")
                 return {
                     "id": asin,
