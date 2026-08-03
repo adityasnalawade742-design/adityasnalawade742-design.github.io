@@ -78,6 +78,13 @@ items_to_rebuild = [
         "raw": "raw_images/raw_B0DXKGL1T2.jpg",
         "hook": "focus_product_B0DXKGL1T2_hook.jpg",
         "badge": "✨ VIRAL ROOM FIND"
+    },
+    {
+        "asin": "B0FGJ1S73D",
+        "title": "Ceramic Mushroom Bedside Lamp",
+        "raw": "raw_images/raw_B0FGJ1S73D.jpg",
+        "hook": "focus_product_B0FGJ1S73D_hook.jpg",
+        "badge": "🍄 MUSHROOM LAMP FIND"
     }
 ]
 
