@@ -273,6 +273,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             # BUG FIX: logs was only in do_POST but should also support GET
             self.handle_api_logs()
             return
+        elif parsed.path in ('/api/create_bridge_page', '/api/create-bridge-page'):
+            self.handle_api_create_bridge_page()
+            return
         elif parsed.path == '/api/auth/pinterest':
             self.handle_api_auth_pinterest()
             return
@@ -1281,6 +1284,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
 
             asin = data.get('asin', '').strip().upper()
+            if not asin:
+                parsed_url = urllib.parse.urlparse(self.path)
+                query_params = urllib.parse.parse_qs(parsed_url.query)
+                asin = query_params.get('asin', [''])[0].strip().upper()
+                if not data:
+                    data = {k: v[0] for k, v in query_params.items() if v}
+
             title = data.get('title', f'Product {asin}')
             price = data.get('price', '$19.99')
             pin_title = data.get('pin_title', title)
