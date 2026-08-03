@@ -12,6 +12,7 @@ from pathlib import Path
 if hasattr(sys.stdout, "buffer"):
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
+from config import AMAZON_ASSOCIATE_TAG
 from modules.amazon_extractor import get_product_details_and_photos
 from modules.automated_product_selector import get_next_automated_product, save_processed_asin, is_asin_published_on_homepage
 from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
