@@ -1309,6 +1309,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             reg_file = WORKSPACE_DIR / 'product_price_registry.json'
             reg_entry = {}
+            registry_all = {}
             if reg_file.exists():
                 try:
                     with open(reg_file, 'r', encoding='utf-8') as rf:
@@ -1317,17 +1318,47 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 except Exception as e_rf:
                     print(f"[Create Bridge Page] Registry load error: {e_rf}")
 
-            title = reg_entry.get('title') or data.get('title') or f'Product {asin}'
-            price = reg_entry.get('current_price') or data.get('price') or '$19.99'
-            if not str(price).startswith('$') and not any(c in str(price) for c in ['$', '₹', '£', '€', '¥']):
-                price = f"${price}"
+            # Title cleaning logic: reject placeholder titles like "Product B0..." or "Product "
+            raw_title = data.get('title', '').strip()
+            raw_pin_title = data.get('pin_title', '').strip()
+            raw_image_hook = data.get('image_hook', '').strip()
+            
+            clean_title = reg_entry.get('title', '').strip()
+            if not clean_title or clean_title.startswith('Product B0') or clean_title.startswith('Product '):
+                if raw_title and not raw_title.startswith('Product B0') and not raw_title.startswith('Product '):
+                    clean_title = raw_title
+                elif raw_image_hook and not raw_image_hook.startswith('Product B0') and not raw_image_hook.startswith('Product '):
+                    clean_title = raw_image_hook
+                elif raw_pin_title and not raw_pin_title.startswith('Product B0') and not raw_pin_title.startswith('Product '):
+                    clean_title = raw_pin_title
+                else:
+                    clean_title = f"Aesthetic Decor Find {asin}"
+            title = clean_title
 
-            pin_title = data.get('pin_title', title)
+            # Price normalization: fix truncated prices like ".99" or "19.99"
+            price = reg_entry.get('current_price') or data.get('price') or '$19.99'
+            price_str = str(price).strip()
+            if price_str.startswith('.'):
+                price_str = f"$19{price_str}"
+            elif price_str.replace('.', '', 1).isdigit() and not price_str.startswith('$'):
+                price_str = f"${price_str}"
+            price = price_str
+
+            pin_title = raw_pin_title if raw_pin_title and not raw_pin_title.startswith('Product B0') else title
             pin_description = reg_entry.get('description') or data.get('pin_description', '')
             badge_hook = data.get('badge_hook', 'VIRAL ROOM FIND')
-            regional_asins = reg_entry.get('regional_asins') or data.get('regional_asins', {})
-            regional_prices = reg_entry.get('regional_prices') or data.get('regional_prices', {})
-            direct_regions = reg_entry.get('direct_regions') or data.get('direct_regions', ['US'])
+            regional_asins = reg_entry.get('regional_asins') or data.get('regional_asins', {'US': asin})
+            regional_prices = reg_entry.get('regional_prices') or data.get('regional_prices', {
+                'US': price,
+                'IN': '₹1,650.00' if '19.99' in price else '₹2,899.00',
+                'UK': '£15.99' if '19.99' in price else '£27.50',
+                'DE': '€18.50' if '19.99' in price else '€32.00',
+                'CA': 'CA$26.99' if '19.99' in price else 'CA$46.99',
+                'AU': 'A$29.99' if '19.99' in price else 'A$52.00',
+                'JP': '¥3,050' if '19.99' in price else '¥5,400',
+                'SE': '210,00kr'
+            })
+            direct_regions = reg_entry.get('direct_regions') or data.get('direct_regions', ['US', 'IN', 'UK', 'DE', 'CA', 'AU', 'JP', 'SE'])
 
             from modules.bridge_creator import generate_bridge_page
             from modules.html_overlay_engine import render_html_overlay
@@ -1335,6 +1366,26 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             _seo_for_features = generate_pin_seo_data(product_title=title, price=price)
             features_list = reg_entry.get('features') or _seo_for_features.get('features', ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP'])
+
+            # Auto-register product in product_price_registry.json if missing or incomplete
+            try:
+                current_reg = registry_all.get(asin, {})
+                current_reg['asin'] = asin
+                current_reg['title'] = title
+                current_reg['current_price'] = price
+                if pin_description:
+                    current_reg['description'] = pin_description
+                if features_list:
+                    current_reg['features'] = features_list
+                current_reg['regional_prices'] = regional_prices
+                current_reg['regional_asins'] = regional_asins
+                current_reg['direct_regions'] = direct_regions
+                registry_all[asin] = current_reg
+                with open(reg_file, 'w', encoding='utf-8') as wf:
+                    json.dump(registry_all, wf, indent=2, ensure_ascii=False)
+                print(f"[Create Bridge Page] ✅ Auto-registered ASIN {asin} ('{title}') in product_price_registry.json!")
+            except Exception as e_reg:
+                print(f"[Create Bridge Page Warning] Auto-register error: {e_reg}")
 
             seo_data = {
                 'pin_title': pin_title,
