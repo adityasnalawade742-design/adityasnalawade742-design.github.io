@@ -902,11 +902,18 @@
             document.getElementById('n8nExtractLoader').style.display = 'block';
             document.getElementById('n8nPhotoReviewList').innerHTML = '';
 
-            const asins = [...n8nSelectedAsins];
+            const items = [...n8nSelectedAsins].map(asin => {
+                const disc = n8nDiscoveredItems.find(i => i.asin === asin) || {};
+                return {
+                    asin: asin,
+                    title: disc.title || '',
+                    price: disc.price || '$19.99'
+                };
+            });
             fetch('/api/batch_extract', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ asins })
+                body: JSON.stringify({ items, asins: [...n8nSelectedAsins] })
             })
             .then(r => r.json())
             .then(data => {

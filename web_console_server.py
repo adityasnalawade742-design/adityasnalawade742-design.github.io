@@ -805,6 +805,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         data = json.loads(body.decode('utf-8'))
         asins = data.get('asins', [])
 
+        items_input = data.get('items', [])
+        input_titles = {i['asin'].strip().upper(): i['title'] for i in items_input if isinstance(i, dict) and i.get('asin') and i.get('title')}
+        input_prices = {i['asin'].strip().upper(): i['price'] for i in items_input if isinstance(i, dict) and i.get('asin') and i.get('price')}
+
         # BUG-1 FIX: load registry to get real title/price instead of generic placeholders
         reg_path = WORKSPACE_DIR / "product_price_registry.json"
         reg_data = {}
@@ -830,9 +834,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
         extracted_batch = []
         for asin in asins:
+            asin_clean = asin.strip().upper()
             try:
                 # fetch_all_product_images tries: SerpAPI thumbnails[] -> Amazon page scrape -> SQLite cache
-                photos = fetch_all_product_images(asin)
+                photos = fetch_all_product_images(asin_clean)
 
                 photo_data = []
                 for p in photos:
@@ -856,11 +861,14 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 if not winner_photo and photos:
                     winner_photo = photos[0]
 
-                meta = reg_data.get(asin, {})  # BUG-1 FIX: merge registry data
+                meta = reg_data.get(asin_clean, {})
+                real_title = input_titles.get(asin_clean) or meta.get('title') or f'Product {asin_clean}'
+                real_price = input_prices.get(asin_clean) or meta.get('current_price') or meta.get('regional_prices', {}).get('US') or '$19.99'
+
                 extracted_batch.append({
-                    'asin': asin,
-                    'title': meta.get('title') or f'Product {asin}',
-                    'price': (meta.get('current_price') or meta.get('regional_prices', {}).get('US') or '$19.99'),
+                    'asin': asin_clean,
+                    'title': real_title,
+                    'price': real_price,
                     'rating': '4.5',
                     'winner_photo': winner_photo or (photos[0] if photos else ''),
                     'should_skip': skip,
@@ -868,11 +876,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 })
             except Exception as e:
                 print(f"[Batch Extract Error] Failed {asin}: {e}")
-                fallback_url = _get_best_fallback_image(asin) or ''
+                fallback_url = _get_best_fallback_image(asin_clean) or ''
+                real_title = input_titles.get(asin_clean) or f'Product {asin_clean}'
+                real_price = input_prices.get(asin_clean) or '$19.99'
                 extracted_batch.append({
-                    'asin': asin,
-                    'title': f'Product {asin}',
-                    'price': '$19.99',
+                    'asin': asin_clean,
+                    'title': real_title,
+                    'price': real_price,
                     'rating': '4.5',
                     'winner_photo': fallback_url,
                     'should_skip': False,
