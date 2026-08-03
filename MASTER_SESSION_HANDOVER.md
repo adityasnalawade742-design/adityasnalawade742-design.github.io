@@ -1,9 +1,9 @@
 # 🚀 Master Session Handover & Complete System State
-> **Last Updated**: August 3, 2026 — 01:10 IST  
+> **Last Updated**: August 3, 2026 — 13:35 IST  
 > **Repository Root**: `G:\CLI\pinterest-auto-affiliate`  
 > **GitHub Pages URL**: https://adityasnalawade742-design.github.io  
-> **System Health Status**: 100% VERIFIED & STABLE — All 40+ Bugs Fixed Across 2 Comprehensive Audit Passes  
-> **Git Branch & Commit**: `main` (`7579949`)
+> **System Health Status**: 100% VERIFIED & STABLE — All 40+ Bugs Fixed + Broken Test Card Purged + Mushroom Lamp Custom Raw Image Integrated  
+> **Git Branch & Commit**: `main` (`0a7587e`)
 
 ---
 
@@ -40,7 +40,20 @@ This codebase powers **"Cozy Room Finds"**, a fully automated **Pinterest → Am
 
 ---
 
-## 2. Complete Summary of All 40+ Bugs Fixed Across 2 Audit Passes
+## 2. Recent Session Fixes & New Features (August 3, 2026)
+
+### 🧹 Purged Broken Test Product (`TESTASIN12`)
+- **Problem**: `index.html` contained a leftover dummy test card `TESTASIN12` ("Aesthetic Cozy Mushroom Lamp Test") pointing to missing image files and yielding a GitHub Pages 404 error on click.
+- **Fix**: Executed `delete_product.py TESTASIN12`, decomposing the wrapper DOM element from `index.html`, unblocking history, and syncing clean code live to GitHub.
+
+### 🍄 Integrated Custom Raw Source Image for Mushroom Lamp (`B0D1FRDFFX`)
+- **Action**: Saved `raw_B0D1FRDFFX_console.jpg` into `raw_images/raw_B0D1FRDFFX.jpg`.
+- **Re-rendered Overlays**: Executed `rebuild_all_price_badges_usd.py` with Playwright Smart Luminance engine (Opacity: 0.55 top, 0.65 bottom) generating high-resolution 1200x1600 pin graphic (`focus_product_B0D1FRDFFX_hook.jpg`).
+- **Landing Page Rebuild**: Rebuilt `bridge_B0D1FRDFFX.html` and synced live to GitHub Pages.
+
+---
+
+## 3. Complete Summary of All 40+ Bugs Fixed Across 2 Audit Passes
 
 ### 🔴 Pass 1 Fixes (28 Critical & High Issues)
 - **C1**: Replaced hardcoded `G:/CLI/...` paths with dynamic `Path(__file__).resolve().parent`.
@@ -77,7 +90,7 @@ This codebase powers **"Cozy Room Finds"**, a fully automated **Pinterest → Am
 
 ---
 
-## 3. Complete Repository Architecture Map
+## 4. Complete Repository Architecture Map
 
 ```
 pinterest-auto-affiliate/
@@ -139,7 +152,7 @@ pinterest-auto-affiliate/
 
 ---
 
-## 4. Active Portfolio — 9 Live Products
+## 5. Active Portfolio — 9 Live Products
 
 | # | ASIN | Product Title | USD Price | Live Landing Page |
 |:-:|:---|:---|:---|:---|
@@ -155,7 +168,7 @@ pinterest-auto-affiliate/
 
 ---
 
-## 5. Amazon Associate Regional Store IDs
+## 6. Amazon Associate Regional Store IDs
 
 | Region | Store ID |
 |:---|:---|
@@ -171,9 +184,9 @@ pinterest-auto-affiliate/
 
 ---
 
-## 6. How to Resume Work in Any AGY Session or Account
+## 7. How to Resume Work in Any AGY Session or Account
 
-When starting a new session or switching AGY accounts:
+When starting a new session or changing AGY accounts:
 
 1. **Run Health Check**:
    ```bash
@@ -189,4 +202,4 @@ When starting a new session or switching AGY accounts:
    ```
 4. **Access Web Console**: Open `http://localhost:5000` in your browser.
 
-All fixes are committed, pushed to `main` (`7579949`), and live on GitHub Pages!
+All fixes are committed, pushed to `main`, and live on GitHub Pages!
