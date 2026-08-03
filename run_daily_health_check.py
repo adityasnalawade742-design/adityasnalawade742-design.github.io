@@ -77,6 +77,7 @@ for card in cards:
             "B0FXLYXM32":  "76.49",
             "B0D1FRDFFX":  "35.98",
             "B0DXKGL1T2":  "38.57",
+            "B0FGJ1S73D":  "32.99",
         }
         base_usd = fallback_prices.get(asin, "19.99")
 

@@ -69,8 +69,8 @@ def run_pipeline():
         print("\n🎯 [Step 5] Overlaying Hook Text on Image...")
         final_image_path = add_hook_text_overlay(
             image_path=raw_image_path,
-            hook_text=seo_data['image_hook'],
-            subtitle="Elegance That Shines",
+            hook_text=product['title'],
+            subtitle=seo_data.get('subtitle_hook', ''),
             price_str=product.get('price', '$24.99'),
             style="glowing_neon"
         )

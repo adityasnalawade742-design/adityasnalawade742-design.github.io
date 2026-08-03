@@ -294,13 +294,39 @@
       "WARM EYE-CARING AMBIENT GLOW"
     ],
     "regional_prices": {
-      "US": "$32.99"
+      "US": "$32.99",
+      "IN": "₹2,750.00",
+      "UK": "£25.99",
+      "DE": "€30.50",
+      "CA": "CA$44.90",
+      "AU": "A$49.99",
+      "JP": "¥5,100",
+      "SE": "345,00kr",
+      "FR": "Not Available",
+      "ES": "Not Available",
+      "IT": "Not Available",
+      "NL": "Not Available",
+      "PL": "Not Available",
+      "TR": "Not Available",
+      "BE": "Not Available",
+      "MX": "Not Available",
+      "BR": "Not Available",
+      "SG": "Not Available",
+      "AE": "AED121.15",
+      "SA": "Not Available",
+      "EG": "Not Available"
     },
     "regional_asins": {
       "US": "B0FGJ1S73D"
     },
     "direct_regions": [
-      "US"
+      "US",
+      "IN",
+      "UK",
+      "DE",
+      "SE",
+      "CA",
+      "JP"
     ]
   }
 }

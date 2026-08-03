@@ -2,7 +2,7 @@ import re
 import json
 from pathlib import Path
 
-repo = Path("G:/CLI/pinterest-auto-affiliate")
+repo = Path(__file__).resolve().parent
 all_pass = True
 
 def chk(name, condition, note=""):

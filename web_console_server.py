@@ -1289,27 +1289,52 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             print(f'[Create Bridge Page] 🔨 Building bridge_{asin}.html + hook image...')
 
+            reg_file = WORKSPACE_DIR / 'product_price_registry.json'
+            reg_entry = {}
+            if reg_file.exists():
+                try:
+                    with open(reg_file, 'r', encoding='utf-8') as rf:
+                        registry_all = json.load(rf)
+                        reg_entry = registry_all.get(asin, {})
+                except Exception as e_rf:
+                    print(f"[Create Bridge Page] Registry load error: {e_rf}")
+
+            title = reg_entry.get('title') or data.get('title') or f'Product {asin}'
+            price = reg_entry.get('current_price') or data.get('price') or '$19.99'
+            if not str(price).startswith('$') and not any(c in str(price) for c in ['$', '₹', '£', '€', '¥']):
+                price = f"${price}"
+
+            pin_title = data.get('pin_title', title)
+            pin_description = reg_entry.get('description') or data.get('pin_description', '')
+            badge_hook = data.get('badge_hook', 'VIRAL ROOM FIND')
+            regional_asins = reg_entry.get('regional_asins') or data.get('regional_asins', {})
+            regional_prices = reg_entry.get('regional_prices') or data.get('regional_prices', {})
+            direct_regions = reg_entry.get('direct_regions') or data.get('direct_regions', ['US'])
+
             from modules.bridge_creator import generate_bridge_page
             from modules.html_overlay_engine import render_html_overlay
             from modules.seo_copywriter import generate_pin_seo_data
 
             _seo_for_features = generate_pin_seo_data(product_title=title, price=price)
+            features_list = reg_entry.get('features') or _seo_for_features.get('features', ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP'])
 
             seo_data = {
                 'pin_title': pin_title,
                 'description': pin_description,
-                'image_hook': image_hook,
+                'image_hook': title,
                 'subtitle_hook': '',
                 'badge_hook': badge_hook,
-                'features': _seo_for_features.get('features', ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP']),
+                'features': features_list,
             }
 
             prod = {
                 'title': title,
                 'price': price,
-                'rating': '4.8',
-                'features': seo_data['features'],
-                'category': 'decor',
+                'current_price': price,
+                'rating': reg_entry.get('rating', '4.8'),
+                'description': pin_description,
+                'features': features_list,
+                'category': reg_entry.get('category', 'decor'),
                 'regional_asins': regional_asins,
                 'regional_prices': regional_prices,
                 'direct_regions': direct_regions,
@@ -1318,16 +1343,16 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             # 1. Generate bridge page
             generate_bridge_page(prod, seo_data, asin)
 
-            # 2. Render hook image (price badge overlay)
+            # 2. Render hook image (price badge overlay - ALWAYS USD)
             from modules.amazon_extractor import get_best_image_for_asin
-            img_res = get_best_image_for_asin(asin, title=data.get('title', title), save_to_disk=True)
+            img_res = get_best_image_for_asin(asin, title=title, save_to_disk=True)
             raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
             source_img = str(raw_img_path) if raw_img_path.exists() else (img_res.get("local_path") or str(raw_img_path))
             hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
 
             render_html_overlay(
                 image_path=source_img,
-                headline=image_hook,
+                headline=title,
                 subtitle='',
                 badge_text=badge_hook,
                 price_str=price,

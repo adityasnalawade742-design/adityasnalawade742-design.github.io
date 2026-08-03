@@ -108,6 +108,16 @@ master_catalog = {
         "category": "lighting",
         "description": "Hand-crafted Lily of the Valley flower glass shade table lamp with warm ambient glow for nightstands, bedrooms, and aesthetic room decor.",
         "direct_regions": ["US", "UK", "DE", "SE", "CA", "JP"],
+    },
+    "B0FGJ1S73D": {
+        "search_keywords": "Ceramic Mushroom Bedside Table Lamp",
+        "title": "Ceramic Mushroom Bedside Lamp with Glass Shade",
+        "price": "$32.99",
+        "rating": "4.8",
+        "features": ["3-WAY TOUCH LIGHTING (2700K-5000K)", "HAND-BLOWN GLASS SHADE", "PREMIUM HEAVY-DUTY CERAMIC BASE", "WARM EYE-CARING AMBIENT GLOW"],
+        "category": "lighting",
+        "description": "Transform your nightstand into a calming sanctuary with this Ceramic Mushroom Bedside Lamp. Features 3-way lighting and a warm ambient glow tailored for bedtime reading.",
+        "direct_regions": ["US", "IN", "UK", "DE", "SE", "CA", "JP"]
     }
 }
 # Load and merge empirical scraped prices and empirical direct matrix

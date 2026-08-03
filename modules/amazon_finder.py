@@ -4,6 +4,7 @@ import re
 import json
 import requests
 import urllib.parse
+from bs4 import BeautifulSoup
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
