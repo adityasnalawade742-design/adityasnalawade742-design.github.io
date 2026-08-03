@@ -808,6 +808,7 @@
                         n8nSelectedAsins.delete(asin);
                         updateSelectedCounter();
                     }
+                    n8nDiscoveredItems = n8nDiscoveredItems.filter(i => i.asin !== asin);
                 }
             })
             .catch(err => {
@@ -975,7 +976,10 @@
 
         function selectOverridePhoto(asin, url) {
             n8nChosenPhotos[asin] = url;
-            renderImageReviewRows(n8nExtractedItems);
+            const prevImg = document.getElementById(`prev-${asin}`);
+            if (prevImg) prevImg.src = url;
+            const item = n8nExtractedItems.find(i => i.asin === asin);
+            if (item) item.winner_photo = url;
         }
 
         function openZoomModal(asin, url, title, isClean, isChosen) {
@@ -1006,6 +1010,7 @@
             setTimeout(() => modal.classList.add('active'), 10);
         }
 
+        let _zoomModalTimeout = null;
         function closeZoomModal(event) {
             if (event && event.target && event.target.id !== 'imageZoomModal' && !event.target.classList.contains('zoom-close-btn')) {
                 return;
@@ -1013,7 +1018,8 @@
             const modal = document.getElementById('imageZoomModal');
             if (!modal) return;
             modal.classList.remove('active');
-            setTimeout(() => {
+            if (_zoomModalTimeout) clearTimeout(_zoomModalTimeout);
+            _zoomModalTimeout = setTimeout(() => {
                 modal.style.display = 'none';
                 const modalImg = document.getElementById('zoomModalImg');
                 if (modalImg) modalImg.src = '';
@@ -1081,46 +1087,40 @@
 
             const n8nWebhookUrl = getN8nWebhookUrl();
             try {
-                const n8nRes = await fetch(n8nWebhookUrl, {
+                // BUG-C3 & C4 FIX: Proxy to n8n server-side to bypass browser CORS restrictions and build bridge pages
+                const proxyRes = await fetch('/api/proxy_n8n_webhook', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ items: preparedItems })
+                    body: JSON.stringify({ n8n_url: n8nWebhookUrl, items: preparedItems })
                 });
-                // C8 FIX: fetch() doesn't throw on HTTP 4xx/5xx — must check .ok manually
-                if (!n8nRes.ok) {
-                    const errText = await n8nRes.text();
-                    throw new Error(`n8n returned HTTP ${n8nRes.status}: ${errText.slice(0, 120)}`);
+                const proxyData = await proxyRes.json();
+                if (proxyData.status !== 'success') {
+                    throw new Error(proxyData.message || 'Proxy error');
                 }
-                document.getElementById('n8nStatusHeading').innerText = `✅ Batch of ${preparedItems.length} Products Dispatched to n8n!`;
+                document.getElementById('n8nStatusHeading').innerText = `✅ Batch of ${preparedItems.length} Products Dispatched & Pages Building!`;
                 document.getElementById('n8nStatusHeading').style.color = '#4ade80';
-                showToast(`Batch dispatched to n8n! ${preparedItems.length} Pins publishing.`, '📌');
+                showToast(`Batch dispatched! ${preparedItems.length} items generating.`, '📌');
 
-                // BUG 4 FIX: Start polling /api/task_status per ASIN every 5s
                 _startN8nStatusPolling(preparedItems);
             } catch (e) {
-                document.getElementById('n8nStatusHeading').innerText = `⚠️ n8n webhook unreachable (${n8nWebhookUrl}). Is n8n running?`;
+                document.getElementById('n8nStatusHeading').innerText = `⚠️ Dispatch warning: ${e.message}`;
                 document.getElementById('n8nStatusHeading').style.color = '#fb8500';
-                // Even if n8n is unreachable, still poll /api/create_bridge_page status
                 _startN8nStatusPolling(preparedItems);
             }
         }
 
         function _startN8nStatusPolling(preparedItems) {
             if (_n8nStatusPollTimer) clearInterval(_n8nStatusPollTimer);
-            let completedCount = 0;
             const total = preparedItems.length;
 
             _n8nStatusPollTimer = setInterval(async () => {
-                let allDone = true;
                 for (const it of preparedItems) {
                     const asin = it.asin;
                     const iconEl = document.getElementById(`status-icon-${asin}`);
                     const msgEl = document.getElementById(`status-msg-${asin}`);
                     const linkEl = document.getElementById(`status-link-${asin}`);
 
-                    // Skip already-resolved rows
                     if (iconEl && (iconEl.innerText === '✅' || iconEl.innerText === '❌')) continue;
-                    allDone = false;
 
                     try {
                         const res = await fetch(`/api/task_status?asin=${asin}`);
@@ -1131,25 +1131,28 @@
                             if (msgEl) msgEl.innerText = 'Bridge page built & deployed to GitHub Pages!';
                             if (msgEl) msgEl.style.color = '#4ade80';
                             if (linkEl && d.bridge_url) linkEl.innerHTML = `<a href="${d.bridge_url}" target="_blank" style="color:var(--gold-primary);font-weight:700;text-decoration:none;">🔗 View Live</a>`;
-                            completedCount++;
                         } else if (d.status === 'error') {
                             if (iconEl) iconEl.innerText = '❌';
                             if (msgEl) msgEl.innerText = `Error: ${d.message || 'Unknown error'}`;
                             if (msgEl) msgEl.style.color = '#f87171';
-                            completedCount++;
                         } else if (d.status === 'processing') {
                             if (msgEl) msgEl.innerText = d.step || d.message || 'Processing...';
                         }
-                        // status 'not_found' = n8n hasn't called create_bridge_page yet, keep waiting
-                    } catch (_) { /* network blip, try next tick */ }
+                    } catch (_) {}
                 }
 
-                if (completedCount >= total) {
+                // BUG-C5 FIX: Count resolved items explicitly each tick instead of relying on running counter
+                const resolvedCount = preparedItems.filter(it => {
+                    const el = document.getElementById(`status-icon-${it.asin}`);
+                    return el && (el.innerText === '✅' || el.innerText === '❌');
+                }).length;
+
+                if (resolvedCount >= total) {
                     clearInterval(_n8nStatusPollTimer);
                     _n8nStatusPollTimer = null;
                     document.getElementById('n8nStatusHeading').innerText = `🏆 All ${total} products built & deployed!`;
                 }
-            }, 5000); // poll every 5 seconds
+            }, 3000);
         }
 
         function n8nResetBatch() {
@@ -1230,7 +1233,7 @@
                     for (const asin in reg) {
                         const title = (reg[asin].title || asin).substring(0, 22) + '...';
                         const directList = mat[asin] || [];
-                        let rowHtml = `<tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:10px;text-align:left;font-weight:700;">${escapeHTML(title)}<br><span style="font-size:10px;color:var(--text-sub);">${asin}</span></td>`;
+                        let rowHtml = `<tr style="border-bottom:1px solid rgba(255,255,255,0.06);"><td style="padding:10px;text-align:left;font-weight:700;">${escapeHTML(title)}<br><span style="font-size:10px;color:var(--text-sub);">${escapeHTML(asin)}</span></td>`;
                         ccs.forEach(cc => {
                             const isDirect = directList.includes(cc);
                             rowHtml += `<td style="padding:6px;"><span style="padding:3px 7px;border-radius:10px;font-weight:800;font-size:10px;background:${isDirect ? 'rgba(16,185,129,0.2)' : 'rgba(59,130,246,0.2)'};color:${isDirect ? '#10b981' : '#3b82f6'};">${isDirect ? 'DP' : 'S'}</span></td>`;

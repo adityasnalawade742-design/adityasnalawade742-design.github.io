@@ -19,7 +19,7 @@ PINTEREST_BOARD_ID = os.getenv("PINTEREST_BOARD_ID", "1092545259543920271")
 # Check if using Sandbox or Production token
 PINTEREST_ACCESS_TOKEN = os.getenv("PINTEREST_ACCESS_TOKEN", "")
 
-API_URL = "https://api-sandbox.pinterest.com/v5/pins" if PINTEREST_ACCESS_TOKEN.startswith("pina_") else "https://api.pinterest.com/v5/pins"
+API_URL = "https://api.pinterest.com/v5/pins"
 
 HOMEPAGE_PRODUCTS = [
     {

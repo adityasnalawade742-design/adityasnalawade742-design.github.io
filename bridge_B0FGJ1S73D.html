@@ -1,28 +1,23 @@
-from pathlib import Path
-from jinja2 import Template
-import json
-from config import BRIDGE_DIR, IMAGES_DIR, AMAZON_ASSOCIATE_TAG
-
-BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ seo.pin_title }} | Cozy Room Finds</title>
-    <meta name="description" content="{{ seo.description }}">
+    <title>Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp | Cozy Room Finds</title>
+    <meta name="description" content="Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 
     <!-- OpenGraph & Social Media Sharing Preview Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ seo.pin_title }} | Cozy Room Finds">
-    <meta property="og:description" content="{{ seo.description }}">
-    <meta property="og:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
-    <meta property="og:url" content="https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html">
+    <meta property="og:title" content="Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp | Cozy Room Finds">
+    <meta property="og:description" content="Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds">
+    <meta property="og:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_B0FGJ1S73D.jpg">
+    <meta property="og:url" content="https://adityasnalawade742-design.github.io/bridge_B0FGJ1S73D.html">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ seo.pin_title }} | Cozy Room Finds">
-    <meta name="twitter:description" content="{{ seo.description }}">
-    <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
-    <link rel="canonical" href="https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html">
+    <meta name="twitter:title" content="Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp | Cozy Room Finds">
+    <meta name="twitter:description" content="Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds">
+    <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_B0FGJ1S73D.jpg">
+    <link rel="canonical" href="https://adityasnalawade742-design.github.io/bridge_B0FGJ1S73D.html">
 
 
     <!-- Schema.org JSON-LD Structured Data for Google SERP Rich Snippets -->
@@ -30,15 +25,15 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
     {
       "@context": "https://schema.org/",
       "@type": "Product",
-      "name": "{{ seo.pin_title }}",
-      "image": "https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg",
-      "description": "{{ seo.description }}",
+      "name": "Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp",
+      "image": "https://adityasnalawade742-design.github.io/raw_images/raw_B0FGJ1S73D.jpg",
+      "description": "Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds",
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "{{ product.price | replace('$', '') | replace(',', '') }}",
+        "price": "19.99",
         "availability": "https://schema.org/InStock",
-        "url": "https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html"
+        "url": "https://adityasnalawade742-design.github.io/bridge_B0FGJ1S73D.html"
       },
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -421,46 +416,45 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         <!-- Rating Box -->
         <div class="rating-box">
             <span class="rating-stars">★★★★★</span>
-            <span>{{ product.rating or '4.9' }}</span>
-            <span class="rating-count">({{ product.reviews or '1,200' }}+ Verified Reviews)</span>
+            <span>4.8</span>
+            <span class="rating-count">(1,200+ Verified Reviews)</span>
         </div>
 
-        <h1>{{ product.title }}</h1>
+        <h1>Product B0FGJ1S73D</h1>
 
         <div class="price-container">
-            <div class="price">{{ product.price }}</div>
+            <div class="price">$19.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="{{ hook_image_rel }}" alt="{{ product.title }}">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0FGJ1S73D_hook.jpg?v=1785750779" alt="Product B0FGJ1S73D">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('{{ hook_image_rel }}', this)">✨ Commercial View</button>
-            {% for raw_img in raw_images %}
-            <button class="img-tab-btn" onclick="switchImage('{{ raw_img }}', this)">📷 Angle {{ loop.index }}</button>
-            {% endfor %}
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FGJ1S73D_hook.jpg?v=1785750779', this)">✨ Commercial View</button>
+            
         </div>
 
-        <p class="description">{{ seo.description }}</p>
+        <p class="description">Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds</p>
 
         <!-- Feature Highlights Box -->
         <div class="features-box">
             <h3>✦ Product Highlights & Specifications</h3>
             <ul class="features-list">
-                {% if product.features and (product.features is mapping or product.features is sequence) and (product.features is not string) and product.features|length > 0 %}
-                {% for feat in product.features[:6] %}
-                <li>✨ {{ feat }}</li>
-                {% endfor %}
-                {% else %}
-                <li>✨ Premium Room Aesthetic Upgrade</li>
-                <li>🌿 High Quality Craftsmanship</li>
-                <li>🎁 Perfect Gift Choice</li>
-                <li>⚡ Quick & Easy Setup</li>
-                {% endif %}
+                
+                
+                <li>✨ 3 WAY TOUCH DIMMER</li>
+                
+                <li>✨ WARM AMBER GLOW</li>
+                
+                <li>✨ USB CHARGING PORT</li>
+                
+                <li>✨ FABRIC SHADE FINISH</li>
+                
+                
             </ul>
         </div>
 
@@ -471,13 +465,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 <span>Verified Room Find</span>
             </div>
             <p style="font-size: 13px; color: #e2e8f0; font-style: italic; line-height: 1.5;">
-                "{{ product.buyer_review or 'Absolutely love this find! It transformed my room setup completely — the quality is stunning and it arrived super fast. Looks even better in person than in photos!' }}"
+                "Absolutely love this find! It transformed my room setup completely — the quality is stunning and it arrived super fast. Looks even better in person than in photos!"
             </p>
         </div>
 
         <!-- Geo Shipping Notice Box -->
-        {% set is_in_direct = ('IN' in product.get('direct_regions', ['US'])) %}
-        <div id="geoNoticeBox" class="geo-notice-box" style="{% if not is_in_direct %}display: flex;{% else %}display: none;{% endif %}">
+        
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
             <span class="geo-icon">📍</span>
             <div>
                 <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
@@ -486,18 +480,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <!-- High-Converting CTA -->
-        {% set clean_words = product.title.split()[:4] | join(' ') %}
-        {% if not is_in_direct %}
-        <a id="buyBtn" href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
+        
+        
+        <a id="buyBtn" href="https://www.amazon.com/dp/B0FGJ1S73D?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
             <span id="buyBtnText">CHECK ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
-        {% else %}
-        <a id="buyBtn" href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">BUY ON AMAZON (US $)</span>
-            <span>➔</span>
-        </a>
-        {% endif %}
+        
 
         <div class="guarantee">
             <span>🔒 Official Amazon Store</span>
@@ -520,26 +509,27 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 📖 Why You'll Love This Room Accent
             </h3>
             <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.65; margin-bottom: 16px;">
-                {{ seo.description or product.description or "Designed for contemporary nightstands and cozy living room spaces, this piece combines aesthetic warmth with daily functional convenience." }}
+                Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #94a3b8;">
-                {% if product.features and (product.features is sequence) and (product.features is not string) and product.features|length > 0 %}
-                {% for feat in product.features[:3] %}
+                
+                
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Feature {{ loop.index }}:</strong> {{ feat }}</span>
+                    <span><strong>Feature 1:</strong> 3 WAY TOUCH DIMMER</span>
                 </div>
-                {% endfor %}
-                {% else %}
+                
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Aesthetic Design:</strong> Blends effortlessly into modern, boho, and cozy room decor themes.</span>
+                    <span><strong>Feature 2:</strong> WARM AMBER GLOW</span>
                 </div>
+                
                 <div style="display: flex; gap: 8px;">
                     <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Premium Quality:</strong> Built with high quality materials for daily functionality and durability.</span>
+                    <span><strong>Feature 3:</strong> USB CHARGING PORT</span>
                 </div>
-                {% endif %}
+                
+                
             </div>
         </div>
 
@@ -590,9 +580,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         (function() {
             try {
                 const pageUrl = encodeURIComponent(window.location.href);
-                const title = encodeURIComponent("{{ product.title }}");
+                const title = encodeURIComponent("Product B0FGJ1S73D");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "{{ hook_image_rel }}";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FGJ1S73D_hook.jpg?v=1785750779";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -645,12 +635,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
-            {% set search_phrase = product.get('search_keywords') or (product.title.split()[:4] | join(' ')) %}
-            const currentAsin = "{{ product.get('target_asin', asin) }}";
-            const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
-            const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN", "UK", "GB"]) | tojson }};
-            const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
-            const regionalAsins = {{ (product.regional_asins if product.regional_asins is defined else {}) | tojson }};
+            
+            const currentAsin = "B0FGJ1S73D";
+            const prodKeywords = encodeURIComponent("Product B0FGJ1S73D").replace(/%20/g, "+");
+            const directRegions = ["US"];
+            const regionalMatrix = {};
+            const regionalAsins = {};
 
             let exchangeRates = { 
                 "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, 
@@ -758,7 +748,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("{{ product.get('current_price', product.get('price', '$19.99')) }}".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$19.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
@@ -840,12 +830,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
-            {% set search_phrase = product.get('search_keywords') or (product.title.split()[:4] | join(' ')) %}
-            const currentAsin = "{{ product.get('target_asin', asin) }}";
-            const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
-            const directRegions = {{ (product.direct_regions if product.direct_regions is defined else ["US", "IN", "UK", "GB"]) | tojson }};
-            const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
-            const regionalAsins = {{ (product.regional_asins if product.regional_asins is defined else {}) | tojson }};
+            
+            const currentAsin = "B0FGJ1S73D";
+            const prodKeywords = encodeURIComponent("Product B0FGJ1S73D").replace(/%20/g, "+");
+            const directRegions = ["US"];
+            const regionalMatrix = {};
+            const regionalAsins = {};
 
             let exchangeRates = { 
                 "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, 
@@ -953,7 +943,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("{{ product.get('current_price', product.get('price', '$19.99')) }}".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$19.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, {
                         minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
                         maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
@@ -1105,119 +1095,3 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
         })();
     </script>
 </body>
-"""
-
-_MODULE_DIR = Path(__file__).resolve().parent.parent
-
-def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
-    """
-    Generates a mobile-first, high-converting Pinterest affiliate bridge page.
-    Saves file to root repository directory as bridge_{asin}.html.
-    """
-    import time
-    product_data = dict(product_data) if product_data else {}
-    seo_data = dict(seo_data) if seo_data else {}
-
-    output_filename = f"bridge_{asin}.html"
-    output_filepath = _MODULE_DIR / output_filename
-    
-    hook_img_rel = f"./focus_product_{asin}_hook.jpg?v={int(time.time())}"
-    
-    raw_images_rel = []
-    if "images" in product_data and isinstance(product_data["images"], list):
-        for img_path in product_data["images"][:3]:
-            if isinstance(img_path, str) and Path(img_path).exists():
-                raw_images_rel.append(img_path)
-    
-    matrix_file = _MODULE_DIR / "global_direct_matrix.json"
-    if matrix_file.exists():
-        try:
-            with open(matrix_file, "r", encoding="utf-8") as f:
-                g_matrix = json.load(f)
-                product_data["direct_regions"] = g_matrix.get(asin, ["US"])
-        except Exception as e_mat:
-            print(f"[Bridge Creator Warning] Matrix load issue: {e_mat}")
-
-    aff_url = product_data.get("affiliate_url") or f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
-    template = Template(BRIDGE_PAGE_TEMPLATE)
-    rendered_html = template.render(
-        product=dict(product_data),
-        seo=dict(seo_data) if seo_data else {},
-        asin=asin,
-        affiliate_url=aff_url,
-        hook_image_rel=hook_img_rel,
-        raw_images=raw_images_rel
-    )
-    
-    with open(output_filepath, "w", encoding="utf-8") as f:
-        f.write(rendered_html)
-        
-    print(f"[Bridge Creator] Generated high-converting luxury bridge page: {output_filepath}")
-    
-    try:
-        update_showcase_index_page(product_data, asin)
-    except Exception as e:
-        print(f"[Bridge Creator] Warning updating index showcase: {e}")
-
-    return str(output_filepath)
-
-
-def update_showcase_index_page(product_data: dict, asin: str):
-    """
-    Ensures newly processed products automatically appear on index.html grid.
-    """
-    import time
-    index_path = _MODULE_DIR / "index.html"
-    if not index_path.exists():
-        return
-
-    with open(index_path, "r", encoding="utf-8") as f:
-        html = f.read()
-
-    card_id = f"card-{asin}"
-    if card_id in html:
-        return  # Card already exists
-
-    raw_title = product_data.get('title', 'Cozy Room Find')
-    display_title = (raw_title[:47] + "...") if len(raw_title) > 50 else raw_title
-    price_val = product_data.get('price', '$19.99')
-    import re
-    price_num = re.sub(r'[^0-9.]', '', str(price_val)) or '19.99'
-    category_val = product_data.get('category', 'room decor').lower()
-    direct_regions = ",".join(product_data.get('direct_regions', ['US']))
-
-    # Extract regional prices if available
-    reg_matrix = product_data.get('regional_prices', {}) or product_data.get('regional_matrix', {})
-    reg_attrs = []
-    for reg_code, reg_price in reg_matrix.items():
-        if reg_price and reg_price != 'Not Available':
-            reg_attrs.append(f'data-price-{reg_code.lower()}="{reg_price}"')
-    reg_attrs_str = " " + " ".join(reg_attrs) if reg_attrs else ""
-
-    card_html = f'''
-        <!-- Card {asin} -->
-        <div class="card-wrapper" id="{card_id}" data-base-usd="{price_num}" data-category="{category_val}" data-direct-regions="{direct_regions}" data-price-us="{price_val}"{reg_attrs_str}>
-            <a class="card" href="./bridge_{asin}.html">
-                <div class="card-img-container">
-                    <div class="card-price-tag">{price_val}</div>
-                    <div class="card-rating">★ {product_data.get('rating', '4.8')}</div>
-                    <img src="./focus_product_{asin}_hook.jpg?v={int(time.time())}" alt="{raw_title}">
-                </div>
-                <div class="card-content">
-                    <h2>{display_title}</h2>
-                    <div class="card-cta">
-                        <span>View Details</span>
-                        <span class="arrow">→</span>
-                    </div>
-                </div>
-            </a>
-            <button class="delete-btn" onclick="deleteCard('{asin}', '{card_id}')">🗑️ Delete Product</button>
-        </div>
-'''
-    for grid_tag in ['<main class="grid" id="productGrid">', '<div class="grid" id="productGrid">']:
-        if grid_tag in html:
-            new_html = html.replace(grid_tag, grid_tag + card_html)
-            with open(index_path, "w", encoding="utf-8") as f:
-                f.write(new_html)
-            print(f"[Bridge Creator] Automatically inserted new card {asin} into index.html showcase.")
-            break

@@ -42,5 +42,6 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 BRIDGE_DIR.mkdir(parents=True, exist_ok=True)
 
 if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY is not set in .env file.")
+    print("[Config Warning] GEMINI_API_KEY is not set in .env — Gemini AI features will use fallbacks.")
+
 

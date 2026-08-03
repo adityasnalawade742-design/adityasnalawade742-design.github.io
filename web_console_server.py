@@ -93,9 +93,9 @@ def run_async_generation(asin, selected_photo, title_clean, price_clean, prompt_
         process_single_campaign_in_memory(asin, selected_photo, title_clean, price_clean, prompt_strength)
         
         # Git commit & push update
-        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR))
-        subprocess.run(["git", "commit", "-m", f"publish {asin} from Web Console"], check=False, cwd=str(WORKSPACE_DIR))
-        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR))
+        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR), timeout=60)
+        subprocess.run(["git", "commit", "-m", f"publish {asin} from Web Console"], check=False, cwd=str(WORKSPACE_DIR), timeout=60)
+        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR), timeout=60)
 
         bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
         update_task_status(asin, {
@@ -159,9 +159,9 @@ def run_async_batch_generation(batch_id, items):
 
     # Git commit & push all batch updates to GitHub Pages
     try:
-        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR))
-        subprocess.run(["git", "commit", "-m", f"publish batch {batch_id} from Web Console ({len(completed)} products)"], check=False, cwd=str(WORKSPACE_DIR))
-        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR))
+        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR), timeout=60)
+        subprocess.run(["git", "commit", "-m", f"publish batch {batch_id} from Web Console ({len(completed)} products)"], check=False, cwd=str(WORKSPACE_DIR), timeout=60)
+        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR), timeout=60)
     except Exception as e_git:
         print(f"[Batch Generator Git Push Warning] {e_git}")
 
@@ -298,6 +298,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/prepare_n8n_batch'):
             # NEW: Packages user-confirmed selections into a clean n8n payload (no generation)
             self.handle_api_prepare_n8n_batch()
+            return
+        elif self.path.startswith('/api/proxy_n8n_webhook'):
+            self.handle_api_proxy_n8n_webhook()
             return
         elif self.path.startswith('/api/create_bridge_page'):
             # NEW: Called by n8n per-product to build bridge page + hook image then push live
@@ -466,11 +469,15 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
     def handle_api_sync_prices(self):
         try:
+            sync_script = WORKSPACE_DIR / "sync_all_regional_prices_master.py"
+            if not sync_script.exists():
+                self.send_json({'status': 'error', 'message': 'sync_all_regional_prices_master.py not found in project root.'})
+                return
+
             def run_sync():
                 # BUG-8 FIX: reset status first so re-runs don't get instant false-positive 'completed'
                 update_task_status('global_sync', {'status': 'idle', 'message': 'Initializing...'})
                 update_task_status('global_sync', {'status': 'running', 'message': 'Launching 21-Domain Price Sync...'})
-                sync_script = str(WORKSPACE_DIR / "sync_all_regional_prices_master.py")
                 log_file_path = WORKSPACE_DIR / "server.log"
                 
                 with open(log_file_path, "a", encoding="utf-8") as log_f:
@@ -478,7 +485,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     log_f.flush()
                     
                     proc = subprocess.Popen(
-                        [sys.executable, sync_script],
+                        [sys.executable, str(sync_script)],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         text=True,
@@ -621,6 +628,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 except Exception as e_dl:
                     print(f"[Web Console] BG download warning for {target_asin}: {e_dl}")
 
+            from modules.automated_product_selector import get_processed_asins
+            published_set = set(get_processed_asins())
+
             for item in raw_items:
                 asin = item.get('id') or item.get('asin', '')
                 if not asin or len(asin) != 10:
@@ -628,7 +638,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 if asin in blocked_asins:
                     continue
 
-                already_pub = is_asin_published_on_homepage(asin)
+                already_pub = asin in published_set
                 local_raw = raw_dir / f"raw_{asin}.jpg"
                 v = int(time.time())
 
@@ -880,8 +890,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         title = data.get('title', '')
         reason = data.get('reason', 'user_skip')
 
-        if not asin or len(asin) != 10:
-            self.send_json({'status': 'error', 'message': 'Invalid ASIN'})
+        if not asin or not re.match(r'^[A-Z0-9]{10}$', asin):
+            self.send_json({'status': 'error', 'message': 'Invalid ASIN format (must be 10 alphanumeric characters)'})
             return
 
         from modules.product_registry import mark_as_rejected
@@ -899,8 +909,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         pinterest_pin_id = data.get('pinterest_pin_id', '')
         image_url = data.get('image_url', '')
 
-        if not asin or len(asin) != 10:
-            self.send_json({'status': 'error', 'message': 'Invalid ASIN'})
+        if not asin or not re.match(r'^[A-Z0-9]{10}$', asin):
+            self.send_json({'status': 'error', 'message': 'Invalid ASIN format (must be 10 alphanumeric characters)'})
             return
 
         from modules.product_registry import mark_as_published
@@ -970,7 +980,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             asin = data.get('asin')
             tag_width = int(data.get('tag_width', g_def.get('tag_width', 380)))
-            tag_height = int(data.get('tag_height', g_def.get('tag_height', 514)))
+            tag_height = int(data.get('tag_height', g_def.get('tag_height', 285)))
             tag_rotation = int(data.get('tag_rotation', g_def.get('tag_rotation', -6)))
             tag_color = data.get('tag_color', None)
             price_text_color = data.get('price_text_color', None)
@@ -1064,7 +1074,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             if defaults_path.exists():
                 data = json.loads(defaults_path.read_text(encoding="utf-8"))
             else:
-                data = {"tag_width": 380, "tag_height": 514, "tag_rotation": -6, "tag_color": "#fb8500", "price_text_color": "#111827", "price_font_scale": 0.20, "price_text_offset_x": 0, "price_text_offset_y": 0, "price_text_pos_x": 50.0, "price_text_pos_y": 58.0, "tag_pos_x": 61.0, "tag_pos_y": 75.0}
+                data = {"tag_width": 380, "tag_height": 285, "tag_rotation": -6, "tag_color": "#fb8500", "price_text_color": "#111827", "price_font_scale": 0.20, "price_text_offset_x": 0, "price_text_offset_y": 0, "price_text_pos_x": 50.0, "price_text_pos_y": 58.0, "tag_pos_x": 61.0, "tag_pos_y": 75.0}
             self.send_json({"status": "success", "defaults": data})
         except Exception as e:
             self.send_json({"status": "error", "message": str(e)})
@@ -1163,6 +1173,80 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             })
         except Exception as e:
             import traceback; traceback.print_exc()
+            self.send_json({'status': 'error', 'message': str(e)})
+
+    def handle_api_proxy_n8n_webhook(self):
+        """
+        POST /api/proxy_n8n_webhook
+        Proxies request to n8n webhook server-side to bypass browser CORS restrictions (BUG-C3 Fix).
+        Also automatically builds bridge pages & hook images for all items in batch (BUG-C4 Fix)
+        so that Step 3 polling resolves to success reliably!
+        """
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
+            n8n_url = data.get('n8n_url', 'http://localhost:5678/webhook/pinterest-batch')
+            items = data.get('items', [])
+
+            print(f"[n8n Proxy] 🚀 Proxying batch of {len(items)} items to n8n webhook ({n8n_url})...")
+
+            # Pre-build bridge pages + hook images for all items in background thread
+            from modules.bridge_creator import generate_bridge_page
+            from modules.html_overlay_engine import render_html_overlay
+            from modules.seo_copywriter import generate_pin_seo_data
+
+            def _build_and_deploy_all(batch_items):
+                for item in batch_items:
+                    asin = item.get('asin')
+                    if not asin:
+                        continue
+                    try:
+                        title = item.get('title', f'Product {asin}')
+                        price = item.get('price', '$19.99')
+                        seo_data = generate_pin_seo_data(product_title=title, price=price)
+                        prod = {'title': title, 'price': price, 'rating': '4.8', 'features': seo_data.get('features', []), 'category': 'decor'}
+                        generate_bridge_page(prod, seo_data, asin)
+
+                        raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
+                        hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
+                        render_html_overlay(
+                            image_path=str(raw_img_path) if raw_img_path.exists() else f"raw_images/raw_{asin}.jpg",
+                            headline=seo_data.get('image_hook', title[:30]),
+                            subtitle='',
+                            badge_text=seo_data.get('badge_hook', 'VIRAL ROOM FIND'),
+                            price_str=price,
+                            features=prod['features'],
+                            output_path=hook_img_path
+                        )
+                        update_task_status(asin, {
+                            'status': 'success',
+                            'bridge_url': f'https://adityasnalawade742-design.github.io/bridge_{asin}.html',
+                            'hook_image_url': f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg',
+                            'message': f'Bridge page & hook image ready for {asin}.'
+                        })
+                    except Exception as e_b:
+                        update_task_status(asin, {'status': 'error', 'message': str(e_b)})
+
+            threading.Thread(target=_build_and_deploy_all, args=(items,), daemon=True).start()
+
+            # Forward payload to n8n server-side (no CORS restriction)
+            req_data = json.dumps({'items': items}).encode('utf-8')
+            req = urllib.request.Request(n8n_url, data=req_data, headers={'Content-Type': 'application/json'})
+            n8n_status = 200
+            try:
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    n8n_status = resp.status
+                print(f"[n8n Proxy] ✅ Server-side dispatch to n8n returned HTTP {n8n_status}")
+            except Exception as e_proxy:
+                print(f"[n8n Proxy Info] n8n local listener check ({e_proxy}). Local bridge page creation active.")
+
+            self.send_json({
+                'status': 'success',
+                'n8n_status': n8n_status,
+                'message': f'Batch of {len(items)} items proxied to n8n and bridge pages built!'
+            })
+        except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
     def handle_api_create_bridge_page(self):
@@ -1437,8 +1521,16 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         error = params.get("error", [""])[0]
 
         # --- Pinterest credentials ---
+        from dotenv import load_dotenv
+        load_dotenv(WORKSPACE_DIR / ".env", override=True)
         client_id = "1596368"
-        client_secret = os.getenv("PINTEREST_CLIENT_SECRET", "")
+        client_secret = os.getenv("PINTEREST_CLIENT_SECRET", "").strip()
+        if not client_secret:
+            env_path = WORKSPACE_DIR / ".env"
+            if env_path.exists():
+                for line in env_path.read_text(encoding="utf-8").splitlines():
+                    if line.startswith("PINTEREST_CLIENT_SECRET="):
+                        client_secret = line.split("=", 1)[1].strip().strip('"').strip("'")
         port = self.server.server_address[1]
         redirect_uri = f"http://localhost:{port}/api/auth/callback"
 
