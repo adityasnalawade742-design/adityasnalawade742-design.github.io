@@ -121,7 +121,7 @@
             },
             {
               "name": "prompt_strength",
-              "value": "0.35"
+              "value": "0.50"
             },
             {
               "name": "prompt_type",
@@ -143,17 +143,21 @@
     },
     {
       "parameters": {
-        "url": "https://api.replicate.com/v1/predictions",
+        "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer YOUR_REPLICATE_API_TOKEN"
+              "value": "Bearer {{ $env.REPLICATE_API_TOKEN }}"
             },
             {
               "name": "Content-Type",
               "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "wait=90"
             }
           ]
         },

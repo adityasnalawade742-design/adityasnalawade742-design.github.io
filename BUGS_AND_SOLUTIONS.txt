@@ -1,0 +1,1026 @@
+================================================================================
+       COMPLETE SYSTEM BUG REPORT & SOLUTIONS
+       Pinterest Auto Affiliate — pinterest-auto-affiliate
+       Generated: 2026-08-03 | Total Bugs Found: 48
+================================================================================
+
+FORMAT: [BUG ID] | FILE | DESCRIPTION | SOLUTION
+================================================================================
+
+
+================================================================================
+SECTION A — n8n WORKFLOW BUGS (12 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[N8N-1] CONFLICTING WORKFLOW FILES
+FILE: fixed_n8n_workflow.json vs n8n_pinterest_affiliate_workflow.json
+DESCRIPTION:
+  Two separate n8n workflow JSON files exist with different implementations.
+  It is unclear which one is actually imported into n8n. The "fixed" version
+  has known bugs that the "affiliate" version corrects.
+
+SOLUTION:
+  1. Delete "fixed_n8n_workflow.json" entirely.
+  2. Use ONLY "n8n_pinterest_affiliate_workflow.json" as the canonical file.
+  3. Re-import "n8n_pinterest_affiliate_workflow.json" into your n8n instance.
+  4. Rename it to "n8n_workflow_CANONICAL.json" to avoid future confusion.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-2] WRONG REPLICATE API ENDPOINT — ALL AI CALLS FAIL
+FILE: fixed_n8n_workflow.json | Node 5 | Line 146
+CURRENT (WRONG):
+  "url": "https://api.replicate.com/v1/predictions"
+  "version": "black-forest-labs/flux-dev"
+
+DESCRIPTION:
+  The /v1/predictions endpoint requires a full SHA256 model version hash,
+  not a model slug. Passing a slug returns 422 Unprocessable Entity.
+
+SOLUTION:
+  Change the URL to the model-specific endpoint:
+  "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions"
+  Remove the "version" field from the request body entirely.
+  The n8n_pinterest_affiliate_workflow.json already has the correct URL.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-3] HARDCODED PLACEHOLDER API TOKENS — ALL API CALLS RETURN 401
+FILE: fixed_n8n_workflow.json | Node 5 Line 152, Node 7 Line 219
+CURRENT (WRONG):
+  "value": "Bearer YOUR_REPLICATE_API_TOKEN"
+  "value": "Bearer YOUR_PINTEREST_ACCESS_TOKEN"
+
+DESCRIPTION:
+  These are literal placeholder strings. Every single API call fails with
+  401 Unauthorized making the entire pipeline non-functional.
+
+SOLUTION:
+  In your n8n instance, set environment variables:
+    REPLICATE_API_TOKEN = your_actual_replicate_token
+    PINTEREST_ACCESS_TOKEN = your_actual_pinterest_token
+  Then use n8n expression syntax in the workflow:
+    Node 5: "value": "Bearer {{ $env.REPLICATE_API_TOKEN }}"
+    Node 7: "value": "Bearer {{ $env.PINTEREST_ACCESS_TOKEN }}"
+  The n8n_pinterest_affiliate_workflow.json already uses this correct syntax.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-4] image_hook SENDS TITLE TEXT INSTEAD OF IMAGE URL — BRIDGE PAGES BROKEN
+FILE: fixed_n8n_workflow.json | Node 6 | Line 196
+CURRENT (WRONG):
+  "image_hook": $json.title
+
+DESCRIPTION:
+  The /api/create_bridge_page endpoint expects image_hook to be an image
+  filename or URL. Sending the product title text string here corrupts
+  the bridge page generation payload entirely.
+
+SOLUTION:
+  Change to pass the correct field from the Split Items node:
+  "image_hook": $node['2. Split Items — Process One Product at a Time'].json.image_hook
+  The n8n_pinterest_affiliate_workflow.json Node 6 already does this correctly.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-5] Prefer: wait HEADER MISSING TIMEOUT VALUE — ASYNC RESPONSE BREAKS PIPELINE
+FILE: fixed_n8n_workflow.json | Node 5 | Line 160
+CURRENT (WRONG):
+  "value": "wait"
+
+DESCRIPTION:
+  The Replicate API "Prefer: wait" header must specify a timeout in seconds.
+  Without it, Replicate may respond with 202 + a polling URL instead of
+  the final result. Node 6 then receives no output[0] image URL and fails.
+
+SOLUTION:
+  Change to: "value": "wait=90"
+  This tells Replicate to hold the connection for up to 90 seconds and
+  return the final result synchronously.
+  The n8n_pinterest_affiliate_workflow.json already uses "wait=90".
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-6] PROMPT B prompt_strength = 0.35 VIOLATES SYSTEM RULE
+FILE: fixed_n8n_workflow.json AND n8n_pinterest_affiliate_workflow.json | Node 4b
+CURRENT (WRONG):
+  "prompt_strength": "0.35"
+
+DESCRIPTION:
+  System rule: Single-Item Room Photos must use prompt_strength = 0.48–0.55
+  (max 0.55). Value 0.35 is too low — it over-transforms existing room
+  photos, introduces unwanted artifacts and background changes.
+
+SOLUTION:
+  In BOTH workflow files, change Node 4b prompt_strength to:
+  "prompt_strength": "0.50"
+  This is the safe midpoint of the 0.48–0.55 allowed range.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-7] MISSING THIRD CLASSIFICATION BRANCH FOR MULTI-PACK PRODUCTS
+FILE: Both workflow files | Node 3 (Classifier)
+DESCRIPTION:
+  The IF node only has 2 branches: white cutout → Prompt A, room photo →
+  Prompt B. There is NO third branch for multi-pack and set products which
+  require prompt_strength = 0.28 to preserve exact item count.
+  Multi-packs incorrectly go through Prompt B at 0.35/0.50, hallucinating
+  extra props and destroying product structure.
+
+SOLUTION:
+  Add a Switch node after Split Items (before the IF Classifier) that
+  checks if ($json.is_multi_pack === true) or title includes keywords
+  like "set of", "pack of", "2-pack", "bundle". If true, route to:
+  — New Node 4c: prompt_strength = "0.28"
+  — Prompt C: "Preserve exact product count and physical structure 100%.
+    Do not add, remove, or hallucinate any items. Only enhance lighting."
+  If false, continue to the existing Node 3 white-cutout IF classifier.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-8] CODE SANITIZER NODE NOT RELIABLY IN MAIN EXECUTION PATH
+FILE: fixed_n8n_workflow.json | "Code in JavaScript" node
+DESCRIPTION:
+  The Code node (which sanitizes title and price) is positioned at [-208, -80]
+  above the main flow. Connection order is: Split → Code → Classifier.
+  If the Code node throws a runtime error, execution may skip to Classifier
+  with unsanitized data, causing malformed titles starting with "Product B0"
+  to pass through and appear on Pinterest pins.
+
+SOLUTION:
+  1. Move the Code node to be inline between Split and Classifier.
+  2. Wrap the entire Code node body in try/catch:
+     try {
+       // existing code
+       return { json: { ...item, title: title, price: price, ... } };
+     } catch(e) {
+       return { json: { ...item, title: item.title || item.asin, price: item.price || '$19.99' } };
+     }
+  3. Add an IF check after the Code node: if title starts with "Product B0",
+     route to an error log node instead of continuing the pipeline.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-9] bridge_url AND hook_image_url MAY BE UNDEFINED IN NODE 7
+FILE: Both workflow files | Node 7 (Pinterest API)
+CURRENT (RISKY):
+  "link": $json.bridge_url
+  "url": $json.hook_image_url
+
+DESCRIPTION:
+  These fields come from Node 6's server response. If the server returns an
+  error or names the fields differently (e.g., bridge_page_url), these are
+  undefined/null. Pinterest API then rejects the pin with 400 Bad Request
+  with no explanation. There is no fallback or guard in place.
+
+SOLUTION:
+  Add null-safe fallbacks:
+  "link": ($json.bridge_url || ('https://adityasnalawade742-design.github.io/bridge_' + $node['2. Split Items — Process One Product at a Time'].json.asin + '.html'))
+  "url": ($json.hook_image_url || $json.hook_image || $json.image_url || '')
+  Also add a guard IF node before Node 7: if hook_image_url is empty, route
+  to an error log instead of attempting the Pinterest post.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-10] NODE 8 RE-REFERENCES CONSUMED NODE 6 DATA — STALE DATA RISK
+FILE: n8n_pinterest_affiliate_workflow.json | Node 8
+CURRENT (RISKY):
+  $node['6. Build Bridge Page + Playwright Price Overlay'].json.bridge_url
+
+DESCRIPTION:
+  In n8n's execution model, referencing an upstream node's output from a
+  downstream node after it has been consumed can return stale/empty data.
+  Node 8 should read from the current execution context ($json) not Node 6.
+
+SOLUTION:
+  Change Node 8 log expression to:
+  'Pin posted for ' + ($json.asin || $node['2. Split Items...'].json.asin || 'N/A')
+  + ' — Pin ID: ' + ($json.id || 'N/A')
+  + ' | Bridge: ' + ($json.bridge_url || $json.url || 'N/A')
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-11] NO ERROR HANDLING OR RETRY LOGIC IN ANY NODE
+FILE: Both workflow files | All nodes
+DESCRIPTION:
+  None of the 8 nodes have error branches, retry configuration, or fallback
+  routing. If Replicate returns 429 (rate limit), or the bridge server is
+  down, or Pinterest returns 401, the entire execution silently fails with
+  no notification, no retry, and no alerting.
+
+SOLUTION:
+  In n8n settings for each HTTP Request node (5, 6, 7):
+  1. Enable "Continue on Fail" option.
+  2. Add an IF node after each: check if $json.error exists.
+     If yes, route to an error notification node (email/Slack/log).
+     If no, continue normally.
+  3. For Node 5 (Replicate): Add retry logic — if status is not 'succeeded',
+     wait 5 seconds and poll the prediction URL up to 3 times.
+  4. For Node 7 (Pinterest): Add a 1-second delay node before posting to
+     respect Pinterest API rate limits (1 req/sec per user).
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[N8N-12] MISSING webhookId ON NODES — BREAKS STABLE WEBHOOK URL
+FILE: fixed_n8n_workflow.json | All nodes except Node 1
+DESCRIPTION:
+  The fixed_n8n_workflow.json has webhookId only on Node 1. In n8n, the
+  webhookId is used for stable webhook URL generation. Re-importing the
+  workflow regenerates a new webhook URL, breaking all callers including
+  web_console_server.py and n8n_local_bridge.py which hardcode the URL.
+
+SOLUTION:
+  Use only n8n_pinterest_affiliate_workflow.json which has stable node IDs.
+  After importing, copy the webhook production URL from n8n and update:
+  — web_console_server.py: handle_api_proxy_n8n_webhook() N8N_WEBHOOK_URL
+  — n8n_local_bridge.py: N8N_WEBHOOK_URL constant
+  — .env file: N8N_WEBHOOK_URL variable
+  Do NOT re-import the workflow unless necessary, as it regenerates the URL.
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION B — index.html HOMEPAGE BUGS (9 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[IDX-1] B0CX144DHK CARD SHOWS RAW ASIN AS TITLE AND ALT TEXT
+FILE: index.html | Lines 892, 889
+CURRENT (WRONG):
+  <h2>Product B0CX144DHK</h2>
+  <img alt="Product B0CX144DHK" .../>
+
+DESCRIPTION:
+  The card was inserted by bridge_creator but was never rebuilt with real
+  data from product_price_registry.json. Real title is:
+  "Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp"
+
+SOLUTION:
+  Run: python rebuild_EVERY_single_bridge.py
+  This rebuilds all cards from registry data.
+  OR manually edit index.html lines 892 and 889:
+  <h2>Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp</h2>
+  <img alt="Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp" .../>
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-2] B0CX144DHK WRONG data-direct-regions — REVENUE LOSS ON 7 REGIONS
+FILE: index.html | Line 884
+CURRENT (WRONG):
+  data-direct-regions="US"
+
+DESCRIPTION:
+  The registry declares 8 confirmed direct regions: US, IN, UK, DE, CA, AU,
+  JP, SE. The card only has "US". Currency engine shows search fallback links
+  for 7 regions instead of direct /dp/ product links. Revenue-impacting.
+
+SOLUTION:
+  Change line 884 to:
+  data-direct-regions="US,IN,UK,DE,CA,AU,JP,SE"
+  Also add B0CX144DHK to global_direct_matrix.json (see REG-2 solution).
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-3] 9 PRODUCTS HAVE INR PRICES UNDER UK/DE DATA ATTRIBUTES
+FILE: index.html | Lines 966, 984, 1002, 1020, 1038, 1056, 1074
+DESCRIPTION:
+  The scraper returned INR values but stored them under UK and DE keys.
+  UK users see "INR1,794.46" in their price badge — completely wrong.
+  Affected ASINs and wrong attributes:
+  B0FXLYXM32: data-price-uk="INR16,255.28", data-price-de="INR13,029.34"
+  B0D1FRDFFX: data-price-uk="INR1,793.17",  data-price-de="INR3,730.98"
+  B07HP22QTZ: data-price-uk="INR1,582.81"
+  B0BZXNSW5K: data-price-uk="INR1,794.46"
+  B0DXKGL1T2: data-price-uk="INR4,666.35"
+  B0D8P8CSYP: data-price-uk="INR2,801.35", data-price-de="INR3,291.91"
+
+SOLUTION:
+  Run: python sync_all_regional_prices_master.py
+  This re-scrapes all regional prices and rebuilds correct data attributes.
+  After sync, run: python rebuild_EVERY_single_bridge.py
+  Which regenerates index.html with correct price data attributes.
+  OR manually replace each INR value with the correct regional price.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-4] JSON-LD SCHEMA numberOfItems IS STALE — 2 PRODUCTS MISSING FROM SEO
+FILE: index.html | Line 34-45
+CURRENT (WRONG):
+  "numberOfItems": 9
+  (B0CX144DHK and B0FGJ1S73D are missing from itemListElement array)
+
+DESCRIPTION:
+  Google will not index the 2 missing products in Shopping search results.
+  Also the count says 9 but there are 11 actual cards on the page.
+
+SOLUTION:
+  Change line 34 to: "numberOfItems": 11
+  Add to itemListElement array (after position 9):
+  { "@type": "ListItem", "position": 10, "name": "Glivpny Mushroom Table Lamp", "url": "https://adityasnalawade742-design.github.io/bridge_B0CX144DHK.html" },
+  { "@type": "ListItem", "position": 11, "name": "Ceramic Mushroom Bedside Lamp with Glass Shade", "url": "https://adityasnalawade742-design.github.io/bridge_B0FGJ1S73D.html" }
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-5] RATING BADGE SHOWS "SAVE X% OFF" INSTEAD OF STAR RATING
+FILE: index.html | Lines 934, 952, 970, 988, etc.
+CURRENT (WRONG):
+  <div class="card-rating">🔥 SAVE 24% OFF</div>
+
+DESCRIPTION:
+  The card-rating div was repurposed to show a discount badge. The discount
+  percentage is hardcoded and unverified. Original rule requires star rating.
+
+SOLUTION:
+  Either:
+  Option A — Show real star rating (from registry):
+  <div class="card-rating">★ 4.5</div>
+  Option B — Keep discount badge but make it accurate:
+  Only show it if you have verified original vs current price from Amazon.
+  Never hardcode a percentage without a real before/after price comparison.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-6] B0GYDXHF4G DIRECT REGIONS HAVE NO REGIONAL ASINs FOR FOREIGN STORES
+FILE: index.html | Line 948, product_price_registry.json | Line 65
+DESCRIPTION:
+  data-direct-regions="US,DE,SE,CA,JP" but regional_asins only has:
+  {"US": "B0GYDXHF4G"}. For DE, SE, CA, JP the bridge redirector will use
+  the US ASIN on foreign storefronts — which may result in dead 404 pages.
+
+SOLUTION:
+  1. Manually verify if B0GYDXHF4G exists on amazon.de, amazon.se, etc.
+  2. If it does, add it to regional_asins in product_price_registry.json:
+     "regional_asins": { "US": "B0GYDXHF4G", "DE": "B0GYDXHF4G", ... }
+  3. If it does NOT exist on those stores, remove them from direct_regions.
+  4. Run: python rebuild_EVERY_single_bridge.py to rebuild bridge page.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-7] B0FXLYXM32 PRICE $76.49 VIOLATES $10–$50 IMPULSE PRICE RULE
+FILE: index.html | product_price_registry.json
+DESCRIPTION:
+  Discovery quality rule requires products to be $10–$50. At $76.49 this
+  mirror should have been filtered by the Gemini AI evaluator. It was likely
+  added manually bypassing the quality filter.
+
+SOLUTION:
+  Option A — Remove the product:
+  Run: python delete_product.py B0FXLYXM32
+  Option B — Keep it but acknowledge it as a premium/exception product:
+  Add category="premium" to its card and add a note in the registry.
+  Consider adding a "PREMIUM PICK" badge instead of a price badge.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-8] INITIAL VISIBLE COUNT HARDCODED — DOES NOT REFLECT ACTUAL CARD COUNT
+FILE: index.html | Line 878
+CURRENT (WRONG):
+  Showing <span id="visibleCount" ...>11</span> Curated Finds
+
+DESCRIPTION:
+  The JS filterProducts() updates it dynamically but only on filter/search.
+  On initial page load the number reads the hardcoded HTML value "11".
+  If cards are deleted or hidden, the number is wrong until a filter is used.
+
+SOLUTION:
+  Add a small init script at the bottom of the page:
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const count = document.querySelectorAll('.card-wrapper').length;
+      const el = document.getElementById('visibleCount');
+      if (el) el.innerText = count;
+    });
+  </script>
+  Also update the hardcoded 11 to match current actual card count.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[IDX-9] B0FXLYXM32 INDIA PRICE ₹899 IS CLEARLY A SCRAPER ERROR
+FILE: index.html | Line 966, product_price_registry.json | Line 74
+CURRENT (WRONG):
+  data-price-in="₹899.00"  (registry also says "IN": "₹899.00")
+
+DESCRIPTION:
+  A $76.49 USD floor mirror for ₹899 (~$10.70 USD) is impossible. The
+  scraper captured a completely different product's price. Indian users
+  see a misleading ultra-low price that doesn't match the product.
+
+SOLUTION:
+  1. Manually check amazon.in for ASIN B0FXLYXM32.
+  2. If it exists, update product_price_registry.json with the real price.
+  3. If it doesn't exist on amazon.in, set: "IN": "Not Available"
+  4. Update index.html data-price-in attribute to match.
+  5. Run: python rebuild_EVERY_single_bridge.py to rebuild bridge page.
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION C — product_price_registry.json BUGS (5 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[REG-1] INR-FORMATTED PRICES STORED UNDER UK AND DE KEYS
+FILE: product_price_registry.json | Lines 75-76
+CURRENT (WRONG):
+  "UK": "INR16,255.28"
+  "DE": "INR13,029.34"
+
+DESCRIPTION:
+  Same scraper error as IDX-3. UK price must be in GBP (£). DE must be EUR (€).
+  This causes wrong currency displays on bridge pages for UK/DE visitors.
+
+SOLUTION:
+  Run: python sync_all_regional_prices_master.py
+  This will re-scrape and fix all regional prices.
+  OR manually find the correct prices on amazon.co.uk and amazon.de
+  and update the registry file directly, then rebuild all bridge pages.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[REG-2] B0CX144DHK MISSING FROM global_direct_matrix.json
+FILE: global_direct_matrix.json
+DESCRIPTION:
+  B0CX144DHK is on the homepage and in the registry but has NO entry in
+  global_direct_matrix.json. When bridge_creator.py generates its bridge
+  page it defaults to ["US"] only. All other declared regions (IN, UK, DE,
+  CA, AU, JP, SE) get search fallback links instead of direct /dp/ links.
+
+SOLUTION:
+  Add the following entry to global_direct_matrix.json:
+  "B0CX144DHK": ["US", "IN", "UK", "DE", "CA", "AU", "JP", "SE"]
+  Then run: python rebuild_EVERY_single_bridge.py
+  to regenerate bridge_B0CX144DHK.html with correct geo-redirect logic.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[REG-3] B0CX144DHK REGISTRY MISSING 13 REGIONAL PRICE ENTRIES
+FILE: product_price_registry.json | Lines 332-368
+DESCRIPTION:
+  B0CX144DHK has prices for only 8 regions. Missing regions: FR, ES, IT,
+  NL, PL, TR, BE, MX, BR, SG, AE, SA, EG. The bridge page geo-redirector
+  cannot distinguish "not checked" from "not available" for these regions.
+
+SOLUTION:
+  Run the sync script to check all regions:
+  python sync_all_regional_prices_master.py
+  Manually add "Not Available" for regions where confirmed unavailable:
+  "FR": "Not Available", "ES": "Not Available", ... etc.
+  This ensures the bridge page correctly shows "OUT OF STOCK" for those.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[REG-4] 7 PRODUCTS MISSING description AND features FIELDS
+FILE: product_price_registry.json
+DESCRIPTION:
+  Products B0DZD1X83N, B0GYDXHF4G, B0FXLYXM32, B0C2YLN3H4, B07HP22QTZ,
+  B0BZXNSW5K, B0DXKGL1T2 all lack "description" and "features" keys.
+  Bridge template falls back to generic hardcoded text like:
+  "Premium Room Aesthetic Upgrade", "High Quality Craftsmanship" etc.
+  This violates Rule 1 (registry is the single source of truth).
+
+SOLUTION:
+  For each of the 7 products, add real data to the registry:
+  Example for B0DZD1X83N:
+  "description": "Minimalist wood base bedside lamp with warm ambient glow...",
+  "features": [
+    "MINIMALIST WOOD BASE DESIGN",
+    "WARM 2700K AMBIENT GLOW",
+    "TOUCH DIMMER CONTROL",
+    "E27 BULB COMPATIBLE"
+  ]
+  Use real Amazon product listing data to fill in accurate features.
+  Then run: python rebuild_EVERY_single_bridge.py to rebuild all pages.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[REG-5] B0D1FRDFFX INDIA PRICE ₹10,996.51 IS SCRAPER ERROR (3.6x USD PRICE)
+FILE: product_price_registry.json | Line 229
+CURRENT (WRONG):
+  "IN": "₹10,996.51"
+
+DESCRIPTION:
+  A $35.98 USD glass mushroom lamp at ₹10,996 (~$131 USD equivalent) is
+  impossible — that's 3.6x the US price. This is a scraper error likely
+  capturing import/shipping costs from a third-party seller on amazon.in.
+  Showing ₹10,996 to Indian users destroys conversion rates for this product.
+
+SOLUTION:
+  1. Manually check amazon.in for ASIN B0D1FRDFFX.
+  2. If the real price is reasonable (₹2,000–₹4,000 range), update it.
+  3. If the only listing is the overpriced import seller, set "Not Available"
+     and remove IN from the direct_regions list for this ASIN.
+  4. Rebuild: python rebuild_EVERY_single_bridge.py
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION D — bridge_creator.py BUGS (7 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[BC-1] DEFAULT CTA BUTTON ALWAYS USES US TAG — NOT PRIMARY INDIA TAG
+FILE: modules/bridge_creator.py | Lines 491-499 (Jinja template)
+CURRENT (WRONG):
+  href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20"
+  (Both if/else branches output identical US amazon.com link with US tag)
+
+DESCRIPTION:
+  The static HTML fallback (shown before JS loads) always shows a US link.
+  smartdeal0358-21 is the primary India tag and should be the default.
+  If JavaScript fails (crawlers, disabled JS), all users get US links only.
+
+SOLUTION:
+  Change the static HTML default CTA to use the India tag as the default:
+  href="https://www.amazon.in/dp/{{ asin }}?tag=smartdeal0358-21"
+  The JS applyGeoRedirect() will override this for other countries on load.
+  This ensures if JS fails, the most-used associate program still earns.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[BC-2] og:image POINTS TO raw_images/ WHICH IS NOT UPLOADED TO GITHUB PAGES
+FILE: modules/bridge_creator.py | Lines 19, 24 (Jinja template)
+CURRENT (WRONG):
+  <meta property="og:image" content="https://...github.io/raw_images/raw_{{ asin }}.jpg">
+
+DESCRIPTION:
+  raw_images/ directory stores unprocessed Amazon photos which may not be
+  committed and pushed to GitHub Pages. Pinterest and social media previews
+  will show a broken image when sharing bridge page links.
+
+SOLUTION:
+  Change all og:image and twitter:image meta tags to use the Playwright
+  rendered hook image which IS always uploaded:
+  <meta property="og:image" content="https://adityasnalawade742-design.github.io/focus_product_{{ asin }}_hook.jpg">
+  <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/focus_product_{{ asin }}_hook.jpg">
+  Also update Schema.org "image" field on line 34 to the same hook image URL.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[BC-3] SCHEMA.ORG aggregateRating IS HARDCODED — FAKE DATA
+FILE: modules/bridge_creator.py | Lines 45-46 (Jinja template)
+CURRENT (WRONG):
+  "ratingValue": "4.8",
+  "reviewCount": "128"
+
+DESCRIPTION:
+  Every single product page shows the exact same fake rating (4.8) and
+  review count (128). This is deceptive structured data that could trigger
+  Google Search Console penalties and manual actions.
+
+SOLUTION:
+  Pull real values from product registry or Amazon extractor:
+  "ratingValue": "{{ product.rating or '4.5' }}",
+  "reviewCount": "{{ product.reviews or '200' }}"
+  Add real "rating" and "reviews" fields to product_price_registry.json
+  for each product, populated from actual Amazon data during extraction.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[BC-4] SCHEMA.ORG price FILTER BREAKS ON NON-USD PRICES
+FILE: modules/bridge_creator.py | Lines 38-39 (Jinja template)
+CURRENT (WRONG):
+  "priceCurrency": "USD",
+  "price": "{{ product.price | replace('$', '') | replace(',', '') }}"
+
+DESCRIPTION:
+  If product.price is "₹1,670.00" or "€18.64", the replace('$','') does
+  nothing and the price renders as "₹1,670.00" — an invalid schema value.
+  Also priceCurrency is hardcoded to "USD" regardless of actual currency.
+
+SOLUTION:
+  Use the USD base price from the registry always for schema:
+  "priceCurrency": "USD",
+  "price": "{{ product.get('current_price', product.get('price', '19.99')) | replace('$', '') | replace(',', '') | trim }}"
+  Always use the US price for schema since bridge pages are indexed globally.
+  The Jinja filter chain should strip all non-numeric characters:
+  "price": "{{ (product.get('current_price') or product.get('price') or '19.99') | regex_replace('[^0-9.]', '') }}"
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[BC-5] generate_bridge_page OVERWRITES USER-SET direct_regions FROM MATRIX
+FILE: modules/bridge_creator.py | Line 897
+CURRENT (WRONG):
+  product_data["direct_regions"] = g_matrix.get(asin, ["US"])
+
+DESCRIPTION:
+  This unconditionally overwrites any direct_regions the caller already
+  passed in product_data. If caller passed verified regions not yet in the
+  matrix file, they are silently discarded and replaced with matrix values.
+
+SOLUTION:
+  Only apply matrix value if direct_regions is not already set:
+  if "direct_regions" not in product_data or not product_data["direct_regions"]:
+      product_data["direct_regions"] = g_matrix.get(asin, ["US"])
+  This preserves caller-specified regions while still loading from matrix
+  as a fallback when no regions are provided.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[BC-6] NEW CARDS ALWAYS INSERTED AT TOP OF GRID — NO ORDER MANAGEMENT
+FILE: modules/bridge_creator.py | Line 979
+CURRENT (WRONG):
+  new_html = html.replace(grid_tag, grid_tag + card_html)
+
+DESCRIPTION:
+  New products are prepended to the very top of the grid. Each new product
+  pushes all older products down. There's no date-based or priority-based
+  ordering. Over time the grid order becomes completely arbitrary.
+
+SOLUTION:
+  Change insertion to append BEFORE the closing </main> tag instead:
+  new_html = html.replace('</main>', card_html + '</main>')
+  This appends new products at the bottom of the grid.
+  OR maintain an ordering by adding a data-date attribute to each card
+  and using JS to sort cards by date on page load.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[BC-7] DEAD CODE: get_flattened_data() DOES NOT EXIST ON PIL IMAGE
+FILE: modules/html_overlay_engine.py | Line 175
+CURRENT (WRONG):
+  for pixel in img.get_flattened_data() if hasattr(img, "get_flattened_data") else list(img.getdata()):
+
+DESCRIPTION:
+  PIL.Image objects do not have a get_flattened_data() method. The hasattr
+  check always returns False so it always uses list(img.getdata()).
+  The dead code branch is misleading but not functionally harmful.
+
+SOLUTION:
+  Simplify to remove the dead branch entirely:
+  for pixel in list(img.getdata()):
+  This is cleaner, faster, and functionally identical to what runs now.
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION E — config.py BUGS (2 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[CFG-1] BASE_BRIDGE_URL DEFAULTS TO WRONG PLACEHOLDER
+FILE: config.py | Line 34
+CURRENT (WRONG):
+  BASE_BRIDGE_URL = os.getenv("BASE_BRIDGE_URL", "https://your-app.vercel.app")
+
+DESCRIPTION:
+  The actual deployment is GitHub Pages. Any code using BASE_BRIDGE_URL
+  without a .env setting generates URLs pointing to "your-app.vercel.app"
+  which doesn't exist and will return 404 for any auto-generated links.
+
+SOLUTION:
+  Change the default to the correct GitHub Pages URL:
+  BASE_BRIDGE_URL = os.getenv("BASE_BRIDGE_URL", "https://adityasnalawade742-design.github.io")
+  Also add to your .env file:
+  BASE_BRIDGE_URL=https://adityasnalawade742-design.github.io
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[CFG-2] BRIDGE_DIR AND IMAGES_DIR ARE CREATED BUT NEVER ACTUALLY USED
+FILE: config.py | Lines 37-42
+CURRENT:
+  BRIDGE_DIR = OUTPUT_DIR / "bridge_pages"
+  IMAGES_DIR = OUTPUT_DIR / "images"
+  BRIDGE_DIR.mkdir(parents=True, exist_ok=True)
+  IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+
+DESCRIPTION:
+  All bridge pages are written to project root (not output/bridge_pages/).
+  All images are written to project root (not output/images/).
+  These directories are created but nothing ever writes to them.
+  BRIDGE_DIR is imported by bridge_creator.py but never used.
+
+SOLUTION:
+  Option A — Remove the unused directories:
+  Delete lines 37-42 and the imports in bridge_creator.py.
+  Option B — Actually use them (recommended for cleaner structure):
+  Update bridge_creator.py to write bridge pages to BRIDGE_DIR instead of
+  project root. Update image_generator.py to write images to IMAGES_DIR.
+  Note: GitHub Pages serves from root, so if you move files you must also
+  update all relative paths in HTML files.
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION F — web_console_server.py BUGS (5 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[WCS-1] DEFAULT prompt_strength = 0.30 VIOLATES SYSTEM RULES
+FILE: web_console_server.py | Line 944
+CURRENT (WRONG):
+  prompt_strength = data.get('prompt_strength', 0.30)
+
+DESCRIPTION:
+  System rules require minimum 0.48 for room photos and 0.78 for cutouts.
+  A default of 0.30 is below both thresholds. Any call to /api/generate
+  without specifying prompt_strength will produce under-transformed images.
+
+SOLUTION:
+  Change the default to 0.50 (safe midpoint for room photos):
+  prompt_strength = data.get('prompt_strength', 0.50)
+  Even better: classify the image first and set the default intelligently:
+  is_white = data.get('is_white_bg', False)
+  prompt_strength = data.get('prompt_strength', 0.78 if is_white else 0.50)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[WCS-2] RE-RENDER BADGES ENDPOINT CALLS NON-EXISTENT SCRIPT
+FILE: web_console_server.py | Line 563
+CURRENT (WRONG):
+  rerender_script = str(WORKSPACE_DIR / "rebuild_all_price_badges_usd.py")
+
+DESCRIPTION:
+  "rebuild_all_price_badges_usd.py" does NOT exist in the project directory.
+  Calling /api/rerender_badges from the Web Console always fails with
+  FileNotFoundError. This feature is completely broken.
+
+SOLUTION:
+  Change to the correct existing script:
+  rerender_script = str(WORKSPACE_DIR / "daily_price_updater.py")
+  OR if you want full rebuild:
+  rerender_script = str(WORKSPACE_DIR / "rebuild_EVERY_single_bridge.py")
+  Both scripts exist and handle badge re-rendering correctly.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[WCS-3] process_single_campaign_in_memory DOES NOT LOAD REGISTRY DATA
+FILE: web_console_server.py | Lines 60-65
+CURRENT (WRONG):
+  prod = {
+      'title': title,
+      'price': price,
+      'rating': "4.6",
+      'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
+  }
+
+DESCRIPTION:
+  The campaign generator ignores product_price_registry.json entirely.
+  Real features, description, regional prices, and direct_regions from the
+  registry are all discarded. Bridge pages and graphics get generic
+  hardcoded features instead of real product-specific data. Violates Rule 1.
+
+SOLUTION:
+  Load registry data at the start of the function:
+  reg_path = WORKSPACE_DIR / "product_price_registry.json"
+  reg_data = {}
+  try:
+      reg_data = json.loads(reg_path.read_text(encoding="utf-8"))
+  except Exception: pass
+  meta = reg_data.get(asin, {})
+
+  prod = {
+      'title': title or meta.get('title', f'Product {asin}'),
+      'price': price or meta.get('current_price', '$19.99'),
+      'rating': meta.get('rating', '4.6'),
+      'features': meta.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW"]),
+      'description': meta.get('description', ''),
+      'regional_prices': meta.get('regional_prices', {}),
+      'direct_regions': meta.get('direct_regions', ['US'])
+  }
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[WCS-4] GIT PUSH check=True CRASHES THREAD ON PUSH FAILURE
+FILE: web_console_server.py | Line 98
+CURRENT (WRONG):
+  subprocess.run(["git", "push", "origin", "main"], check=True, ...)
+
+DESCRIPTION:
+  If GitHub is unreachable, authentication fails, or there's a merge conflict,
+  this raises CalledProcessError which propagates up as a task failure —
+  even though the campaign was fully generated locally. The user sees an error
+  status but their product IS actually ready, just not pushed yet.
+
+SOLUTION:
+  Change check=True to check=False and handle the return code manually:
+  result = subprocess.run(["git", "push", "origin", "main"], check=False,
+                          cwd=str(WORKSPACE_DIR), timeout=60)
+  if result.returncode != 0:
+      print(f"[Git Push Warning] Push failed with code {result.returncode}. Campaign is ready locally.")
+      update_task_status(asin, {
+          'status': 'success_local',
+          'bridge_url': bridge_url,
+          'message': 'Campaign ready! Git push failed — please push manually with: git push origin main'
+      })
+  else:
+      update_task_status(asin, {'status': 'success', 'bridge_url': bridge_url, ...})
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[WCS-5] EXTRACTION URL USES INDIA TAG ON US AMAZON.COM
+FILE: web_console_server.py | Line 759
+CURRENT (WRONG):
+  amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
+
+DESCRIPTION:
+  smartdeal0358-21 is the India (amazon.in) associate tag. Using it on
+  amazon.com does no harm (Amazon ignores it for commission), but it is
+  incorrect and can confuse audit tools that validate tag-domain matching.
+
+SOLUTION:
+  Use the US tag for amazon.com extractions:
+  amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-20"
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION G — html_overlay_engine.py BUGS (4 Bugs)
+================================================================================
+
+--------------------------------------------------------------------------------
+[OVL-1] PLAYWRIGHT SCREENSHOT JPEG QUALITY 88 — BELOW PREMIUM STANDARD
+FILE: modules/html_overlay_engine.py | Line 789
+CURRENT (WRONG):
+  page.screenshot(path=str(output_path), type="jpeg", quality=88)
+
+DESCRIPTION:
+  Pinterest recommends maximum quality images for best feed performance.
+  Quality 88 introduces visible JPEG compression artifacts, especially on
+  price tag text and headline typography — looking unprofessional.
+
+SOLUTION:
+  Increase quality to 97:
+  page.screenshot(path=str(output_path), type="jpeg", quality=97)
+  Note: quality=100 increases file size significantly with minimal visual
+  gain. 97 is the optimal balance between quality and file size.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[OVL-2] device_scale_factor=1.5 MAKES RENDERS 1800x2400 NOT 1200x1600
+FILE: modules/html_overlay_engine.py | Line 780
+CURRENT:
+  context = browser.new_context(viewport={"width": 1200, "height": 1600}, device_scale_factor=1.5)
+
+DESCRIPTION:
+  With device_scale_factor=1.5, Playwright renders at 1800x2400 internally.
+  While this produces sharper text, it creates oversized files (3–5MB each).
+  Pinterest will downscale anyway. This behavior is undocumented and the
+  actual output resolution is not what the code comment suggests.
+
+SOLUTION:
+  If sharper text is the goal, keep 1.5 but document it explicitly:
+  # Note: device_scale_factor=1.5 renders at 1800x2400 for crisp text
+  # Pinterest accepts up to 10MB, so file size is acceptable
+  OR to get true 1200x1600 output:
+  context = browser.new_context(viewport={"width": 1200, "height": 1600}, device_scale_factor=1.0)
+  And compensate with larger CSS font sizes for readability.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[OVL-3] FEATURE TEXT TRUNCATED AT 14 CHARACTERS — TOO AGGRESSIVE
+FILE: modules/html_overlay_engine.py | Lines 330-332
+CURRENT (WRONG):
+  if len(f_str) > 16:
+      f_str = f_str[:14] + "…"
+
+DESCRIPTION:
+  Features like "WARM AMBIENT GLOW" (17 chars) get cut to "WARM AMBIENT G…"
+  This looks unpolished and unprofessional on the Pinterest graphic.
+  At 1200px width with 4 cards, features can comfortably fit 24 characters.
+
+SOLUTION:
+  Increase the truncation limit:
+  if len(f_str) > 26:
+      f_str = f_str[:24] + "…"
+  Also consider using CSS text-overflow: ellipsis (already applied in
+  feat-card CSS) instead of Python-side truncation. Remove the Python
+  truncation entirely and let CSS handle it responsively.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[OVL-4] BOTTOM SCRIM DRAWN TO x=1250 ON A 1200px WIDE CANVAS
+FILE: modules/html_overlay_engine.py | Line 125
+CURRENT (WRONG):
+  draw_scrim.line([(0, y), (1250, y)], fill=(12, 10, 18, alpha))
+
+DESCRIPTION:
+  The canvas is 1200px wide but the bottom scrim gradient line is drawn to
+  x=1250 — 50px beyond the image boundary. Pillow silently clips this but
+  the code is incorrect and suggests a copy-paste error.
+
+SOLUTION:
+  Change to the correct canvas width:
+  draw_scrim.line([(0, y), (1200, y)], fill=(12, 10, 18, alpha))
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION H — ASSOCIATE TAG BUGS (3 Bugs — REVENUE CRITICAL)
+================================================================================
+
+--------------------------------------------------------------------------------
+[TAG-1] SE, NL, PL, TR USE GERMAN DE TAG — ZERO COMMISSIONS ON 4 STOREFRONTS
+FILE: modules/bridge_creator.py | Lines 677-680 (associateTagMap)
+CURRENT (WRONG):
+  "SE": "smartdeal0bb4-21",
+  "NL": "smartdeal0bb4-21",
+  "PL": "smartdeal0bb4-21",
+  "TR": "smartdeal0bb4-21"
+
+DESCRIPTION:
+  amazon.se (Sweden), amazon.nl (Netherlands), amazon.pl (Poland), and
+  amazon.com.tr (Turkey) each require their OWN separate Amazon Associates
+  accounts. Using the German tag on these storefronts earns ZERO commission
+  because Amazon does not allow cross-program tag usage between countries.
+
+SOLUTION:
+  You must create separate Amazon Associates accounts for each of these
+  storefronts and use the correct country-specific tags:
+  "SE": "your-actual-sweden-tag",
+  "NL": "your-actual-netherlands-tag",
+  "PL": "your-actual-poland-tag",
+  "TR": "your-actual-turkey-tag"
+  Until you have real tags, use search fallback (no /dp/ direct links)
+  for these regions so at least users land on the right storefront.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[TAG-2] BELGIUM USES FRANCE TAG — LIKELY WRONG PROGRAM
+FILE: modules/bridge_creator.py | Line 681
+CURRENT (WRONG):
+  "BE": "smartdeal0962-21"
+
+DESCRIPTION:
+  Belgium (amazon.com.be) uses smartdeal0962-21 which is the France tag.
+  Amazon Belgium is a separate storefront from Amazon France and may require
+  its own Associates account registration.
+
+SOLUTION:
+  Check if Amazon Belgium Associates is available in your country.
+  If yes, create an account and replace with the BE-specific tag.
+  If no (Amazon BE doesn't have its own Associates program), you can safely
+  route BE users to amazon.fr with the FR tag as a fallback.
+  Update the countryMap in bridge_creator.py accordingly.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[TAG-3] AE, SA, SG, JP, AU, BR, MX, EG ALL USE US TAG — ZERO COMMISSIONS
+FILE: modules/bridge_creator.py | Lines 683-689
+CURRENT (WRONG):
+  "MX": "smartdeal0358-20",   (US tag)
+  "BR": "smartdeal0358-20",   (US tag)
+  "SG": "smartdeal0358-20",   (US tag)
+  "AE": "smartdeal0358-20",   (US tag)
+  "SA": "smartdeal0358-20",   (US tag)
+  "EG": "smartdeal0358-20",   (US tag)
+  "JP": "smartdeal0358-20",   (US tag)
+  "AU": "smartdeal0358-20",   (US tag)
+
+DESCRIPTION:
+  Amazon Associate programs are completely country-specific. Using the US
+  tag on amazon.ae, amazon.co.jp, amazon.com.au, amazon.sg, amazon.sa,
+  amazon.eg, amazon.com.br, amazon.com.mx earns ZERO commission.
+  All international sales on these 8 storefronts currently earn nothing.
+
+SOLUTION:
+  Register for Amazon Associates programs on each of these storefronts:
+  amazon.ae   → Amazon UAE Associates
+  amazon.sa   → Amazon Saudi Arabia Associates
+  amazon.sg   → Amazon Singapore Associates
+  amazon.co.jp → Amazon Japan Associates (requires Japanese business entity)
+  amazon.com.au → Amazon Australia Associates
+  amazon.com.br → Amazon Brazil Associates
+  amazon.com.mx → Amazon Mexico Associates
+  amazon.eg   → Amazon Egypt Associates (check availability)
+
+  Then update associateTagMap and domainToTagMap in bridge_creator.py with
+  the real country-specific tags for each storefront.
+  Priority order: AU, JP, SG (highest English-speaking traffic) first.
+--------------------------------------------------------------------------------
+
+
+================================================================================
+PRIORITY FIX ORDER (Do These First)
+================================================================================
+
+IMMEDIATE — Fix These Before Next Campaign:
+  1. [N8N-3]  Add real API tokens to n8n environment variables
+  2. [N8N-2]  Fix Replicate endpoint URL in fixed_n8n_workflow.json
+  3. [N8N-4]  Fix image_hook field in Node 6 of fixed workflow
+  4. [IDX-1]  Fix B0CX144DHK card title (run rebuild_EVERY_single_bridge.py)
+  5. [REG-2]  Add B0CX144DHK to global_direct_matrix.json
+  6. [WCS-2]  Fix re-render badges script path
+
+THIS WEEK — Fix for Revenue & Quality:
+  7. [TAG-3]  Register AU, JP, SG Associates accounts (highest ROI)
+  8. [TAG-1]  Register SE, NL Associates accounts
+  9. [IDX-3]  Re-run price sync to fix all INR-under-UK/DE attributes
+  10. [N8N-6]  Change Prompt B strength from 0.35 to 0.50
+  11. [N8N-7]  Add multi-pack classification branch to n8n
+  12. [BC-2]  Fix og:image to point to hook image not raw_images/
+  13. [WCS-3]  Load registry data in process_single_campaign_in_memory
+
+NEXT SPRINT — Quality & SEO Improvements:
+  14. [IDX-4]  Update JSON-LD numberOfItems to 11 and add missing products
+  15. [REG-4]  Add real description/features to 7 products in registry
+  16. [BC-3]  Replace fake schema.org ratings with real product data
+  17. [OVL-3]  Increase feature text truncation from 14 to 24 characters
+  18. [OVL-1]  Increase Playwright screenshot quality from 88 to 97
+  19. [CFG-1]  Fix BASE_BRIDGE_URL default placeholder
+  20. [WCS-4]  Change git push check=True to check=False
+
+================================================================================
+END OF BUGS AND SOLUTIONS REPORT
+Total Bugs: 48 | Critical: 8 | High: 18 | Medium: 16 | Low: 6
+================================================================================

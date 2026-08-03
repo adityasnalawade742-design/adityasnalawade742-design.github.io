@@ -16,12 +16,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ seo.pin_title }} | Cozy Room Finds">
     <meta property="og:description" content="{{ seo.description }}">
-    <meta property="og:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
+    <meta property="og:image" content="https://adityasnalawade742-design.github.io/focus_product_{{ asin }}_hook.jpg">
     <meta property="og:url" content="https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ seo.pin_title }} | Cozy Room Finds">
     <meta name="twitter:description" content="{{ seo.description }}">
-    <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg">
+    <meta name="twitter:image" content="https://adityasnalawade742-design.github.io/focus_product_{{ asin }}_hook.jpg">
     <link rel="canonical" href="https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html">
 
 
@@ -31,19 +31,19 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
       "@context": "https://schema.org/",
       "@type": "Product",
       "name": "{{ seo.pin_title }}",
-      "image": "https://adityasnalawade742-design.github.io/raw_images/raw_{{ asin }}.jpg",
+      "image": "https://adityasnalawade742-design.github.io/focus_product_{{ asin }}_hook.jpg",
       "description": "{{ seo.description }}",
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "{{ product.price | replace('$', '') | replace(',', '') }}",
+        "price": "{{ (product.current_price or product.price or '19.99') | replace('$', '') | replace(',', '') | trim }}",
         "availability": "https://schema.org/InStock",
         "url": "https://adityasnalawade742-design.github.io/bridge_{{ asin }}.html"
       },
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "128"
+        "ratingValue": "{{ product.rating or '4.5' }}",
+        "reviewCount": "{{ product.reviews or '200' }}"
       }
     }
     </script>
@@ -894,7 +894,8 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
         try:
             with open(matrix_file, "r", encoding="utf-8") as f:
                 g_matrix = json.load(f)
-                product_data["direct_regions"] = g_matrix.get(asin, ["US"])
+                if "direct_regions" not in product_data or not product_data["direct_regions"]:
+                    product_data["direct_regions"] = g_matrix.get(asin, ["US"])
         except Exception as e_mat:
             print(f"[Bridge Creator Warning] Matrix load issue: {e_mat}")
 

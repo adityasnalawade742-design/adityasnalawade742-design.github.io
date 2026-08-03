@@ -55,13 +55,24 @@ def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt
     from modules.html_overlay_engine import render_html_overlay
     from modules.vision_prompt import generate_cozy_image_prompt
     from modules.seo_copywriter import generate_pin_seo_data
-    from modules.bridge_creator import generate_bridge_page
+    from modules.bridge_creator import generate_bridge_page    # Load product_price_registry.json metadata if available
+    reg_path = WORKSPACE_DIR / "product_price_registry.json"
+    meta = {}
+    if reg_path.exists():
+        try:
+            reg_data = json.loads(reg_path.read_text(encoding="utf-8"))
+            meta = reg_data.get(asin, {})
+        except Exception:
+            pass
 
     prod = {
-        'title': title,
-        'price': price,
-        'rating': "4.6",
-        'features': ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]
+        'title': title or meta.get('title', f'Product {asin}'),
+        'price': price or meta.get('current_price', '$19.99'),
+        'rating': meta.get('rating', '4.6'),
+        'features': meta.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]),
+        'description': meta.get('description', ''),
+        'regional_prices': meta.get('regional_prices', {}),
+        'direct_regions': meta.get('direct_regions', ['US'])
     }
 
     ref_sheet_path = create_multi_photo_reference_sheet([selected_photo], filename_prefix=f"product_{asin}", max_photos=1)
@@ -76,9 +87,10 @@ def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt
         subtitle="",
         badge_text=seo_data.get('badge_hook', "VIRAL ROOM FIND"),
         price_str=prod['price'],
-        features=seo_data.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]),  # BUG H FIX: use product-specific features from seo_copywriter
+        features=seo_data.get('features', prod['features']),
         output_path=hook_img_path
     )
+
     generate_bridge_page(prod, seo_data, asin)
     save_processed_asin(asin)
 
@@ -93,16 +105,24 @@ def run_async_generation(asin, selected_photo, title_clean, price_clean, prompt_
         process_single_campaign_in_memory(asin, selected_photo, title_clean, price_clean, prompt_strength)
         
         # Git commit & push update
-        subprocess.run(["git", "add", "-A"], check=True, cwd=str(WORKSPACE_DIR), timeout=60)
+        subprocess.run(["git", "add", "-A"], check=False, cwd=str(WORKSPACE_DIR), timeout=60)
         subprocess.run(["git", "commit", "-m", f"publish {asin} from Web Console"], check=False, cwd=str(WORKSPACE_DIR), timeout=60)
-        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(WORKSPACE_DIR), timeout=60)
+        push_res = subprocess.run(["git", "push", "origin", "main"], check=False, cwd=str(WORKSPACE_DIR), timeout=60)
 
         bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
-        update_task_status(asin, {
-            'status': 'success',
-            'bridge_url': bridge_url,
-            'message': 'Campaign generated and deployed live to GitHub Pages!'
-        })
+        if push_res.returncode != 0:
+            print(f"[Git Push Warning] Push returned non-zero exit code ({push_res.returncode}). Campaign is ready locally.")
+            update_task_status(asin, {
+                'status': 'success_local',
+                'bridge_url': bridge_url,
+                'message': 'Campaign generated locally! Git push failed — please push manually.'
+            })
+        else:
+            update_task_status(asin, {
+                'status': 'success',
+                'bridge_url': bridge_url,
+                'message': 'Campaign generated and deployed live to GitHub Pages!'
+            })
     except Exception as e:
         update_task_status(asin, {
             'status': 'error',
@@ -560,7 +580,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
     def handle_api_rerender_badges(self):
         try:
-            rerender_script = str(WORKSPACE_DIR / "rebuild_all_price_badges_usd.py")
+            rerender_script = str(WORKSPACE_DIR / "daily_price_updater.py")
             # BUG FIX: was blocking server thread — now runs in background, returns task key for polling
             task_key = 'rerender_badges'
             update_task_status(task_key, {'status': 'running', 'message': 'Badge re-render started...'})
@@ -756,7 +776,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             asin = target.split('/dp/')[1].split('?')[0].split('/')[0]
         else:
             asin = target.upper()
-            amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
+            amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-20"
 
         try:
             prod = get_product_details_and_photos(amazon_url)
@@ -941,7 +961,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         selected_photo = data.get('selected_photo')
         title = data.get('title', '')
         price = data.get('price', '$19.99')
-        prompt_strength = data.get('prompt_strength', 0.30)
+        prompt_strength = data.get('prompt_strength', 0.50)
 
         title_clean = title.replace('"', '\\"').replace("'", "\\'")
         price_clean = price.replace('"', '\\"')

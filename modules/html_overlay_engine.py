@@ -122,7 +122,7 @@ def render_pillow_fallback(image_path: str, headline: str, subtitle: str, badge_
             draw_scrim.line([(0, y), (1200, y)], fill=(12, 10, 18, alpha))
         for y in range(1250, 1600):
             alpha = int(210 * ((y - 1250) / 350) ** 1.5)
-            draw_scrim.line([(0, y), (1250, y)], fill=(12, 10, 18, alpha))
+            draw_scrim.line([(0, y), (1200, y)], fill=(12, 10, 18, alpha))
             
         img = Image.alpha_composite(img, scrim)
         draw = ImageDraw.Draw(img)
@@ -327,8 +327,8 @@ def render_html_overlay(
     clean_feats = []
     for f in features[:4]:
         f_str = re.sub(r'^[✨🌿🎁⚡✦✓\s]+', '', str(f)).strip()
-        if len(f_str) > 16:
-            f_str = f_str[:14] + "…"
+        if len(f_str) > 26:
+            f_str = f_str[:24] + "…"
         clean_feats.append(f_str.upper())
     feat_items = "".join([f'<div class="feat-card"><span>✨ {f}</span></div>' for f in clean_feats])
 
@@ -786,7 +786,7 @@ def render_html_overlay(
                 except Exception:
                     pass
                 page.wait_for_timeout(500)
-                page.screenshot(path=str(output_path), type="jpeg", quality=88)
+                page.screenshot(path=str(output_path), type="jpeg", quality=97)
                 browser.close()
                 rendered = True
                 break
