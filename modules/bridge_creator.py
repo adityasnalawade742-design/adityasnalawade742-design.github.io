@@ -898,6 +898,96 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 }
             }
             window.applyGeoRedirect = applyGeoRedirect;
+
+            // ⚡ Auto-Detect Visitor Country on Page Load & Execute applyGeoRedirect
+            let isForced = false;
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const forcedCountry = urlParams.get('country') || urlParams.get('geo');
+                if (forcedCountry) {
+                    applyGeoRedirect(forcedCountry.toUpperCase());
+                    isForced = true;
+                }
+            } catch(e) {}
+
+            if (!isForced) {
+                // Step 1: 0ms Instant Synchronous Geo Detection
+                try {
+                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                    const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
+                    const tzCountryMap = {
+                        'kolkata': 'IN', 'calcutta': 'IN',
+                        'london': 'GB', 'dublin': 'IE',
+                        'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',
+                        'paris': 'FR', 'rome': 'IT', 'madrid': 'ES',
+                        'amsterdam': 'NL', 'stockholm': 'SE', 'warsaw': 'PL',
+                        'tokyo': 'JP', 'sydney': 'AU', 'melbourne': 'AU',
+                        'toronto': 'CA', 'vancouver': 'CA',
+                        'singapore': 'SG', 'dubai': 'AE', 'riyadh': 'SA',
+                        'mexico_city': 'MX', 'sao_paulo': 'BR'
+                    };
+                    let detected = null;
+                    for (const [tzPart, cc] of Object.entries(tzCountryMap)) {
+                        if (tz.includes(tzPart)) {
+                            detected = cc;
+                            break;
+                        }
+                    }
+                    if (!detected) {
+                        if (lang.includes('en-in') || lang.includes('-in') || lang.includes('hi')) detected = 'IN';
+                        else if (lang.includes('en-gb') || lang.includes('-gb')) detected = 'GB';
+                        else if (lang.includes('-fr') || lang.includes('fr-')) detected = 'FR';
+                        else if (lang.includes('-de') || lang.includes('de-')) detected = 'DE';
+                        else if (lang.includes('-jp') || lang.includes('ja-')) detected = 'JP';
+                        else if (lang.includes('-au')) detected = 'AU';
+                        else if (lang.includes('-ca')) detected = 'CA';
+                    }
+                    if (detected) {
+                        applyGeoRedirect(detected);
+                    }
+                } catch(e_sync) {}
+
+                // Step 2: Unblockable Cloudflare Network Trace
+                fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
+                    .then(res => res.text())
+                    .then(text => {
+                        const locMatch = text.match(/^loc=(.+)$/m);
+                        if (locMatch && locMatch[1]) {
+                            const country = locMatch[1].trim().toUpperCase();
+                            if (country && country.length === 2 && country !== 'XX') {
+                                applyGeoRedirect(country);
+                                return;
+                            }
+                        }
+                        fallbackFetchIP();
+                    })
+                    .catch(() => fallbackFetchIP());
+            }
+
+            function fallbackFetchIP() {
+                const ipProviders = [
+                    'https://ipwho.is/',
+                    'https://freeipapi.com/api/json',
+                    'https://api.country.is',
+                    'https://ipapi.co/json/'
+                ];
+
+                function tryFetchIP(index) {
+                    if (index >= ipProviders.length) return;
+                    fetch(ipProviders[index] + '?t=' + Date.now(), { cache: 'no-store' })
+                        .then(r => r.json())
+                        .then(d => {
+                            const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
+                            if (c && c.length === 2) {
+                                applyGeoRedirect(c);
+                            } else {
+                                tryFetchIP(index + 1);
+                            }
+                        })
+                        .catch(() => tryFetchIP(index + 1));
+                }
+                tryFetchIP(0);
+            }
         })();
     </script>
 </body>
