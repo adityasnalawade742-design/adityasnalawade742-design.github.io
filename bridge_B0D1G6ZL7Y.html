@@ -31,7 +31,7 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": ".99",
+        "price": "19.99",
         "availability": "https://schema.org/InStock",
         "url": "https://adityasnalawade742-design.github.io/bridge_B0D1G6ZL7Y.html"
       },
@@ -423,18 +423,18 @@
         <h1>Flower Bud Touch Desk Lamp</h1>
 
         <div class="price-container">
-            <div class="price">.99</div>
+            <div class="price">$19.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0D1G6ZL7Y_hook.jpg?v=1785768788" alt="Flower Bud Touch Desk Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0D1G6ZL7Y_hook.jpg?v=1785768812" alt="Flower Bud Touch Desk Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D1G6ZL7Y_hook.jpg?v=1785768788', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D1G6ZL7Y_hook.jpg?v=1785768812', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Flower Bud Touch Desk Lamp");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0D1G6ZL7Y_hook.jpg?v=1785768788";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0D1G6ZL7Y_hook.jpg?v=1785768812";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -645,7 +645,7 @@
             const currentAsin = "B0D1G6ZL7Y";
             const prodKeywords = encodeURIComponent("Flower Bud Touch Desk Lamp").replace(/%20/g, "+");
             const directRegions = ["US"];
-            const regionalMatrix = {"AU": "A.99", "CA": "CA.99", "DE": "\u20ac18.50", "IN": "\u20b91,650.00", "JP": "\u00a53,050", "SE": "210,00kr", "UK": "\u00a315.99", "US": ".99"};
+            const regionalMatrix = {"AU": "A.99", "CA": "CA.99", "DE": "\u20ac18.50", "IN": "\u20b91,650.00", "JP": "\u00a53,050", "SE": "210,00kr", "UK": "\u00a315.99", "US": "$19.99"};
             const regionalAsins = {"US": "B0D1G6ZL7Y"};
 
             let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20 };
@@ -731,7 +731,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat(".99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$19.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const finalDisplayPrice = `${sym}${converted}`;
                     priceTags.forEach(el => {
