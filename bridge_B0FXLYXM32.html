@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0FXLYXM32_hook.jpg?v=1785760952" alt="Wavy Full Length Floor Standing Mirror">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0FXLYXM32_hook.jpg?v=1785761022" alt="Wavy Full Length Floor Standing Mirror">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FXLYXM32_hook.jpg?v=1785760952', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FXLYXM32_hook.jpg?v=1785761022', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Wavy Full Length Floor Standing Mirror");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FXLYXM32_hook.jpg?v=1785760952";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FXLYXM32_hook.jpg?v=1785761022";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -600,184 +600,6 @@
         (function() {
             const countryMap = {
                 // INDIA & ASIA-PACIFIC
-                "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
-                "SG": { domain: "amazon.sg", label: "AMAZON SINGAPORE (SG$)" },
-                "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
-                "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
-                "NZ": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
-                "AE": { domain: "amazon.ae", label: "AMAZON UAE (AED)" },
-                "SA": { domain: "amazon.sa", label: "AMAZON SAUDI ARABIA (SAR)" },
-                "TR": { domain: "amazon.com.tr", label: "AMAZON TURKEY (TRY)" },
-                "EG": { domain: "amazon.eg", label: "AMAZON EGYPT (EGP)" },
-
-                // EUROPE
-                "GB": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
-                "UK": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
-                "IE": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
-                "DE": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "AT": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "CH": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "NL": { domain: "amazon.nl", label: "AMAZON NETHERLANDS (€)" },
-                "BE": { domain: "amazon.com.be", label: "AMAZON BELGIUM (€)" },
-                "LU": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "FR": { domain: "amazon.fr", label: "AMAZON FRANCE (€)" },
-                "ES": { domain: "amazon.es", label: "AMAZON SPAIN (€)" },
-                "PT": { domain: "amazon.es", label: "AMAZON SPAIN (€)" },
-                "IT": { domain: "amazon.it", label: "AMAZON ITALY (€)" },
-                "SE": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
-                "NO": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
-                "DK": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
-                "FI": { domain: "amazon.se", label: "AMAZON SWEDEN (kr)" },
-                "PL": { domain: "amazon.pl", label: "AMAZON POLAND (PLN)" },
-                "CZ": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "RO": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "GR": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-                "HU": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
-
-                // AMERICAS
-                "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
-                "MX": { domain: "amazon.com.mx", label: "AMAZON MEXICO (Mex$)" },
-                "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
-            };
-
-            
-            const currentAsin = "B0FXLYXM32";
-            const prodKeywords = encodeURIComponent("White Wavy Wall Body Standing Mirror").replace(/%20/g, "+");
-            const directRegions = ["US", "IN", "UK", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {"AE": "AED476.54", "AU": "A$116.26", "BE": "Not Available", "BR": "Not Available", "CA": "CA$216.34", "DE": "\u20ac70.37", "EG": "Not Available", "ES": "Not Available", "FR": "Not Available", "IN": "\u20b96,386.91", "IT": "Not Available", "JP": "\u00a520,390", "MX": "Not Available", "NL": "Not Available", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e578.69\u200e", "SE": "Not Available", "SG": "S$147.86", "TR": "Not Available", "UK": "\u00a359.99", "US": "$76.49"};
-            const regionalAsins = {"US": "B0FXLYXM32"};
-
-            let exchangeRates = { 
-                "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, 
-                "BRL": 5.45, "MXN": 18.20, "SGD": 1.35, "NZD": 1.64, "CHF": 0.89, "SEK": 10.50, "NOK": 10.80, 
-                "DKK": 6.85, "PLN": 3.95, "CZK": 23.50, "HUF": 360.0, "RON": 4.56, "BGN": 1.80, "TRY": 32.50, 
-                "ILS": 3.70, "AED": 3.67, "SAR": 3.75, "QAR": 3.64, "KWD": 0.31, "BHD": 0.38, "OMR": 0.38, 
-                "KRW": 1380.0, "CNY": 7.25, "HKD": 7.80, "TWD": 32.50, "THB": 36.50, "MYR": 4.70, "IDR": 16200.0, 
-                "PHP": 58.50, "VND": 25400.0, "ZAR": 18.50, "EGP": 48.50, "NGN": 1500.0, "KES": 130.0, 
-                "ARS": 900.0, "CLP": 930.0, "COP": 3900.0, "PEN": 3.75, "UYU": 39.0 
-            };
-            const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "SGD": "S$", "NZD": "NZ$", "CHF": "CHF ", "SEK": "kr ", "NOK": "kr ", "DKK": "kr. ", "PLN": "zł ", "CZK": "Kč ", "HUF": "Ft ", "RON": "lei ", "BGN": "лв ", "TRY": "₺", "ILS": "₪", "AED": "AED ", "SAR": "SAR ", "QAR": "QAR ", "KWD": "KWD ", "BHD": "BHD ", "OMR": "OMR ", "KRW": "₩", "CNY": "¥", "HKD": "HK$", "TWD": "NT$", "THB": "฿", "MYR": "RM ", "IDR": "Rp ", "PHP": "₱", "VND": "₫", "ZAR": "R ", "EGP": "E£ ", "NGN": "₦", "KES": "KSh ", "ARS": "$", "CLP": "$", "COP": "$", "PEN": "S/. ", "UYU": "$U " };
-            const countryToCurrencyMap = { "US": "USD", "CA": "CAD", "MX": "MXN", "BR": "BRL", "AR": "ARS", "CL": "CLP", "CO": "COP", "PE": "PEN", "UY": "UYU", "EC": "USD", "SV": "USD", "PA": "USD", "PR": "USD", "GB": "GBP", "UK": "GBP", "IM": "GBP", "JE": "GBP", "GG": "GBP", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "BE": "EUR", "AT": "EUR", "FI": "EUR", "IE": "EUR", "PT": "EUR", "GR": "EUR", "CY": "EUR", "EE": "EUR", "LV": "EUR", "LT": "EUR", "LU": "EUR", "MT": "EUR", "SK": "EUR", "SI": "EUR", "HR": "EUR", "MC": "EUR", "AD": "EUR", "SM": "EUR", "VA": "EUR", "ME": "EUR", "XK": "EUR", "CH": "CHF", "LI": "CHF", "SE": "SEK", "NO": "NOK", "SJ": "NOK", "DK": "DKK", "FO": "DKK", "GL": "DKK", "PL": "PLN", "CZ": "CZK", "HU": "HUF", "RO": "RON", "BG": "BGN", "TR": "TRY", "IN": "INR", "NP": "INR", "BT": "INR", "JP": "JPY", "CN": "CNY", "HK": "HKD", "TW": "TWD", "KR": "KRW", "SG": "SGD", "AU": "AUD", "NZ": "NZD", "TH": "THB", "MY": "MYR", "ID": "IDR", "PH": "PHP", "VN": "VND", "IL": "ILS", "AE": "AED", "SA": "SAR", "QA": "QAR", "KW": "KWD", "BH": "BHD", "OM": "OMR", "ZA": "ZAR", "EG": "EGP", "NG": "NGN", "KE": "KES" };
-
-            // Fetch Live Exchange Rates for 100% Price Parity
-            try {
-                fetch('https://open.er-api.com/v6/latest/USD')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data && data.rates) {
-                            exchangeRates = { ...exchangeRates, ...data.rates };
-                            if (window.currentAppliedCC) {
-                                applyGeoRedirect(window.currentAppliedCC);
-                            }
-                        }
-                    })
-                    .catch(e => {});
-            } catch(e) {}
-
-            const associateTagMap = {
-                "US": "smartdeal0358-20",
-                "CA": "smartdeal0302-20",
-                "IN": "smartdeal0358-21",
-                "UK": "smartdea04b3a-21",
-                "GB": "smartdea04b3a-21",
-                "DE": "smartdeal0bb4-21",
-                "FR": "smartdeal0962-21",
-                "ES": "smartdeal0b46-21",
-                "IT": "smartdea03a8d-21"
-            };
-
-            const domainToTagMap = {
-                "amazon.com": "smartdeal0358-20",
-                "amazon.ca": "smartdeal0302-20",
-                "amazon.in": "smartdeal0358-21",
-                "amazon.co.uk": "smartdea04b3a-21",
-                "amazon.de": "smartdeal0bb4-21",
-                "amazon.fr": "smartdeal0962-21",
-                "amazon.es": "smartdeal0b46-21",
-                "amazon.it": "smartdea03a8d-21",
-                "amazon.se": "smartdeal0bb4-21",
-                "amazon.nl": "smartdeal0bb4-21",
-                "amazon.pl": "smartdeal0bb4-21",
-                "amazon.com.tr": "smartdeal0bb4-21",
-                "amazon.com.be": "smartdeal0962-21",
-                "amazon.com.mx": "smartdeal0358-20",
-                "amazon.com.br": "smartdeal0358-20",
-                "amazon.sg": "smartdeal0358-20",
-                "amazon.ae": "smartdeal0358-20",
-                "amazon.sa": "smartdeal0358-20",
-                "amazon.eg": "smartdeal0358-20",
-                "amazon.co.jp": "smartdeal0358-20",
-                "amazon.com.au": "smartdeal0358-20"
-            };
-
-            function getTag(cc) {
-                return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20";
-            }
-
-            function applyGeoRedirect(cc) {
-                let targetCC = (cc || '').toUpperCase();
-                window.currentAppliedCC = targetCC;
-                const regSel = document.getElementById('bridgeRegionSelect');
-                if (regSel && countryMap[targetCC]) {
-                    regSel.value = targetCC;
-                }
-                const isDirectListing = directRegions.includes(targetCC) || (targetCC === 'GB' && directRegions.includes('UK')) || (targetCC === 'UK' && directRegions.includes('GB'));
-                
-                // 🏷️ 1. Dynamic Regional Price Tag Update (PERFECTED FOR 100% OF WORLD COUNTRIES)
-                const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
-                const regKey = (targetCC === 'IN') ? 'in' : (targetCC === 'UK' || targetCC === 'GB') ? 'uk' : (targetCC === 'DE') ? 'de' : (targetCC === 'CA') ? 'ca' : (targetCC === 'JP') ? 'jp' : (targetCC === 'AU') ? 'au' : 'us';
-                const regPrice = regionalMatrix[targetCC] || regionalMatrix[targetCC.toLowerCase()] || regionalMatrix[regKey] || (targetCC === 'GB' ? (regionalMatrix['UK'] || regionalMatrix['uk']) : null);
-                const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
-                const explicitScrapedRegions = ['in', 'uk', 'de', 'ca', 'jp', 'au', 'gb'];
-                const isExplicitScrapedMatch = (targetCC === 'US' && regKey === 'us') || (explicitScrapedRegions.includes(regKey) && explicitScrapedRegions.includes(targetCC.toLowerCase())) || Boolean(regPrice);
-
-                if (isExplicitScrapedMatch && regPrice === 'Not Available') {
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = '🔴 OUT OF STOCK';
-                            el.style.background = 'rgba(249, 115, 22, 0.25)';
-                            el.style.color = '#fdba74';
-                            el.style.borderColor = 'rgba(249, 115, 22, 0.4)';
-                        } else {
-                            el.innerText = 'Out of Stock';
-                        }
-                    });
-                } else if (isExplicitScrapedMatch && regPrice) {
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = `✨ VERIFIED DEAL • ${regPrice}`;
-                        } else {
-                            el.innerText = regPrice;
-                        }
-                    });
-                } else {
-                    const rate = exchangeRates[targetCurr] || 1.0;
-                    const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$76.49".replace(/[^0-9.]/g, '') || '20.00');
-                    const converted = (baseUsd * rate).toLocaleString(undefined, {
-                        minimumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2,
-                        maximumFractionDigits: (targetCurr === 'JPY' || targetCurr === 'KRW') ? 0 : 2
-                    });
-                    const finalDisplayPrice = `${sym}${converted}`;
-
-                    priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) {
-                            el.innerText = isDirectListing ? `✨ VERIFIED DEAL • ${finalDisplayPrice}` : `⚠️ UNLISTED IN REGION • ${finalDisplayPrice}`;
-                            if (!isDirectListing) {
-                                el.style.background = 'rgba(239, 68, 68, 0.25)';
-                                el.style.color = '#fca5a5';
-                                el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                            }
-                        } else {
-                            el.innerText = finalDisplayPrice;
-                        }
-                    });
-                }
-
-                // 🌐 2. Dynamic Regional CTA Link & Notice Box Handling (ASIN Variant Mapper + Zero-404 Fallback)
-                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
-
-                "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
                 "SG": { domain: "amazon.sg", label: "AMAZON SINGAPORE (SG$)" },
                 "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
                 "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
