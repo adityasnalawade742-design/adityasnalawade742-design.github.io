@@ -1191,7 +1191,11 @@
         function changeGlobalCurrency(targetCurr) {
             const rate = exchangeRates[targetCurr] || 1.0;
             const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-            const currToRegionMap = { "USD": "us", "GBP": "uk", "INR": "in", "EUR": "de", "CAD": "ca", "JPY": "jp", "AUD": "au" };
+            const currToRegionMap = { 
+                "USD": "us", "GBP": "uk", "INR": "in", "EUR": "de", "CAD": "ca", 
+                "JPY": "jp", "AUD": "au", "SEK": "se", "PLN": "pl", "TRY": "tr", 
+                "BRL": "br", "MXN": "mx", "SGD": "sg", "AED": "ae", "SAR": "sa" 
+            };
             const regionCode = currToRegionMap[targetCurr];
 
             document.querySelectorAll('.card-wrapper').forEach(card => {
@@ -1252,16 +1256,14 @@
         function applyHomepageCountry(countryCode) {
             if (!countryCode) return;
             const cc = countryCode.toUpperCase();
-            document.querySelectorAll('a[href^="./bridge_"]').forEach(a => {
+            document.querySelectorAll('a[href*="./bridge_"]').forEach(a => {
                 const cleanHref = a.getAttribute('href').split('?')[0];
                 a.setAttribute('href', `${cleanHref}?country=${cc}`);
             });
-            const detectedCurr = countryToCurrencyMap[cc];
-            if (detectedCurr) {
-                const sel = document.getElementById('currencySelector');
-                if (sel) sel.value = detectedCurr;
-                changeGlobalCurrency(detectedCurr);
-            }
+            const detectedCurr = countryToCurrencyMap[cc] || 'USD';
+            const sel = document.getElementById('currencySelector');
+            if (sel) sel.value = detectedCurr;
+            changeGlobalCurrency(detectedCurr);
         }
 
         // Auto-Detect Visitor's Local Country IP & Forward ?country= parameter to all card links
