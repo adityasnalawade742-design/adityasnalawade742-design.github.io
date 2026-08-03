@@ -1345,7 +1345,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             # 2. Render hook image (price badge overlay - ALWAYS USD)
             from modules.amazon_extractor import get_best_image_for_asin
-            img_res = get_best_image_for_asin(asin, title=title, save_to_disk=True)
+            img_res = get_best_image_for_asin(asin, title=data.get('title', title), save_to_disk=True)
             raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
             source_img = str(raw_img_path) if raw_img_path.exists() else (img_res.get("local_path") or str(raw_img_path))
             hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')

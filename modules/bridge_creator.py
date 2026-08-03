@@ -445,7 +445,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             {% endfor %}
         </div>
 
-        <p class="description">{{ seo.description }}</p>
+        <p class="description">{{ seo.description or product.description }}</p>
 
         <!-- Feature Highlights Box -->
         <div class="features-box">
