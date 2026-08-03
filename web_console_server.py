@@ -1343,9 +1343,19 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                         clean_title = f"Aesthetic Decor Find {asin}"
             title = clean_title
 
-            # Price normalization: fix truncated prices like ".99" or "19.99"
-            price = reg_entry.get('current_price') or data.get('price') or '$19.99'
+            # Price normalization & lookup: if price is missing or defaulted to $19.99, fetch real Amazon price
+            price = reg_entry.get('current_price') or data.get('price') or ''
             price_str = str(price).strip()
+            if not price_str or price_str in ['$19.99', '19.99', '.99']:
+                try:
+                    from modules.amazon_extractor import get_best_image_for_asin
+                    fetched_info = get_best_image_for_asin(asin, save_to_disk=False)
+                    if fetched_info and fetched_info.get('price'):
+                        price_str = str(fetched_info.get('price')).strip()
+                except Exception:
+                    pass
+            if not price_str:
+                price_str = "$19.99"
             if price_str.startswith('.'):
                 price_str = f"$19{price_str}"
             elif price_str.replace('.', '', 1).isdigit() and not price_str.startswith('$'):
