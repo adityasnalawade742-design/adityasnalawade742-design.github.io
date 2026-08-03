@@ -639,7 +639,7 @@
         let n8nSelectedAsins = new Set();
         let n8nExtractedItems = [];
         let n8nChosenPhotos = {};
-        const N8N_WEBHOOK_DEFAULT = 'http://localhost:5678/webhook-test/pinterest-batch';
+        const N8N_WEBHOOK_DEFAULT = 'http://localhost:5678/webhook/pinterest-batch';
         function getN8nWebhookUrl() {
             const inp = document.getElementById('n8nWebhookUrlInput');
             return (inp && inp.value.trim()) ? inp.value.trim() : N8N_WEBHOOK_DEFAULT;

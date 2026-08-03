@@ -1231,14 +1231,14 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             content_length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(content_length)
             data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
-            n8n_url = data.get('n8n_url') or 'http://localhost:5678/webhook-test/pinterest-batch'
+            n8n_url = data.get('n8n_url') or 'http://localhost:5678/webhook/pinterest-batch'
             items = data.get('items', [])
 
             urls_to_try = [n8n_url]
-            if 'webhook-test' in n8n_url:
-                urls_to_try.append(n8n_url.replace('webhook-test', 'webhook'))
-            elif '/webhook/' in n8n_url:
+            if '/webhook/' in n8n_url and 'webhook-test' not in n8n_url:
                 urls_to_try.append(n8n_url.replace('/webhook/', '/webhook-test/'))
+            elif 'webhook-test' in n8n_url:
+                urls_to_try.insert(0, n8n_url.replace('webhook-test', 'webhook'))
 
             print(f"[n8n Proxy] 🚀 Proxying batch of {len(items)} items to n8n webhook ({urls_to_try[0]})...")
 
@@ -1253,12 +1253,15 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             # Forward payload to n8n server-side (no CORS restriction)
             req_data = json.dumps({'items': items}).encode('utf-8')
-            n8n_status = 0
             for url in urls_to_try:
                 try:
                     req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json'})
                     with urllib.request.urlopen(req, timeout=10) as resp:
                         n8n_status = resp.status
+                        resp_text = resp.read().decode('utf-8', errors='ignore')
+                        if 'no test execution was listening' in resp_text.lower():
+                            print(f"[n8n Proxy Warning] {url} returned 'no test execution listening'. Trying next URL...")
+                            continue
                     print(f"[n8n Proxy] ✅ Server-side dispatch to n8n ({url}) returned HTTP {n8n_status}")
                     break
                 except Exception as e_proxy:
