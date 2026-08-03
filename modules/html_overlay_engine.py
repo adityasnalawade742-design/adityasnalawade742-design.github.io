@@ -22,7 +22,7 @@ def analyze_tag_and_room_with_gemini(room_image_path: str, tag_image_path: str) 
     rotation degree, scale, price font family, font size, text color, and vertical offsets.
     """
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    if not api_key or api_key.startswith("AQ."):
+    if not api_key:
         return None
 
     try:

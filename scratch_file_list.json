@@ -1,0 +1,1016 @@
+[
+  {
+    "path": "admin_console.html",
+    "size": 59753,
+    "lines": 1249,
+    "ext": ".html"
+  },
+  {
+    "path": "adult_decor_fast_verified.json",
+    "size": 820,
+    "lines": 26,
+    "ext": ".json"
+  },
+  {
+    "path": "amazon_products_links.txt",
+    "size": 7276,
+    "lines": 41,
+    "ext": ".txt"
+  },
+  {
+    "path": "audit_all_affiliate_tags.py",
+    "size": 2656,
+    "lines": 78,
+    "ext": ".py"
+  },
+  {
+    "path": "AUTOMATION_RULES.md",
+    "size": 5161,
+    "lines": 87,
+    "ext": ".md"
+  },
+  {
+    "path": "brand_new_products.json",
+    "size": 196,
+    "lines": 7,
+    "ext": ".json"
+  },
+  {
+    "path": "bridge_B07HP22QTZ.html",
+    "size": 44545,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0BZXNSW5K.html",
+    "size": 44763,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0C2YLN3H4.html",
+    "size": 44540,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0D1FRDFFX.html",
+    "size": 44867,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0D8P8CSYP.html",
+    "size": 44882,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0DXKGL1T2.html",
+    "size": 44800,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0DZD1X83N.html",
+    "size": 44966,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0FXLYXM32.html",
+    "size": 44679,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "bridge_B0GYDXHF4G.html",
+    "size": 44768,
+    "lines": 906,
+    "ext": ".html"
+  },
+  {
+    "path": "check_fixes.py",
+    "size": 3503,
+    "lines": 67,
+    "ext": ".py"
+  },
+  {
+    "path": "config.py",
+    "size": 1657,
+    "lines": 47,
+    "ext": ".py"
+  },
+  {
+    "path": "daily_price_updater.py",
+    "size": 13697,
+    "lines": 315,
+    "ext": ".py"
+  },
+  {
+    "path": "delete_product.py",
+    "size": 4871,
+    "lines": 116,
+    "ext": ".py"
+  },
+  {
+    "path": "different_home_decor_products.json",
+    "size": 1083,
+    "lines": 30,
+    "ext": ".json"
+  },
+  {
+    "path": "force_rebuild_all_bridges.py",
+    "size": 3588,
+    "lines": 94,
+    "ext": ".py"
+  },
+  {
+    "path": "fresh_serp_verified.json",
+    "size": 654,
+    "lines": 20,
+    "ext": ".json"
+  },
+  {
+    "path": "global_direct_matrix.json",
+    "size": 502,
+    "lines": 45,
+    "ext": ".json"
+  },
+  {
+    "path": "global_tag_defaults.json",
+    "size": 281,
+    "lines": 12,
+    "ext": ".json"
+  },
+  {
+    "path": "index.html",
+    "size": 55181,
+    "lines": 1320,
+    "ext": ".html"
+  },
+  {
+    "path": "install_daily_price_sync_scheduler.py",
+    "size": 1310,
+    "lines": 33,
+    "ext": ".py"
+  },
+  {
+    "path": "main.py",
+    "size": 5278,
+    "lines": 132,
+    "ext": ".py"
+  },
+  {
+    "path": "MASTER_PROJECT_CONTEXT.md",
+    "size": 9633,
+    "lines": 154,
+    "ext": ".md"
+  },
+  {
+    "path": "MASTER_SESSION_HANDOVER.md",
+    "size": 2957,
+    "lines": 66,
+    "ext": ".md"
+  },
+  {
+    "path": "n8n_local_bridge.py",
+    "size": 5732,
+    "lines": 144,
+    "ext": ".py"
+  },
+  {
+    "path": "n8n_pinterest_affiliate_workflow.json",
+    "size": 11555,
+    "lines": 289,
+    "ext": ".json"
+  },
+  {
+    "path": "Pages.html",
+    "size": 201263,
+    "lines": 2493,
+    "ext": ".html"
+  },
+  {
+    "path": "pinterest_campaign_tracker.json",
+    "size": 4487,
+    "lines": 76,
+    "ext": ".json"
+  },
+  {
+    "path": "PINTEREST_RE_APPLICATION_GUIDE.md",
+    "size": 7706,
+    "lines": 129,
+    "ext": ".md"
+  },
+  {
+    "path": "PINTEREST_STANDARD_ACCESS_GUIDE.md",
+    "size": 7166,
+    "lines": 145,
+    "ext": ".md"
+  },
+  {
+    "path": "PINTEREST_VIDEO_DEMO_AND_N8N_GUIDE.md",
+    "size": 3900,
+    "lines": 67,
+    "ext": ".md"
+  },
+  {
+    "path": "post_5_homepage_pins.py",
+    "size": 4684,
+    "lines": 125,
+    "ext": ".py"
+  },
+  {
+    "path": "post_all_10_homepage_pins.py",
+    "size": 5741,
+    "lines": 138,
+    "ext": ".py"
+  },
+  {
+    "path": "preview_10_pins_copy.py",
+    "size": 760,
+    "lines": 20,
+    "ext": ".py"
+  },
+  {
+    "path": "privacy-policy.html",
+    "size": 13518,
+    "lines": 295,
+    "ext": ".html"
+  },
+  {
+    "path": "processed_asins.json",
+    "size": 207,
+    "lines": 14,
+    "ext": ".json"
+  },
+  {
+    "path": "product_price_registry.json",
+    "size": 7384,
+    "lines": 285,
+    "ext": ".json"
+  },
+  {
+    "path": "PROJECT_PROGRESS.md",
+    "size": 5242,
+    "lines": 103,
+    "ext": ".md"
+  },
+  {
+    "path": "PROJECT_STATE.md",
+    "size": 6316,
+    "lines": 102,
+    "ext": ".md"
+  },
+  {
+    "path": "README.md",
+    "size": 2282,
+    "lines": 50,
+    "ext": ".md"
+  },
+  {
+    "path": "real_white_bg_products.json",
+    "size": 1624,
+    "lines": 34,
+    "ext": ".json"
+  },
+  {
+    "path": "rebuild_all_price_badges_usd.py",
+    "size": 4101,
+    "lines": 119,
+    "ext": ".py"
+  },
+  {
+    "path": "rebuild_EVERY_single_bridge.py",
+    "size": 11103,
+    "lines": 215,
+    "ext": ".py"
+  },
+  {
+    "path": "requirements.txt",
+    "size": 77,
+    "lines": 8,
+    "ext": ".txt"
+  },
+  {
+    "path": "robots.txt",
+    "size": 124,
+    "lines": 7,
+    "ext": ".txt"
+  },
+  {
+    "path": "run_daily_health_check.py",
+    "size": 5509,
+    "lines": 140,
+    "ext": ".py"
+  },
+  {
+    "path": "serpapi_cache.json",
+    "size": 1564639,
+    "lines": 26916,
+    "ext": ".json"
+  },
+  {
+    "path": "sitemap.xml",
+    "size": 1779,
+    "lines": 53,
+    "ext": ".xml"
+  },
+  {
+    "path": "sync_all_regional_prices_master.py",
+    "size": 3497,
+    "lines": 61,
+    "ext": ".py"
+  },
+  {
+    "path": "sync_exact_amazon_prices.py",
+    "size": 4311,
+    "lines": 113,
+    "ext": ".py"
+  },
+  {
+    "path": "SYSTEM_ARCHITECTURE.md",
+    "size": 6208,
+    "lines": 93,
+    "ext": ".md"
+  },
+  {
+    "path": "tactiq-free-transcript-gNBoN-Q8qhM.txt",
+    "size": 121991,
+    "lines": 1099,
+    "ext": ".txt"
+  },
+  {
+    "path": "terms-of-service.html",
+    "size": 9867,
+    "lines": 245,
+    "ext": ".html"
+  },
+  {
+    "path": "txt.txt",
+    "size": 302,
+    "lines": 3,
+    "ext": ".txt"
+  },
+  {
+    "path": "validate_all_affiliate_urls.py",
+    "size": 2710,
+    "lines": 68,
+    "ext": ".py"
+  },
+  {
+    "path": "vercel.json",
+    "size": 408,
+    "lines": 24,
+    "ext": ".json"
+  },
+  {
+    "path": "verified_adult_home_decor.json",
+    "size": 959,
+    "lines": 30,
+    "ext": ".json"
+  },
+  {
+    "path": "verified_fresh_products.json",
+    "size": 763,
+    "lines": 26,
+    "ext": ".json"
+  },
+  {
+    "path": "verified_lifestyle_products.json",
+    "size": 1284,
+    "lines": 34,
+    "ext": ".json"
+  },
+  {
+    "path": "web_console_server.py",
+    "size": 92063,
+    "lines": 1810,
+    "ext": ".py"
+  },
+  {
+    "path": "white_bg_analysis.json",
+    "size": 1716,
+    "lines": 47,
+    "ext": ".json"
+  },
+  {
+    "path": "bridge_pages\\bridge_B0D8P8CSYP.html",
+    "size": 44760,
+    "lines": 905,
+    "ext": ".html"
+  },
+  {
+    "path": "github_pages\\index.html",
+    "size": 2717,
+    "lines": 55,
+    "ext": ".html"
+  },
+  {
+    "path": "github_pages\\privacy.html",
+    "size": 3251,
+    "lines": 64,
+    "ext": ".html"
+  },
+  {
+    "path": "github_pages\\README.md",
+    "size": 1763,
+    "lines": 49,
+    "ext": ".md"
+  },
+  {
+    "path": "github_pages\\style.css",
+    "size": 4191,
+    "lines": 213,
+    "ext": ".css"
+  },
+  {
+    "path": "github_pages\\terms.html",
+    "size": 2757,
+    "lines": 55,
+    "ext": ".html"
+  },
+  {
+    "path": "github_pages\\bridge_pages\\bridge_B0CCP46DK9.html",
+    "size": 6397,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "github_pages\\bridge_pages\\bridge_B0D8P8CSYP.html",
+    "size": 6331,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "modules\\amazon_extractor.py",
+    "size": 29952,
+    "lines": 640,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\amazon_finder.py",
+    "size": 28559,
+    "lines": 640,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\automated_product_selector.py",
+    "size": 7145,
+    "lines": 179,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\bridge_creator.py",
+    "size": 63782,
+    "lines": 1223,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\html_overlay_engine.py",
+    "size": 37295,
+    "lines": 797,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\image_cache_db.py",
+    "size": 2096,
+    "lines": 59,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\image_generator.py",
+    "size": 35821,
+    "lines": 841,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\interactive_photo_selector.py",
+    "size": 2763,
+    "lines": 84,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\pinterest_publisher.py",
+    "size": 3933,
+    "lines": 97,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\product_registry.py",
+    "size": 9541,
+    "lines": 254,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\seo_copywriter.py",
+    "size": 10666,
+    "lines": 176,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\vision_prompt.py",
+    "size": 4458,
+    "lines": 66,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\__init__.py",
+    "size": 35,
+    "lines": 1,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_au.py",
+    "size": 3246,
+    "lines": 76,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_ca.py",
+    "size": 3228,
+    "lines": 76,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_de.py",
+    "size": 3442,
+    "lines": 77,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_es.py",
+    "size": 2297,
+    "lines": 48,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_extended_domains.py",
+    "size": 4609,
+    "lines": 100,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_fr.py",
+    "size": 2473,
+    "lines": 57,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_in.py",
+    "size": 3128,
+    "lines": 74,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_it.py",
+    "size": 2297,
+    "lines": 48,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_jp.py",
+    "size": 3058,
+    "lines": 74,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_se.py",
+    "size": 2245,
+    "lines": 48,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_uk.py",
+    "size": 3266,
+    "lines": 76,
+    "ext": ".py"
+  },
+  {
+    "path": "modules\\scrapers\\scrape_us.py",
+    "size": 3548,
+    "lines": 89,
+    "ext": ".py"
+  },
+  {
+    "path": "output\\bird_lamp_B0D8P8CSYP_summary.json",
+    "size": 3982,
+    "lines": 56,
+    "ext": ".json"
+  },
+  {
+    "path": "output\\mushroom_lamp_B0D1FRDFFX_summary.json",
+    "size": 4077,
+    "lines": 58,
+    "ext": ".json"
+  },
+  {
+    "path": "output\\summary_B0BZXNSW5K.json",
+    "size": 3487,
+    "lines": 59,
+    "ext": ".json"
+  },
+  {
+    "path": "output\\vintage_lamp_B0DXKGL1T2_summary.json",
+    "size": 3819,
+    "lines": 56,
+    "ext": ".json"
+  },
+  {
+    "path": "output\\wood_warmer_summary.json",
+    "size": 3907,
+    "lines": 55,
+    "ext": ".json"
+  },
+  {
+    "path": "output\\bridge_pages\\bridge_B0BZXNSW5K.html",
+    "size": 5937,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "output\\bridge_pages\\bridge_B0CCP46DK9.html",
+    "size": 6397,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "output\\bridge_pages\\bridge_B0D1FRDFFX.html",
+    "size": 6329,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "output\\bridge_pages\\bridge_B0D8P8CSYP.html",
+    "size": 6334,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "output\\bridge_pages\\bridge_B0DXKGL1T2.html",
+    "size": 6241,
+    "lines": 166,
+    "ext": ".html"
+  },
+  {
+    "path": "Pages_files\\21863.1b0abc70a732a009.module.css",
+    "size": 29884,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\24301.f1e9bb6a5789993a.module.css",
+    "size": 29565,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\2703.3279723156cf9b0b.module.css",
+    "size": 36161,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\30346.5115be1ff0511220.module.css",
+    "size": 15888,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\31896.fa935e88fc123608.module.css",
+    "size": 448,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\36762.e4e355af1ceb8b8c.module.css",
+    "size": 20599,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\37575.674f2d8f00a06893.module.css",
+    "size": 108145,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\38963.f9ae8bf4d28d4bfd.module.css",
+    "size": 312,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\50624.62fc23baf902e916.module.css",
+    "size": 116688,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\52785.6c3440adac0b5a13.module.css",
+    "size": 12078,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\53839.3de4c73116bc257b.module.css",
+    "size": 1999,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\5398.5487b33f91314679.module.css",
+    "size": 17163,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\59365.eafd6ac3f54e705a.module.css",
+    "size": 17560,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\68854.7a02305b2c84d08d.module.css",
+    "size": 24301,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\73404.1e765cbc042f61d0.module.css",
+    "size": 14903,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\78506.d1103cf3448445e1.module.css",
+    "size": 93749,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\79732.33a91c9e9834a961.module.css",
+    "size": 871,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\81758.7c3708c9a66f2f0d.module.css",
+    "size": 8993,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\86343.559c252887994ee2.module.css",
+    "size": 18415,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\86851.7d0dfed3614c981f.module.css",
+    "size": 1375,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\89194.f4d4131df514487c.module.css",
+    "size": 6629,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\92563.75c14e5d5ab45a6b.module.css",
+    "size": 36888,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\96188.dd134d1c4b62ada4.module.css",
+    "size": 23976,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\99788.3f3bbe9f49318c1c.module.css",
+    "size": 19808,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\app-runtime.a596275b6d2beaf5.module.css",
+    "size": 4445,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\dark-f3311053b052c5d4.css",
+    "size": 76586,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\github-cf976967feea1e66.css",
+    "size": 127663,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\global-1832d803adebd2b4.css",
+    "size": 297447,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\global-nav-bar.12389113fba8b089.module.css",
+    "size": 9002,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\keyboard-shortcuts-dialog.9e064a66c0cb8c51.module.css",
+    "size": 332,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\light-62b06818b06b09b7.css",
+    "size": 76754,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\primer-primitives-ac2f4b33720c6312.css",
+    "size": 10055,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\primer-react-css.98ad1672d1ed9f02.module.css",
+    "size": 283182,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\primer-tailwind-compatible-80881bd3df4e816e.css",
+    "size": 366484,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\react-core.e7eb59fdde3d4b7e.module.css",
+    "size": 447,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\settings-aab9bc3531fb5086.css",
+    "size": 24236,
+    "lines": 2,
+    "ext": ".css"
+  },
+  {
+    "path": "Pages_files\\tailwind-5202d2d5c2ceca8a.css",
+    "size": 126741,
+    "lines": 3,
+    "ext": ".css"
+  },
+  {
+    "path": "scratch\\audit_index_prices.py",
+    "size": 1448,
+    "lines": 36,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\check_all_products_live.py",
+    "size": 2899,
+    "lines": 80,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\check_bird_mtime.py",
+    "size": 1017,
+    "lines": 28,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\cleanup_not_needed_scripts.py",
+    "size": 1805,
+    "lines": 54,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\count_py_files.py",
+    "size": 1081,
+    "lines": 34,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\debug_discover.py",
+    "size": 1495,
+    "lines": 39,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\debug_engines.py",
+    "size": 1813,
+    "lines": 54,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\debug_images.py",
+    "size": 1124,
+    "lines": 28,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\deep_codebase_audit.py",
+    "size": 3582,
+    "lines": 92,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\find_recent_images.py",
+    "size": 973,
+    "lines": 28,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\full_system_diagnostic.py",
+    "size": 4311,
+    "lines": 126,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\inspect_bird_images.py",
+    "size": 810,
+    "lines": 25,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\master_zero_404_audit.py",
+    "size": 3776,
+    "lines": 98,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\rebuild_all_price_badges_usd.py",
+    "size": 3883,
+    "lines": 116,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\render_bird_lamp.py",
+    "size": 1396,
+    "lines": 40,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\sync_index_html_clean.py",
+    "size": 2450,
+    "lines": 59,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\test_all_endpoints.py",
+    "size": 2260,
+    "lines": 62,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\test_amazon_engine.py",
+    "size": 764,
+    "lines": 23,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\test_live_amazon_404.py",
+    "size": 2526,
+    "lines": 71,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\test_live_api.py",
+    "size": 815,
+    "lines": 23,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\test_system_audit.py",
+    "size": 2208,
+    "lines": 58,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\test_variant_checker.py",
+    "size": 1440,
+    "lines": 37,
+    "ext": ".py"
+  },
+  {
+    "path": "scratch\\verify_4_master_bots.py",
+    "size": 2161,
+    "lines": 47,
+    "ext": ".py"
+  }
+]

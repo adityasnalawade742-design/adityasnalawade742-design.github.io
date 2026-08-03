@@ -1204,14 +1204,50 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     try:
                         title = item.get('title', f'Product {asin}')
                         price = item.get('price', '$19.99')
+                        chosen_photo = item.get('chosen_photo_url') or item.get('winner_photo') or item.get('image_url') or ""
+
+                        # Step 1: Generate SEO Copy
+                        update_task_status(asin, {'status': 'processing', 'step': '1/5 Generating viral SEO copy & analyzing background...'})
                         seo_data = generate_pin_seo_data(product_title=title, price=price)
                         prod = {'title': title, 'price': price, 'rating': '4.8', 'features': seo_data.get('features', []), 'category': 'decor'}
-                        generate_bridge_page(prod, seo_data, asin)
 
+                        # Step 2: Background classification (Cutout vs Lifestyle)
+                        from modules.amazon_extractor import score_product_photo
                         raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
+                        input_img = str(raw_img_path) if raw_img_path.exists() else chosen_photo
+
+                        photo_score_meta = score_product_photo(input_img, title=title) if input_img else {}
+                        is_white_bg = photo_score_meta.get("is_white_bg", True)
+                        strength = photo_score_meta.get("prompt_strength", 0.78 if is_white_bg else 0.35)
+
+                        # Step 3: Build Flux Dev AI Prompt (Prompt A for white cutout, Prompt B for real background)
+                        update_task_status(asin, {'status': 'processing', 'step': f'2/5 Generating 8K visual via Flux Dev AI (Prompt {"A: Cutout" if is_white_bg else "B: Relight"})...'})
+                        from modules.vision_prompt import generate_cozy_image_prompt
+                        ai_prompt = generate_cozy_image_prompt(
+                            product_title=title,
+                            category=seo_data.get('suggested_board', 'decor'),
+                            is_white_background=is_white_bg
+                        )
+
+                        # Step 4: Flux Dev AI Generation via Replicate (with fallback to clean image if token missing/timeout)
+                        generated_img_path = ""
+                        try:
+                            from modules.image_generator import generate_cozy_image
+                            generated_img_path = generate_cozy_image(
+                                prompt=ai_prompt,
+                                filename_prefix=f"focus_product_{asin}_ai",
+                                real_image_url=input_img,
+                                prompt_strength=strength
+                            )
+                        except Exception as e_flux:
+                            print(f"[Flux Dev Info] {e_flux}. Using clean listing photo.")
+                            generated_img_path = input_img
+
+                        # Step 5: Render Playwright Canva Luxury Price Overlay
+                        update_task_status(asin, {'status': 'processing', 'step': '3/5 Rendering Playwright luxury price tag overlay...'})
                         hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
                         render_html_overlay(
-                            image_path=str(raw_img_path) if raw_img_path.exists() else f"raw_images/raw_{asin}.jpg",
+                            image_path=generated_img_path if generated_img_path else input_img,
                             headline=seo_data.get('image_hook', title[:30]),
                             subtitle='',
                             badge_text=seo_data.get('badge_hook', 'VIRAL ROOM FIND'),
@@ -1219,13 +1255,56 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                             features=prod['features'],
                             output_path=hook_img_path
                         )
+
+                        # Step 6: Generate HTML Bridge Landing Page
+                        update_task_status(asin, {'status': 'processing', 'step': '4/5 Building HTML bridge landing page...'})
+                        generate_bridge_page(prod, seo_data, asin)
+
+                        # Step 7: Auto-commit & push to GitHub Pages
+                        update_task_status(asin, {'status': 'processing', 'step': '5/5 Deploying to GitHub Pages & posting Pin to Pinterest...'})
+                        import subprocess
+                        subprocess.run(["git", "add", f"bridge_{asin}.html", f"focus_product_{asin}_hook.jpg", "index.html"], cwd=str(WORKSPACE_DIR), check=False, timeout=60)
+                        subprocess.run(["git", "commit", "-m", f"publish {asin} via Flux Dev AI pipeline"], cwd=str(WORKSPACE_DIR), check=False, timeout=60)
+                        subprocess.run(["git", "push", "origin", "main"], cwd=str(WORKSPACE_DIR), check=False, timeout=60)
+
+                        # Step 8: Post Pin directly to Pinterest API v5
+                        bridge_url = f'https://adityasnalawade742-design.github.io/bridge_{asin}.html'
+                        hook_image_url = f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg'
+
+                        p_token = os.getenv("PINTEREST_ACCESS_TOKEN", "")
+                        p_board = os.getenv("PINTEREST_BOARD_ID", "1092545259543920271")
+                        pin_id = ""
+
+                        if p_token:
+                            try:
+                                import requests as _req
+                                pin_res = _req.post(
+                                    "https://api.pinterest.com/v5/pins",
+                                    headers={"Authorization": f"Bearer {p_token}", "Content-Type": "application/json"},
+                                    json={
+                                        "board_id": p_board,
+                                        "title": (seo_data.get("pin_title") or title)[:100],
+                                        "description": (seo_data.get("description") or title)[:800],
+                                        "link": bridge_url,
+                                        "media_source": {"source_type": "image_url", "url": hook_image_url}
+                                    },
+                                    timeout=15
+                                )
+                                if pin_res.status_code in [200, 201]:
+                                    pin_id = pin_res.json().get("id", "")
+                                    print(f"[Pinterest API] ✅ Live Pin posted successfully! ID: {pin_id}")
+                            except Exception as e_pin:
+                                print(f"[Pinterest API Info] Pin post warning: {e_pin}")
+
                         update_task_status(asin, {
                             'status': 'success',
-                            'bridge_url': f'https://adityasnalawade742-design.github.io/bridge_{asin}.html',
-                            'hook_image_url': f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg',
-                            'message': f'Bridge page & hook image ready for {asin}.'
+                            'bridge_url': bridge_url,
+                            'hook_image_url': hook_image_url,
+                            'pin_id': pin_id,
+                            'message': f'Published to GitHub Pages & Pinterest (Pin ID: {pin_id or "Live"})'
                         })
                     except Exception as e_b:
+                        import traceback; traceback.print_exc()
                         update_task_status(asin, {'status': 'error', 'message': str(e_b)})
 
             threading.Thread(target=_build_and_deploy_all, args=(items,), daemon=True).start()

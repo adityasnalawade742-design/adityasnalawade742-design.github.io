@@ -195,15 +195,15 @@ def generate_cozy_image(
         model="black-forest-labs/flux-dev",
         input=input_payload
     )
-    print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting max 20s for render...")
+    print(f"[Image Gen - Replicate] Prediction Created (ID: {pred.id}). Waiting max 120s for render...")
     
-    # Wait max 20 seconds for Replicate API prediction to complete
+    # Wait max 120 seconds for Replicate API prediction to complete (Flux Dev takes 30-90s)
     start_t = time.time()
     while pred.status in ["starting", "processing"]:
-        if time.time() - start_t > 20:
-            print("[Image Gen - Replicate] ⚠️ Replicate API render exceeded 20s limit, falling back to clean product photo...")
+        if time.time() - start_t > 120:
+            print("[Image Gen - Replicate] ⚠️ Replicate API render exceeded 120s limit, falling back to clean product photo...")
             break
-        time.sleep(1)
+        time.sleep(2)
         pred.reload()
 
     if pred.status == "succeeded" and pred.output is not None:
