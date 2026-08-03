@@ -1148,6 +1148,37 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 # Generate unique SEO copy per product
                 seo = generate_pin_seo_data(product_title=title, price=price)
 
+                # Load regional ASINs, prices, and direct regions from registry / matrix
+                reg_asins = item.get('regional_asins', {})
+                reg_prices = item.get('regional_prices', {})
+                direct_regs = item.get('direct_regions', [])
+
+                if not reg_asins or not direct_regs:
+                    try:
+                        reg_path = WORKSPACE_DIR / 'product_price_registry.json'
+                        if reg_path.exists():
+                            with open(reg_path, 'r', encoding='utf-8') as rf:
+                                reg_db = json.load(rf)
+                                if asin in reg_db:
+                                    reg_asins = reg_asins or reg_db[asin].get('regional_asins', {})
+                                    reg_prices = reg_prices or reg_db[asin].get('regional_prices', {})
+                                    direct_regs = direct_regs or reg_db[asin].get('direct_regions', [])
+                    except Exception:
+                        pass
+
+                if not direct_regs:
+                    try:
+                        g_matrix_path = WORKSPACE_DIR / 'global_direct_matrix.json'
+                        if g_matrix_path.exists():
+                            with open(g_matrix_path, 'r', encoding='utf-8') as mf:
+                                g_mat = json.load(mf)
+                                direct_regs = g_mat.get(asin, ["US"])
+                    except Exception:
+                        pass
+
+                if not direct_regs:
+                    direct_regs = ["US"]
+
                 prepared.append({
                     'asin': asin,
                     'title': title,
@@ -1160,7 +1191,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     'image_hook': seo.get('image_hook', title[:30]),
                     'bridge_url': f'https://adityasnalawade742-design.github.io/bridge_{asin}.html',
                     'hook_image_url': f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg',
-                    # BUG E FIX: use actual running port (server may have started on 5001/8080 if 5000 was busy)
+                    'regional_asins': reg_asins,
+                    'regional_prices': reg_prices,
+                    'direct_regions': direct_regs,
                     'create_bridge_endpoint': f'http://localhost:{self.server.server_address[1]}/api/create_bridge_page'
                 })
 
@@ -1178,9 +1211,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
     def handle_api_proxy_n8n_webhook(self):
         """
         POST /api/proxy_n8n_webhook
-        Proxies request to n8n webhook server-side to bypass browser CORS restrictions (BUG-C3 Fix).
-        Also automatically builds bridge pages & hook images for all items in batch (BUG-C4 Fix)
-        so that Step 3 polling resolves to success reliably!
+        Proxies request to n8n webhook server-side to bypass browser CORS restrictions.
+        Dispatches payload array to n8n so n8n owns 100% of node execution.
         """
         try:
             content_length = int(self.headers.get('Content-Length', 0))
@@ -1191,139 +1223,30 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             print(f"[n8n Proxy] 🚀 Proxying batch of {len(items)} items to n8n webhook ({n8n_url})...")
 
-            # Pre-build bridge pages + hook images for all items in background thread
-            from modules.bridge_creator import generate_bridge_page
-            from modules.html_overlay_engine import render_html_overlay
-            from modules.seo_copywriter import generate_pin_seo_data
-
-            def _build_and_deploy_all(batch_items):
-                for item in batch_items:
-                    asin = item.get('asin')
-                    if not asin:
-                        continue
-                    try:
-                        title = item.get('title', f'Product {asin}')
-                        price = item.get('price', '$19.99')
-                        chosen_photo = item.get('chosen_photo_url') or item.get('winner_photo') or item.get('image_url') or ""
-
-                        # Step 1: Generate SEO Copy
-                        update_task_status(asin, {'status': 'processing', 'step': '1/5 Generating viral SEO copy & analyzing background...'})
-                        seo_data = generate_pin_seo_data(product_title=title, price=price)
-                        prod = {'title': title, 'price': price, 'rating': '4.8', 'features': seo_data.get('features', []), 'category': 'decor'}
-
-                        # Step 2: Background classification (Cutout vs Lifestyle)
-                        from modules.amazon_extractor import score_product_photo
-                        raw_img_path = WORKSPACE_DIR / 'raw_images' / f'raw_{asin}.jpg'
-                        input_img = str(raw_img_path) if raw_img_path.exists() else chosen_photo
-
-                        photo_score_meta = score_product_photo(input_img, title=title) if input_img else {}
-                        is_white_bg = photo_score_meta.get("is_white_bg", True)
-                        strength = photo_score_meta.get("prompt_strength", 0.78 if is_white_bg else 0.35)
-
-                        # Step 3: Build Flux Dev AI Prompt (Prompt A for white cutout, Prompt B for real background)
-                        update_task_status(asin, {'status': 'processing', 'step': f'2/5 Generating 8K visual via Flux Dev AI (Prompt {"A: Cutout" if is_white_bg else "B: Relight"})...'})
-                        from modules.vision_prompt import generate_cozy_image_prompt
-                        ai_prompt = generate_cozy_image_prompt(
-                            product_title=title,
-                            category=seo_data.get('suggested_board', 'decor'),
-                            is_white_background=is_white_bg
-                        )
-
-                        # Step 4: Flux Dev AI Generation via Replicate (with fallback to clean image if token missing/timeout)
-                        generated_img_path = ""
-                        try:
-                            from modules.image_generator import generate_cozy_image
-                            generated_img_path = generate_cozy_image(
-                                prompt=ai_prompt,
-                                filename_prefix=f"focus_product_{asin}_ai",
-                                real_image_url=input_img,
-                                prompt_strength=strength
-                            )
-                        except Exception as e_flux:
-                            print(f"[Flux Dev Info] {e_flux}. Using clean listing photo.")
-                            generated_img_path = input_img
-
-                        # Step 5: Render Playwright Canva Luxury Price Overlay
-                        update_task_status(asin, {'status': 'processing', 'step': '3/5 Rendering Playwright luxury price tag overlay...'})
-                        hook_img_path = str(WORKSPACE_DIR / f'focus_product_{asin}_hook.jpg')
-                        render_html_overlay(
-                            image_path=generated_img_path if generated_img_path else input_img,
-                            headline=seo_data.get('image_hook', title[:30]),
-                            subtitle='',
-                            badge_text=seo_data.get('badge_hook', 'VIRAL ROOM FIND'),
-                            price_str=price,
-                            features=prod['features'],
-                            output_path=hook_img_path
-                        )
-
-                        # Step 6: Generate HTML Bridge Landing Page
-                        update_task_status(asin, {'status': 'processing', 'step': '4/5 Building HTML bridge landing page...'})
-                        generate_bridge_page(prod, seo_data, asin)
-
-                        # Step 7: Auto-commit & push to GitHub Pages
-                        update_task_status(asin, {'status': 'processing', 'step': '5/5 Deploying to GitHub Pages & posting Pin to Pinterest...'})
-                        import subprocess
-                        subprocess.run(["git", "add", f"bridge_{asin}.html", f"focus_product_{asin}_hook.jpg", "index.html"], cwd=str(WORKSPACE_DIR), check=False, timeout=60)
-                        subprocess.run(["git", "commit", "-m", f"publish {asin} via Flux Dev AI pipeline"], cwd=str(WORKSPACE_DIR), check=False, timeout=60)
-                        subprocess.run(["git", "push", "origin", "main"], cwd=str(WORKSPACE_DIR), check=False, timeout=60)
-
-                        # Step 8: Post Pin directly to Pinterest API v5
-                        bridge_url = f'https://adityasnalawade742-design.github.io/bridge_{asin}.html'
-                        hook_image_url = f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg'
-
-                        p_token = os.getenv("PINTEREST_ACCESS_TOKEN", "")
-                        p_board = os.getenv("PINTEREST_BOARD_ID", "1092545259543920271")
-                        pin_id = ""
-
-                        if p_token:
-                            try:
-                                import requests as _req
-                                pin_res = _req.post(
-                                    "https://api.pinterest.com/v5/pins",
-                                    headers={"Authorization": f"Bearer {p_token}", "Content-Type": "application/json"},
-                                    json={
-                                        "board_id": p_board,
-                                        "title": (seo_data.get("pin_title") or title)[:100],
-                                        "description": (seo_data.get("description") or title)[:800],
-                                        "link": bridge_url,
-                                        "media_source": {"source_type": "image_url", "url": hook_image_url}
-                                    },
-                                    timeout=15
-                                )
-                                if pin_res.status_code in [200, 201]:
-                                    pin_id = pin_res.json().get("id", "")
-                                    print(f"[Pinterest API] ✅ Live Pin posted successfully! ID: {pin_id}")
-                            except Exception as e_pin:
-                                print(f"[Pinterest API Info] Pin post warning: {e_pin}")
-
-                        update_task_status(asin, {
-                            'status': 'success',
-                            'bridge_url': bridge_url,
-                            'hook_image_url': hook_image_url,
-                            'pin_id': pin_id,
-                            'message': f'Published to GitHub Pages & Pinterest (Pin ID: {pin_id or "Live"})'
-                        })
-                    except Exception as e_b:
-                        import traceback; traceback.print_exc()
-                        update_task_status(asin, {'status': 'error', 'message': str(e_b)})
-
-            threading.Thread(target=_build_and_deploy_all, args=(items,), daemon=True).start()
+            for item in items:
+                asin = item.get('asin')
+                if asin:
+                    update_task_status(asin, {
+                        'status': 'processing',
+                        'step': 'Dispatched to n8n Workflow — executing nodes...',
+                        'message': 'n8n active pipeline processing...'
+                    })
 
             # Forward payload to n8n server-side (no CORS restriction)
             req_data = json.dumps({'items': items}).encode('utf-8')
             req = urllib.request.Request(n8n_url, data=req_data, headers={'Content-Type': 'application/json'})
             n8n_status = 200
             try:
-                with urllib.request.urlopen(req, timeout=5) as resp:
+                with urllib.request.urlopen(req, timeout=10) as resp:
                     n8n_status = resp.status
                 print(f"[n8n Proxy] ✅ Server-side dispatch to n8n returned HTTP {n8n_status}")
             except Exception as e_proxy:
-                print(f"[n8n Proxy Info] n8n local listener check ({e_proxy}). Local bridge page creation active.")
+                print(f"[n8n Proxy Warning] Could not reach n8n webhook ({e_proxy}).")
 
             self.send_json({
                 'status': 'success',
                 'n8n_status': n8n_status,
-                'message': f'Batch of {len(items)} items proxied to n8n and bridge pages built!'
+                'message': f'Batch of {len(items)} items proxied to n8n workflow!'
             })
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
@@ -1333,7 +1256,6 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         NEW ENDPOINT — Called by n8n per-product (HTTP Request node).
         Builds the bridge landing page + renders the hook image with price overlay,
         commits to git, pushes to GitHub Pages, and returns the live URLs.
-        n8n then uses bridge_url + hook_image_url as the pin destination + media.
         """
         try:
             content_length = int(self.headers.get('Content-Length', 0))
@@ -1344,9 +1266,12 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             title = data.get('title', f'Product {asin}')
             price = data.get('price', '$19.99')
             pin_title = data.get('pin_title', title)
+            pin_description = data.get('pin_description', '')
             badge_hook = data.get('badge_hook', 'VIRAL ROOM FIND')
             image_hook = data.get('image_hook', title[:30])
-            pin_description = data.get('pin_description', '')
+            regional_asins = data.get('regional_asins', {})
+            regional_prices = data.get('regional_prices', {})
+            direct_regions = data.get('direct_regions', ['US'])
 
             if not asin:
                 self.send_json({'status': 'error', 'message': 'Missing ASIN'})
@@ -1358,7 +1283,6 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             from modules.html_overlay_engine import render_html_overlay
             from modules.seo_copywriter import generate_pin_seo_data
 
-            # BUG H FIX: generate product-specific features from seo_copywriter instead of generic strings
             _seo_for_features = generate_pin_seo_data(product_title=title, price=price)
 
             seo_data = {
@@ -1374,8 +1298,11 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 'title': title,
                 'price': price,
                 'rating': '4.8',
-                'features': seo_data['features'],  # BUG H FIX: product-specific, not generic
+                'features': seo_data['features'],
                 'category': 'decor',
+                'regional_asins': regional_asins,
+                'regional_prices': regional_prices,
+                'direct_regions': direct_regions,
             }
 
             # 1. Generate bridge page
