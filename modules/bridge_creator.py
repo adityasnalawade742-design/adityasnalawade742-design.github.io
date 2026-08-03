@@ -1040,6 +1040,25 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             } catch(e) {}
 
             if (!isForced) {
+                // ⚡ 0ms Instant Synchronous Geo Detection (Works offline & bypasses adblockers)
+                try {
+                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                    const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
+                    if (tz.includes('kolkata') || tz.includes('calcutta') || lang.includes('en-in') || lang.includes('-in') || lang.includes('hi')) {
+                        applyGeoRedirect('IN');
+                    } else if (tz.includes('london') || lang.includes('en-gb') || lang.includes('-gb')) {
+                        applyGeoRedirect('GB');
+                    } else if (tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid') || lang.includes('-de') || lang.includes('-fr') || lang.includes('-it') || lang.includes('-es')) {
+                        applyGeoRedirect('DE');
+                    } else if (tz.includes('tokyo') || lang.includes('-jp')) {
+                        applyGeoRedirect('JP');
+                    } else if (tz.includes('sydney') || tz.includes('melbourne') || lang.includes('-au')) {
+                        applyGeoRedirect('AU');
+                    } else if (tz.includes('toronto') || tz.includes('vancouver') || lang.includes('-ca')) {
+                        applyGeoRedirect('CA');
+                    }
+                } catch(e_sync) {}
+
                 fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
                     .then(res => res.text())
                     .then(text => {
