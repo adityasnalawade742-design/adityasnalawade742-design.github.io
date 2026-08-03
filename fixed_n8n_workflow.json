@@ -1,0 +1,381 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pinterest-batch",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "3d5514b2-d986-49e3-9bdc-bcdb709f1dd1",
+      "name": "1. Webhook — Receive Batch from Web Console",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        128
+      ],
+      "webhookId": "8c792c08-f2e8-4ab6-b766-35742eef42e0",
+      "notes": "Web Console calls this after user confirms product + image selections."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'received', count: ($json.body && $json.body.items ? $json.body.items.length : ($json.items ? $json.items.length : 0)), message: 'Batch accepted by n8n. Starting Flux Dev AI pipeline...' }) }}",
+        "options": {}
+      },
+      "id": "ab21b930-567b-495b-abe6-65ff58002cc6",
+      "name": "1b. Respond to Web Console Immediately",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "body.items",
+        "options": {}
+      },
+      "id": "a0a7e158-321a-4212-b9a0-6901c942870c",
+      "name": "2. Split Items — Process One Product at a Time",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $json;\n\n// 1. Title Sanitizer\nlet title = (item.title || '').trim();\nif (!title || title.startsWith('Product B0') || title.startsWith('Product ')) {\n  title = (item.image_hook || item.pin_title || '').trim();\n}\n\n// 2. Price Sanitizer (Do NOT hardcode $19.99)\nlet price = (item.price || '').toString().trim();\nif (price.startsWith('.')) price = '$19' + price;\nif (price && !price.startsWith('$') && !/[₹£€¥]/.test(price)) price = '$' + price;\n\nreturn {\n  json: {\n    ...item,\n    asin: item.asin,\n    title: title,\n    price: price,\n    pin_title: item.pin_title || title,\n    pin_description: item.pin_description || '',\n    badge_hook: item.badge_hook || 'VIRAL ROOM FIND',\n    chosen_photo_url: item.chosen_photo_url || item.winner_photo\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -208,
+        -80
+      ],
+      "id": "145fe285-88db-406a-b8e6-50a07cae74ea",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.is_white_bg || ($json.chosen_photo_url && ($json.chosen_photo_url.includes('_SL1500_') || $json.chosen_photo_url.includes('_AC_') || $json.chosen_photo_url.includes('cutout'))) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "0cd8a2fc-34a6-476c-b5e1-6aeb117fcb1f",
+      "name": "3. Classifier — Is Image a White Cutout?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        112
+      ],
+      "notes": "Evaluates if selected listing photo is a white cutout background or existing room lifestyle photo."
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ai_prompt",
+              "value": "={{ 'The input photo is an isolated product cutout on a plain white studio background featuring \\'' + ($json.title || 'Cozy Decor') + '\\'. Synthesize a brand-new, complete 8K photorealistic 3:4 lifestyle room background from scratch: place the product naturally onto a cozy aesthetic bedside table or oak desk setup. Integrate the isolated product seamlessly into this new room setting with realistic contact drop shadows and natural ambient light bleeding. Preserve main physical product shape and textures 100% accurately while rendering a high-end Architectural Digest room scene around it. Leave generous clean negative space at the top for headline text.' }}"
+            },
+            {
+              "name": "prompt_strength",
+              "value": "0.78"
+            },
+            {
+              "name": "prompt_type",
+              "value": "Prompt A (White Cutout Room Placement)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "631c81f0-7b29-48cb-a5e6-2bb12515948b",
+      "name": "4a. Set Prompt A (White Cutout Room Placement)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "notes": "Applied for studio cutout photos: Synthesizes a new cozy room scene with drop shadows."
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ai_prompt",
+              "value": "={{ 'Transform the uploaded product image into a premium luxury commercial advertisement while preserving the original product. Product details: ' + ($json.title || 'Cozy Decor') + ' featuring realistic materials, authentic textures, and clean physical geometry. The uploaded product is the main subject and must remain visually consistent with reference image. Enhance surrounding room background with warm cinematic lighting, soft shadows, realistic reflections, and 8K golden hour ambient light. Leave generous clean negative space for headline text.' }}"
+            },
+            {
+              "name": "prompt_strength",
+              "value": "0.35"
+            },
+            {
+              "name": "prompt_type",
+              "value": "Prompt B (Existing Room Relighting)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "59e9e087-2707-4dbd-a4e8-c9ce1493ca75",
+      "name": "4b. Set Prompt B (Existing Room Relighting)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        208,
+        224
+      ],
+      "notes": "Applied for existing room photos: Relights and enhances existing room scene with 8K cinematic ambient light."
+    },
+    {
+      "parameters": {
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_REPLICATE_API_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ version: 'black-forest-labs/flux-dev', input: { prompt: $json.ai_prompt, image: ($json.chosen_photo_url || ''), prompt_strength: parseFloat($json.prompt_strength || 0.5), aspect_ratio: '3:4', output_format: 'jpg', output_quality: 100 } }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "0f0c2299-39e1-4b1e-bcb2-31f62cb848c5",
+      "name": "5. Replicate API — Flux Dev AI Generation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        448,
+        112
+      ],
+      "notes": "Generates 8K commercial visual using Flux Dev AI via Replicate API."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.create_bridge_endpoint || 'http://127.0.0.1:5000/api/create_bridge_page' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n      JSON.stringify({\n        asin: $json.asin,\n        title: $json.title,\n        price: $json.price,\n        pin_title: $json.pin_title,\n        pin_description: $json.pin_description,\n        badge_hook: $json.badge_hook,\n        image_hook: $json.title,\n        chosen_photo_url: ($json.output && $json.output[0]) ? $json.output[0] : $json.chosen_photo_url\n      })\n    }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "a99accda-8c8f-4488-83ff-8500bc2a49d2",
+      "name": "6. Build Bridge Page + Playwright Price Overlay",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        672,
+        112
+      ],
+      "notes": "Renders Playwright luxury price badge overlay on top of generated AI image, generates bridge_{ASIN}.html landing page, and pushes live to GitHub Pages."
+    },
+    {
+      "parameters": {
+        "url": "https://api.pinterest.com/v5/pins",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_PINTEREST_ACCESS_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ board_id: '1092545259543920271', title: ($json.pin_title || $json.title || '').substring(0, 100), description: ($json.pin_description || '').substring(0, 800), link: $json.bridge_url, media_source: { source_type: 'image_url', url: $json.hook_image_url } }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "8e681492-7ae5-47f2-af34-184580e124d5",
+      "name": "7. Post Pin to Pinterest API v5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        896,
+        112
+      ],
+      "notes": "POSTs the Pin with generated Flux Dev AI visual and SEO text to Pinterest API v5."
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "result",
+              "value": "={{ 'Pin posted for ' + ($json.asin || 'N/A') + ' — Pin ID: ' + ($json.id || 'N/A') + ' | Bridge: ' + ($json.bridge_url || '') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "15c96f18-0a9c-43a4-8204-2632f7283eb1",
+      "name": "8. Log Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        64
+      ]
+    }
+  ],
+  "connections": {
+    "1. Webhook — Receive Batch from Web Console": {
+      "main": [
+        [
+          {
+            "node": "1b. Respond to Web Console Immediately",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1b. Respond to Web Console Immediately": {
+      "main": [
+        [
+          {
+            "node": "2. Split Items — Process One Product at a Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Split Items — Process One Product at a Time": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "3. Classifier — Is Image a White Cutout?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Classifier — Is Image a White Cutout?": {
+      "main": [
+        [
+          {
+            "node": "4a. Set Prompt A (White Cutout Room Placement)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "4b. Set Prompt B (Existing Room Relighting)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4a. Set Prompt A (White Cutout Room Placement)": {
+      "main": [
+        [
+          {
+            "node": "5. Replicate API — Flux Dev AI Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4b. Set Prompt B (Existing Room Relighting)": {
+      "main": [
+        [
+          {
+            "node": "5. Replicate API — Flux Dev AI Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Replicate API — Flux Dev AI Generation": {
+      "main": [
+        [
+          {
+            "node": "6. Build Bridge Page + Playwright Price Overlay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Build Bridge Page + Playwright Price Overlay": {
+      "main": [
+        [
+          {
+            "node": "7. Post Pin to Pinterest API v5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Post Pin to Pinterest API v5": {
+      "main": [
+        [
+          {
+            "node": "8. Log Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
