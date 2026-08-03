@@ -1318,21 +1318,29 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 except Exception as e_rf:
                     print(f"[Create Bridge Page] Registry load error: {e_rf}")
 
-            # Title cleaning logic: reject placeholder titles like "Product B0..." or "Product "
+            # Title cleaning logic: reject placeholder titles and cross-contaminated copy
             raw_title = data.get('title', '').strip()
             raw_pin_title = data.get('pin_title', '').strip()
             raw_image_hook = data.get('image_hook', '').strip()
             
             clean_title = reg_entry.get('title', '').strip()
-            if not clean_title or clean_title.startswith('Product B0') or clean_title.startswith('Product '):
-                if raw_title and not raw_title.startswith('Product B0') and not raw_title.startswith('Product '):
+            if not clean_title or clean_title.startswith('Product B0') or clean_title.startswith('Product ') or ('Fenmzee' in clean_title and asin != 'B0BPNXX2MF'):
+                if raw_title and not raw_title.startswith('Product B0') and not raw_title.startswith('Product ') and ('Fenmzee' not in raw_title or asin == 'B0BPNXX2MF'):
                     clean_title = raw_title
-                elif raw_image_hook and not raw_image_hook.startswith('Product B0') and not raw_image_hook.startswith('Product '):
+                elif raw_image_hook and not raw_image_hook.startswith('Product B0') and ('Fenmzee' not in raw_image_hook or asin == 'B0BPNXX2MF'):
                     clean_title = raw_image_hook
-                elif raw_pin_title and not raw_pin_title.startswith('Product B0') and not raw_pin_title.startswith('Product '):
+                elif raw_pin_title and not raw_pin_title.startswith('Product B0') and ('Fenmzee' not in raw_pin_title or asin == 'B0BPNXX2MF'):
                     clean_title = raw_pin_title
                 else:
-                    clean_title = f"Aesthetic Decor Find {asin}"
+                    try:
+                        from modules.amazon_extractor import get_best_image_for_asin
+                        fetched_info = get_best_image_for_asin(asin, save_to_disk=True)
+                        if fetched_info and fetched_info.get('title') and not fetched_info.get('title').startswith('Product B0'):
+                            clean_title = fetched_info.get('title')
+                    except Exception:
+                        pass
+                    if not clean_title or clean_title.startswith('Product B0') or ('Fenmzee' in clean_title and asin != 'B0BPNXX2MF'):
+                        clean_title = f"Aesthetic Decor Find {asin}"
             title = clean_title
 
             # Price normalization: fix truncated prices like ".99" or "19.99"
@@ -1344,8 +1352,14 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 price_str = f"${price_str}"
             price = price_str
 
-            pin_title = raw_pin_title if raw_pin_title and not raw_pin_title.startswith('Product B0') else title
+            from modules.seo_copywriter import generate_pin_seo_data
+            _seo_fresh = generate_pin_seo_data(product_title=title, price=price)
+
+            pin_title = raw_pin_title if raw_pin_title and not raw_pin_title.startswith('Product B0') and ('Fenmzee' not in raw_pin_title or asin == 'B0BPNXX2MF') else title
             pin_description = reg_entry.get('description') or data.get('pin_description', '')
+            if not pin_description or ('Fenmzee' in pin_description and asin != 'B0BPNXX2MF'):
+                pin_description = _seo_fresh.get('description', f"Discover the {title}. Perfect for aesthetic cozy room decor!")
+
             badge_hook = data.get('badge_hook', 'VIRAL ROOM FIND')
             regional_asins = reg_entry.get('regional_asins') or data.get('regional_asins', {'US': asin})
             regional_prices = reg_entry.get('regional_prices') or data.get('regional_prices', {
@@ -1362,10 +1376,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             from modules.bridge_creator import generate_bridge_page
             from modules.html_overlay_engine import render_html_overlay
-            from modules.seo_copywriter import generate_pin_seo_data
 
-            _seo_for_features = generate_pin_seo_data(product_title=title, price=price)
-            features_list = reg_entry.get('features') or _seo_for_features.get('features', ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP'])
+            features_list = reg_entry.get('features')
+            if not features_list or ('FABRIC SHADE FINISH' in str(features_list).upper() and asin != 'B0BPNXX2MF' and 'LAMP' not in title.upper()):
+                features_list = _seo_fresh.get('features', ['PREMIUM QUALITY', 'WARM AMBIENT GLOW', 'AESTHETIC DESIGN', 'EASY SETUP'])
 
             # Auto-register product in product_price_registry.json if missing or incomplete
             try:
