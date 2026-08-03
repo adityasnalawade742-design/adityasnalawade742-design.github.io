@@ -1228,10 +1228,16 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             content_length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(content_length)
             data = json.loads(body.decode('utf-8')) if content_length > 0 else {}
-            n8n_url = data.get('n8n_url', 'http://localhost:5678/webhook/pinterest-batch')
+            n8n_url = data.get('n8n_url') or 'http://localhost:5678/webhook-test/pinterest-batch'
             items = data.get('items', [])
 
-            print(f"[n8n Proxy] 🚀 Proxying batch of {len(items)} items to n8n webhook ({n8n_url})...")
+            urls_to_try = [n8n_url]
+            if 'webhook-test' in n8n_url:
+                urls_to_try.append(n8n_url.replace('webhook-test', 'webhook'))
+            elif '/webhook/' in n8n_url:
+                urls_to_try.append(n8n_url.replace('/webhook/', '/webhook-test/'))
+
+            print(f"[n8n Proxy] 🚀 Proxying batch of {len(items)} items to n8n webhook ({urls_to_try[0]})...")
 
             for item in items:
                 asin = item.get('asin')
@@ -1244,14 +1250,16 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             # Forward payload to n8n server-side (no CORS restriction)
             req_data = json.dumps({'items': items}).encode('utf-8')
-            req = urllib.request.Request(n8n_url, data=req_data, headers={'Content-Type': 'application/json'})
-            n8n_status = 200
-            try:
-                with urllib.request.urlopen(req, timeout=10) as resp:
-                    n8n_status = resp.status
-                print(f"[n8n Proxy] ✅ Server-side dispatch to n8n returned HTTP {n8n_status}")
-            except Exception as e_proxy:
-                print(f"[n8n Proxy Warning] Could not reach n8n webhook ({e_proxy}).")
+            n8n_status = 0
+            for url in urls_to_try:
+                try:
+                    req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json'})
+                    with urllib.request.urlopen(req, timeout=10) as resp:
+                        n8n_status = resp.status
+                    print(f"[n8n Proxy] ✅ Server-side dispatch to n8n ({url}) returned HTTP {n8n_status}")
+                    break
+                except Exception as e_proxy:
+                    print(f"[n8n Proxy Warning] Could not reach n8n URL '{url}': {e_proxy}")
 
             self.send_json({
                 'status': 'success',
@@ -1500,9 +1508,20 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
                     try:
                         req_data = json.dumps(n8n_payload).encode('utf-8')
-                        n8n_req = urllib.request.Request(n8n_webhook_url, data=req_data, headers={'Content-Type': 'application/json'})
-                        with urllib.request.urlopen(n8n_req, timeout=3) as n8n_res:
-                            print(f"[n8n Webhook] ✅ Dispatched to n8n Webhook: {n8n_res.status}")
+                        urls_to_try = [n8n_webhook_url]
+                        if 'webhook-test' in n8n_webhook_url:
+                            urls_to_try.append(n8n_webhook_url.replace('webhook-test', 'webhook'))
+                        elif '/webhook/' in n8n_webhook_url:
+                            urls_to_try.append(n8n_webhook_url.replace('/webhook/', '/webhook-test/'))
+
+                        for u in urls_to_try:
+                            try:
+                                n8n_req = urllib.request.Request(u, data=req_data, headers={'Content-Type': 'application/json'})
+                                with urllib.request.urlopen(n8n_req, timeout=3) as n8n_res:
+                                    print(f"[n8n Webhook] ✅ Dispatched to n8n Webhook ({u}): {n8n_res.status}")
+                                break
+                            except Exception:
+                                pass
                     except Exception as e_n8n:
                         print(f"[n8n Webhook] Note: n8n local webhook listening check: {e_n8n}")
 
