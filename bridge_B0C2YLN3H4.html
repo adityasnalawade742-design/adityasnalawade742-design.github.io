@@ -31,7 +31,7 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "INR1525.61",
+        "price": "28.99",
         "availability": "https://schema.org/InStock",
         "url": "https://adityasnalawade742-design.github.io/bridge_B0C2YLN3H4.html"
       },
@@ -423,18 +423,18 @@
         <h1>Modern Ceramic Donut Vase Set of 2</h1>
 
         <div class="price-container">
-            <div class="price">INR1,525.61</div>
+            <div class="price">$28.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0C2YLN3H4_hook.jpg?v=1785761736" alt="Modern Ceramic Donut Vase Set of 2">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0C2YLN3H4_hook.jpg?v=1785761898" alt="Modern Ceramic Donut Vase Set of 2">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0C2YLN3H4_hook.jpg?v=1785761736', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0C2YLN3H4_hook.jpg?v=1785761898', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Modern Ceramic Donut Vase Set of 2");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0C2YLN3H4_hook.jpg?v=1785761736";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0C2YLN3H4_hook.jpg?v=1785761898";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -645,7 +645,7 @@
             const currentAsin = "B0C2YLN3H4";
             const prodKeywords = encodeURIComponent("White Ceramic Donut Flower Vase Set").replace(/%20/g, "+");
             const directRegions = ["US", "IN", "DE", "SE", "SG", "CA", "AU", "JP"];
-            const regionalMatrix = {"AE": "AED118.17", "AU": "$26.88", "BE": "70,20\u20ac", "BR": "R$171,53", "CA": "$42.26", "DE": "\u20ac16.84", "EG": "Not Available", "ES": "33,54\u20ac", "FR": "33,94\u20ac", "IN": "\u20b9599.00", "IT": "35,06\u20ac", "JP": "\u00a54,498", "MX": "Not Available", "NL": "\u20ac89,23", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e186.57\u200e", "SE": "Not Available", "SG": "Not Available", "TR": "Not Available", "UK": "\u00a314.27", "US": "INR1,525.61"};
+            const regionalMatrix = {"AE": "AED118.17", "AU": "$26.88", "BE": "70,20\u20ac", "BR": "R$171,53", "CA": "$42.26", "DE": "\u20ac16.84", "EG": "Not Available", "ES": "33,54\u20ac", "FR": "33,94\u20ac", "IN": "\u20b9599.00", "IT": "35,06\u20ac", "JP": "\u00a54,498", "MX": "Not Available", "NL": "\u20ac89,23", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e186.57\u200e", "SE": "Not Available", "SG": "Not Available", "TR": "Not Available", "UK": "\u00a314.27", "US": "$19.99"};
             const regionalAsins = {"US": "B0C2YLN3H4"};
 
             let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20 };
@@ -731,7 +731,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("INR1,525.61".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$19.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const finalDisplayPrice = `${sym}${converted}`;
                     priceTags.forEach(el => {

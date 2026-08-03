@@ -31,7 +31,7 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "INR1907.25",
+        "price": "19.99",
         "availability": "https://schema.org/InStock",
         "url": "https://adityasnalawade742-design.github.io/bridge_B0BZXNSW5K.html"
       },
@@ -423,18 +423,18 @@
         <h1>Touch Control Dimmable Bedside Lamp</h1>
 
         <div class="price-container">
-            <div class="price">INR1,907.25</div>
+            <div class="price">$19.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0BZXNSW5K_hook.jpg?v=1785761736" alt="Touch Control Dimmable Bedside Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0BZXNSW5K_hook.jpg?v=1785761898" alt="Touch Control Dimmable Bedside Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0BZXNSW5K_hook.jpg?v=1785761736', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0BZXNSW5K_hook.jpg?v=1785761898', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Touch Control Dimmable Bedside Lamp");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0BZXNSW5K_hook.jpg?v=1785761736";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0BZXNSW5K_hook.jpg?v=1785761898";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -645,7 +645,7 @@
             const currentAsin = "B0BZXNSW5K";
             const prodKeywords = encodeURIComponent("Touch Control Dimmable Bedside Table Lamp").replace(/%20/g, "+");
             const directRegions = ["US", "IN", "UK", "DE", "SE", "CA", "JP"];
-            const regionalMatrix = {"AE": "AED145.51", "AU": "A$30.38", "BE": "Not Available", "BR": "R$938,14", "CA": "$27.99", "DE": "\u20ac18.39", "EG": "Not Available", "ES": "Not Available", "FR": "Not Available", "IN": "\u20b9475.00", "IT": "Not Available", "JP": "\u00a53,098", "MX": "Not Available", "NL": "\u20ac91,08", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e226.93\u200e", "SE": "Not Available", "SG": "Not Available", "TR": "Not Available", "UK": "INR1,794.46", "US": "INR1,907.25"};
+            const regionalMatrix = {"AE": "AED145.51", "AU": "A$30.38", "BE": "Not Available", "BR": "R$938,14", "CA": "$27.99", "DE": "\u20ac18.39", "EG": "Not Available", "ES": "Not Available", "FR": "Not Available", "IN": "\u20b9475.00", "IT": "Not Available", "JP": "\u00a53,098", "MX": "Not Available", "NL": "\u20ac91,08", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e226.93\u200e", "SE": "Not Available", "SG": "Not Available", "TR": "Not Available", "UK": "INR1,794.46", "US": "$19.99"};
             const regionalAsins = {"US": "B0BZXNSW5K"};
 
             let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20 };
@@ -731,7 +731,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("INR1,907.25".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$19.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const finalDisplayPrice = `${sym}${converted}`;
                     priceTags.forEach(el => {
