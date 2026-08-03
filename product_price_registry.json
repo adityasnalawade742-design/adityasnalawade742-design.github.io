@@ -328,5 +328,40 @@
       "CA",
       "JP"
     ]
+  },
+  "B0D1G6ZL7Y": {
+    "title": "Flower Bud Touch Desk Lamp",
+    "asin": "B0D1G6ZL7Y",
+    "current_price": ".99",
+    "description": "Transform your space with this aesthetic Flower Bud Touch Desk Lamp. Features touch control dimming, rechargeable battery, and a warm ambient glow.",
+    "features": [
+      "TOUCH CONTROL DIMMER",
+      "WARM AMBIENT BEDROOM GLOW",
+      "RECHARGEABLE BATTERY",
+      "AESTHETIC FLOWER BUD DESIGN"
+    ],
+    "regional_prices": {
+      "US": ".99",
+      "IN": "₹1,650.00",
+      "UK": "£15.99",
+      "DE": "€18.50",
+      "CA": "CA.99",
+      "AU": "A.99",
+      "JP": "¥3,050",
+      "SE": "210,00kr"
+    },
+    "regional_asins": {
+      "US": "B0D1G6ZL7Y"
+    },
+    "direct_regions": [
+      "US",
+      "IN",
+      "UK",
+      "DE",
+      "CA",
+      "AU",
+      "JP",
+      "SE"
+    ]
   }
 }
