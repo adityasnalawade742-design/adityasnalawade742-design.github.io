@@ -541,10 +541,16 @@
                 <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;margin-bottom:20px;">
                     <!-- M1 FIX: editable webhook URL so users don't need to touch source code -->
                     <div style="margin-bottom:14px;">
-                        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;">n8n Webhook URL</label>
-                        <input id="n8nWebhookUrlInput" type="text" value="http://localhost:5678/webhook/pinterest-batch"
-                            style="width:100%;margin-top:6px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:12px;font-family:monospace;box-sizing:border-box;"
-                            placeholder="http://localhost:5678/webhook/pinterest-batch" />
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;">n8n Webhook URL Target</label>
+                            <div style="display:flex;gap:6px;">
+                                <button type="button" onclick="setN8nMode('test')" style="font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:rgba(255,183,3,0.25);border:1px solid #ffb703;color:#ffb703;cursor:pointer;">🧪 Canvas Test Mode (/webhook-test/)</button>
+                                <button type="button" onclick="setN8nMode('active')" style="font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:rgba(34,197,94,0.25);border:1px solid #4ade80;color:#4ade80;cursor:pointer;">🟢 Active Production Mode (/webhook/)</button>
+                            </div>
+                        </div>
+                        <input id="n8nWebhookUrlInput" type="text" value="http://localhost:5678/webhook-test/pinterest-batch"
+                            style="width:100%;margin-top:4px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:12px;font-family:monospace;box-sizing:border-box;"
+                            placeholder="http://localhost:5678/webhook-test/pinterest-batch" />
                     </div>
                     <div id="n8nStatusHeading" style="color:var(--gold-primary);font-size:16px;font-weight:800;margin-bottom:16px;">⏳ Dispatching batch to n8n...</div>
                     <div id="n8nStatusRows" style="display:flex;flex-direction:column;gap:12px;"></div>
@@ -633,10 +639,20 @@
         let n8nSelectedAsins = new Set();
         let n8nExtractedItems = [];
         let n8nChosenPhotos = {};
-        const N8N_WEBHOOK_DEFAULT = 'http://localhost:5678/webhook/pinterest-batch';
+        const N8N_WEBHOOK_DEFAULT = 'http://localhost:5678/webhook-test/pinterest-batch';
         function getN8nWebhookUrl() {
             const inp = document.getElementById('n8nWebhookUrlInput');
             return (inp && inp.value.trim()) ? inp.value.trim() : N8N_WEBHOOK_DEFAULT;
+        }
+
+        function setN8nMode(mode) {
+            const inp = document.getElementById('n8nWebhookUrlInput');
+            if (!inp) return;
+            if (mode === 'test') {
+                inp.value = 'http://localhost:5678/webhook-test/pinterest-batch';
+            } else {
+                inp.value = 'http://localhost:5678/webhook/pinterest-batch';
+            }
         }
 
         function escapeHTML(str) {
