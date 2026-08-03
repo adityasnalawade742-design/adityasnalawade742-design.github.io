@@ -32,7 +32,24 @@
       "SE": "B0F946YHSZ",
       "CA": "B0DZD1X83N",
       "JP": "B0DZD1X83N"
-    }
+    },
+    "description": "Cozy lamp description",
+    "features": [
+      "PREMIUM CRAFTSMANSHIP",
+      "WARM AMBIENT GLOW",
+      "AESTHETIC ROOM ACCENT",
+      "EASY SETUP"
+    ],
+    "direct_regions": [
+      "US",
+      "IN",
+      "UK",
+      "DE",
+      "CA",
+      "AU",
+      "JP",
+      "SE"
+    ]
   },
   "B0GYDXHF4G": {
     "title": "Flame Aroma Essential Oil Diffuser",

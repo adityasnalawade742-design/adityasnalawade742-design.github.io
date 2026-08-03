@@ -525,7 +525,23 @@
 
                 <div id="n8nPhotoReviewList" style="display:flex;flex-direction:column;gap:24px;"></div>
 
-                <div style="display:flex;gap:14px;margin-top:28px;justify-content:center;">
+                <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:18px;margin-top:24px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;">n8n Webhook URL Target</label>
+                        <div style="display:flex;gap:6px;">
+                            <button type="button" onclick="setN8nMode('active')" style="font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:rgba(34,197,94,0.25);border:1px solid #4ade80;color:#4ade80;cursor:pointer;">🟢 Active Production Mode (/webhook/)</button>
+                            <button type="button" onclick="setN8nMode('test')" style="font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:rgba(255,183,3,0.25);border:1px solid #ffb703;color:#ffb703;cursor:pointer;">🧪 Canvas Test Mode (/webhook-test/)</button>
+                        </div>
+                    </div>
+                    <input id="n8nWebhookUrlInput" type="text" value="http://localhost:5678/webhook/pinterest-batch"
+                        style="width:100%;margin-top:4px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:12px;font-family:monospace;box-sizing:border-box;"
+                        placeholder="http://localhost:5678/webhook/pinterest-batch" />
+                    <div style="font-size:11.5px;color:var(--text-sub);margin-top:6px;">
+                        💡 <strong>How to get your exact URL:</strong> Open <em>Node 1</em> in n8n ➔ Click <strong>Production URL</strong> ➔ Click <strong>Copy URL</strong> ➔ Paste it into the box above.
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:14px;margin-top:20px;justify-content:center;">
                     <button class="btn-secondary" onclick="n8nBackToStep1()">← Back to Step 1</button>
                     <button class="btn-primary" id="n8nSubmitBtn" onclick="n8nSubmitBatch()" style="font-size:16px;padding:14px 44px;">📌 Send to n8n Workflow</button>
                 </div>
@@ -539,19 +555,6 @@
                 </div>
 
                 <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;margin-bottom:20px;">
-                    <!-- M1 FIX: editable webhook URL so users don't need to touch source code -->
-                    <div style="margin-bottom:14px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;">n8n Webhook URL Target</label>
-                            <div style="display:flex;gap:6px;">
-                                <button type="button" onclick="setN8nMode('test')" style="font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:rgba(255,183,3,0.25);border:1px solid #ffb703;color:#ffb703;cursor:pointer;">🧪 Canvas Test Mode (/webhook-test/)</button>
-                                <button type="button" onclick="setN8nMode('active')" style="font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:rgba(34,197,94,0.25);border:1px solid #4ade80;color:#4ade80;cursor:pointer;">🟢 Active Production Mode (/webhook/)</button>
-                            </div>
-                        </div>
-                        <input id="n8nWebhookUrlInput" type="text" value="http://localhost:5678/webhook-test/pinterest-batch"
-                            style="width:100%;margin-top:4px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:12px;font-family:monospace;box-sizing:border-box;"
-                            placeholder="http://localhost:5678/webhook-test/pinterest-batch" />
-                    </div>
                     <div id="n8nStatusHeading" style="color:var(--gold-primary);font-size:16px;font-weight:800;margin-bottom:16px;">⏳ Dispatching batch to n8n...</div>
                     <div id="n8nStatusRows" style="display:flex;flex-direction:column;gap:12px;"></div>
                 </div>

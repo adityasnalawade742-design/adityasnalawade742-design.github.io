@@ -231,6 +231,7 @@
           "timeout": 30000
         }
       },
+      "onError": "continueRegularOutput",
       "id": "8e681492-7ae5-47f2-af34-184580e124d5",
       "name": "7. Post Pin to Pinterest API v5",
       "type": "n8n-nodes-base.httpRequest",

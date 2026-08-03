@@ -1255,10 +1255,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             items = data.get('items', [])
 
             urls_to_try = [n8n_url]
-            if '/webhook/' in n8n_url and 'webhook-test' not in n8n_url:
+            if '/webhook-test/' in n8n_url:
+                urls_to_try.append(n8n_url.replace('/webhook-test/', '/webhook/'))
+            elif '/webhook/' in n8n_url:
                 urls_to_try.append(n8n_url.replace('/webhook/', '/webhook-test/'))
-            elif 'webhook-test' in n8n_url:
-                urls_to_try.insert(0, n8n_url.replace('webhook-test', 'webhook'))
 
             print(f"[n8n Proxy] 🚀 Proxying batch of {len(items)} items to n8n webhook ({urls_to_try[0]})...")
 
@@ -1272,26 +1272,42 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     })
 
             # Forward payload to n8n server-side (no CORS restriction)
-            req_data = json.dumps({'items': items}).encode('utf-8')
+            req_data = json.dumps({'items': items, 'body': {'items': items}}).encode('utf-8')
+            n8n_status = 500
+            success_url = None
+
+            import urllib.error
             for url in urls_to_try:
                 try:
-                    req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json'})
+                    req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
                     with urllib.request.urlopen(req, timeout=10) as resp:
                         n8n_status = resp.status
                         resp_text = resp.read().decode('utf-8', errors='ignore')
                         if 'no test execution was listening' in resp_text.lower():
-                            print(f"[n8n Proxy Warning] {url} returned 'no test execution listening'. Trying next URL...")
+                            print(f"[n8n Proxy Warning] {url} returned 'no test execution listening'. Trying fallback...")
                             continue
-                    print(f"[n8n Proxy] ✅ Server-side dispatch to n8n ({url}) returned HTTP {n8n_status}")
-                    break
+                        success_url = url
+                        print(f"[n8n Proxy] ✅ Server-side dispatch to n8n ({url}) returned HTTP {n8n_status}")
+                        break
+                except urllib.error.HTTPError as e_http:
+                    print(f"[n8n Proxy Warning] {url} returned HTTP {e_http.code}. Trying fallback...")
+                    n8n_status = e_http.code
                 except Exception as e_proxy:
                     print(f"[n8n Proxy Warning] Could not reach n8n URL '{url}': {e_proxy}")
 
-            self.send_json({
-                'status': 'success',
-                'n8n_status': n8n_status,
-                'message': f'Batch of {len(items)} items proxied to n8n workflow!'
-            })
+            if success_url:
+                self.send_json({
+                    'status': 'success',
+                    'n8n_status': n8n_status,
+                    'target_url': success_url,
+                    'message': f'Batch of {len(items)} items proxied to n8n workflow ({success_url})!'
+                })
+            else:
+                self.send_json({
+                    'status': 'warning',
+                    'n8n_status': n8n_status,
+                    'message': f'Could not reach n8n webhook at {n8n_url}. Please activate the workflow in n8n (toggle ON in top right) or paste your exact n8n Webhook URL.'
+                })
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
