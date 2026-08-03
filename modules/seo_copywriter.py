@@ -148,20 +148,20 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
         )
         keywords = ["bird touch lamp", "cute nightstand light", "cozy room decor", "dimmable night light", "amazon finds"]
 
-    # 10. Fenmzee Bedside Touch Lamp (Default Touch Lamp)
+    # 10. Default Dynamic Fallback (No Hardcoded Product Copy)
     else:
-        clean_name = "Fenmzee Bedside Table Touch Lamp"
-        pin_title = "Say Goodbye To Overhead Lights 🕯️ Fenmzee Touch Bedside Lamp"
+        clean_name = product_title.strip() if product_title and not product_title.startswith('Product B0') and not product_title.startswith('Product ') else "Aesthetic Home Decor Find"
+        pin_title = f"Cozy Room Upgrade ✨ {clean_name}"
         subtitle_hook = ""  # H1 FIX: Rule 7 — subtitles MUST always be empty
-        badge_hook = "BEDSIDE FAVORITE"
-        features = ["3 WAY TOUCH DIMMER", "WARM AMBER GLOW", "USB CHARGING PORT", "FABRIC SHADE FINISH"]
+        badge_hook = "VIRAL ROOM FIND"
+        features = ["PREMIUM CRAFTSMANSHIP", "WARM AMBIENT GLOW", "AESTHETIC ROOM ACCENT", "EASY SETUP"]
         theme_style = "floating_luxury"
         description = (
-            "Say goodbye to harsh bedroom lights! Transform your nightstand into a calming sanctuary with the Fenmzee Bedside Touch Lamp. "
-            "Features 3-way touch dimming and warm ambient lighting tailored for bedtime reading and cozy room vibes. "
-            "Tap link to shop now on Amazon! #cozyroomdecor #bedsidelamp #nightstandlighting #bedroomvibes #amazonfinds"
+            f"Transform your space with the viral {clean_name}! "
+            f"Features premium design and warm ambient lighting tailored for cozy room vibes. "
+            f"Tap link to check live price on Amazon! #cozyroomdecor #roomdecor #aestheticfinds #homefinds #amazonfinds"
         )
-        keywords = ["bedside touch lamp", "cozy room decor", "nightstand lighting", "bedroom transformation", "amazon room finds"]
+        keywords = [clean_name.lower(), "cozy room decor", "aesthetic home finds", "room transformation", "amazon room finds"]
 
     return {
         "pin_title": pin_title,
