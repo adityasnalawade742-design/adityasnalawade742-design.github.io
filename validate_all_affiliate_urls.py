@@ -19,11 +19,25 @@ test_countries = [
     ("US", "amazon.com", "smartdeal0358-20"),
     ("IN", "amazon.in", "smartdeal0358-21"),
     ("UK", "amazon.co.uk", "smartdea04b3a-21"),
+    ("GB", "amazon.co.uk", "smartdea04b3a-21"),
     ("DE", "amazon.de", "smartdeal0bb4-21"),
     ("CA", "amazon.ca", "smartdeal0302-20"),
     ("FR", "amazon.fr", "smartdeal0962-21"),
     ("ES", "amazon.es", "smartdeal0b46-21"),
-    ("IT", "amazon.it", "smartdea03a8d-21")
+    ("IT", "amazon.it", "smartdea03a8d-21"),
+    ("SE", "amazon.se", "smartdeal0bb4-21"),
+    ("NL", "amazon.nl", "smartdeal0bb4-21"),
+    ("PL", "amazon.pl", "smartdeal0bb4-21"),
+    ("TR", "amazon.com.tr", "smartdeal0bb4-21"),
+    ("BE", "amazon.com.be", "smartdeal0962-21"),
+    ("MX", "amazon.com.mx", "smartdeal0358-20"),
+    ("BR", "amazon.com.br", "smartdeal0358-20"),
+    ("SG", "amazon.sg", "smartdeal0358-20"),
+    ("AE", "amazon.ae", "smartdeal0358-20"),
+    ("SA", "amazon.sa", "smartdeal0358-20"),
+    ("EG", "amazon.eg", "smartdeal0358-20"),
+    ("JP", "amazon.co.jp", "smartdeal0358-20"),
+    ("AU", "amazon.com.au", "smartdeal0358-20")
 ]
 
 link_errors = []

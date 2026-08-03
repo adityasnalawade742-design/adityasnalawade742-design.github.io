@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0FXLYXM32_hook.jpg?v=1785761022" alt="Wavy Full Length Floor Standing Mirror">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0FXLYXM32_hook.jpg?v=1785761349" alt="Wavy Full Length Floor Standing Mirror">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FXLYXM32_hook.jpg?v=1785761022', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FXLYXM32_hook.jpg?v=1785761349', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Wavy Full Length Floor Standing Mirror");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FXLYXM32_hook.jpg?v=1785761022";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FXLYXM32_hook.jpg?v=1785761349";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -600,6 +600,7 @@
         (function() {
             const countryMap = {
                 // INDIA & ASIA-PACIFIC
+                "IN": { domain: "amazon.in", label: "AMAZON INDIA (₹)" },
                 "SG": { domain: "amazon.sg", label: "AMAZON SINGAPORE (SG$)" },
                 "JP": { domain: "amazon.co.jp", label: "AMAZON JAPAN (¥)" },
                 "AU": { domain: "amazon.com.au", label: "AMAZON AUSTRALIA (A$)" },
@@ -608,6 +609,8 @@
                 "SA": { domain: "amazon.sa", label: "AMAZON SAUDI ARABIA (SAR)" },
                 "TR": { domain: "amazon.com.tr", label: "AMAZON TURKEY (TRY)" },
                 "EG": { domain: "amazon.eg", label: "AMAZON EGYPT (EGP)" },
+
+                // EUROPE
                 "GB": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
                 "UK": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
                 "IE": { domain: "amazon.co.uk", label: "AMAZON UK (£)" },
@@ -630,6 +633,8 @@
                 "RO": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
                 "GR": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
                 "HU": { domain: "amazon.de", label: "AMAZON GERMANY (€)" },
+
+                // AMERICAS
                 "US": { domain: "amazon.com", label: "AMAZON US ($)" },
                 "CA": { domain: "amazon.ca", label: "AMAZON CANADA (CA$)" },
                 "MX": { domain: "amazon.com.mx", label: "AMAZON MEXICO (Mex$)" },
@@ -654,8 +659,54 @@
                     .catch(e => {});
             } catch(e) {}
 
-            const associateTagMap = { "US": "smartdeal0358-20", "CA": "smartdeal0302-20", "IN": "smartdeal0358-21", "UK": "smartdea04b3a-21", "GB": "smartdea04b3a-21", "DE": "smartdeal0bb4-21", "FR": "smartdeal0962-21", "ES": "smartdeal0b46-21", "IT": "smartdea03a8d-21" };
-            const domainToTagMap = { "amazon.com": "smartdeal0358-20", "amazon.ca": "smartdeal0302-20", "amazon.in": "smartdeal0358-21", "amazon.co.uk": "smartdea04b3a-21", "amazon.de": "smartdeal0bb4-21", "amazon.fr": "smartdeal0962-21", "amazon.es": "smartdeal0b46-21", "amazon.it": "smartdea03a8d-21" };
+            const associateTagMap = {
+                "US": "smartdeal0358-20",
+                "CA": "smartdeal0302-20",
+                "IN": "smartdeal0358-21",
+                "UK": "smartdea04b3a-21",
+                "GB": "smartdea04b3a-21",
+                "DE": "smartdeal0bb4-21",
+                "FR": "smartdeal0962-21",
+                "ES": "smartdeal0b46-21",
+                "IT": "smartdea03a8d-21",
+                "SE": "smartdeal0bb4-21",
+                "NL": "smartdeal0bb4-21",
+                "PL": "smartdeal0bb4-21",
+                "TR": "smartdeal0bb4-21",
+                "BE": "smartdeal0962-21",
+                "MX": "smartdeal0358-20",
+                "BR": "smartdeal0358-20",
+                "SG": "smartdeal0358-20",
+                "AE": "smartdeal0358-20",
+                "SA": "smartdeal0358-20",
+                "EG": "smartdeal0358-20",
+                "JP": "smartdeal0358-20",
+                "AU": "smartdeal0358-20"
+            };
+
+            const domainToTagMap = {
+                "amazon.com": "smartdeal0358-20",
+                "amazon.ca": "smartdeal0302-20",
+                "amazon.in": "smartdeal0358-21",
+                "amazon.co.uk": "smartdea04b3a-21",
+                "amazon.de": "smartdeal0bb4-21",
+                "amazon.fr": "smartdeal0962-21",
+                "amazon.es": "smartdeal0b46-21",
+                "amazon.it": "smartdea03a8d-21",
+                "amazon.se": "smartdeal0bb4-21",
+                "amazon.nl": "smartdeal0bb4-21",
+                "amazon.pl": "smartdeal0bb4-21",
+                "amazon.com.tr": "smartdeal0bb4-21",
+                "amazon.com.be": "smartdeal0962-21",
+                "amazon.com.mx": "smartdeal0358-20",
+                "amazon.com.br": "smartdeal0358-20",
+                "amazon.sg": "smartdeal0358-20",
+                "amazon.ae": "smartdeal0358-20",
+                "amazon.sa": "smartdeal0358-20",
+                "amazon.eg": "smartdeal0358-20",
+                "amazon.co.jp": "smartdeal0358-20",
+                "amazon.com.au": "smartdeal0358-20"
+            };
 
             function getTag(cc) { return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20"; }
 
