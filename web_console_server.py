@@ -1207,7 +1207,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     'regional_asins': reg_asins,
                     'regional_prices': reg_prices,
                     'direct_regions': direct_regs,
-                    'create_bridge_endpoint': f'http://localhost:{self.server.server_address[1]}/api/create_bridge_page'
+                    'create_bridge_endpoint': f'http://127.0.0.1:{self.server.server_address[1]}/api/create_bridge_page'
                 })
 
             print(f'[Prepare n8n Batch] 📦 Packaged {len(prepared)} products ready for n8n.')
