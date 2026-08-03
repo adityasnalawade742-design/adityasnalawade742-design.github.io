@@ -324,7 +324,13 @@ def render_html_overlay(
         dynamic_headline_size = "40px"
 
     # Build features HTML
-    feat_items = "".join([f'<div class="feat-card"><span>{f}</span></div>' for f in features[:4]])
+    clean_feats = []
+    for f in features[:4]:
+        f_str = re.sub(r'^[✨🌿🎁⚡✦✓\s]+', '', str(f)).strip()
+        if len(f_str) > 16:
+            f_str = f_str[:14] + "…"
+        clean_feats.append(f_str.upper())
+    feat_items = "".join([f'<div class="feat-card"><span>✨ {f}</span></div>' for f in clean_feats])
 
     # Smart Luminance Inspection Engine (0% dimming if dark/medium, ultra-light 0.20 opacity if bright)
     scrim = detect_image_luminance(image_path)
@@ -651,10 +657,13 @@ def render_html_overlay(
             gap: 10px;
         }
         .feat-card {
-            background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(12px); border-radius: 16px; padding: 14px 10px; text-align: center;
+            background: rgba(15, 14, 19, 0.72); border: 1.5px solid rgba(255, 255, 255, 0.28);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 18px; padding: 12px 6px; text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+            display: flex; align-items: center; justify-content: center;
         }
-        .feat-card span { color: #f8f9fa; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-shadow: 0 2px 6px rgba(0,0,0,0.7); }
+        .feat-card span { color: #ffffff; font-size: 13.5px; font-weight: 800; letter-spacing: 0.5px; text-shadow: 0 2px 6px rgba(0,0,0,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         """
 
     html_content = f"""<!DOCTYPE html>
