@@ -352,6 +352,16 @@
     },
     "regional_asins": {
       "US": "B0BPNXX2MF"
-    }
+    },
+    "direct_regions": [
+      "US",
+      "IN",
+      "UK",
+      "DE",
+      "CA",
+      "AU",
+      "JP",
+      "SE"
+    ]
   }
 }
