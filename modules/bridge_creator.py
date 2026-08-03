@@ -520,24 +520,24 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 📖 Why You'll Love This Room Accent
             </h3>
             <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.65; margin-bottom: 16px;">
-                {{ seo.description or product.description or "Designed for contemporary nightstands and cozy living room spaces, this piece combines aesthetic warmth with daily functional convenience." }}
+                {{ seo.description if (seo.description and seo.description|length > 40) else (product.description if (product.description and product.description|length > 40) else "Say goodbye to harsh overhead lighting! Transform your nightstand setup into a calming sanctuary with this " ~ product.title ~ ". Features warm ambient illumination tailored for bedtime reading and cozy room vibes.") }}
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #94a3b8;">
                 {% if product.features and (product.features is sequence) and (product.features is not string) and product.features|length > 0 %}
-                {% for feat in product.features[:3] %}
-                <div style="display: flex; gap: 8px;">
-                    <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Feature {{ loop.index }}:</strong> {{ feat }}</span>
+                {% for feat in product.features[:4] %}
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="color: var(--accent-gold); font-size: 14px;">✨</span>
+                    <span><strong style="color: #e2e8f0;">{{ feat }}</strong></span>
                 </div>
                 {% endfor %}
                 {% else %}
-                <div style="display: flex; gap: 8px;">
-                    <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Aesthetic Design:</strong> Blends effortlessly into modern, boho, and cozy room decor themes.</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="color: var(--accent-gold); font-size: 14px;">✨</span>
+                    <span><strong style="color: #e2e8f0;">Aesthetic Room Upgrade:</strong> Blends effortlessly into modern, boho, and cozy room decor themes.</span>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <span style="color: var(--accent-gold);">✓</span>
-                    <span><strong>Premium Quality:</strong> Built with high quality materials for daily functionality and durability.</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="color: var(--accent-gold); font-size: 14px;">✨</span>
+                    <span><strong style="color: #e2e8f0;">Warm Ambient Glow:</strong> Soft eye-caring illumination perfect for bedtime relaxation.</span>
                 </div>
                 {% endif %}
             </div>
