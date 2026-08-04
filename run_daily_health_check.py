@@ -106,22 +106,19 @@ for card in cards:
         "data-direct-regions": direct_regs_str
     }
     
+    raw_html = index_file.read_text(encoding="utf-8")
     for k, v in attr_updates.items():
-        if card.get(k) != v:
-            card[k] = v
-            index_modified = True
-            healed_count += 1
-            print(f"  🔧 Healed index.html card [{asin}] {k} -> '{v}'")
+        pattern = re.compile(rf'id="card-{asin}"[^>]*?\b{k}="[^"]*"')
+        if pattern.search(raw_html):
+            new_html = pattern.sub(lambda m: re.sub(rf'\b{k}="[^"]*"', f'{k}="{v}"', m.group(0)), raw_html)
+            if new_html != raw_html:
+                raw_html = new_html
+                index_modified = True
+                healed_count += 1
+                print(f"  🔧 Healed index.html card [{asin}] {k} -> '{v}'")
 
-    pt = card.find("div", class_="card-price-tag")
-    expected_pt_str = str(rp.get("US", f"${base_usd}"))
-    if pt and pt.get_text(strip=True) != expected_pt_str:
-        pt.clear()
-        pt.string = expected_pt_str
-        index_modified = True
-
-if index_modified or healed_count > 0:
-    index_file.write_text(str(soup), encoding="utf-8")
+if index_modified and healed_count > 0:
+    index_file.write_text(raw_html, encoding="utf-8")
     print("✅ Saved self-healed index.html!")
     # M5 FIX: push healed changes live so the site doesn't stay broken until next scheduled sync
     try:

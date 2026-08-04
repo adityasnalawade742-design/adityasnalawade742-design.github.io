@@ -22,8 +22,8 @@ def rebuild_all_price_badges():
     for asin, meta in registry.items():
         raw_path = repo_dir / "raw_images" / f"raw_{asin}.jpg"
         if not raw_path.exists():
-            if (repo_dir / "generated image.jpg").exists():
-                raw_path = repo_dir / "generated image.jpg"
+            if (repo_dir / f"raw_{asin}_console.jpg").exists():
+                raw_path = repo_dir / f"raw_{asin}_console.jpg"
             elif (repo_dir / f"focus_product_{asin}_hook.jpg").exists():
                 raw_path = repo_dir / f"focus_product_{asin}_hook.jpg"
             else:
