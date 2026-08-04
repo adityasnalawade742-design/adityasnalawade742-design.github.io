@@ -38,12 +38,13 @@ def scrape_uk_prices():
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
                     txt = offscreen.inner_text().strip()
-                    m = re.search(r"£(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)", txt)
-                    if m:
-                        val = float(m.group(1).replace(",", ""))
-                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
-                        if val <= (base_usd * 3.5):
-                            price_str = f"£{val:.2f}"
+                    if "INR" not in txt and "₹" not in txt:
+                        m = re.search(r"£(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)", txt)
+                        if m:
+                            val = float(m.group(1).replace(",", ""))
+                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                            if val <= (base_usd * 3.5):
+                                price_str = f"£{val:.2f}"
 
                 if not price_str:
                     whole = page.query_selector("span.a-price-whole")

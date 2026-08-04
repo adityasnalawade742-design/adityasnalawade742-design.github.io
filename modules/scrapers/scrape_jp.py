@@ -38,12 +38,13 @@ def scrape_jp_prices():
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
                     txt = offscreen.inner_text().strip()
-                    m = re.search(r"[¥￥\s]*(\d{1,3}(?:,\d{3})*)", txt)
-                    if m:
-                        val = int(m.group(1).replace(",", ""))
-                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
-                        if val <= (base_usd * 300.0):
-                            price_str = f"¥{val:,}"
+                    if "INR" not in txt and "₹" not in txt:
+                        m = re.search(r"[¥￥\s]*(\d{1,3}(?:,\d{3})*)", txt)
+                        if m:
+                            val = int(m.group(1).replace(",", ""))
+                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                            if val <= (base_usd * 300.0):
+                                price_str = f"¥{val:,}"
 
                 if not price_str:
                     whole = page.query_selector("span.a-price-whole")

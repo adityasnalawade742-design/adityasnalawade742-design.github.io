@@ -16,28 +16,28 @@ print("🌐 AUTOMATED OUTBOUND LINK & TAG CRAWLER (PRECISION AUDIT)")
 print("=========================================================================\n")
 
 test_countries = [
-    ("US", "amazon.com", "smartdeal0358-20"),
-    ("IN", "amazon.in", "smartdeal0358-21"),
-    ("UK", "amazon.co.uk", "smartdea04b3a-21"),
-    ("GB", "amazon.co.uk", "smartdea04b3a-21"),
-    ("DE", "amazon.de", "smartdeal0bb4-21"),
-    ("CA", "amazon.ca", "smartdeal0302-20"),
-    ("FR", "amazon.fr", "smartdeal0962-21"),
-    ("ES", "amazon.es", "smartdeal0b46-21"),
-    ("IT", "amazon.it", "smartdea03a8d-21"),
-    ("SE", "amazon.se", "smartdeal0bb4-21"),
-    ("NL", "amazon.nl", "smartdeal0bb4-21"),
-    ("PL", "amazon.pl", "smartdeal0bb4-21"),
-    ("TR", "amazon.com.tr", "smartdeal0bb4-21"),
-    ("BE", "amazon.com.be", "smartdeal0962-21"),
-    ("MX", "amazon.com.mx", "smartdeal0358-20"),
-    ("BR", "amazon.com.br", "smartdeal0358-20"),
-    ("SG", "amazon.sg", "smartdeal0358-20"),
-    ("AE", "amazon.ae", "smartdeal0358-20"),
-    ("SA", "amazon.sa", "smartdeal0358-20"),
-    ("EG", "amazon.eg", "smartdeal0358-20"),
-    ("JP", "amazon.co.jp", "smartdeal0358-20"),
-    ("AU", "amazon.com.au", "smartdeal0358-20")
+    ("US", "amazon.com", "smartdeal0358-20", True),
+    ("IN", "amazon.in", "smartdeal0358-21", True),
+    ("UK", "amazon.co.uk", "smartdea04b3a-21", True),
+    ("GB", "amazon.co.uk", "smartdea04b3a-21", True),
+    ("DE", "amazon.de", "smartdeal0bb4-21", True),
+    ("CA", "amazon.ca", "smartdeal0302-20", True),
+    ("FR", "amazon.fr", "smartdeal0962-21", True),
+    ("ES", "amazon.es", "smartdeal0b46-21", True),
+    ("IT", "amazon.it", "smartdea03a8d-21", True),
+    ("SE", "amazon.se", "smartdeal0bb4-21", True),
+    ("NL", "amazon.nl", "smartdeal0bb4-21", True),
+    ("PL", "amazon.pl", "smartdeal0bb4-21", True),
+    ("TR", "amazon.com.tr", "smartdeal0bb4-21", True),
+    ("BE", "amazon.com.be", "smartdeal0962-21", True),
+    ("MX", "amazon.com.mx", None, False),
+    ("BR", "amazon.com.br", None, False),
+    ("SG", "amazon.sg", None, False),
+    ("AE", "amazon.ae", None, False),
+    ("SA", "amazon.sa", None, False),
+    ("EG", "amazon.eg", None, False),
+    ("JP", "amazon.co.jp", None, False),
+    ("AU", "amazon.com.au", None, False)
 ]
 
 link_errors = []
@@ -51,7 +51,7 @@ with sync_playwright() as p:
         asin = bf.name.replace("bridge_", "").replace(".html", "")
         file_url = f"file:///{bf.resolve()}".replace("\\", "/")
         
-        for cc, exp_domain, exp_tag in test_countries:
+        for cc, exp_domain, exp_tag, has_tag in test_countries:
             page.goto(f"{file_url}?country={cc}")
             page.wait_for_timeout(400)
             
@@ -62,9 +62,13 @@ with sync_playwright() as p:
             if exp_domain not in href:
                 link_errors.append(f"{bf.name} [{cc}]: Expected domain '{exp_domain}' in href='{href}'")
             
-            # 2. Assert associate tag matches
-            if f"tag={exp_tag}" not in href:
-                link_errors.append(f"{bf.name} [{cc}]: Missing associate tag '{exp_tag}' in href='{href}'")
+            # 2. Assert associate tag status matches
+            if has_tag:
+                if f"tag={exp_tag}" not in href:
+                    link_errors.append(f"{bf.name} [{cc}]: Missing associate tag '{exp_tag}' in href='{href}'")
+            else:
+                if "tag=" in href:
+                    link_errors.append(f"{bf.name} [{cc}]: Expected no associate tag but found 'tag=' in href='{href}'")
                 
             # 3. Assert search query '+' encoding
             if "/s?k=" in href and "%20" in href:

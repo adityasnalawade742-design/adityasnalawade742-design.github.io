@@ -14,129 +14,29 @@ registry_file = repo_dir / "product_price_registry.json"
 with open(registry_file, "r", encoding="utf-8") as f:
     registry = json.load(f)
 
-# Master catalog metadata mapping for graphic pin overlays
-items_to_rebuild = [
-    {
-        "asin": "B0DZD1X83N",
-        "title": "Minimalist Wood Base Table Lamp",
-        "raw": "raw_images/raw_B0DZD1X83N.jpg",
-        "hook": "focus_product_B0DZD1X83N_hook.jpg",
-        "badge": "✨ VIRAL ROOM FIND"
-    },
-    {
-        "asin": "B0BZXNSW5K",
-        "title": "Touch Control Dimmable Bedside Lamp",
-        "raw": "raw_images/raw_B0BZXNSW5K.jpg",
-        "hook": "focus_product_B0BZXNSW5K_hook.jpg",
-        "badge": "🕯️ BEDSIDE FAVORITE"
-    },
-    {
-        "asin": "B0D1FRDFFX",
-        "title": "Glass Mushroom Ambient Lamp",
-        "raw": "raw_images/raw_B0D1FRDFFX.jpg",
-        "hook": "focus_product_B0D1FRDFFX_hook.jpg",
-        "badge": "🍄 VIRAL MUSHROOM LAMP"
-    },
-    {
-        "asin": "B0C2YLN3H4",
-        "title": "White Ceramic Donut Vase Set",
-        "raw": "raw_images/raw_B0C2YLN3H4.jpg",
-        "hook": "focus_product_B0C2YLN3H4_hook.jpg",
-        "badge": "🌿 BOHO DECOR PICK"
-    },
-    {
-        "asin": "B0GYDXHF4G",
-        "title": "Flame Aroma Essential Oil Diffuser",
-        "raw": "raw_images/raw_B0GYDXHF4G.jpg",
-        "hook": "focus_product_B0GYDXHF4G_hook.jpg",
-        "badge": "✨ VIRAL ROOM FIND"
-    },
-    {
-        "asin": "B0FXLYXM32",
-        "title": "White Wavy Wall Vanity Mirror",
-        "raw": "raw_images/raw_B0FXLYXM32.jpg",
-        "hook": "focus_product_B0FXLYXM32_hook.jpg",
-        "badge": "✨ VANITY GOALS"
-    },
-    {
-        "asin": "B07HP22QTZ",
-        "title": "Crystal Prism Window Suncatcher",
-        "raw": "raw_images/raw_B07HP22QTZ.jpg",
-        "hook": "focus_product_B07HP22QTZ_hook.jpg",
-        "badge": "🌈 SUNLIGHT MAGIC"
-    },
-    {
-        "asin": "B0D8P8CSYP",
-        "title": "Cute Bird Dimmable Touch Lamp",
-        "raw": "raw_images/raw_B0D8P8CSYP.jpg",
-        "hook": "focus_product_B0D8P8CSYP_hook.jpg",
-        "badge": "🐦 CUTE BEDSIDE PICK"
-    },
-    {
-        "asin": "B0DXKGL1T2",
-        "title": "Lily of Valley Flower Lamp",
-        "raw": "raw_images/raw_B0DXKGL1T2.jpg",
-        "hook": "focus_product_B0DXKGL1T2_hook.jpg",
-        "badge": "✨ VIRAL ROOM FIND"
-    },
-    {
-        "asin": "B0FGJ1S73D",
-        "title": "Ceramic Mushroom Bedside Lamp",
-        "raw": "raw_images/raw_B0FGJ1S73D.jpg",
-        "hook": "focus_product_B0FGJ1S73D_hook.jpg",
-        "badge": "🍄 MUSHROOM LAMP FIND"
-    },
-    {
-        "asin": "B0CJC549C6",
-        "title": "Matte Black Thinker Statue Set",
-        "raw": "raw_images/raw_B0CJC549C6.jpg",
-        "hook": "focus_product_B0CJC549C6_hook.jpg",
-        "badge": "✨ VIRAL DECOR FIND"
-    },
-    {
-        "asin": "B0CJ4Q4PZQ",
-        "title": "Pink Striped Glass Mushroom Lamp",
-        "raw": "raw_images/raw_B0CJ4Q4PZQ.jpg",
-        "hook": "focus_product_B0CJ4Q4PZQ_hook.jpg",
-        "badge": "🍄 COZY BEDSIDE GLOW"
-    },
-    {
-        "asin": "B0BQGC76VX",
-        "title": "Irregular Wavy Wall Mirror",
-        "raw": "raw_images/raw_B0BQGC76VX.jpg",
-        "hook": "focus_product_B0BQGC76VX_hook.jpg",
-        "badge": "✨ MODERN BOHO FIND"
-    },
-    {
-        "asin": "B0C7WFZZ7D",
-        "title": "Hollow Ceramic Snuggle Vase Set",
-        "raw": "raw_images/raw_B0C7WFZZ7D.jpg",
-        "hook": "focus_product_B0C7WFZZ7D_hook.jpg",
-        "badge": "🌿 BOHO DECOR PICK"
-    },
-    {
-        "asin": "B0BXP7YWHJ",
-        "title": "White Ceramic Donut Vases",
-        "raw": "raw_images/raw_B0BXP7YWHJ.jpg",
-        "hook": "focus_product_B0BXP7YWHJ_hook.jpg",
-        "badge": "✨ VANITY GOALS"
-    }
-]
-
 def rebuild_all_price_badges():
     print("==================================================")
     print("🎨 REBUILDING GRAPHIC PRICE BADGES ACCORDING TO SYNCED PRICES")
     print("==================================================")
 
-    for item in items_to_rebuild:
-        asin = item["asin"]
-        raw_path = repo_dir / item["raw"]
+    for asin, meta in registry.items():
+        raw_path = repo_dir / "raw_images" / f"raw_{asin}.jpg"
         if not raw_path.exists():
-            print(f" ⚠️ Skipping [{asin}]: raw image {raw_path} not found.")
-            continue
+            if (repo_dir / "generated image.jpg").exists():
+                raw_path = repo_dir / "generated image.jpg"
+            elif (repo_dir / f"focus_product_{asin}_hook.jpg").exists():
+                raw_path = repo_dir / f"focus_product_{asin}_hook.jpg"
+            else:
+                print(f" ⚠️ Skipping [{asin}]: raw image not found.")
+                continue
 
-        usd_price = registry.get(asin, {}).get("current_price") or registry.get(asin, {}).get("regional_prices", {}).get("US", "$19.99")
-        output_path = repo_dir / item["hook"]
+        usd_price = meta.get("current_price") or meta.get("regional_prices", {}).get("US", "$19.99")
+        if "INR" in str(usd_price):
+            usd_price = "$19.99"
+
+        output_path = repo_dir / f"focus_product_{asin}_hook.jpg"
+        title = meta.get("title", f"Product {asin}")
+        badge = meta.get("badge", "✨ VIRAL ROOM FIND")
 
         print(f"\n🖼️ Re-rendering graphic overlay for [{asin}]...")
         print(f"   • Raw Image:  {raw_path.name}")
@@ -145,10 +45,11 @@ def rebuild_all_price_badges():
 
         render_html_overlay(
             image_path=str(raw_path),
-            headline=item["title"],
+            headline=title,
             subtitle="",
-            badge_text=item["badge"],
+            badge_text=badge,
             price_str=usd_price,
+            features=meta.get("features"),
             output_path=str(output_path),
             theme="bottom_glass_card"
         )

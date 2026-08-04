@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0C7WFZZ7D_hook.jpg?v=1785865105" alt="Hollow Ceramic Snuggle Vase Set">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0C7WFZZ7D_hook.jpg?v=1785867225" alt="Hollow Ceramic Snuggle Vase Set">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0C7WFZZ7D_hook.jpg?v=1785865105', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0C7WFZZ7D_hook.jpg?v=1785867225', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Hollow Ceramic Snuggle Vase Set");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0C7WFZZ7D_hook.jpg?v=1785865105";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0C7WFZZ7D_hook.jpg?v=1785867225";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -673,15 +673,7 @@
                 "NL": "smartdeal0bb4-21",
                 "PL": "smartdeal0bb4-21",
                 "TR": "smartdeal0bb4-21",
-                "BE": "smartdeal0962-21",
-                "MX": "smartdeal0358-20",
-                "BR": "smartdeal0358-20",
-                "SG": "smartdeal0358-20",
-                "AE": "smartdeal0358-20",
-                "SA": "smartdeal0358-20",
-                "EG": "smartdeal0358-20",
-                "JP": "smartdeal0358-20",
-                "AU": "smartdeal0358-20"
+                "BE": "smartdeal0962-21"
             };
 
             const domainToTagMap = {
@@ -697,18 +689,10 @@
                 "amazon.nl": "smartdeal0bb4-21",
                 "amazon.pl": "smartdeal0bb4-21",
                 "amazon.com.tr": "smartdeal0bb4-21",
-                "amazon.com.be": "smartdeal0962-21",
-                "amazon.com.mx": "smartdeal0358-20",
-                "amazon.com.br": "smartdeal0358-20",
-                "amazon.sg": "smartdeal0358-20",
-                "amazon.ae": "smartdeal0358-20",
-                "amazon.sa": "smartdeal0358-20",
-                "amazon.eg": "smartdeal0358-20",
-                "amazon.co.jp": "smartdeal0358-20",
-                "amazon.com.au": "smartdeal0358-20"
+                "amazon.com.be": "smartdeal0962-21"
             };
 
-            function getTag(cc) { return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20"; }
+            function getTag(cc) { return associateTagMap[cc] || null; }
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
@@ -745,16 +729,18 @@
                 const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
                 const target = countryMap[targetCC] || countryMap["US"];
                 const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
+                const tagParam = activeTag ? `?tag=${activeTag}` : '';
+                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
                 const buyBtn = document.getElementById('buyBtn');
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
                 if (targetAsin && (targetCC === 'US' || isDirectListing || regionalAsins[targetCC] || (targetCC === 'GB' && regionalAsins['UK']))) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}?tag=${activeTag}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
                     if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=${activeTag}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}${tagSearchParam}`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
                         const titleEl = document.getElementById('geoNoticeTitle');

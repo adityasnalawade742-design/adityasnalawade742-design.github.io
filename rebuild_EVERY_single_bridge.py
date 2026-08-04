@@ -145,6 +145,7 @@ if registry_path.exists():
         item["regional_asins"] = reg_item.get("regional_asins", {})
         if "current_price" in reg_item and reg_item["current_price"]:
             item["current_price"] = reg_item["current_price"]
+            item["price"] = reg_item["current_price"]
         if "title" in reg_item and reg_item["title"]:
             item["title"] = reg_item["title"]
         if "headline" in reg_item and reg_item["headline"]:

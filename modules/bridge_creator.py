@@ -678,15 +678,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "NL": "smartdeal0bb4-21",
                 "PL": "smartdeal0bb4-21",
                 "TR": "smartdeal0bb4-21",
-                "BE": "smartdeal0962-21",
-                "MX": "smartdeal0358-20",
-                "BR": "smartdeal0358-20",
-                "SG": "smartdeal0358-20",
-                "AE": "smartdeal0358-20",
-                "SA": "smartdeal0358-20",
-                "EG": "smartdeal0358-20",
-                "JP": "smartdeal0358-20",
-                "AU": "smartdeal0358-20"
+                "BE": "smartdeal0962-21"
             };
 
             const domainToTagMap = {
@@ -702,18 +694,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "amazon.nl": "smartdeal0bb4-21",
                 "amazon.pl": "smartdeal0bb4-21",
                 "amazon.com.tr": "smartdeal0bb4-21",
-                "amazon.com.be": "smartdeal0962-21",
-                "amazon.com.mx": "smartdeal0358-20",
-                "amazon.com.br": "smartdeal0358-20",
-                "amazon.sg": "smartdeal0358-20",
-                "amazon.ae": "smartdeal0358-20",
-                "amazon.sa": "smartdeal0358-20",
-                "amazon.eg": "smartdeal0358-20",
-                "amazon.co.jp": "smartdeal0358-20",
-                "amazon.com.au": "smartdeal0358-20"
+                "amazon.com.be": "smartdeal0962-21"
             };
 
-            function getTag(cc) { return associateTagMap[cc] || associateTagMap["US"] || "smartdeal0358-20"; }
+            function getTag(cc) { return associateTagMap[cc] || null; }
 
             function applyGeoRedirect(cc) {
                 let targetCC = (cc || '').toUpperCase();
@@ -750,16 +734,18 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
                 const target = countryMap[targetCC] || countryMap["US"];
                 const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
+                const tagParam = activeTag ? `?tag=${activeTag}` : '';
+                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
                 const buyBtn = document.getElementById('buyBtn');
                 const buyBtnText = document.getElementById('buyBtnText');
                 const geoBox = document.getElementById('geoNoticeBox');
                 
                 if (targetAsin && (targetCC === 'US' || isDirectListing || regionalAsins[targetCC] || (targetCC === 'GB' && regionalAsins['UK']))) {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}?tag=${activeTag}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
                     if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
-                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}&tag=${activeTag}`;
+                    if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}${tagSearchParam}`;
                     if (buyBtnText) buyBtnText.innerText = `SEARCH LOCAL DEALS ON ${target.label}`;
                     if (geoBox) {
                         const titleEl = document.getElementById('geoNoticeTitle');

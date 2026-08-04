@@ -1566,7 +1566,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     print(f"[n8n Dispatcher] ⚙️ Processing ASIN: {asin} | Chosen Photo: {(chosen_photo or 'N/A')[:40]}...")
 
                     # 1. Fetch Product Data
-                    amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-21"
+                    amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-20"
                     prod = get_product_details_and_photos(amazon_url) or {
                         'title': title, 'price': price, 'features': ['Aesthetic Decor', 'Cozy Glow', 'Modern Style'],
                         'category': 'decor', 'url': amazon_url

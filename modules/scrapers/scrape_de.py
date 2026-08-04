@@ -38,13 +38,14 @@ def scrape_de_prices():
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
                     txt = offscreen.inner_text().strip()
-                    m = re.search(r"(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)\s*€|€\s*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)", txt)
-                    if m:
-                        raw_num = (m.group(1) or m.group(2)).replace(".", "").replace(",", ".")
-                        val = float(raw_num)
-                        base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
-                        if val <= (base_usd * 3.5):
-                            price_str = f"€{val:.2f}".replace(".", ",")
+                    if "INR" not in txt and "₹" not in txt:
+                        m = re.search(r"(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)\s*€|€\s*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)", txt)
+                        if m:
+                            raw_num = (m.group(1) or m.group(2)).replace(".", "").replace(",", ".")
+                            val = float(raw_num)
+                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                            if val <= (base_usd * 3.5):
+                                price_str = f"€{val:.2f}".replace(".", ",")
 
                 if not price_str:
                     whole = page.query_selector("span.a-price-whole")

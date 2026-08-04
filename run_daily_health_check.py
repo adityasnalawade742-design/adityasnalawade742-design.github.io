@@ -29,11 +29,16 @@ healed_count = 0
 # 1. Clean Registry of any raw INR corruptions in US/UK/DE/CA/AU/JP keys
 for asin, item in registry.items():
     rp = item.get("regional_prices", {})
+    for rk, rv in list(rp.items()):
+        if rk != "IN" and ("INR" in str(rv) or "₹" in str(rv)):
+            rp[rk] = "Not Available"
+            healed_count += 1
+            print(f"  🔧 Healed raw INR string in registry [{asin}] {rk} -> Not Available")
+
     us_p = rp.get("US", item.get("current_price", "$19.99"))
-    
-    if "INR" in str(us_p):
+    if "INR" in str(us_p) or "₹" in str(us_p):
         clean_usd = item.get("current_price", "$19.99")
-        if "INR" in clean_usd:
+        if "INR" in clean_usd or "₹" in clean_usd:
             clean_usd = "$19.99"
         rp["US"] = clean_usd
         item["current_price"] = clean_usd
