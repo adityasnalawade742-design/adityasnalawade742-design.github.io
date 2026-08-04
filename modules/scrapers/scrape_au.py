@@ -21,6 +21,10 @@ def scrape_au_prices():
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             locale="en-AU"
         )
+        context.add_cookies([
+            {"name": "i18n-prefs", "value": "AUD", "domain": ".amazon.com.au", "path": "/"},
+            {"name": "lc-main", "value": "en_AU", "domain": ".amazon.com.au", "path": "/"}
+        ])
         page = context.new_page()
 
         for asin, item in registry.items():
@@ -47,16 +51,19 @@ def scrape_au_prices():
                                 price_str = f"A${val:.2f}"
 
                 if not price_str:
-                    whole = page.query_selector("span.a-price-whole")
-                    frac = page.query_selector("span.a-price-fraction")
-                    if whole:
-                        w_raw = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
-                        f_raw = frac.inner_text().strip() if frac else "00"
-                        if w_raw.isdigit():
-                            val = float(f"{w_raw}.{f_raw}")
-                            base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
-                            if val <= (base_usd * 3.5):
-                                price_str = f"A${val:.2f}"
+                    sym_el = page.query_selector("span.a-price-symbol")
+                    sym_txt = sym_el.inner_text().strip() if sym_el else ""
+                    if "$" in sym_txt and "₹" not in sym_txt:
+                        whole = page.query_selector("span.a-price-whole")
+                        frac = page.query_selector("span.a-price-fraction")
+                        if whole:
+                            w_raw = whole.inner_text().strip().replace("\n", "").replace(".", "").replace(",", "")
+                            f_raw = frac.inner_text().strip() if frac else "00"
+                            if w_raw.isdigit():
+                                val = float(f"{w_raw}.{f_raw}")
+                                base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
+                                if val <= (base_usd * 3.5):
+                                    price_str = f"A${val:.2f}"
             except Exception:
                 pass
 
