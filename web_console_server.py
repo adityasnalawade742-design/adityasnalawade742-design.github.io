@@ -383,7 +383,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             v_stamp = int(time.time())  # BUG 5 FIX: cache-bust all hook images
             if index_path.exists():
                 html = index_path.read_text(encoding="utf-8")
-                card_matches = re.findall(r'id="card-([A-Za-z0-9_]{5,15})"', html)
+                card_matches = re.findall(r'id="card-([A-Z0-9]{10})"', html)
                 for asin in card_matches:
                     if asin in seen:
                         continue
@@ -1403,7 +1403,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             from modules.seo_copywriter import generate_pin_seo_data
             _seo_fresh = generate_pin_seo_data(product_title=title, price=price)
-            title = _seo_fresh.get('image_hook') or title
+            image_hook = data.get('image_hook') or _seo_fresh.get('image_hook') or title
 
             pin_title = raw_pin_title if raw_pin_title and not raw_pin_title.startswith('Product B0') and ('Fenmzee' not in raw_pin_title or asin == 'B0BPNXX2MF') else title
             pin_description = reg_entry.get('description') or data.get('pin_description', '')

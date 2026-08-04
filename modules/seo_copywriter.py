@@ -105,14 +105,14 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
 
     # 7. Mushroom Lamp
     elif "mushroom" in t_lower:
-        clean_name = "Dawnwake Mushroom Touch Table Lamp"
-        pin_title = "Cozy Bedroom Essential 🍄 Dawnwake Mushroom Touch Lamp"
+        clean_name = product_title.strip() if product_title and not product_title.startswith('Product B0') and not product_title.startswith('Product ') else "Mushroom Touch Table Lamp"
+        pin_title = f"Cozy Bedroom Essential 🍄 {clean_name}"
         subtitle_hook = ""
         badge_hook = "COZY NIGHT VIBES"
         features = ["TOUCH SENSOR DIMMER", "WARM AMBIENT GLOW", "GLASS DOME SHADE", "BEDSIDE ELEGANCE"]
         theme_style = "floating_luxury"
         description = (
-            "Tired of harsh bedroom lighting? Elevate your nightstand aesthetic with this viral Dawnwake Mushroom Touch Table Lamp! "
+            f"Tired of harsh bedroom lighting? Elevate your nightstand aesthetic with this viral {clean_name}! "
             "Features smooth dimmable touch controls and warm ambient glow for cozy reading nights. "
             "Tap link to shop now on Amazon! #mushroomlamp #bedsidelamp #cozyroomdecor #aestheticroom #amazonfinds"
         )
@@ -163,7 +163,7 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
         )
         keywords = ["bird touch lamp", "cute nightstand light", "cozy room decor", "dimmable night light", "amazon finds"]
 
-    # 10. Default Dynamic Fallback (No Hardcoded Product Copy)
+    # 11. Default Dynamic Fallback (No Hardcoded Product Copy)
     else:
         clean_name = product_title.strip() if product_title and not product_title.startswith('Product B0') and not product_title.startswith('Product ') else "Aesthetic Home Decor Find"
         pin_title = f"Cozy Room Upgrade ✨ {clean_name}"

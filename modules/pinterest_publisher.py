@@ -47,6 +47,11 @@ def publish_pin_to_pinterest(
     safe_title = (title or "")[:100]
     safe_desc = (description or "")[:800]
 
+    if title and len(title) > 100:
+        print(f"[Pinterest Publisher] ℹ️ Title truncated from {len(title)} to 100 characters for Pinterest API compliance.")
+    if description and len(description) > 800:
+        print(f"[Pinterest Publisher] ℹ️ Description truncated from {len(description)} to 800 characters for Pinterest API compliance.")
+
     # H5 FIX: only include board_id in payload when it is a real ID (not a placeholder or empty)
     pin_payload = {
         "title": safe_title,  # Pinterest max title length
@@ -57,8 +62,10 @@ def publish_pin_to_pinterest(
             "url": media_url
         }
     }
-    if target_board_id:
+    if target_board_id and target_board_id.isdigit():
         pin_payload["board_id"] = target_board_id
+    elif target_board_id:
+        print(f"[Pinterest Publisher] ⚠️ Warning: Board ID '{target_board_id}' appears to be a board name, not a numeric Pinterest Board ID. Pinterest API requires a numeric Board ID.")
 
     if token and target_board_id and target_board_id != "COZY_ROOM_DECOR_BOARD_ID":
         print(f"[Pinterest Publisher] 🚀 Attempting live API pin publish to board '{target_board_id}'...")

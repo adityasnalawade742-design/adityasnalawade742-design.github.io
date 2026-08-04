@@ -148,19 +148,30 @@ def extract_live_amazon_price(amazon_url: str) -> str:
         html = urllib.request.urlopen(req, timeout=10).read().decode('utf-8')
         soup = BeautifulSoup(html, 'html.parser')
         
-        # Regex for price whole + fraction
-        m = re.search(r'([$£€]\d+\.\d{2})', html)
-        if m:
-            return m.group(1)
-            
+        # Priority 1: Target DOM .a-price .a-offscreen element
+        offscreen = soup.select_one('.a-price .a-offscreen')
+        if offscreen:
+            txt = offscreen.text.strip()
+            if "INR" not in txt and "₹" not in txt:
+                m = re.search(r'(\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', txt)
+                if m:
+                    return m.group(1)
+
+        # Priority 2: DOM whole + fraction
         whole = soup.find('span', {'class': 'a-price-whole'})
         fraction = soup.find('span', {'class': 'a-price-fraction'})
         symbol = soup.find('span', {'class': 'a-price-symbol'})
-        if whole and symbol:
-            sym = symbol.text.strip()
+        if whole:
+            sym = symbol.text.strip() if symbol else "$"
             wh = re.sub(r'[^\d]', '', whole.text)
             fr = fraction.text.strip() if fraction else "00"
-            return f"{sym}{wh}.{fr}"
+            if wh.isdigit() and len(wh) <= 6:
+                return f"{sym}{wh}.{fr}"
+            
+        # Priority 3: Regex fallback
+        m = re.search(r'(\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', html)
+        if m:
+            return m.group(1)
     except Exception as e:
         print(f"[Price Scraper Warning] HTTP Direct error: {e}")
 

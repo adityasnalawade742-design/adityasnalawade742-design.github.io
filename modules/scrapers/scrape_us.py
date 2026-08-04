@@ -58,7 +58,7 @@ def scrape_us_prices():
                     if whole:
                         w = whole.inner_text().strip().replace("\n", "").replace(".", "")
                         f = frac.inner_text().strip() if frac else "00"
-                        if w.isdigit() and len(w) <= 3:
+                        if w.isdigit() and len(w) <= 6:
                             price_str = f"${w}.{f}"
             except Exception as e:
                 print(f"  ⚠️ Scrape page error for {asin}: {e}")
@@ -66,7 +66,7 @@ def scrape_us_prices():
             # Sanity ceiling check
             if price_str:
                 num_val = float(re.sub(r"[^\d.]", "", price_str) or 0)
-                if num_val > 500:
+                if num_val > 10000:
                     price_str = None
 
             if price_str:

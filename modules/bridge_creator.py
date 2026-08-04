@@ -778,11 +778,12 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                         'kolkata': 'IN', 'calcutta': 'IN',
                         'london': 'GB', 'dublin': 'IE',
                         'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',
-                        'paris': 'FR', 'rome': 'IT', 'madrid': 'ES',
-                        'amsterdam': 'NL', 'stockholm': 'SE', 'warsaw': 'PL',
+                        'paris': 'FR', 'rome': 'IT', 'madrid': 'ES', 'lisbon': 'ES',
+                        'amsterdam': 'NL', 'brussels': 'BE', 'stockholm': 'SE', 'oslo': 'SE', 'copenhagen': 'SE', 'helsinki': 'SE', 'warsaw': 'PL',
+                        'prague': 'DE', 'budapest': 'DE', 'bucharest': 'DE', 'athens': 'DE', 'istanbul': 'TR',
                         'tokyo': 'JP', 'sydney': 'AU', 'melbourne': 'AU',
                         'toronto': 'CA', 'vancouver': 'CA',
-                        'singapore': 'SG', 'dubai': 'AE', 'riyadh': 'SA',
+                        'singapore': 'SG', 'dubai': 'AE', 'riyadh': 'SA', 'cairo': 'EG',
                         'mexico_city': 'MX', 'sao_paulo': 'BR'
                     };
                     let detected = null;

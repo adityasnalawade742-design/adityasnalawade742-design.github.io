@@ -45,7 +45,8 @@ total_links_tested = 0
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
+    context = browser.new_context()
+    page = context.new_page()
 
     for bf in bridge_files:
         asin = bf.name.replace("bridge_", "").replace(".html", "")
