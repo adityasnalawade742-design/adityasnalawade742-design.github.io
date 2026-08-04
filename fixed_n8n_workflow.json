@@ -164,7 +164,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ version: 'black-forest-labs/flux-dev', input: { prompt: $json.ai_prompt, image: ($node['Code in JavaScript'].json.chosen_photo_url || ''), prompt_strength: parseFloat($json.prompt_strength || 0.5), aspect_ratio: '3:4', output_format: 'jpg', output_quality: 100 } }) }}",
+        "jsonBody": "={{ JSON.stringify({ input: { prompt: $json.ai_prompt, image: ($node['Code in JavaScript'].json.chosen_photo_url || ''), prompt_strength: parseFloat($json.prompt_strength || 0.5), aspect_ratio: '3:4', output_format: 'jpg', output_quality: 100 } }) }}",
         "options": {
           "timeout": 120000
         }
