@@ -19,16 +19,6 @@ for bf in bridge_files:
 
 # Master dictionary for all products in portfolio
 master_catalog = {
-    "B0DZD1X83N": {
-        "search_keywords": "Minimalist Wood Base Table Nightstand Lamp",
-        "title": "Minimalist Wood Base Cream Shade Bedside Table Lamp",
-        "price": "$20.00",
-        "rating": "4.6",
-        "features": ["MINIMALIST WOOD BASE", "CREAM FABRIC LAMPSHADE", "WARM AMBIENT GLOW", "INLINE CONTROL SWITCH"],
-        "category": "lighting",
-        "description": "Transform your nightstand setup with this aesthetic minimalist wood base table lamp. Warm ambient glow perfect for cozy reading and bedroom decor.",
-        "direct_regions": ["US", "DE", "SE", "CA", "JP"]
-    },
     "B0BZXNSW5K": {
         "search_keywords": "Touch Control Dimmable Bedside Table Lamp",
         "title": "Bedside Table Lamp for Bedroom - Dimmable Touch, USB A+C, AC Outlet",
