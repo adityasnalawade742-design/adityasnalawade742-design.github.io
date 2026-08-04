@@ -85,6 +85,20 @@ items_to_rebuild = [
         "raw": "raw_images/raw_B0FGJ1S73D.jpg",
         "hook": "focus_product_B0FGJ1S73D_hook.jpg",
         "badge": "🍄 MUSHROOM LAMP FIND"
+    },
+    {
+        "asin": "B0CJC549C6",
+        "title": "Matte Black Thinker Statue Set",
+        "raw": "raw_images/raw_B0CJC549C6.jpg",
+        "hook": "focus_product_B0CJC549C6_hook.jpg",
+        "badge": "✨ VIRAL DECOR FIND"
+    },
+    {
+        "asin": "B0CJ4Q4PZQ",
+        "title": "Pink Striped Glass Mushroom Lamp",
+        "raw": "raw_images/raw_B0CJ4Q4PZQ.jpg",
+        "hook": "focus_product_B0CJ4Q4PZQ_hook.jpg",
+        "badge": "🍄 COZY BEDSIDE GLOW"
     }
 ]
 
