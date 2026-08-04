@@ -111,6 +111,7 @@
     },
     {
       "parameters": {
+        "method": "POST",
         "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions",
         "sendHeaders": true,
         "headerParameters": {
@@ -125,7 +126,7 @@
             },
             {
               "name": "Prefer",
-              "value": "wait=90"
+              "value": "wait=60"
             }
           ]
         },
@@ -141,11 +142,12 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [1260, 300],
-      "notes": "Generates 8K commercial visual using Flux Dev AI via Replicate API. Uses model-specific endpoint + Prefer: wait=90 header for synchronous result."
+      "notes": "Generates 8K commercial visual using Flux Dev AI via Replicate API. Uses model-specific endpoint + Prefer: wait=60 header for synchronous result."
     },
     {
       "parameters": {
-        "url": "={{ $json.create_bridge_endpoint || 'http://localhost:5000/api/create_bridge_page' }}",
+        "method": "POST",
+        "url": "={{ $json.create_bridge_endpoint || 'http://127.0.0.1:5000/api/create_bridge_page' }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -168,6 +170,7 @@
     },
     {
       "parameters": {
+        "method": "POST",
         "url": "https://api.pinterest.com/v5/pins",
         "sendHeaders": true,
         "headerParameters": {

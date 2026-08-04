@@ -118,22 +118,37 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
         )
         keywords = ["mushroom touch lamp", "bedside table lamp", "cozy room decor", "aesthetic nightstand", "amazon room finds"]
 
-    # 8. Flower / Lily Lamp
-    elif "flower" in t_lower or "lily" in t_lower:
-        clean_name = "Lily of the Valley Flower Lamp"
-        pin_title = "Fairy Tale Room Vibe 🌸 Lily of the Valley Flower Lamp"
+    # 8. Candle Warmer Lamp
+    elif "candle" in t_lower or "warmer" in t_lower:
+        clean_name = "Dimmable Candle Warmer Lamp"
+        pin_title = "Flame-Free Scented Glow 🕯️ Dimmable Candle Warmer Lamp"
+        subtitle_hook = ""
+        badge_hook = "FLAME-FREE GLOW"
+        features = ["FLAME-FREE HEATING", "BUILT-IN TIMER", "DIMMABLE WARM GLOW", "FITS YANKEE CANDLES"]
+        theme_style = "bottom_glass_card"
+        description = (
+            "Enjoy your favorite scented candles safely with zero open flame or smoke! This viral Dimmable Candle Warmer Lamp "
+            "uses top-down warming light to melt wax evenly and release rich fragrance throughout your room. "
+            "Tap link to check price on Amazon! #candlewarmer #flamefree #cozyroomdecor #candlelamp #amazonfinds"
+        )
+        keywords = ["candle warmer lamp", "dimmable wax warmer", "cozy room decor", "flame free candle lamp", "amazon home finds"]
+
+    # 9. Flower / Lily Lamp
+    elif "lily of the valley" in t_lower or ("flower" in t_lower and "candle" not in t_lower):
+        clean_name = "Lily of the Valley Flower Lamp" if "lily" in t_lower else "Aesthetic Flower Table Lamp"
+        pin_title = "Fairy Tale Room Vibe 🌸 Floral Aesthetic Table Lamp"
         subtitle_hook = ""  # H1 FIX: Rule 7 — subtitles MUST always be empty
         badge_hook = "ROOM TRANSFORMATION"
         features = ["HANDCRAFTED GLASS PETALS", "WARM FLORAL GLOW", "VINTAGE GREEN STEM", "NIGHTSTAND ACCENT"]
         theme_style = "floating_luxury"
         description = (
-            "Transform your nightstand into a botanical fairy tale sanctuary! This viral Lily of the Valley Flower Lamp "
+            "Transform your nightstand into a botanical fairy tale sanctuary! This viral Floral Table Lamp "
             "emits a delicate warm glow through handcrafted floral glass petals. "
-            "Tap link to check price on Amazon! #flowerlamp #lilyofthevalley #cozyroomdecor #aestheticlamp #amazonfinds"
+            "Tap link to check price on Amazon! #flowerlamp #aestheticdecor #cozyroomdecor #aestheticlamp #amazonfinds"
         )
-        keywords = ["lily of the valley lamp", "flower table lamp", "cozy room decor", "floral nightstand light", "amazon home finds"]
+        keywords = ["flower table lamp", "cozy room decor", "floral nightstand light", "amazon home finds"]
 
-    # 9. Bird Lamp
+    # 10. Bird Lamp
     elif "bird" in t_lower:
         clean_name = "Cute Bird Dimmable Touch Night Lamp"
         pin_title = "Aesthetic Nightstand Find 🐦 Cute Bird Touch Night Lamp"

@@ -95,10 +95,10 @@ DESCRIPTION:
   the final result. Node 6 then receives no output[0] image URL and fails.
 
 SOLUTION:
-  Change to: "value": "wait=90"
-  This tells Replicate to hold the connection for up to 90 seconds and
+  Change to: "value": "wait=60" (Replicate API caps max wait header to 60s).
+  This tells Replicate to hold the connection for up to 60 seconds and
   return the final result synchronously.
-  The n8n_pinterest_affiliate_workflow.json already uses "wait=90".
+  The n8n_pinterest_affiliate_workflow.json already uses "wait=60".
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
