@@ -106,6 +106,13 @@ items_to_rebuild = [
         "raw": "raw_images/raw_B0BQGC76VX.jpg",
         "hook": "focus_product_B0BQGC76VX_hook.jpg",
         "badge": "✨ MODERN BOHO FIND"
+    },
+    {
+        "asin": "B0C7WFZZ7D",
+        "title": "Hollow Ceramic Snuggle Vase Set",
+        "raw": "raw_images/raw_B0C7WFZZ7D.jpg",
+        "hook": "focus_product_B0C7WFZZ7D_hook.jpg",
+        "badge": "🌿 BOHO DECOR PICK"
     }
 ]
 
