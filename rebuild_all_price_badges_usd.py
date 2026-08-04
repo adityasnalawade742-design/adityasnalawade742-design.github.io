@@ -99,6 +99,13 @@ items_to_rebuild = [
         "raw": "raw_images/raw_B0CJ4Q4PZQ.jpg",
         "hook": "focus_product_B0CJ4Q4PZQ_hook.jpg",
         "badge": "🍄 COZY BEDSIDE GLOW"
+    },
+    {
+        "asin": "B0BQGC76VX",
+        "title": "Irregular Wavy Wall Mirror",
+        "raw": "raw_images/raw_B0BQGC76VX.jpg",
+        "hook": "focus_product_B0BQGC76VX_hook.jpg",
+        "badge": "✨ MODERN BOHO FIND"
     }
 ]
 

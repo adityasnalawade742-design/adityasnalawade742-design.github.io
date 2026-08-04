@@ -1453,7 +1453,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             seo_data = {
                 'pin_title': pin_title,
                 'description': pin_description,
-                'image_hook': title,
+                'image_hook': _seo_fresh.get('image_hook') or title,
                 'subtitle_hook': '',
                 'badge_hook': badge_hook,
                 'features': features_list,
@@ -1484,7 +1484,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             render_html_overlay(
                 image_path=source_img,
-                headline=title,
+                headline=seo_data.get('image_hook'),
                 subtitle='',
                 badge_text=badge_hook,
                 price_str=price,
