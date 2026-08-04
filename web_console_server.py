@@ -1403,6 +1403,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             from modules.seo_copywriter import generate_pin_seo_data
             _seo_fresh = generate_pin_seo_data(product_title=title, price=price)
+            title = _seo_fresh.get('image_hook') or title
 
             pin_title = raw_pin_title if raw_pin_title and not raw_pin_title.startswith('Product B0') and ('Fenmzee' not in raw_pin_title or asin == 'B0BPNXX2MF') else title
             pin_description = reg_entry.get('description') or data.get('pin_description', '')
@@ -1489,7 +1490,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 badge_text=badge_hook,
                 price_str=price,
                 features=prod['features'],
-                output_path=hook_img_path
+                output_path=hook_img_path,
+                theme="bottom_glass_card"
             )
 
             # 3. Git add + commit + push (background thread so n8n doesn't time out)

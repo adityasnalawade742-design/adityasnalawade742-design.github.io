@@ -113,6 +113,13 @@ items_to_rebuild = [
         "raw": "raw_images/raw_B0C7WFZZ7D.jpg",
         "hook": "focus_product_B0C7WFZZ7D_hook.jpg",
         "badge": "🌿 BOHO DECOR PICK"
+    },
+    {
+        "asin": "B0BXP7YWHJ",
+        "title": "White Ceramic Donut Vases",
+        "raw": "raw_images/raw_B0BXP7YWHJ.jpg",
+        "hook": "focus_product_B0BXP7YWHJ_hook.jpg",
+        "badge": "✨ VANITY GOALS"
     }
 ]
 
