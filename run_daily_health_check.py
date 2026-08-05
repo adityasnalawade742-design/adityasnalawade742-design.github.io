@@ -101,6 +101,7 @@ for card in cards:
     
     # Check and heal attributes
     attr_updates = {
+        "data-category": registry[asin].get("category", "decor"),
         "data-base-usd": base_usd,
         "data-price-us": clean_us_price,
         "data-price-in": safe_reg_price(rp, "IN"),
