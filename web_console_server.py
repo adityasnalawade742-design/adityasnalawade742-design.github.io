@@ -1519,9 +1519,16 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             threading.Thread(target=push_live, args=(asin,), daemon=True).start()
 
+            from modules.pinterest_publisher import get_board_for_category
+            from modules.amazon_extractor import classify_product_category
+            cat_val = reg_entry.get('category') or classify_product_category(title)
+            target_board_id = get_board_for_category(cat_val)
+
             self.send_json({
                 'status': 'success',
                 'asin': asin,
+                'category': cat_val,
+                'board_id': target_board_id,
                 'bridge_url': bridge_url,
                 'hook_image_url': hook_image_url,
                 'message': f'Bridge page and hook image created for {asin}. Deploying to GitHub Pages...'
