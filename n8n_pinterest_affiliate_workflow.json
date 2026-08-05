@@ -113,13 +113,11 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions",
+        "authentication": "genericCredentialType",
+        "genericCredentialType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer {{ $env.REPLICATE_API_TOKEN }}"
-            },
             {
               "name": "Content-Type",
               "value": "application/json"
@@ -135,6 +133,12 @@
         "jsonBody": "={{ JSON.stringify({ input: { prompt: $json.ai_prompt, image: ($node['2. Split Items — Process One Product at a Time'].json.chosen_photo_url || ''), prompt_strength: parseFloat($json.prompt_strength || 0.5), aspect_ratio: '3:4', output_format: 'jpg', output_quality: 100 } }) }}",
         "options": {
           "timeout": 120000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "replicate_api_credential",
+          "name": "Replicate API Key (Header Auth)"
         }
       },
       "id": "node_5_replicate",
