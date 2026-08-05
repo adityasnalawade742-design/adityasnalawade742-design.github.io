@@ -171,7 +171,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.pinterest.com/v5/pins",
+        "url": "={{ ($env.PINTEREST_ACCESS_TOKEN && $env.PINTEREST_ACCESS_TOKEN.startsWith('pina_') ? 'https://api-sandbox.pinterest.com/v5/pins' : 'https://api.pinterest.com/v5/pins') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -187,7 +187,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ board_id: '1092545259543920271', title: ($node['2. Split Items — Process One Product at a Time'].json.pin_title || '').substring(0, 100), description: ($node['2. Split Items — Process One Product at a Time'].json.pin_description || '').substring(0, 800), link: $json.bridge_url, media_source: { source_type: 'image_url', url: $json.hook_image_url } }) }}",
+        "jsonBody": "={{ JSON.stringify({ board_id: ($json.board_id || $node['2. Split Items — Process One Product at a Time'].json.board_id || '1092545259543956242'), title: ($node['2. Split Items — Process One Product at a Time'].json.pin_title || '').substring(0, 100), description: ($node['2. Split Items — Process One Product at a Time'].json.pin_description || '').substring(0, 800), link: $json.bridge_url, media_source: { source_type: 'image_url', url: $json.hook_image_url } }) }}",
         "options": {
           "timeout": 30000
         }
