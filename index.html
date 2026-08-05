@@ -957,7 +957,7 @@
 <div aria-selected="false" class="chip" onclick="setCategory('lighting', this)" onkeydown="if(event.key==='Enter'||event.key===' ')setCategory('lighting', this)" role="tab" tabindex="0">💡 Aesthetic Lighting</div>
 <div aria-selected="false" class="chip" onclick="setCategory('decor', this)" onkeydown="if(event.key==='Enter'||event.key===' ')setCategory('decor', this)" role="tab" tabindex="0">🌿 Room Decor</div>
 <div aria-selected="false" class="chip" onclick="setCategory('vases', this)" onkeydown="if(event.key==='Enter'||event.key===' ')setCategory('vases', this)" role="tab" tabindex="0">🏺 Ceramic Vases</div>
-<div aria-selected="false" class="chip" onclick="setCategory('mirrors', this)" onkeydown="if(event.key==='Enter'||event.key===' ')setCategory('mirrors', this)" role="tab" tabindex="0">🪞 Vanity Mirrors</div>
+<div aria-selected="false" class="chip" onclick="setCategory('mirror', this)" onkeydown="if(event.key==='Enter'||event.key===' ')setCategory('mirror', this)" role="tab" tabindex="0">🪞 Vanity Mirrors</div>
 </div>
 <div class="search-status-bar">
                 Showing <span id="visibleCount" style="color: var(--gold-primary); font-weight: 800;">11</span> Curated Finds
@@ -1317,10 +1317,9 @@
             let visibleCount = 0;
 
             cards.forEach(card => {
-                const category = card.getAttribute('data-category') || '';
-                const title = card.querySelector('h2').innerText.toLowerCase();
-
-                const matchesCategory = (currentCategory === 'all') || category.includes(currentCategory);
+                const normCurrent = currentCategory.replace(/s$/, '');
+                const normItem = category.replace(/s$/, '');
+                const matchesCategory = (currentCategory === 'all') || category.includes(currentCategory) || normItem.includes(normCurrent);
                 const matchesSearch = title.includes(query);
 
                 if (matchesCategory && matchesSearch) {
