@@ -178,6 +178,21 @@ def generate_pin_seo_data(product_title: str, price: str = "", category: str = "
         )
         keywords = [clean_name.lower(), "cozy room decor", "aesthetic home finds", "room transformation", "amazon room finds"]
 
+    if len(clean_name) > 35:
+        words = clean_name.split()
+        short_w = []
+        c_len = 0
+        for w in words:
+            if c_len + len(w) + 1 <= 35:
+                short_w.append(w)
+                c_len += len(w) + 1
+            else:
+                break
+        clean_name = " ".join(short_w) if short_w else clean_name[:35]
+
+    if len(pin_title) > 95:
+        pin_title = pin_title[:95].strip()
+
     return {
         "pin_title": pin_title,
         "image_hook": clean_name,
