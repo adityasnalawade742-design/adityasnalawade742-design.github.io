@@ -654,5 +654,26 @@
       "US"
     ],
     "category": "lighting"
+  },
+  "B0BPM41R5C": {
+    "asin": "B0BPM41R5C",
+    "title": "Ceramic Vases Set, Boho Home Decor",
+    "current_price": "$29.99",
+    "description": "Transform your coffee table or nightstand with this viral White Ceramic Donut Vase Set! Features hollow matte ceramic craftsmanship designed for pampas grass and modern minimalist room transformations. Tap link to check price on Amazon! #cozyroomdecor #donutvase #bohodecor #aestheticroom #amazonfinds",
+    "features": [
+      "MATTE CERAMIC FINISH",
+      "SET OF 2 VASES",
+      "PAMPAS GRASS READY",
+      "HANDCRAFTED BOHO"
+    ],
+    "regional_prices": {
+      "US": "$29.99"
+    },
+    "regional_asins": {
+      "US": "B0BPM41R5C"
+    },
+    "direct_regions": [
+      "US"
+    ]
   }
 }
