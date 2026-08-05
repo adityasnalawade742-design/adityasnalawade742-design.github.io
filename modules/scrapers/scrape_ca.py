@@ -64,8 +64,8 @@ def scrape_ca_prices():
                                 base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
                                 if val <= (base_usd * 3.5):
                                     price_str = f"CA${val:.2f}"
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"  ⚠️ Scrape page error for {asin}: {e}")
 
             if price_str:
                 item["regional_prices"]["CA"] = price_str

@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0CX144DHK_hook.jpg?v=1785920077" alt="Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0CX144DHK_hook.jpg?v=1785922153" alt="Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0CX144DHK_hook.jpg?v=1785920077', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0CX144DHK_hook.jpg?v=1785922153', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0CX144DHK_hook.jpg?v=1785920077";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0CX144DHK_hook.jpg?v=1785922153";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -645,7 +645,7 @@
             
             const currentAsin = "B0CX144DHK";
             const prodKeywords = encodeURIComponent("Glivpny Mushroom Table Lamp Mid Century Modern Decor Lamp").replace(/%20/g, "+").replace(/%2C/gi, "+");
-            const directRegions = ["US", "IN", "UK", "DE", "CA", "AU", "JP", "SE"];
+            const directRegions = ["US", "IN"];
             const regionalMatrix = {"AE": "AED229.95", "AU": "A$57.99", "BE": "Not Available", "BR": "R$399,56", "CA": "CA$51.99", "DE": "\u20ac34.50", "EG": "Not Available", "ES": "Not Available", "FR": "Not Available", "IN": "\u20b93,150.00", "IT": "Not Available", "JP": "\u00a55,800", "MX": "Not Available", "NL": "Not Available", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e262.90\u200e", "SE": "395,00kr", "SG": "Not Available", "TR": "Not Available", "UK": "\u00a329.99", "US": "$37.99"};
             const regionalAsins = {"IN": "B0CX144DHK", "US": "B0CX144DHK"};
 
@@ -700,7 +700,17 @@
                 window.currentAppliedCC = targetCC;
                 const regSel = document.getElementById('bridgeRegionSelect');
                 if (regSel && countryMap[targetCC]) regSel.value = targetCC;
-                const isDirectListing = directRegions.includes(targetCC) || (targetCC === 'GB' && directRegions.includes('UK')) || (targetCC === 'UK' && directRegions.includes('GB'));
+                
+                const targetAsin = (targetCC === 'GB' ? regionalAsins['UK'] : regionalAsins[targetCC]) || (targetCC === 'US' ? currentAsin : null);
+                const isDirectListing = !!targetAsin;
+                
+                const target = countryMap[targetCC] || countryMap["US"];
+                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
+                const tagParam = activeTag ? `?tag=${activeTag}` : '';
+                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
+                const buyBtn = document.getElementById('buyBtn');
+                const buyBtnText = document.getElementById('buyBtnText');
+                const geoBox = document.getElementById('geoNoticeBox');
                 
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = targetCC.toUpperCase();
@@ -727,16 +737,7 @@
                     });
                 }
 
-                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
-                const target = countryMap[targetCC] || countryMap["US"];
-                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
-                const tagParam = activeTag ? `?tag=${activeTag}` : '';
-                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
-                const buyBtn = document.getElementById('buyBtn');
-                const buyBtnText = document.getElementById('buyBtnText');
-                const geoBox = document.getElementById('geoNoticeBox');
-                
-                if (targetAsin && (targetCC === 'US' || isDirectListing || regionalAsins[targetCC] || (targetCC === 'GB' && regionalAsins['UK']))) {
+                if (isDirectListing && targetAsin) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
                     if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
@@ -771,6 +772,7 @@
                     const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
                     const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
                     const tzCountryMap = {
+                        'new_york': 'US', 'chicago': 'US', 'los_angeles': 'US', 'denver': 'US', 'phoenix': 'US', 'detroit': 'US', 'indiana': 'US', 'alaska': 'US', 'honolulu': 'US',
                         'kolkata': 'IN', 'calcutta': 'IN',
                         'london': 'GB', 'dublin': 'IE',
                         'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',

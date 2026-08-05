@@ -74,9 +74,9 @@ def scrape_us_prices():
                 item["current_price"] = price_str
                 print(f"  • [{asin}] US Price: {price_str}")
             else:
-                existing = item["regional_prices"].get("US", item.get("current_price", "$19.99"))
-                if "INR" in str(existing):
-                    existing = "$19.99"
+                existing = item["regional_prices"].get("US", item.get("current_price"))
+                if not existing or "INR" in str(existing) or "₹" in str(existing):
+                    existing = item.get("current_price", "$19.99")
                 item["regional_prices"]["US"] = existing
                 print(f"  • [{asin}] US Price (Preserved): {existing}")
 

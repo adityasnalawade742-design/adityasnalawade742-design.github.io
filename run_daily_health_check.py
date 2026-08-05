@@ -50,12 +50,19 @@ registry_file.write_text(json.dumps(registry, indent=2, ensure_ascii=False), enc
 # 2. Heal index.html data attributes to match registry 100%
 cards = soup.find_all("div", class_="card-wrapper")
 index_modified = False
+raw_html = index_file.read_text(encoding="utf-8")
 
 # Load empirical direct matrix
 matrix_file = repo / "global_direct_matrix.json"
 direct_matrix = {}
 if matrix_file.exists():
     direct_matrix = json.loads(matrix_file.read_text(encoding="utf-8"))
+
+def safe_reg_price(rp_dict, region_key):
+    val = rp_dict.get(region_key, "Not Available")
+    if region_key != "IN" and ("INR" in str(val) or "₹" in str(val)):
+        return "Not Available"
+    return val
 
 for card in cards:
     asin = card.get("data-asin") or card.get("id", "").replace("card-", "")
@@ -71,7 +78,6 @@ for card in cards:
         base_usd_float = 0.0
 
     if not base_usd or base_usd_float > 500 or base_usd_float <= 0:
-        # H7 FIX: fallbacks for ALL 9 ASINs in the portfolio
         fallback_prices = {
             "B0C2YLN3H4":  "28.99",
             "B07HP22QTZ":  "12.99",
@@ -97,17 +103,15 @@ for card in cards:
     attr_updates = {
         "data-base-usd": base_usd,
         "data-price-us": clean_us_price,
-        "data-price-in": rp.get("IN", "Not Available"),
-        "data-price-uk": rp.get("UK", "Not Available"),
-        "data-price-de": rp.get("DE", "Not Available"),
-        "data-price-ca": rp.get("CA", "Not Available"),
-        "data-price-au": rp.get("AU", "Not Available"),
-        "data-price-jp": rp.get("JP", "Not Available"),
+        "data-price-in": safe_reg_price(rp, "IN"),
+        "data-price-uk": safe_reg_price(rp, "UK"),
+        "data-price-de": safe_reg_price(rp, "DE"),
+        "data-price-ca": safe_reg_price(rp, "CA"),
+        "data-price-au": safe_reg_price(rp, "AU"),
+        "data-price-jp": safe_reg_price(rp, "JP"),
         "data-direct-regions": direct_regs_str
     }
     
-    raw_html = index_file.read_text(encoding="utf-8")
-    # H2 FIX: pt.get_text(strip=True)
     for k, v in attr_updates.items():
         pattern = re.compile(rf'id="card-{asin}"[^>]*?\b{k}="[^"]*"')
         if pattern.search(raw_html):

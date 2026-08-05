@@ -705,7 +705,17 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 window.currentAppliedCC = targetCC;
                 const regSel = document.getElementById('bridgeRegionSelect');
                 if (regSel && countryMap[targetCC]) regSel.value = targetCC;
-                const isDirectListing = directRegions.includes(targetCC) || (targetCC === 'GB' && directRegions.includes('UK')) || (targetCC === 'UK' && directRegions.includes('GB'));
+                
+                const targetAsin = (targetCC === 'GB' ? regionalAsins['UK'] : regionalAsins[targetCC]) || (targetCC === 'US' ? currentAsin : null);
+                const isDirectListing = !!targetAsin;
+                
+                const target = countryMap[targetCC] || countryMap["US"];
+                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
+                const tagParam = activeTag ? `?tag=${activeTag}` : '';
+                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
+                const buyBtn = document.getElementById('buyBtn');
+                const buyBtnText = document.getElementById('buyBtnText');
+                const geoBox = document.getElementById('geoNoticeBox');
                 
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = targetCC.toUpperCase();
@@ -732,16 +742,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     });
                 }
 
-                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
-                const target = countryMap[targetCC] || countryMap["US"];
-                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
-                const tagParam = activeTag ? `?tag=${activeTag}` : '';
-                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
-                const buyBtn = document.getElementById('buyBtn');
-                const buyBtnText = document.getElementById('buyBtnText');
-                const geoBox = document.getElementById('geoNoticeBox');
-                
-                if (targetAsin && (targetCC === 'US' || isDirectListing || regionalAsins[targetCC] || (targetCC === 'GB' && regionalAsins['UK']))) {
+                if (isDirectListing && targetAsin) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
                     if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
@@ -776,6 +777,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
                     const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
                     const tzCountryMap = {
+                        'new_york': 'US', 'chicago': 'US', 'los_angeles': 'US', 'denver': 'US', 'phoenix': 'US', 'detroit': 'US', 'indiana': 'US', 'alaska': 'US', 'honolulu': 'US',
                         'kolkata': 'IN', 'calcutta': 'IN',
                         'london': 'GB', 'dublin': 'IE',
                         'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',

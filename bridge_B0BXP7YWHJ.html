@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0BXP7YWHJ_hook.jpg?v=1785920077" alt="White Ceramic Donut Vases">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0BXP7YWHJ_hook.jpg?v=1785922154" alt="White Ceramic Donut Vases">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0BXP7YWHJ_hook.jpg?v=1785920077', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0BXP7YWHJ_hook.jpg?v=1785922154', this)">✨ Commercial View</button>
             
         </div>
 
@@ -471,7 +471,7 @@
 
         <!-- Geo Shipping Notice Box -->
         
-        <div id="geoNoticeBox" class="geo-notice-box" style="display: none;">
+        <div id="geoNoticeBox" class="geo-notice-box" style="display: flex;">
             <span class="geo-icon">📍</span>
             <div>
                 <strong id="geoNoticeTitle">Item Ships from Amazon US (Not Directly Listed on amazon.in)</strong>
@@ -483,7 +483,7 @@
         
         
         <a id="buyBtn" href="https://www.amazon.com/dp/B0BXP7YWHJ?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">BUY ON AMAZON (US $)</span>
+            <span id="buyBtnText">CHECK ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
         
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("White Ceramic Donut Vases");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0BXP7YWHJ_hook.jpg?v=1785920077";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0BXP7YWHJ_hook.jpg?v=1785922154";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -645,7 +645,7 @@
             
             const currentAsin = "B0BXP7YWHJ";
             const prodKeywords = encodeURIComponent("White Ceramic Donut Vases").replace(/%20/g, "+").replace(/%2C/gi, "+");
-            const directRegions = ["US", "IN", "UK", "DE", "CA", "AU", "JP", "SE"];
+            const directRegions = ["US"];
             const regionalMatrix = {"AE": "AED140.00", "AU": "Not Available", "BE": "84,39\u20ac", "BR": "R$253,71", "CA": "CA$63.09", "DE": "\u20ac22,99", "EG": "\u062c\u0646\u064a\u0647\u200e495.00\u200e", "ES": "37,45\u20ac", "FR": "38,34\u20ac", "IN": "\u20b92,899.00", "IT": "40,04\u20ac", "JP": "\u00a53,099", "MX": "Not Available", "NL": "\u20ac\u00a024,88", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e239.09\u200e", "SE": "199,99kr", "SG": "Not Available", "TR": "7.588,00TL", "UK": "\u00a314.99", "US": "$26.97"};
             const regionalAsins = {"US": "B0BXP7YWHJ"};
 
@@ -700,7 +700,17 @@
                 window.currentAppliedCC = targetCC;
                 const regSel = document.getElementById('bridgeRegionSelect');
                 if (regSel && countryMap[targetCC]) regSel.value = targetCC;
-                const isDirectListing = directRegions.includes(targetCC) || (targetCC === 'GB' && directRegions.includes('UK')) || (targetCC === 'UK' && directRegions.includes('GB'));
+                
+                const targetAsin = (targetCC === 'GB' ? regionalAsins['UK'] : regionalAsins[targetCC]) || (targetCC === 'US' ? currentAsin : null);
+                const isDirectListing = !!targetAsin;
+                
+                const target = countryMap[targetCC] || countryMap["US"];
+                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
+                const tagParam = activeTag ? `?tag=${activeTag}` : '';
+                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
+                const buyBtn = document.getElementById('buyBtn');
+                const buyBtnText = document.getElementById('buyBtnText');
+                const geoBox = document.getElementById('geoNoticeBox');
                 
                 const targetCurr = countryToCurrencyMap[targetCC] || 'USD';
                 const regKey = targetCC.toUpperCase();
@@ -727,16 +737,7 @@
                     });
                 }
 
-                const targetAsin = regionalAsins[targetCC] || regionalAsins[targetCC.toLowerCase()] || (targetCC === 'GB' ? (regionalAsins['UK'] || regionalAsins['uk']) : null) || (isDirectListing ? currentAsin : null);
-                const target = countryMap[targetCC] || countryMap["US"];
-                const activeTag = (target && domainToTagMap[target.domain]) ? domainToTagMap[target.domain] : getTag(targetCC);
-                const tagParam = activeTag ? `?tag=${activeTag}` : '';
-                const tagSearchParam = activeTag ? `&tag=${activeTag}` : '';
-                const buyBtn = document.getElementById('buyBtn');
-                const buyBtnText = document.getElementById('buyBtnText');
-                const geoBox = document.getElementById('geoNoticeBox');
-                
-                if (targetAsin && (targetCC === 'US' || isDirectListing || regionalAsins[targetCC] || (targetCC === 'GB' && regionalAsins['UK']))) {
+                if (isDirectListing && targetAsin) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
                     if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
@@ -771,6 +772,7 @@
                     const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
                     const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
                     const tzCountryMap = {
+                        'new_york': 'US', 'chicago': 'US', 'los_angeles': 'US', 'denver': 'US', 'phoenix': 'US', 'detroit': 'US', 'indiana': 'US', 'alaska': 'US', 'honolulu': 'US',
                         'kolkata': 'IN', 'calcutta': 'IN',
                         'london': 'GB', 'dublin': 'IE',
                         'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',

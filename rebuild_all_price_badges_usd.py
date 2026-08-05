@@ -24,15 +24,14 @@ def rebuild_all_price_badges():
         if not raw_path.exists():
             if (repo_dir / f"raw_{asin}_console.jpg").exists():
                 raw_path = repo_dir / f"raw_{asin}_console.jpg"
-            elif (repo_dir / f"focus_product_{asin}_hook.jpg").exists():
-                raw_path = repo_dir / f"focus_product_{asin}_hook.jpg"
             else:
-                print(f" ⚠️ Skipping [{asin}]: raw image not found.")
+                print(f" ⚠️ Skipping [{asin}]: Clean raw image not found at raw_images/raw_{asin}.jpg")
                 continue
 
-        usd_price = meta.get("current_price") or meta.get("regional_prices", {}).get("US", "$19.99")
-        if "INR" in str(usd_price):
-            usd_price = "$19.99"
+        usd_price = meta.get("current_price") or meta.get("regional_prices", {}).get("US")
+        if not usd_price or "INR" in str(usd_price) or "₹" in str(usd_price):
+            print(f" ⚠️ Skipping [{asin}]: Invalid or missing USD price ({usd_price})")
+            continue
 
         output_path = repo_dir / f"focus_product_{asin}_hook.jpg"
         title = meta.get("title", f"Product {asin}")

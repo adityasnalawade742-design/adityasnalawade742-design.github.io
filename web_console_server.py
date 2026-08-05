@@ -1412,17 +1412,8 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             badge_hook = data.get('badge_hook', 'VIRAL ROOM FIND')
             regional_asins = reg_entry.get('regional_asins') or data.get('regional_asins', {'US': asin})
-            regional_prices = reg_entry.get('regional_prices') or data.get('regional_prices', {
-                'US': price,
-                'IN': '₹1,650.00' if '19.99' in price else '₹2,899.00',
-                'UK': '£15.99' if '19.99' in price else '£27.50',
-                'DE': '€18.50' if '19.99' in price else '€32.00',
-                'CA': 'CA$26.99' if '19.99' in price else 'CA$46.99',
-                'AU': 'A$29.99' if '19.99' in price else 'A$52.00',
-                'JP': '¥3,050' if '19.99' in price else '¥5,400',
-                'SE': '210,00kr'
-            })
-            direct_regions = reg_entry.get('direct_regions') or data.get('direct_regions', ['US', 'IN', 'UK', 'DE', 'CA', 'AU', 'JP', 'SE'])
+            regional_prices = reg_entry.get('regional_prices') or data.get('regional_prices', {'US': price})
+            direct_regions = reg_entry.get('direct_regions') or data.get('direct_regions', ['US'])
 
             from modules.bridge_creator import generate_bridge_page
             from modules.html_overlay_engine import render_html_overlay
