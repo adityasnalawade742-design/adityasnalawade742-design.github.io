@@ -112,15 +112,23 @@ for card in cards:
         "data-direct-regions": direct_regs_str
     }
     
-    for k, v in attr_updates.items():
-        pattern = re.compile(rf'id="card-{asin}"[^>]*?\b{k}="[^"]*"')
-        if pattern.search(raw_html):
-            new_html = pattern.sub(lambda m: re.sub(rf'\b{k}="[^"]*"', f'{k}="{v}"', m.group(0)), raw_html)
-            if new_html != raw_html:
-                raw_html = new_html
-                index_modified = True
-                healed_count += 1
-                print(f"  🔧 Healed index.html card [{asin}] {k} -> '{v}'")
+    # Match the entire <div ... id="card-{asin}"> opening tag regardless of attribute order
+    div_pattern = re.compile(rf'(<div\b[^>]*?\bid=["\']card-{asin}["\'][^>]*?>)', re.IGNORECASE)
+    match = div_pattern.search(raw_html)
+    if match:
+        tag_str = match.group(1)
+        new_tag_str = tag_str
+        for k, v in attr_updates.items():
+            if f'{k}="' in new_tag_str:
+                new_tag_str = re.sub(rf'\b{k}="[^"]*"', f'{k}="{v}"', new_tag_str)
+            else:
+                # Insert new attribute before closing bracket
+                new_tag_str = new_tag_str[:-1] + f' {k}="{v}">'
+        if new_tag_str != tag_str:
+            raw_html = raw_html.replace(tag_str, new_tag_str)
+            index_modified = True
+            healed_count += 1
+            print(f"  🔧 Healed index.html card [{asin}] attributes")
 
 if index_modified and healed_count > 0:
     index_file.write_text(raw_html, encoding="utf-8")

@@ -302,25 +302,11 @@ def run_daily_price_update_check(auto_git_push: bool = True):
     # Save updated registry
     save_registry(registry)
 
-    # If any prices updated, commit and push live to GitHub Pages
-    if updated_asins:
-        print("\n" + "=" * 70)
-        print(f"🎉 PRICE SYNCHRONIZATION COMPLETE! {len(updated_asins)} product(s) updated.")
-        for asin, old_p, new_p in updated_asins:
-            print(f"  • {asin}: {old_p} ➔ {new_p}")
-            
-        if auto_git_push:
-            print("\n🚀 Committing and pushing price updates to GitHub Pages...")
-            import subprocess
-            subprocess.run(["git", "add", "-A"], cwd=str(BASE_DIR), check=False)
-            subprocess.run(["git", "commit", "-m", f"Automated Daily Price Sync: Updated {len(updated_asins)} product prices"], cwd=str(BASE_DIR), check=False)
-            res_push = subprocess.run(["git", "push", "origin", "main"], cwd=str(BASE_DIR), check=False)
-            if res_push.returncode == 0:
-                print("✅ Pushed live to GitHub Pages!")
-            else:
-                print("⚠️ Git push encountered an issue. Manual push may be required.")
-    else:
-        print("\n✨ All product prices are 100% verified & accurate. No updates needed today!")
+    # Trigger full master sequential regional price sync suite
+    print("\n🌐 Executing Master Multi-Region Regional Price Sync Suite...")
+    import subprocess
+    master_script = BASE_DIR / "sync_all_regional_prices_master.py"
+    subprocess.run([sys.executable, str(master_script)], cwd=str(BASE_DIR))
 
 if __name__ == "__main__":
     run_daily_price_update_check()

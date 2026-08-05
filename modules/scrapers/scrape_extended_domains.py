@@ -72,7 +72,7 @@ def scrape_extended_domains():
                                     val = float(raw_num)
                                     base_usd = float(str(item.get("current_price", "$20.00")).replace("$", "").replace(",", "") or 20.0)
                                     if 1.0 <= val <= (base_usd * 4.0 * 100.0):
-                                        price_str = txt
+                                        price_str = re.sub(r"\s+", " ", txt).strip()
                                 except ValueError:
                                     pass
 
