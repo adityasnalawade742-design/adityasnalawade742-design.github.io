@@ -110,12 +110,17 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     bridge_url = f"https://adityasnalawade742-design.github.io/bridge_{asin}.html"
     image_url = f"https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg"
     
+    from modules.pinterest_publisher import get_board_for_category
+    target_board_id = get_board_for_category(prod.get("category", "decor"))
+
     pin_result = publish_pin_to_pinterest(
         image_path=hook_img_path,
         title=seo_data['pin_title'],
         description=seo_data['description'],
         destination_url=bridge_url,
-        image_url=image_url
+        board_id=target_board_id,
+        image_url=image_url,
+        category=prod.get("category", "decor")
     )
 
     save_processed_asin(asin)
@@ -124,6 +129,8 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
         "status": "success",
         "asin": asin,
         "product_title": prod['title'],
+        "category": prod.get("category", "decor"),
+        "board_id": target_board_id,
         "price": prod['price'],
         "pin_title": seo_data['pin_title'],
         "pin_description": seo_data['description'],

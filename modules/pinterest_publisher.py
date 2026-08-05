@@ -27,14 +27,16 @@ def publish_pin_to_pinterest(
     destination_url: str,
     board_id: str = None,
     access_token: str = None,
-    image_url: str = None
+    image_url: str = None,
+    category: str = "decor"
 ) -> dict:
     """
     Publishes a pin directly via Pinterest API v5 if credentials are present in config or parameters.
     Otherwise formats a Pin Payload ready for scheduling via Make/n8n/Buffer.
+    Automatically routes to category-specific Board ID if board_id is omitted.
     """
     token = access_token or PINTEREST_ACCESS_TOKEN
-    target_board_id = board_id or PINTEREST_BOARD_ID
+    target_board_id = board_id or get_board_for_category(category)
 
     # M8 FIX: if no image URL, refuse to publish — Pinterest API rejects HTML page URLs
     if not image_url:
