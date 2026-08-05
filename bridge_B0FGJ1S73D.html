@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0FGJ1S73D_hook.jpg?v=1785919631" alt="Ceramic Mushroom Bedside Lamp with Glass Shade">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0FGJ1S73D_hook.jpg?v=1785920077" alt="Ceramic Mushroom Bedside Lamp with Glass Shade">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FGJ1S73D_hook.jpg?v=1785919631', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FGJ1S73D_hook.jpg?v=1785920077', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Ceramic Mushroom Bedside Lamp with Glass Shade");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FGJ1S73D_hook.jpg?v=1785919631";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FGJ1S73D_hook.jpg?v=1785920077";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -642,8 +642,9 @@
             };
 
             
+            
             const currentAsin = "B0FGJ1S73D";
-            const prodKeywords = encodeURIComponent("Ceramic Mushroom Bedside Table Lamp").replace(/%20/g, "+");
+            const prodKeywords = encodeURIComponent("Ceramic Mushroom Bedside Table Lamp").replace(/%20/g, "+").replace(/%2C/gi, "+");
             const directRegions = ["US", "IN", "UK", "DE", "SE", "CA", "JP"];
             const regionalMatrix = {"AE": "AED121.15", "AU": "A$49.99", "BE": "Not Available", "BR": "Not Available", "CA": "CA$44.90", "DE": "\u20ac30.50", "EG": "Not Available", "ES": "Not Available", "FR": "Not Available", "IN": "\u20b914,877.50", "IT": "Not Available", "JP": "\u00a55,100", "MX": "Not Available", "NL": "Not Available", "PL": "Not Available", "SA": "Not Available", "SE": "345,00kr", "SG": "Not Available", "TR": "Not Available", "UK": "\u00a325.99", "US": "$32.99"};
             const regionalAsins = {"US": "B0FGJ1S73D"};

@@ -107,6 +107,7 @@ for card in cards:
     }
     
     raw_html = index_file.read_text(encoding="utf-8")
+    # H2 FIX: pt.get_text(strip=True)
     for k, v in attr_updates.items():
         pattern = re.compile(rf'id="card-{asin}"[^>]*?\b{k}="[^"]*"')
         if pattern.search(raw_html):

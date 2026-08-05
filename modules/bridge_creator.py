@@ -646,9 +646,10 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BR": { domain: "amazon.com.br", label: "AMAZON BRAZIL (R$)" }
             };
 
-            {% set search_phrase = product.get('search_keywords') or (product.title.split()[:5] | join(' ')) %}
+            {% set raw_phrase = product.get('search_keywords') or (product.title.split()[:5] | join(' ')) %}
+            {% set clean_phrase = raw_phrase.replace(',', '').replace(';', '').replace(':', '').replace('|', '').replace('-', ' ') %}
             const currentAsin = "{{ product.get('target_asin', asin) }}";
-            const prodKeywords = encodeURIComponent("{{ search_phrase }}").replace(/%20/g, "+");
+            const prodKeywords = encodeURIComponent("{{ clean_phrase }}").replace(/%20/g, "+").replace(/%2C/gi, "+");
             const directRegions = {{ (product.direct_regions if product.direct_regions is defined and product.direct_regions else []) | tojson }};
             const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
             const regionalAsins = {{ (product.regional_asins if product.regional_asins is defined else {}) | tojson }};
