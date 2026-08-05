@@ -7,18 +7,18 @@ from config import PINTEREST_ACCESS_TOKEN, PINTEREST_BOARD_ID
 PINTEREST_API_ENDPOINT = "https://api.pinterest.com/v5/pins"
 
 CATEGORY_BOARD_MAP = {
-    "lighting": "Aesthetic Lighting & Lamps",
-    "vases": "Boho Vases & Desk Decor",
-    "mirror": "Vanity Mirrors & Wall Decor",
-    "decor": "Cozy Room & Home Decor"
+    "vases": "1092545259543956197",       # Boho Vases & Desk Decor
+    "lighting": "1092545259543956233",    # Aesthetic Lighting & Lamps
+    "mirror": "1092545259543956238",      # Vanity Mirrors & Wall Decor
+    "decor": "1092545259543956242"        # Cozy Room & Home Decor
 }
 
 def get_board_for_category(category: str = "decor") -> str:
     cat = (category or "decor").lower()
-    for key, board in CATEGORY_BOARD_MAP.items():
+    for key, board_id in CATEGORY_BOARD_MAP.items():
         if key in cat:
-            return board
-    return "Cozy Room & Home Decor"
+            return board_id
+    return PINTEREST_BOARD_ID or "1092545259543956197"
 
 def publish_pin_to_pinterest(
     image_path: str,

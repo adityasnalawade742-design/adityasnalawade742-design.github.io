@@ -32,7 +32,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0GYDXHF4G.jpg"
+    "image_path": "raw_images/raw_B0GYDXHF4G.jpg",
+    "category": "decor"
   },
   "B0FXLYXM32": {
     "title": "Wavy Full Length Floor Standing Mirror",
@@ -67,7 +68,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0FXLYXM32.jpg"
+    "image_path": "raw_images/raw_B0FXLYXM32.jpg",
+    "category": "mirror"
   },
   "B0C2YLN3H4": {
     "title": "Modern Ceramic Donut Vase Set of 2",
@@ -102,7 +104,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0C2YLN3H4.jpg"
+    "image_path": "raw_images/raw_B0C2YLN3H4.jpg",
+    "category": "vases"
   },
   "B07HP22QTZ": {
     "title": "Hanging Crystal Suncatcher Prism",
@@ -137,7 +140,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B07HP22QTZ.jpg"
+    "image_path": "raw_images/raw_B07HP22QTZ.jpg",
+    "category": "decor"
   },
   "B0BZXNSW5K": {
     "title": "Touch Control Dimmable Bedside Lamp",
@@ -172,7 +176,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0BZXNSW5K.jpg"
+    "image_path": "raw_images/raw_B0BZXNSW5K.jpg",
+    "category": "lighting"
   },
   "B0DXKGL1T2": {
     "title": "Lily of the Valley Flower Desk Lamp",
@@ -207,7 +212,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0DXKGL1T2.jpg"
+    "image_path": "raw_images/raw_B0DXKGL1T2.jpg",
+    "category": "lighting"
   },
   "B0D1FRDFFX": {
     "title": "Handmade Glass Mushroom Ambient Lamp",
@@ -242,7 +248,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0D1FRDFFX.jpg"
+    "image_path": "raw_images/raw_B0D1FRDFFX.jpg",
+    "category": "lighting"
   },
   "B0D8P8CSYP": {
     "title": "Cute Bird Touch Control Nightstand Lamp",
@@ -277,7 +284,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0D8P8CSYP.jpg"
+    "image_path": "raw_images/raw_B0D8P8CSYP.jpg",
+    "category": "lighting"
   },
   "B0FGJ1S73D": {
     "title": "Ceramic Mushroom Bedside Lamp with Glass Shade",
@@ -319,7 +327,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0FGJ1S73D.jpg"
+    "image_path": "raw_images/raw_B0FGJ1S73D.jpg",
+    "category": "lighting"
   },
   "B0CX144DHK": {
     "asin": "B0CX144DHK",
@@ -406,7 +415,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0CJC549C6.jpg"
+    "image_path": "raw_images/raw_B0CJC549C6.jpg",
+    "category": "decor"
   },
   "B0CJ4Q4PZQ": {
     "asin": "B0CJ4Q4PZQ",
@@ -448,7 +458,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0CJ4Q4PZQ.jpg"
+    "image_path": "raw_images/raw_B0CJ4Q4PZQ.jpg",
+    "category": "lighting"
   },
   "B0BQGC76VX": {
     "asin": "B0BQGC76VX",
@@ -490,7 +501,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0BQGC76VX.jpg"
+    "image_path": "raw_images/raw_B0BQGC76VX.jpg",
+    "category": "mirror"
   },
   "B0C7WFZZ7D": {
     "asin": "B0C7WFZZ7D",
@@ -532,7 +544,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0C7WFZZ7D.jpg"
+    "image_path": "raw_images/raw_B0C7WFZZ7D.jpg",
+    "category": "vases"
   },
   "B0BXP7YWHJ": {
     "asin": "B0BXP7YWHJ",
@@ -574,7 +587,8 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0BXP7YWHJ.jpg"
+    "image_path": "raw_images/raw_B0BXP7YWHJ.jpg",
+    "category": "vases"
   },
   "B0D6YRJLCP": {
     "asin": "B0D6YRJLCP",
@@ -616,6 +630,7 @@
     "direct_regions": [
       "US"
     ],
-    "image_path": "raw_images/raw_B0D6YRJLCP.jpg"
+    "image_path": "raw_images/raw_B0D6YRJLCP.jpg",
+    "category": "vases"
   }
 }
