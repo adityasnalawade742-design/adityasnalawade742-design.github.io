@@ -213,13 +213,11 @@
       "parameters": {
         "method": "POST",
         "url": "https://api-sandbox.pinterest.com/v5/pins",
+        "authentication": "genericCredentialType",
+        "genericCredentialType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer {{ $env.PINTEREST_ACCESS_TOKEN }}"
-            },
             {
               "name": "Content-Type",
               "value": "application/json"
@@ -231,6 +229,12 @@
         "jsonBody": "={{ JSON.stringify({ board_id: ($json.board_id || $node['Code in JavaScript'].json.board_id || '1092545259543956242'), title: ($node['Code in JavaScript'].json.pin_title || $node['Code in JavaScript'].json.title || '').substring(0, 100), description: ($node['Code in JavaScript'].json.pin_description || '').substring(0, 800), link: $json.bridge_url, media_source: { source_type: 'image_url', url: $json.hook_image_url } }) }}",
         "options": {
           "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "pinterest_api_credential",
+          "name": "Pinterest API Token (Header Auth)"
         }
       },
       "id": "8e681492-7ae5-47f2-af34-184580e124d5",
