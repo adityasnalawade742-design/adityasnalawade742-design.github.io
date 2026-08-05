@@ -212,7 +212,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ ($env.PINTEREST_ACCESS_TOKEN && $env.PINTEREST_ACCESS_TOKEN.startsWith('pina_') ? 'https://api-sandbox.pinterest.com/v5/pins' : 'https://api.pinterest.com/v5/pins') }}",
+        "url": "https://api-sandbox.pinterest.com/v5/pins",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
