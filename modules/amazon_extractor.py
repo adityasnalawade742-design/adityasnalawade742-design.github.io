@@ -13,10 +13,43 @@ def extract_asin_from_url(url: str) -> str:
         return asin_match.group(1).upper()
     
     # Fallback pattern check for ASIN query or direct code
-    code_match = re.search(r'\b([A-Z0-9]{10})\b', url, re.IGNORECASE)
-    if code_match:
-        return code_match.group(1).upper()
-    return ""
+def classify_product_category(title: str, description: str = "") -> str:
+    """
+    Classifies any product into one of the exact 4 Pinterest category keys:
+    'vases', 'lighting', 'mirror', or 'decor'.
+    """
+    text = f"{title} {description}".lower()
+    if any(k in text for k in ["vase", "vases", "planter", "pottery", "ceramic set", "pampas"]):
+        return "vases"
+    elif any(k in text for k in ["lamp", "light", "lighting", "lantern", "glowing", "neon", "candle warmer", "nightlight", "diffuser"]):
+        return "lighting" if any(k in text for k in ["lamp", "light", "lighting", "lantern", "neon", "nightlight"]) else "decor"
+    elif any(k in text for k in ["mirror", "mirrors", "vanity mirror", "wavy mirror", "glass mirror"]):
+        return "mirror"
+    else:
+        return "decor"
+
+def preflight_regional_check(asin: str) -> list:
+    """
+    Runs a fast pre-flight check across major regional Amazon storefronts.
+    Returns list of verified region codes (e.g. ['US', 'IN', 'UK']).
+    """
+    regions = {
+        "US": f"https://www.amazon.com/dp/{asin}",
+        "UK": f"https://www.amazon.co.uk/dp/{asin}",
+        "DE": f"https://www.amazon.de/dp/{asin}",
+        "IN": f"https://www.amazon.in/dp/{asin}"
+    }
+    available = ["US"]  # US is base
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    for reg, url in list(regions.items()):
+        if reg == "US": continue
+        try:
+            r = requests.head(url, headers=headers, timeout=2.0, allow_redirects=True)
+            if r.status_code == 200:
+                available.append(reg)
+        except Exception:
+            pass
+    return available
 
 def enhance_to_max_resolution(image_url: str) -> str:
     """Converts low-res Amazon thumbnail URLs into maximum high-res SL1500 master images."""

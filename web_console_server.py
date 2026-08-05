@@ -65,14 +65,19 @@ def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt
         except Exception:
             pass
 
+    from modules.amazon_extractor import classify_product_category, preflight_regional_check
+    cat_val = meta.get('category') or classify_product_category(title or f'Product {asin}')
+    verified_regions = preflight_regional_check(asin)
+
     prod = {
         'title': title or meta.get('title', f'Product {asin}'),
+        'category': cat_val,
         'price': price or meta.get('current_price', '$19.99'),
         'rating': meta.get('rating', '4.6'),
         'features': meta.get('features', ["PREMIUM QUALITY", "WARM AMBIENT GLOW", "EASY ASSEMBLY"]),
         'description': meta.get('description', ''),
         'regional_prices': meta.get('regional_prices', {}),
-        'direct_regions': meta.get('direct_regions', ['US'])
+        'direct_regions': meta.get('direct_regions', verified_regions)
     }
 
     ref_sheet_path = create_multi_photo_reference_sheet([selected_photo], filename_prefix=f"product_{asin}", max_photos=1)

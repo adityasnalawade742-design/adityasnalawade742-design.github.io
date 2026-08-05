@@ -12,20 +12,23 @@ if hasattr(sys.stdout, "reconfigure"):
 
 from config import NICHE, AMAZON_ASSOCIATE_TAG, SERPAPI_KEY
 from modules.automated_product_selector import is_asin_published_on_homepage
-from modules.amazon_extractor import is_adult_aesthetic_product, select_clean_photo_or_skip, get_product_details_and_photos
+from modules.amazon_extractor import is_adult_aesthetic_product, select_clean_photo_or_skip, get_product_details_and_photos, classify_product_category
 
 CACHE_FILE = Path(__file__).resolve().parent.parent / "serpapi_cache.json"  # C5 FIX: dynamic path
 
 TRENDING_PINTEREST_KEYWORDS = [
     "aesthetic glass mushroom table lamp",
     "lily of the valley flower lamp bedside",
-    "sunset lamp projection light golden hour",
-    "flameless candle warmer lamp timer",
+    "volcano erupting flame essential oil diffuser",
     "white ceramic donut vase pampas grass set",
-    "abstract thinker statue bookshelf decor",
     "wavy vanity wall mirror aesthetic cream",
-    "framed neutral botanical print set black frame",
-    "water hyacinth storage basket set natural"
+    "acrylic illuminated glowing led memo board",
+    "cute bird dimmable touch nightstand lamp",
+    "ceramic book vase desk accent decor",
+    "travertine stone candle tray display",
+    "abstract thinker statue bookshelf decor",
+    "flameless candle warmer lamp timer",
+    "cloud wavy aesthetic tabletop vanity mirror"
 ]
 
 def load_serp_cache():
@@ -108,12 +111,12 @@ def is_pinterest_aesthetic_gemini(title: str, price_str: str = "") -> bool:
     return True
 
 
-def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: float = 10.0, max_price: float = 50.0):
+def fetch_amazon_products(query: str = None, num_results: int = 3, min_price: float = 15.0, max_price: float = 49.99):
     """
     Intelligent Live Amazon Product Finder with SerpAPI Quota Protection & Multi-Criteria Quality Filters:
       1. Zero-Cost Local Query Cache (Saves SerpAPI search credits)
-      2. Price Sweet Spot ($10 - $50 impulse conversion threshold)
-      3. Minimum 4.2 Rating & Review count check
+      2. Impulse Buy Price Sweet Spot ($15 - $49.99 conversion threshold)
+      3. Minimum 4.3 Rating & Review count check
       4. Adult Room Aesthetics (excludes kids toys, toddler boards)
       5. Dynamic Homepage Deduplication (skips active items on index.html)
       6. 4-Layer Photo Cleanliness Verification (must have clean text-free photos)
@@ -239,7 +242,7 @@ def _scrape_amazon_search(query: str, num_results: int = 10, min_price: float = 
             rating_str = rating_el.get_text() if rating_el else "4.5"
             rating_match = re.search(r'([0-9\.]+)\s*out', rating_str)
             rating_val = float(rating_match.group(1)) if rating_match else 4.5
-            if rating_val < 4.2:
+            if rating_val < 4.3:
                 continue
 
             # Reviews minimum threshold filter (min 100 reviews)
@@ -264,11 +267,12 @@ def _scrape_amazon_search(query: str, num_results: int = 10, min_price: float = 
             thumb_url = img_el.get("src", "") if img_el else ""
 
             affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+            cat_key = classify_product_category(title)
 
             results.append({
                 "id": asin,
                 "title": title,
-                "category": "Cozy Room Decor & Lighting",
+                "category": cat_key,
                 "price": price_str or "$24.99",
                 "rating": str(rating_val),
                 "reviews_count": reviews_num,
@@ -518,8 +522,8 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             rating_num = float(item.get("rating", 4.5))
         except (ValueError, TypeError):
             rating_num = 4.5
-        if rating_num < 4.2:
-            print(f"[Amazon Finder Filter] Rating {rating_num} below 4.2 for '{title[:35]}'")
+        if rating_num < 4.3:
+            print(f"[Amazon Finder Filter] Rating {rating_num} below 4.3 for '{title[:35]}'")
             continue
 
         # ── Reviews Minimum Threshold Guard (Min 100 Reviews) ──
@@ -551,11 +555,12 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             continue
 
         affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+        cat_key = classify_product_category(title)
 
         parsed_products.append({
             "id": asin,
             "title": title,
-            "category": "Cozy Room Decor & Lighting",
+            "category": cat_key,
             "price": price_str,
             "rating": str(rating_num),
             "reviews_count": reviews_num,
