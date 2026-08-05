@@ -1408,7 +1408,20 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
 
             from modules.seo_copywriter import generate_pin_seo_data
             _seo_fresh = generate_pin_seo_data(product_title=title, price=price)
-            image_hook = data.get('image_hook') or _seo_fresh.get('image_hook') or title
+            hook_candidate = _seo_fresh.get('image_hook') or data.get('image_hook') or title
+            if len(hook_candidate) > 35:
+                words = hook_candidate.split()
+                short_w = []
+                c_len = 0
+                for w in words:
+                    if c_len + len(w) + 1 <= 35:
+                        short_w.append(w)
+                        c_len += len(w) + 1
+                    else:
+                        break
+                image_hook = " ".join(short_w) if short_w else hook_candidate[:35]
+            else:
+                image_hook = hook_candidate
 
             pin_title = raw_pin_title if raw_pin_title and not raw_pin_title.startswith('Product B0') and ('Fenmzee' not in raw_pin_title or asin == 'B0BPNXX2MF') else title
             pin_description = reg_entry.get('description') or data.get('pin_description', '')

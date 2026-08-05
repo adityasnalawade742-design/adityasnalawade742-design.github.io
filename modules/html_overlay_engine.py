@@ -303,7 +303,21 @@ def render_html_overlay(
     # Absolutize background image path for local file URL
     abs_img_path = Path(image_path).resolve().as_uri()
 
-    headline_clean = headline.strip().title()
+    headline_raw = headline.strip().title()
+    if len(headline_raw) > 35:
+        words = headline_raw.split()
+        short_words = []
+        curr_len = 0
+        for w in words:
+            if curr_len + len(w) + 1 <= 35:
+                short_words.append(w)
+                curr_len += len(w) + 1
+            else:
+                break
+        headline_clean = " ".join(short_words) if short_words else headline_raw[:35]
+    else:
+        headline_clean = headline_raw
+
     badge_clean = badge_text.strip().upper()
     subtitle_clean = subtitle.strip().upper()
     
@@ -318,10 +332,8 @@ def render_html_overlay(
         dynamic_headline_size = "76px"
     elif hlen <= 28:
         dynamic_headline_size = "58px"
-    elif hlen <= 38:
-        dynamic_headline_size = "48px"
     else:
-        dynamic_headline_size = "40px"
+        dynamic_headline_size = "48px"
 
     # Build features HTML
     clean_feats = []
