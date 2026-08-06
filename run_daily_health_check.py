@@ -68,6 +68,9 @@ for card in cards:
     asin = card.get("data-asin") or card.get("id", "").replace("card-", "")
     if asin not in registry:
         continue
+
+    pt = card.find("span", class_="price-tag")
+    card_price_text = pt.get_text(strip=True) if pt else ""
     
     rp = registry[asin].get("regional_prices", {})
     raw_usd = registry[asin].get("current_price", "$19.99")
