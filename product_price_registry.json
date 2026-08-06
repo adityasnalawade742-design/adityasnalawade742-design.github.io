@@ -757,5 +757,26 @@
     "direct_regions": [
       "US"
     ]
+  },
+  "B0CT274BX5": {
+    "asin": "B0CT274BX5",
+    "title": "Candle Warmer Lamp with Timer -",
+    "current_price": "$15.99",
+    "description": "Tired of stressful overhead lighting? Transform your bedroom into a soothing cozy sanctuary with this viral Flame Aroma Essential Oil Diffuser. Features realistic volcano flame mist, warm amber LED ambient lighting, and ultra-quiet humidification. Tap link to check live price on Amazon! #cozyroomdecor #flamediffuser #aestheticdecor #amazonfinds #bedroomvibes",
+    "features": [
+      "FLAME-FREE HEATING",
+      "BUILT-IN TIMER",
+      "DIMMABLE WARM GLOW",
+      "FITS YANKEE CANDLES"
+    ],
+    "regional_prices": {
+      "US": "$15.99"
+    },
+    "regional_asins": {
+      "US": "B0CT274BX5"
+    },
+    "direct_regions": [
+      "US"
+    ]
   }
 }
