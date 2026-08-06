@@ -7,13 +7,13 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "3d5514b2-d986-49e3-9bdc-bcdb709f1dd1",
+      "id": "c3a74525-8434-474c-b5ea-1b2b4e9bcc0f",
       "name": "1. Webhook — Receive Batch from Web Console",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -752,
-        128
+        144,
+        704
       ],
       "webhookId": "8c792c08-f2e8-4ab6-b766-35742eef42e0",
       "notes": "Web Console calls this after user confirms product + image selections."
@@ -24,13 +24,13 @@
         "responseBody": "={{ JSON.stringify({ status: 'received', count: ($json.body && $json.body.items ? $json.body.items.length : ($json.items ? $json.items.length : 0)), message: 'Batch accepted by n8n. Starting Flux Dev AI pipeline...' }) }}",
         "options": {}
       },
-      "id": "ab21b930-567b-495b-abe6-65ff58002cc6",
+      "id": "c5342011-6721-43ea-b98a-da97aca1cdfd",
       "name": "1b. Respond to Web Console Immediately",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        -560,
-        128
+        336,
+        704
       ]
     },
     {
@@ -38,26 +38,26 @@
         "fieldToSplitOut": "body.items",
         "options": {}
       },
-      "id": "a0a7e158-321a-4212-b9a0-6901c942870c",
+      "id": "005b6efc-175d-444b-8d3f-6c0f4d4b982f",
       "name": "2. Split Items — Process One Product at a Time",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -320,
-        128
+        576,
+        704
       ]
     },
     {
       "parameters": {
-        "jsCode": "const item = $json;\n\n// 1. Title Sanitizer\nlet title = (item.title || '').trim();\nif (!title || title.startsWith('Product B0') || title.startsWith('Product ')) {\n  title = (item.image_hook || item.pin_title || '').trim();\n}\nif (title.length > 35) {\n  const words = title.split(' ');\n  let shortW = [];\n  let cLen = 0;\n  for (const w of words) {\n    if (cLen + w.length + 1 <= 35) {\n      shortW.push(w);\n      cLen += w.length + 1;\n    } else break;\n  }\n  title = shortW.length > 0 ? shortW.join(' ') : title.substring(0, 35);\n}\n\n// 2. Price Sanitizer\nlet price = (item.price || '').toString().trim();\nif (price.startsWith('.')) price = '$19' + price;\nif (price && !price.startsWith('$') && !/[₹£€¥]/.test(price)) price = '$' + price;\n\nreturn {\n  json: {\n    ...item,\n    asin: item.asin,\n    title: title,\n    price: price,\n    pin_title: item.pin_title || title,\n    pin_description: item.pin_description || '',\n    badge_hook: item.badge_hook || 'VIRAL ROOM FIND',\n    chosen_photo_url: item.chosen_photo_url || item.winner_photo\n  }\n};"
+        "jsCode": "const item = $json;\n\n    // 1. Title Sanitizer (Max 35 chars)\n    let title = (item.title || '').trim();\n    if (!title || title.startsWith('Product B0') || title.startsWith('Product ')) {\n      title = (item.image_hook || item.pin_title || '').trim();\n    }\n    if (title.length > 35) {\n      const words = title.split(' ');\n      let shortW = [];\n      let cLen = 0;\n      for (const w of words) {\n        if (cLen + w.length + 1 <= 35) {\n          shortW.push(w);\n          cLen += w.length + 1;\n        } else break;\n      }\n      title = shortW.length > 0 ? shortW.join(' ') : title.substring(0, 35);\n    }\n\n    // 2. Price Sanitizer\n    let price = (item.price || '').toString().trim();\n    if (price.startsWith('.')) price = '$19' + price;\n    if (price && !price.startsWith('$') && !/[₹£€¥]/.test(price)) price = '$' + price;\n\n    return {\n      json: {\n        ...item,\n        asin: item.asin,\n        title: title,\n        price: price,\n        pin_title: item.pin_title || title,\n        pin_description: item.pin_description || '',\n        badge_hook: item.badge_hook || 'VIRAL ROOM FIND',\n        chosen_photo_url: item.chosen_photo_url || item.winner_photo\n      }\n    };\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -208,
-        -80
+        688,
+        496
       ],
-      "id": "145fe285-88db-406a-b8e6-50a07cae74ea",
+      "id": "d10ed056-f120-42bc-8a26-d2f246c98287",
       "name": "Code in JavaScript"
     },
     {
@@ -65,19 +65,19 @@
         "conditions": {
           "boolean": [
             {
-              "value1": "={{ $json.is_white_bg || ($json.chosen_photo_url && ($json.chosen_photo_url.includes('_SL1500_') || $json.chosen_photo_url.includes('_AC_') || $json.chosen_photo_url.includes('cutout'))) }}",
+              "value1": "={{ Boolean($json.is_white_bg || ($json.chosen_photo_url && $json.chosen_photo_url.includes('cutout'))) }}",
               "value2": true
             }
           ]
         }
       },
-      "id": "0cd8a2fc-34a6-476c-b5e1-6aeb117fcb1f",
+      "id": "db34e86c-d97b-4cbd-9fd0-9e69f0d049cf",
       "name": "3. Classifier — Is Image a White Cutout?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        -16,
-        112
+        880,
+        688
       ],
       "notes": "Evaluates if selected listing photo is a white cutout background or existing room lifestyle photo."
     },
@@ -101,13 +101,13 @@
         },
         "options": {}
       },
-      "id": "631c81f0-7b29-48cb-a5e6-2bb12515948b",
+      "id": "b6a06a3a-3596-4f7d-ac14-00b887f4a93c",
       "name": "4a. Set Prompt A (White Cutout Room Placement)",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
       "position": [
-        208,
-        0
+        1104,
+        576
       ],
       "notes": "Applied for studio cutout photos: Synthesizes a new cozy room scene with drop shadows."
     },
@@ -131,13 +131,13 @@
         },
         "options": {}
       },
-      "id": "59e9e087-2707-4dbd-a4e8-c9ce1493ca75",
+      "id": "af194fe8-8e9f-421f-a6b9-cabbbf230ad7",
       "name": "4b. Set Prompt B (Existing Room Relighting)",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
       "position": [
-        208,
-        224
+        1104,
+        800
       ],
       "notes": "Applied for existing room photos: Relights and enhances existing room scene with 8K cinematic ambient light."
     },
@@ -145,13 +145,11 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer {{ $env.REPLICATE_API_TOKEN }}"
-            },
             {
               "name": "Content-Type",
               "value": "application/json"
@@ -169,14 +167,20 @@
           "timeout": 120000
         }
       },
-      "id": "0f0c2299-39e1-4b1e-bcb2-31f62cb848c5",
+      "id": "c178a562-0b82-4c66-adde-c8b046f2c0f4",
       "name": "5. Replicate API — Flux Dev AI Generation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [
-        448,
-        112
+        1344,
+        688
       ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "A4W0GfHhLrinilgO",
+          "name": "Header Auth account"
+        }
+      },
       "notes": "Generates 8K commercial visual using Flux Dev AI via Replicate API."
     },
     {
@@ -194,18 +198,18 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{\n      JSON.stringify({\n        asin: $node['Code in JavaScript'].json.asin,\n        title: $node['Code in JavaScript'].json.title,\n        price: $node['Code in JavaScript'].json.price,\n        pin_title: $node['Code in JavaScript'].json.pin_title,\n        pin_description: $node['Code in JavaScript'].json.pin_description,\n        badge_hook: $node['Code in JavaScript'].json.badge_hook,\n        image_hook: $node['Code in JavaScript'].json.title,\n        chosen_photo_url: ($json.output && $json.output[0]) ? $json.output[0] : $node['Code in JavaScript'].json.chosen_photo_url\n      })\n    }}",
+        "jsonBody": "={{\n      JSON.stringify({\n        asin: $node['Code in JavaScript'].json.asin,\n        title: $node['Code in JavaScript'].json.title,\n        price: $node['Code in JavaScript'].json.price,\n        pin_title: $node['Code in JavaScript'].json.pin_title,\n        pin_description: $node['Code in JavaScript'].json.pin_description,\n        badge_hook: $node['Code in JavaScript'].json.badge_hook,\n        image_hook: $node['Code in JavaScript'].json.pin_title || $node['Code in JavaScript'].json.title,\n        chosen_photo_url: ($json.output && $json.output[0]) ? $json.output[0] : $node['Code in JavaScript'].json.chosen_photo_url\n      })\n    }}",
         "options": {
           "timeout": 120000
         }
       },
-      "id": "a99accda-8c8f-4488-83ff-8500bc2a49d2",
+      "id": "d30460bc-e5fd-4d9c-acc6-67ad1729625e",
       "name": "6. Build Bridge Page + Playwright Price Overlay",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [
-        672,
-        112
+        1568,
+        688
       ],
       "notes": "Renders Playwright luxury price badge overlay on top of generated AI image, generates bridge_{ASIN}.html landing page, and pushes live to GitHub Pages."
     },
@@ -214,7 +218,7 @@
         "method": "POST",
         "url": "https://api-sandbox.pinterest.com/v5/pins",
         "authentication": "genericCredentialType",
-        "genericCredentialType": "httpHeaderAuth",
+        "genericAuthType": "oAuth2Api",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -226,25 +230,25 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ board_id: ($json.board_id || $node['Code in JavaScript'].json.board_id || '1092545259543956242'), title: ($node['Code in JavaScript'].json.pin_title || $node['Code in JavaScript'].json.title || '').substring(0, 100), description: ($node['Code in JavaScript'].json.pin_description || '').substring(0, 800), link: $json.bridge_url, media_source: { source_type: 'image_url', url: $json.hook_image_url } }) }}",
+        "jsonBody": "={\n  \"board_id\": \"{{ $node['Code in JavaScript'].json.board_id || '1092545259543959836' }}\",\n  \"title\": \"{{ ($node['Code in JavaScript'].json.pin_title || $node['Code in JavaScript'].json.title || '').substring(0, 100) }}\",\n  \"description\": \"{{ ($node['Code in JavaScript'].json.pin_description || 'Cozy room decor find. Check live price on Amazon!').substring(0, 800) }}\",\n  \"link\": \"{{ $json.bridge_url }}\",\n  \"media_source\": {\n    \"source_type\": \"image_url\",\n    \"url\": \"{{ $json.hook_image_url || $node['Code in JavaScript'].json.chosen_photo_url }}\"\n  }\n}",
         "options": {
           "timeout": 30000
         }
       },
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "pinterest_api_credential",
-          "name": "Pinterest API Token (Header Auth)"
-        }
-      },
-      "id": "8e681492-7ae5-47f2-af34-184580e124d5",
+      "id": "038adc69-3ebc-4e94-99f3-cdd8f0e3b913",
       "name": "7. Post Pin to Pinterest API v5",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [
-        896,
-        112
+        1792,
+        688
       ],
+      "credentials": {
+        "oAuth2Api": {
+          "id": "0kJ7nQ6tSGx3FjSl",
+          "name": "Pinterest"
+        }
+      },
       "notes": "POSTs the Pin with generated Flux Dev AI visual and SEO text to Pinterest API v5."
     },
     {
@@ -259,13 +263,13 @@
         },
         "options": {}
       },
-      "id": "15c96f18-0a9c-43a4-8204-2632f7283eb1",
+      "id": "336aafd7-fbd8-48a6-a9aa-fd94d9b71515",
       "name": "8. Log Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
       "position": [
-        1120,
-        64
+        2016,
+        640
       ]
     }
   ],
@@ -387,5 +391,9 @@
         ]
       ]
     }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "36ae10f051fe61ffe8e510150b2a8a802c7728e150c6deae369ad7d13d21231b"
   }
 }
