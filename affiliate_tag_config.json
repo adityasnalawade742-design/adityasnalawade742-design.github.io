@@ -17,87 +17,116 @@
   "verification_status": {
     "amazon.com": {
       "store_id": "smartdeal0358-20",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.in": {
       "store_id": "smartdeal0358-21",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.co.uk": {
       "store_id": "smartdea04b3a-21",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.de": {
       "store_id": "smartdeal0bb4-21",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.ca": {
       "store_id": "smartdeal0302-20",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.fr": {
       "store_id": "smartdeal0962-21",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.es": {
       "store_id": "smartdeal0b46-21",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.it": {
       "store_id": "smartdea03a8d-21",
-      "status": "Verified ✅"
+      "status": "verified",
+      "verified_by": "click_report",
+      "verified_at": "2026-08-06T15:45:00Z"
     },
     "amazon.se": {
       "store_id": "smartdeal0bb4-21",
-      "status": "Pending Verification ⏳"
+      "status": "pending",
+      "reason": "Awaiting EU unified portal click report attribution"
     },
     "amazon.nl": {
       "store_id": "smartdeal0bb4-21",
-      "status": "Pending Verification ⏳"
+      "status": "pending",
+      "reason": "Awaiting EU unified portal click report attribution"
     },
     "amazon.pl": {
       "store_id": "smartdeal0bb4-21",
-      "status": "Pending Verification ⏳"
+      "status": "pending",
+      "reason": "Awaiting EU unified portal click report attribution"
     },
     "amazon.com.tr": {
       "store_id": "smartdeal0bb4-21",
-      "status": "Pending Verification ⏳"
+      "status": "pending",
+      "reason": "Awaiting EU unified portal click report attribution"
     },
     "amazon.com.be": {
       "store_id": "smartdeal0962-21",
-      "status": "Pending Verification ⏳"
+      "status": "pending",
+      "reason": "Awaiting EU unified portal click report attribution"
     },
     "amazon.co.jp": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate JP Associates account creation"
     },
     "amazon.com.au": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate AU Associates account creation"
     },
     "amazon.com.mx": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate MX Associates account creation"
     },
     "amazon.com.br": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate BR Associates account creation"
     },
     "amazon.sg": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate SG Associates account creation"
     },
     "amazon.ae": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate AE Associates account creation"
     },
     "amazon.sa": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate SA Associates account creation"
     },
     "amazon.eg": {
       "store_id": null,
-      "status": "Not Configured 🚫"
+      "status": "not_configured",
+      "reason": "Requires separate EG Associates account creation"
     }
   }
 }
