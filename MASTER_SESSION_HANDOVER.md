@@ -1,93 +1,75 @@
 # 🏆 MASTER SESSION HANDOVER & STATE RECOVERY GUIDE
 
-> **PROJECT**: Pinterest Auto Affiliate & Multi-Region Storefront Machine
-> **DATE**: August 5, 2026
-> **STATUS**: 100% Operational | Zero Drift | 4-Board Category Mapped | n8n Hardened
+> **PROJECT**: Pinterest Auto Affiliate & Multi-Region Storefront Machine  
+> **APP NAME**: Cozy Room Decor Publisher Pro (App ID: `1596368`)  
+> **COMPANY / BRAND**: Cozy Room Finds / Cozy Room Decor  
+> **DATE**: August 6, 2026  
+> **STATUS**: 100% Operational | Sandbox Approved | Dual-Branch Synced (`main` + `gh-pages`)  
 
 ---
 
 ## 📌 Executive Summary & Account Resume Guide
 
-If you start a **new agent session**, switch AGY accounts, or move to a different workspace, this single file contains **everything required** to pick up immediately without losing state or context.
+If you start a **new AGY agent session**, switch accounts, or move to a new workspace, this file contains **100% of the state, instructions, credentials context, and commands** required to continue immediately without losing any progress!
 
 ---
 
-## 🚀 Quick Restart Commands (Copy & Paste)
+## 🚀 Quick Restart Commands (Copy & Paste to Resume)
 
-```bash
-# 1. Pull latest code from GitHub Pages main branch
+```powershell
+# 1. Pull latest code & sync local branches
+git checkout main
 git pull origin main
 
-# 2. Run automated zero-drift self-healing health check
-python run_daily_health_check.py
-
-# 3. Launch local Web Console & n8n Bridge Server (Port 5000)
+# 2. Start Web Console & n8n Bridge Server (Port 5000)
 python web_console_server.py
 
-# 4. Verify category board alignment on index.html
-python scratch/check_homepage_categories.py
+# 3. Launch n8n local instance (if needed)
+n8n start
+
+# 4. Verify catalog & zero-drift health check
+python run_daily_health_check.py
 ```
 
 ---
 
-## 🛠️ Summary of Completed Features & Resolved Issues
+## 🔑 Master App Branding & Configuration Reference
 
-### 1. 🪴 Pinterest 4-Category Board System Mapped & Live
-All 16 products are published across their respective category boards on Pinterest account **`Nesteraliving`**:
-* 🪴 **Boho Vases & Desk Decor** (`1092545259543956197`) — 4 Products
-* 💡 **Aesthetic Lighting & Lamps** (`1092545259543956233`) — 7 Products
-* 🪞 **Vanity Mirrors & Wall Decor** (`1092545259543956238`) — 2 Products
-* 🛋️ **Cozy Room & Home Decor** (`1092545259543956242`) — 3 Products
-* **Mapping Config**: Stored in `pinterest_board_mapping.json` & `modules/pinterest_publisher.py`.
-
-### 2. ⚡ Product Selection Upgrades 1–4 Implemented
-* **Auto Category Classifier** (`modules/amazon_extractor.py` -> `classify_product_category`): Automatically maps any new product to one of the 4 Pinterest categories.
-* **Multi-Region Pre-Flight Check** (`modules/amazon_extractor.py` -> `preflight_regional_check`): Fast HTTP check across US, UK, DE, IN prior to selection.
-* **Impulse Price Guardrails** (`modules/amazon_finder.py`): Enforces `$15.00 – $49.99` price sweet spot & `4.3★+` rating threshold.
-* **2026 Expanded Pinterest Keywords**: Loaded 12 high-intent 2026 viral decor queries.
-
-### 3. 🌐 Storefront Category Alignment & Vanity Mirrors Fix
-* **Category Auto-Healing**: Updated `run_daily_health_check.py` to auto-heal `data-category` attributes on `index.html`.
-* **Vanity Mirrors Chip Fix**: Resolved singular/plural mismatch (`mirrors` vs `mirror`) on `index.html`. Enhanced JS `filterProducts()` matcher to handle singular/plural variations (`mirror`/`mirrors`, `vase`/`vases`).
-* **Category Audit**: 100% PASS across all 5 tabs (`all`: 16, `lighting`: 7, `decor`: 3, `vases`: 4, `mirror`: 2).
-
-### 4. ⚙️ n8n Workflow Hardening & Fixes
-* **Recommended Workflow File**: **`fixed_n8n_workflow.json`**.
-* **Title Length Sanitizer**: Enforced 35-character cap on overlay titles in `modules/html_overlay_engine.py`, `modules/seo_copywriter.py`, and `web_console_server.py` to eliminate giant text overlays.
-* **Env Access Error Fix**: Removed `$env` references in Node 7 to bypass n8n's `N8N_BLOCK_ENV_ACCESS_IN_NODE` error.
-* **Header Auth Credentials**: Node 5 (Replicate) & Node 7 (Pinterest) configured to use n8n's `genericCredentialType` (`httpHeaderAuth`).
-* **Dynamic Board Routing**: Node 7 uses `board_id: $json.board_id` returned by `/api/create_bridge_page`.
-* **Transparent Error Reporting**: Removed `onError: continueRegularOutput` on Node 7 so errors are reported clearly.
-
-### 5. 🛠️ Product Page Repair (`bridge_B0D5YNHXQ7.html`)
-* Rebuilt `bridge_B0D5YNHXQ7.html` with clean title (**`Glivpny Vintage Ceramic Mushroom Lamp`**), category `lighting`, clean 35-char hook image overlay (`focus_product_B0D5YNHXQ7_hook.jpg`), and verified multi-region India routing (`?country=IN`).
+- **App Name**: `Cozy Room Decor Publisher Pro`
+- **App ID**: `1596368`
+- **Company Name**: `Cozy Room Finds`
+- **Developer Contact**: `aditya.s.nalawade742@gmail.com`
+- **Sandbox Board ID**: `1092545259543959836` (*Cozy Decor Sandbox Board*)
+- **Credentials Location**: Saved locally in `.env` file (`PINTEREST_ACCESS_TOKEN`, `REPLICATE_API_TOKEN`)
+- **SerpAPI Pool**: 5 Active Keys (969 total searches remaining)
 
 ---
 
-## 🔑 Key Credential Setup in n8n UI
+## 🛠️ Summary of Key Features Built & Errors Fixed
 
-When importing `fixed_n8n_workflow.json` into n8n (`http://localhost:5678`):
-1. **Node 5 (Replicate API)**:
-   * **Authentication**: Generic Credential Type -> Header Auth
-   * **Name**: `Authorization`
-   * **Value**: `Bearer r8_YOUR_REPLICATE_TOKEN`
-2. **Node 7 (Pinterest API)**:
-   * **Authentication**: Generic Credential Type -> Header Auth
-   * **Name**: `Authorization`
-   * **Value**: `Bearer pina_YOUR_TRIAL_TOKEN`
-   * **URL**: `https://api-sandbox.pinterest.com/v5/pins`
+### 1. 🔌 Pinterest API v5 OAuth 2.0 Integration & Demo Video Readiness
+- **Consent Screen Brand Alignment**: Aligned App Name (`Cozy Room Decor Publisher Pro`), App ID (`1596368`), Company (`Cozy Room Finds`), and developer email across `index.html`, `privacy-policy.html`, `admin_console.html`, and bridge template modules.
+- **Video Recording Script**: Created a complete 7-scene Loom/OBS recording script in [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md) satisfying reviewer Nana's rejection criteria.
+
+### 2. ⚙️ n8n Workflow Hardening & 400 Bad Request Fixes
+- **Recommended Workflow File**: [`fixed_n8n_workflow.json`](file:///G:/CLI/pinterest-auto-affiliate/fixed_n8n_workflow.json).
+- **Node 3 Classifier Fix**: Updated expression to `Boolean($json.is_white_bg || ($json.chosen_photo_url && $json.chosen_photo_url.includes('cutout')))` so Amazon room photos are not falsely routed to Prompt A.
+- **Node 5 Flux AI Fix**: Added `Bearer ` prefix to Replicate Authorization header.
+- **Node 6 Auto-Publish Fix**: Updated line 1525 of `web_console_server.py` to push to **both `main` and `main:gh-pages`** simultaneously.
+- **Node 7 Image Fetch Error Fix**: Updated `media_source` `url` in Node 7 to use `$node['Code in JavaScript'].json.chosen_photo_url` directly or raw GitHub links, bypassing GitHub Pages CDN propagation 404s.
+
+### 3. 🌐 Storefront Catalog & Branch Sync
+- **Catalog Count**: 18 Curated Products active on [`index.html`](https://adityasnalawade742-design.github.io/index.html).
+- **Subdirectory Alignment**: All bridge pages are synced in root (`bridge_{ASIN}.html`) AND subfolder (`bridge_pages/bridge_{ASIN}.html`).
+- **Clean Cleanup**: Purged test products (`B0CT274BX5`, `B0CGZS5129`, `B0BWJDGJMM`) from registry, workspace, and git branches.
 
 ---
 
-## 📊 File Architecture Index
+## 📊 Core Architecture Index
 
-* `index.html`: Storefront homepage with 16 card wrappers & JS filter chips
-* `product_price_registry.json`: Master product database & regional price matrix
-* `fixed_n8n_workflow.json`: Primary 8-node n8n workflow file
-* `web_console_server.py`: Local Web Console & n8n Bridge Server (Port 5000)
-* `run_daily_health_check.py`: Automated zero-drift self-healing script
-* `pinterest_board_mapping.json`: Category -> Board ID mapping matrix
-* `modules/amazon_extractor.py`: Category classifier & pre-flight checker
-* `modules/amazon_finder.py`: Impulse price guardrails & 2026 keyword finder
-* `modules/html_overlay_engine.py`: Playwright 1200x1600 image overlay renderer
-* `modules/pinterest_publisher.py`: Direct Pinterest API publisher module
+- [`index.html`](file:///G:/CLI/pinterest-auto-affiliate/index.html): Main storefront homepage with 18 product card wrappers & JS filter chips.
+- [`product_price_registry.json`](file:///G:/CLI/pinterest-auto-affiliate/product_price_registry.json): Master product database & regional price matrix.
+- [`fixed_n8n_workflow.json`](file:///G:/CLI/pinterest-auto-affiliate/fixed_n8n_workflow.json): Primary 8-node n8n workflow file.
+- [`web_console_server.py`](file:///G:/CLI/pinterest-auto-affiliate/web_console_server.py): Flask Web Console & n8n Bridge Server (Port 5000).
+- [`run_daily_health_check.py`](file:///G:/CLI/pinterest-auto-affiliate/run_daily_health_check.py): Zero-drift automated self-healing script.
+- [`PINTEREST_RE_APPLICATION_GUIDE.md`](file:///G:/CLI/pinterest-auto-affiliate/PINTEREST_RE_APPLICATION_GUIDE.md): Master 10-step video recording guide & Pinterest submission template.
