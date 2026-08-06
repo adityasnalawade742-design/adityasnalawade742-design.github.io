@@ -108,6 +108,16 @@ master_catalog = {
         "category": "lighting",
         "description": "Transform your nightstand into a calming sanctuary with this Ceramic Mushroom Bedside Lamp. Features 3-way lighting and a warm ambient glow tailored for bedtime reading.",
         "direct_regions": ["US", "IN", "UK", "DE", "SE", "CA", "JP"]
+    },
+    "B0DC6HDMRM": {
+        "search_keywords": "Lukasa Dimmable Candle Warmer Lamp Timer",
+        "title": "Lukasa Candle Warmer Lamp with Timer & Dimmer",
+        "price": "$24.99",
+        "rating": "4.8",
+        "features": ["FLAME-FREE HEATING", "BUILT-IN TIMER", "DIMMABLE WARM GLOW", "FITS YANKEE CANDLES"],
+        "category": "lighting",
+        "description": "Enjoy your favorite scented candles safely with zero open flame or smoke! This viral Dimmable Candle Warmer Lamp uses top-down warming light to melt wax evenly.",
+        "direct_regions": ["US"]
     }
 }
 # Load and merge empirical scraped prices and empirical direct matrix
