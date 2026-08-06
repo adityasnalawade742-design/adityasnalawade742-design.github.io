@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0CX144DHK_hook.jpg?v=1786009935" alt="Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0CX144DHK_hook.jpg?v=1786012106" alt="Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0CX144DHK_hook.jpg?v=1786009935', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0CX144DHK_hook.jpg?v=1786012106', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Glivpny Mushroom Table Lamp, Mid Century Modern Decor Lamp");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0CX144DHK_hook.jpg?v=1786009935";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0CX144DHK_hook.jpg?v=1786012106";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -677,21 +677,7 @@
                 "BE": "smartdeal0962-21"
             };
 
-            const domainToTagMap = {
-                "amazon.com": "smartdeal0358-20",
-                "amazon.ca": "smartdeal0302-20",
-                "amazon.in": "smartdeal0358-21",
-                "amazon.co.uk": "smartdea04b3a-21",
-                "amazon.de": "smartdeal0bb4-21",
-                "amazon.fr": "smartdeal0962-21",
-                "amazon.es": "smartdeal0b46-21",
-                "amazon.it": "smartdea03a8d-21",
-                "amazon.se": "smartdeal0bb4-21",
-                "amazon.nl": "smartdeal0bb4-21",
-                "amazon.pl": "smartdeal0bb4-21",
-                "amazon.com.tr": "smartdeal0bb4-21",
-                "amazon.com.be": "smartdeal0962-21"
-            };
+            const domainToTagMap = {"amazon.com": "smartdeal0358-20", "amazon.ca": "smartdeal0302-20", "amazon.in": "smartdeal0358-21", "amazon.co.uk": "smartdea04b3a-21", "amazon.de": "smartdeal0bb4-21", "amazon.se": "smartdeal0bb4-21", "amazon.nl": "smartdeal0bb4-21", "amazon.pl": "smartdeal0bb4-21", "amazon.com.tr": "smartdeal0bb4-21", "amazon.fr": "smartdeal0962-21", "amazon.com.be": "smartdeal0962-21", "amazon.es": "smartdeal0b46-21", "amazon.it": "smartdea03a8d-21"};
 
             function getTag(cc) { return associateTagMap[cc] || null; }
 

@@ -15,30 +15,44 @@ print("=========================================================================
 print("🌐 AUTOMATED OUTBOUND LINK & TAG CRAWLER (PRECISION AUDIT)")
 print("=========================================================================\n")
 
-test_countries = [
-    ("US", "amazon.com", "smartdeal0358-20", True),
-    ("IN", "amazon.in", "smartdeal0358-21", True),
-    ("UK", "amazon.co.uk", "smartdea04b3a-21", True),
-    ("GB", "amazon.co.uk", "smartdea04b3a-21", True),
-    ("DE", "amazon.de", "smartdeal0bb4-21", True),
-    ("CA", "amazon.ca", "smartdeal0302-20", True),
-    ("FR", "amazon.fr", "smartdeal0962-21", True),
-    ("ES", "amazon.es", "smartdeal0b46-21", True),
-    ("IT", "amazon.it", "smartdea03a8d-21", True),
-    ("SE", "amazon.se", "smartdeal0bb4-21", True),
-    ("NL", "amazon.nl", "smartdeal0bb4-21", True),
-    ("PL", "amazon.pl", "smartdeal0bb4-21", True),
-    ("TR", "amazon.com.tr", "smartdeal0bb4-21", True),
-    ("BE", "amazon.com.be", "smartdeal0962-21", True),
-    ("MX", "amazon.com.mx", None, False),
-    ("BR", "amazon.com.br", None, False),
-    ("SG", "amazon.sg", None, False),
-    ("AE", "amazon.ae", None, False),
-    ("SA", "amazon.sa", None, False),
-    ("EG", "amazon.eg", None, False),
-    ("JP", "amazon.co.jp", None, False),
-    ("AU", "amazon.com.au", None, False)
+tag_cfg_file = repo / "affiliate_tag_config.json"
+domain_tag_map = {}
+if tag_cfg_file.exists():
+    try:
+        tag_data = json.loads(tag_cfg_file.read_text(encoding="utf-8"))
+        domain_tag_map = tag_data.get("domain_tag_map", {})
+    except Exception as e_tag:
+        print(f"[Tag Validation Warning] Could not load JSON config: {e_tag}")
+
+country_to_domain_map = [
+    ("US", "amazon.com"),
+    ("IN", "amazon.in"),
+    ("UK", "amazon.co.uk"),
+    ("GB", "amazon.co.uk"),
+    ("DE", "amazon.de"),
+    ("CA", "amazon.ca"),
+    ("FR", "amazon.fr"),
+    ("ES", "amazon.es"),
+    ("IT", "amazon.it"),
+    ("SE", "amazon.se"),
+    ("NL", "amazon.nl"),
+    ("PL", "amazon.pl"),
+    ("TR", "amazon.com.tr"),
+    ("BE", "amazon.com.be"),
+    ("MX", "amazon.com.mx"),
+    ("BR", "amazon.com.br"),
+    ("SG", "amazon.sg"),
+    ("AE", "amazon.ae"),
+    ("SA", "amazon.sa"),
+    ("EG", "amazon.eg"),
+    ("JP", "amazon.co.jp"),
+    ("AU", "amazon.com.au")
 ]
+
+test_countries = []
+for cc, exp_domain in country_to_domain_map:
+    tag = domain_tag_map.get(exp_domain)
+    test_countries.append((cc, exp_domain, tag, bool(tag)))
 
 link_errors = []
 total_links_tested = 0

@@ -1,0 +1,103 @@
+{
+  "domain_tag_map": {
+    "amazon.com": "smartdeal0358-20",
+    "amazon.ca": "smartdeal0302-20",
+    "amazon.in": "smartdeal0358-21",
+    "amazon.co.uk": "smartdea04b3a-21",
+    "amazon.de": "smartdeal0bb4-21",
+    "amazon.se": "smartdeal0bb4-21",
+    "amazon.nl": "smartdeal0bb4-21",
+    "amazon.pl": "smartdeal0bb4-21",
+    "amazon.com.tr": "smartdeal0bb4-21",
+    "amazon.fr": "smartdeal0962-21",
+    "amazon.com.be": "smartdeal0962-21",
+    "amazon.es": "smartdeal0b46-21",
+    "amazon.it": "smartdea03a8d-21"
+  },
+  "verification_status": {
+    "amazon.com": {
+      "store_id": "smartdeal0358-20",
+      "status": "Verified ✅"
+    },
+    "amazon.in": {
+      "store_id": "smartdeal0358-21",
+      "status": "Verified ✅"
+    },
+    "amazon.co.uk": {
+      "store_id": "smartdea04b3a-21",
+      "status": "Verified ✅"
+    },
+    "amazon.de": {
+      "store_id": "smartdeal0bb4-21",
+      "status": "Verified ✅"
+    },
+    "amazon.ca": {
+      "store_id": "smartdeal0302-20",
+      "status": "Verified ✅"
+    },
+    "amazon.fr": {
+      "store_id": "smartdeal0962-21",
+      "status": "Verified ✅"
+    },
+    "amazon.es": {
+      "store_id": "smartdeal0b46-21",
+      "status": "Verified ✅"
+    },
+    "amazon.it": {
+      "store_id": "smartdea03a8d-21",
+      "status": "Verified ✅"
+    },
+    "amazon.se": {
+      "store_id": "smartdeal0bb4-21",
+      "status": "Pending Verification ⏳"
+    },
+    "amazon.nl": {
+      "store_id": "smartdeal0bb4-21",
+      "status": "Pending Verification ⏳"
+    },
+    "amazon.pl": {
+      "store_id": "smartdeal0bb4-21",
+      "status": "Pending Verification ⏳"
+    },
+    "amazon.com.tr": {
+      "store_id": "smartdeal0bb4-21",
+      "status": "Pending Verification ⏳"
+    },
+    "amazon.com.be": {
+      "store_id": "smartdeal0962-21",
+      "status": "Pending Verification ⏳"
+    },
+    "amazon.co.jp": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.com.au": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.com.mx": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.com.br": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.sg": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.ae": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.sa": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    },
+    "amazon.eg": {
+      "store_id": null,
+      "status": "Not Configured 🚫"
+    }
+  }
+}

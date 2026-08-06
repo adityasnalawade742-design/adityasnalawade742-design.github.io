@@ -682,21 +682,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 "BE": "smartdeal0962-21"
             };
 
-            const domainToTagMap = {
-                "amazon.com": "smartdeal0358-20",
-                "amazon.ca": "smartdeal0302-20",
-                "amazon.in": "smartdeal0358-21",
-                "amazon.co.uk": "smartdea04b3a-21",
-                "amazon.de": "smartdeal0bb4-21",
-                "amazon.fr": "smartdeal0962-21",
-                "amazon.es": "smartdeal0b46-21",
-                "amazon.it": "smartdea03a8d-21",
-                "amazon.se": "smartdeal0bb4-21",
-                "amazon.nl": "smartdeal0bb4-21",
-                "amazon.pl": "smartdeal0bb4-21",
-                "amazon.com.tr": "smartdeal0bb4-21",
-                "amazon.com.be": "smartdeal0962-21"
-            };
+            const domainToTagMap = {{ domain_tag_map_json if domain_tag_map_json and domain_tag_map_json != '{}' else '{"amazon.com":"smartdeal0358-20","amazon.ca":"smartdeal0302-20","amazon.in":"smartdeal0358-21","amazon.co.uk":"smartdea04b3a-21","amazon.de":"smartdeal0bb4-21","amazon.fr":"smartdeal0962-21","amazon.es":"smartdeal0b46-21","amazon.it":"smartdea03a8d-21","amazon.se":"smartdeal0bb4-21","amazon.nl":"smartdeal0bb4-21","amazon.pl":"smartdeal0bb4-21","amazon.com.tr":"smartdeal0bb4-21","amazon.com.be":"smartdeal0962-21"}' }};
 
             function getTag(cc) { return associateTagMap[cc] || null; }
 
@@ -890,6 +876,17 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
             print(f"[Bridge Creator Warning] Matrix load issue: {e_mat}")
 
     aff_url = product_data.get("affiliate_url") or f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+    
+    tag_config_json = "{}"
+    tag_config_file = _MODULE_DIR / "affiliate_tag_config.json"
+    if tag_config_file.exists():
+        try:
+            with open(tag_config_file, "r", encoding="utf-8") as tf:
+                cfg_data = json.load(tf)
+                tag_config_json = json.dumps(cfg_data.get("domain_tag_map", {}))
+        except Exception as e_cfg:
+            print(f"[Bridge Creator Warning] Could not load affiliate_tag_config.json: {e_cfg}")
+
     template = Template(BRIDGE_PAGE_TEMPLATE)
     rendered_html = template.render(
         product=dict(product_data),
@@ -897,7 +894,8 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
         asin=asin,
         affiliate_url=aff_url,
         hook_image_rel=hook_img_rel,
-        raw_images=raw_images_rel
+        raw_images=raw_images_rel,
+        domain_tag_map_json=tag_config_json
     )
     
     with open(output_filepath, "w", encoding="utf-8") as f:
