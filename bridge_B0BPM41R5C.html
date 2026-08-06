@@ -31,7 +31,7 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "29.99",
+        "price": "16.99",
         "availability": "https://schema.org/InStock",
         "url": "https://adityasnalawade742-design.github.io/bridge_B0BPM41R5C.html"
       },
@@ -423,18 +423,18 @@
         <h1>Ceramic Vases Set, Boho Home Decor</h1>
 
         <div class="price-container">
-            <div class="price">$29.99</div>
+            <div class="price">$16.99</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0BPM41R5C_hook.jpg?v=1786007831" alt="Ceramic Vases Set, Boho Home Decor">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0BPM41R5C_hook.jpg?v=1786009935" alt="Ceramic Vases Set, Boho Home Decor">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0BPM41R5C_hook.jpg?v=1786007831', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0BPM41R5C_hook.jpg?v=1786009935', this)">✨ Commercial View</button>
             
         </div>
 
@@ -587,7 +587,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Ceramic Vases Set, Boho Home Decor");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0BPM41R5C_hook.jpg?v=1786007831";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0BPM41R5C_hook.jpg?v=1786009935";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -646,7 +646,7 @@
             const currentAsin = "B0BPM41R5C";
             const prodKeywords = encodeURIComponent("Ceramic Vases Set Boho Home Decor").replace(/%20/g, "+").replace(/%2C/gi, "+");
             const directRegions = ["US"];
-            const regionalMatrix = {"AE": "AED171.47", "AU": "Not Available", "BE": "26,99\u20ac", "BR": "R$316,28", "CA": "CA$71.91", "DE": "\u20ac34,77", "EG": "\u062c\u0646\u064a\u0647\u200e239.00\u200e", "ES": "24,99 \u20ac", "FR": "61,01 \u20ac", "IN": "Not Available", "IT": "21,99\u20ac", "JP": "\u00a56,892", "MX": "Not Available", "NL": "\u20ac30,99", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e153.00\u200e", "SE": "292,48kr", "SG": "S$53.26", "TR": "Not Available", "UK": "\u00a338.26", "US": "$29.99"};
+            const regionalMatrix = {"AE": "AED171.47", "AU": "Not Available", "BE": "26,99\u20ac", "BR": "R$316,28", "CA": "CA$71.91", "DE": "\u20ac34,77", "EG": "\u062c\u0646\u064a\u0647\u200e239.00\u200e", "ES": "36,99 \u20ac", "FR": "61,01 \u20ac", "IN": "Not Available", "IT": "21,99\u20ac", "JP": "\u00a56,892", "MX": "Not Available", "NL": "\u20ac30,99", "PL": "Not Available", "SA": "\u0631\u064a\u0627\u0644\u200e153.00\u200e", "SE": "292,48kr", "SG": "S$53.26", "TR": "Not Available", "UK": "\u00a338.26", "US": "$16.99"};
             const regionalAsins = {"US": "B0BPM41R5C"};
 
             let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20 };
@@ -726,7 +726,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$29.99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$16.99".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const finalDisplayPrice = `${sym}${converted}`;
                     priceTags.forEach(el => {

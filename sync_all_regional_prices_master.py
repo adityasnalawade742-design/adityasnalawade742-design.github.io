@@ -33,10 +33,8 @@ for name, script_path in scrapers:
     time.sleep(0.5)
 
 print("\n-------------------------------------------------------------------------")
-print("🎨 RE-RENDERING PLAYWRIGHT GRAPHIC PRICE BADGES FOR ALL PRODUCTS...")
+print("🎨 SKIPPING OBSOLETE PLAYWRIGHT BADGE RE-RENDERER...")
 print("-------------------------------------------------------------------------")
-badge_res = subprocess.run([sys.executable, "rebuild_all_price_badges_usd.py"], cwd=str(repo), capture_output=True, text=True, encoding="utf-8", errors="replace")
-print(badge_res.stdout.strip())
 
 print("\n-------------------------------------------------------------------------")
 print("🛡️ RUNNING AUTOMATED ZERO-DRIFT HEALTH CHECK & AUTO-HEAL...")
