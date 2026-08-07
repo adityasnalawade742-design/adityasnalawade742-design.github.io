@@ -779,5 +779,26 @@
     "direct_regions": [
       "US"
     ]
+  },
+  "B0BYP7XB7S": {
+    "asin": "B0BYP7XB7S",
+    "title": "LCCCK White and Silver Ceramic",
+    "current_price": "$38.99",
+    "description": "Transform your coffee table or nightstand with this viral White Ceramic Donut Vase Set! Features hollow matte ceramic craftsmanship designed for pampas grass and modern minimalist room transformations. Tap link to check price on Amazon! #cozyroomdecor #donutvase #bohodecor #aestheticroom #amazonfinds",
+    "features": [
+      "PREMIUM CRAFTSMANSHIP",
+      "WARM AMBIENT GLOW",
+      "AESTHETIC ROOM ACCENT",
+      "EASY SETUP"
+    ],
+    "regional_prices": {
+      "US": "$38.99"
+    },
+    "regional_asins": {
+      "US": "B0BYP7XB7S"
+    },
+    "direct_regions": [
+      "US"
+    ]
   }
 }
