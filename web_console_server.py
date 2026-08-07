@@ -1504,7 +1504,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             )
 
             # 3. Git add + commit + push (background thread so n8n doesn't time out)
-            bridge_url = f'https://adityasnalawade742-design.github.io/bridge_pages/bridge_{asin}.html'
+            bridge_url = f'https://adityasnalawade742-design.github.io/bridge_{asin}.html'
             hook_image_url = f'https://adityasnalawade742-design.github.io/focus_product_{asin}_hook.jpg'
 
             # BUG A FIX: Update TASK_STATUS_MAP so Step 3 polling (/api/task_status?asin=X)

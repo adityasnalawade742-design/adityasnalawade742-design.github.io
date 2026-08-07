@@ -90,7 +90,7 @@ def run_pipeline():
         image_filename = Path(final_image_path).name
         
         if BASE_BRIDGE_URL and "your-app.vercel.app" not in BASE_BRIDGE_URL:
-            live_destination_url = f"{BASE_BRIDGE_URL.rstrip('/')}/bridge_pages/{bridge_filename}"
+            live_destination_url = f"{BASE_BRIDGE_URL.rstrip('/')}/bridge_{bridge_filename.replace('bridge_', '')}"
             live_image_url = f"{BASE_BRIDGE_URL.rstrip('/')}/images/{image_filename}"
         else:
             live_destination_url = f"file:///{bridge_page_path}"
