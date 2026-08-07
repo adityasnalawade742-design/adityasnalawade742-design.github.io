@@ -230,7 +230,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"board_id\": \"{{ $node['Code in JavaScript'].json.board_id || '1092545259543959836' }}\",\n  \"title\": \"{{ ($node['Code in JavaScript'].json.pin_title || $node['Code in JavaScript'].json.title || '').substring(0, 100) }}\",\n  \"description\": \"{{ ($node['Code in JavaScript'].json.pin_description || 'Cozy room decor find. Check live price on Amazon!').substring(0, 800) }}\",\n  \"link\": \"{{ $json.bridge_url }}\",\n  \"media_source\": {\n    \"source_type\": \"image_url\",\n    \"url\": \"{{ $json.hook_image_url ? 'https://raw.githubusercontent.com/adityasnalawade742-design/adityasnalawade742-design.github.io/main/' + $json.hook_image_url.split('/').pop() : $node['Code in JavaScript'].json.chosen_photo_url }}\"\n  }\n}",
+        "jsonBody": "={{ JSON.stringify({ board_id: ($node['Code in JavaScript'].json.board_id || '1092545259543959836'), title: ($node['Code in JavaScript'].json.pin_title || $node['Code in JavaScript'].json.title || '').substring(0, 100), description: ($node['Code in JavaScript'].json.pin_description || 'Cozy room decor find. Check live price on Amazon!').substring(0, 800), link: ($json.bridge_url || ('https://adityasnalawade742-design.github.io/bridge_' + $node['Code in JavaScript'].json.asin + '.html')), media_source: { source_type: 'image_url', url: ($json.hook_image_url || $node['Code in JavaScript'].json.chosen_photo_url) } }) }}",
         "options": {
           "timeout": 30000
         }
