@@ -178,30 +178,18 @@ for asin, item in master_catalog.items():
     }
     generate_bridge_page(item, seo_data, asin)
 
-# Also check subdirectories like bridge_pages/
+# Also ensure sub-directory bridge_pages/ contains 100% of portfolio landing pages
 sub_dir = repo_dir / "bridge_pages"
-if sub_dir.exists():
-    for sub_bf in sub_dir.glob("bridge_*.html"):
-        asin = sub_bf.stem.replace("bridge_", "")
-        if asin in master_catalog:
-            print(f" 🔨 Rebuilding sub-directory file: {sub_bf}...")
-            item = master_catalog[asin]
-            seo_data = {
-                "pin_title": item["title"],
-                "image_hook": item["title"][:30],
-                "subtitle_hook": "",
-                "badge_hook": "VIRAL ROOM FIND",
-                "description": item["description"]
-            }
-            res_html = generate_bridge_page(item, seo_data, asin)
-            if not res_html:  # L6 FIX: guard against None return value before open()
-                print(f" ⚠️ generate_bridge_page returned None for sub-dir {asin}, skipping copy.")
-                continue
-            # Copy to sub_dir
-            with open(res_html, "r", encoding="utf-8") as f_src:
-                content = f_src.read()
-            with open(sub_bf, "w", encoding="utf-8") as f_dst:
-                f_dst.write(content)
+sub_dir.mkdir(exist_ok=True)
+for asin, item in master_catalog.items():
+    sub_bf = sub_dir / f"bridge_{asin}.html"
+    root_bf = repo_dir / f"bridge_{asin}.html"
+    if root_bf.exists():
+        with open(root_bf, "r", encoding="utf-8") as f_src:
+            content = f_src.read()
+        with open(sub_bf, "w", encoding="utf-8") as f_dst:
+            f_dst.write(content)
+        print(f" 🔨 Synced to bridge_pages/: bridge_{asin}.html")
 
 # Regenerate sitemap.xml for Google Search Console indexing
 print("\n[Master Rebuilder] 🗺️ Auto-generating sitemap.xml for Google Search Console...")

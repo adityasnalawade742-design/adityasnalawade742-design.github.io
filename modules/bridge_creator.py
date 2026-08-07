@@ -901,6 +901,15 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
     with open(output_filepath, "w", encoding="utf-8") as f:
         f.write(rendered_html)
         
+    try:
+        sub_dir = output_filepath.parent / "bridge_pages"
+        sub_dir.mkdir(exist_ok=True)
+        sub_filepath = sub_dir / f"bridge_{asin}.html"
+        with open(sub_filepath, "w", encoding="utf-8") as f_sub:
+            f_sub.write(rendered_html)
+    except Exception as e_sub:
+        print(f"[Bridge Creator] Warning writing to bridge_pages/: {e_sub}")
+
     print(f"[Bridge Creator] Generated high-converting luxury bridge page: {output_filepath}")
     
     try:
