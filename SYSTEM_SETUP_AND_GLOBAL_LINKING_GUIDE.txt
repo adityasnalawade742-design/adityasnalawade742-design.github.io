@@ -1,0 +1,343 @@
+================================================================================
+🏛️ PINTEREST AUTO-AFFILIATE PLATFORM: COMPLETE SYSTEM & GLOBAL LINKING GUIDE
+================================================================================
+Document Version: 2.0 (Master Production Reference)
+Platform Owner: Aditya Santosh Nalawade (Cozy Room Finds)
+Application Name: Cozy Room Decor Publisher Pro (App ID: 1596368)
+Target Audience: System Engineers, Operations Team, Pinterest Reviewers & Admins
+
+================================================================================
+1. EXECUTIVE OVERVIEW & CORE MISSION
+================================================================================
+This platform is an automated, high-converting affiliate marketing and multi-region 
+e-commerce ecosystem. It converts visual traffic from Pinterest into Amazon Associate 
+affiliate commissions with a 100% Zero 404-Error Guarantee across 21 international 
+Amazon marketplaces.
+
+Core Platform Pillars:
+  1. 100% User-Directed Publishing: Complies with Pinterest API v5 Guidelines.
+  2. 8K AI Image Generation: Uses Replicate Flux Dev AI model to turn product photos 
+     into commercial lifestyle room scenes.
+  3. Playwright Price Badge Overlay: Renders custom graphic price badges on top of 
+     generated AI visuals.
+  4. 21-Domain Regional Geo Matrix: Automatically routes global visitors to their native 
+     local Amazon store (e.g., amazon.in for India, amazon.co.uk for UK, amazon.de for 
+     Germany, amazon.ca for Canada, etc.) carrying official Associate Tag IDs.
+  5. 45-World Currency Engine: Automatically converts product prices into the visitor's 
+     local currency using real-time open exchange rates.
+
+================================================================================
+2. THE 5-LAYER TECHNICAL ARCHITECTURE
+================================================================================
+
+--------------------------------------------------------------------------------
+LAYER 1: DISCOVERY & AMAZON SCRAPER ENGINE
+--------------------------------------------------------------------------------
+Files: modules/scrapers/scrape_us.py, modules/amazon_extractor.py
+Functions:
+  - Scrapes raw product metadata directly from Amazon US and international listings.
+  - Extracts ASIN code, product title, USD list price, star rating, bullet features, 
+    and high-resolution image URLs (SL1500 resolution).
+  - Classifies listing photos into "White Cutout Studio Photos" vs "Existing Lifestyle Photos".
+  - Calculates precision prompt strength values (0.78 for cutouts, 0.50 for relighting).
+
+--------------------------------------------------------------------------------
+LAYER 2: FLASK WEB CONSOLE SERVER (PORT 5000)
+--------------------------------------------------------------------------------
+File: web_console_server.py
+Access URL: http://localhost:5000/console or http://127.0.0.1:5000/
+Functions:
+  - Serves an interactive local web control dashboard (admin_console.html).
+  - Handles single-product discovery, batch extraction, and image selection.
+  - Dispatches product payloads to n8n webhook endpoint (/webhook/pinterest-batch).
+  - Exposes local API endpoints:
+      * /api/create_bridge_page : Builds landing page, renders overlay badge, returns 
+        bridge URL and Base64 image payload.
+      * /api/delete_homepage_product : Purges deleted products from index.html & registry.
+      * /api/sync_prices : Triggers master 21-domain regional price sync.
+      * /api/matrix : Returns global direct matrix state for all active ASINs.
+
+--------------------------------------------------------------------------------
+LAYER 3: N8N 8-NODE AUTOMATION WORKFLOW
+--------------------------------------------------------------------------------
+File: fixed_n8n_workflow.json
+Pipeline Breakdown:
+  Node 1 : Webhook — Receives incoming batch payload from Web Console.
+  Node 1b: Respond — Returns HTTP 200 JSON acknowledgment to Web Console immediately.
+  Node 2 : Split Items — Processes batch products sequentially one by one.
+  Node 3 : Code in JS — Clamps titles to max 35 characters, sanitizes price format.
+  Node 4 : Classifier — Evaluates white cutout vs room photo to select AI prompt.
+  Node 4a/b: Set Prompt — Injects Prompt A (0.78 strength) or Prompt B (0.50 strength).
+  Node 5 : Replicate API — Calls Black Forest Labs Flux Dev model synchronously.
+  Node 6 : Build Bridge — Calls Web Console server (/api/create_bridge_page) to render 
+           Playwright price badge overlay and build luxury landing page.
+  Node 7 : Post Pin — Submits Pin payload to Pinterest API v5 (supports both Production 
+           URL and Sandbox Trial Mode using Base64 inline image uploads).
+  Node 8 : Log Result — Records Pin publishing status and Pin ID.
+
+--------------------------------------------------------------------------------
+LAYER 4: PLAYWRIGHT OVERLAY & JINJA2 BRIDGE BUILDER
+--------------------------------------------------------------------------------
+Files: modules/html_overlay_engine.py, modules/bridge_creator.py
+Functions:
+  - Headless Playwright browser launches HTML template (glassmorphism dark badge card).
+  - Overlays headline, price tag, rating, and feature bullets onto the generated AI visual.
+  - Compiles full Jinja2 luxury bridge page (bridge_{ASIN}.html).
+  - Dynamically inserts product card wrapper into root index.html showcase grid.
+
+--------------------------------------------------------------------------------
+LAYER 5: PUBLIC STOREFRONT CATALOG & GITHUB PAGES DEPLOYMENT
+--------------------------------------------------------------------------------
+Files: index.html, .github/workflows/pages.yml
+Live Domain: https://adityasnalawade742-design.github.io/
+Functions:
+  - Serves static e-commerce catalog featuring search input, clear button (✕), category 
+    chips, and 45-currency switcher.
+  - GitHub Actions (.github/workflows/pages.yml) automatically deploys all HTML pages, 
+    images, and bridge files to GitHub Pages CDN on every git push to main.
+
+================================================================================
+3. END-TO-END CAMPAIGN EXECUTION WORKFLOW
+================================================================================
+
+Step 1: Product Selection & Discovery
+  - Enter product ASIN or keyword in Web Console (http://localhost:5000).
+  - Scraper fetches listing title, price, bullet features, and top 5 image options.
+
+Step 2: User Approval & Batch Dispatch
+  - You review product details, select preferred image, and click "Dispatch Batch".
+  - Web Console posts JSON payload to n8n webhook (/webhook/pinterest-batch).
+
+Step 3: AI Visual Generation & Overlay Rendering
+  - n8n calls Replicate Flux Dev model to generate 8K 3:4 lifestyle room scene.
+  - Web Console renders Playwright floating price badge overlay on top of AI visual.
+
+Step 4: Bridge Page Compilation & Live Deployment
+  - System generates bridge_{ASIN}.html landing page containing 21-domain matrix table, 
+    dual image switcher tabs (Commercial View vs Angle Photos), and FTC disclosure.
+  - System updates index.html grid and commits/pushes changes live to GitHub Pages.
+
+Step 5: Pinterest Pin Publishing
+  - n8n Node 7 posts Pin payload (title, description, destination link, image visual) 
+    to Pinterest API v5.
+  - Pin goes live on your target Pinterest board.
+
+================================================================================
+4. 21-DOMAIN INTERNATIONAL GEO MATRIX & GLOBAL LINKING MECHANICS
+================================================================================
+
+--------------------------------------------------------------------------------
+THE PROBLEM WITH STANDARD AFFILIATE LINKS
+--------------------------------------------------------------------------------
+If an international visitor from India, UK, or Germany clicks a standard US Amazon link 
+(amazon.com/dp/ASIN):
+  1. Amazon US charges high international shipping fees and import duties (causing 95%+ 
+     visitor bounce rate).
+  2. If that specific ASIN is not listed in Amazon US, the visitor gets Amazon's 
+     infamous 404 "Looking for something? We're sorry" dog error page.
+
+--------------------------------------------------------------------------------
+OUR SOLUTION: 0MS CLIENT-SIDE GEO-REDIRECTOR (bridge_{ASIN}.html)
+--------------------------------------------------------------------------------
+Every Pin published on Pinterest links back to a dedicated luxury landing page:
+  https://adityasnalawade742-design.github.io/bridge_{ASIN}.html
+
+When an international visitor opens this page, our embedded JavaScript geo-engine 
+executes instantly in 0 milliseconds:
+
+  1. Country Detection:
+     - Checks URL parameter first (e.g., ?country=IN or ?country=UK).
+     - If omitted, inspects browser timezone (Intl.DateTimeFormat) and IP geolocation 
+       service (ipapi.co).
+     - Resolves 2-letter country code (US, IN, GB, DE, CA, FR, ES, IT, SE, NL, PL, TR, 
+       BE, JP, AU, MX, BR, SG, AE, SA, EG).
+
+  2. Matrix Lookup (global_direct_matrix.json):
+     - The system checks if the exact product ASIN has been empirically verified to exist 
+       in that country's local Amazon catalog.
+
+  3. Routing Execution:
+     - Direct ASIN Match (YES): Redirects visitor directly to local product page:
+       Example: https://www.amazon.in/dp/B0BZXNSW5K?tag=smartdeal0358-21
+     - Targeted Search Fallback (NO): Redirects visitor to local category search results:
+       Example: https://www.amazon.in/s?k=Touch+Bedside+Lamp&tag=smartdeal0358-21
+
+--------------------------------------------------------------------------------
+EXACT BREAKDOWN OF ALL 21 REGIONAL AMAZON DOMAINS & STORE TAGS
+--------------------------------------------------------------------------------
+
+ 1. 🇺🇸 United States
+    - Domain: amazon.com
+    - Tag ID: smartdeal0358-20
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 2. 🇮🇳 India
+    - Domain: amazon.in
+    - Tag ID: smartdeal0358-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 3. 🇬🇧 United Kingdom
+    - Domain: amazon.co.uk
+    - Tag ID: smartdea04b3a-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 4. 🇩🇪 Germany
+    - Domain: amazon.de
+    - Tag ID: smartdeal0bb4-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 5. 🇨🇦 Canada
+    - Domain: amazon.ca
+    - Tag ID: smartdeal0302-20
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 6. 🇫🇷 France
+    - Domain: amazon.fr
+    - Tag ID: smartdeal0962-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 7. 🇪🇸 Spain
+    - Domain: amazon.es
+    - Tag ID: smartdeal0b46-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 8. 🇮🇹 Italy
+    - Domain: amazon.it
+    - Tag ID: smartdea03a8d-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+ 9. 🇸🇪 Sweden
+    - Domain: amazon.se
+    - Tag ID: smartdeal0bb4-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+10. 🇳🇱 Netherlands
+    - Domain: amazon.nl
+    - Tag ID: smartdeal0bb4-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+11. 🇵🇱 Poland
+    - Domain: amazon.pl
+    - Tag ID: smartdeal0bb4-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+12. 🇹🇷 Turkey
+    - Domain: amazon.com.tr
+    - Tag ID: smartdeal0bb4-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+13. 🇧🇪 Belgium
+    - Domain: amazon.com.be
+    - Tag ID: smartdeal0962-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+14. 🇯🇵 Japan
+    - Domain: amazon.co.jp
+    - Tag ID: smartdeal0358-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+15. 🇦🇺 Australia
+    - Domain: amazon.com.au
+    - Tag ID: smartdeal0358-21
+    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+
+16. 🇲🇽 Mexico
+    - Domain: amazon.com.mx
+    - Tag ID: smartdeal0358-21
+    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+
+17. 🇧🇷 Brazil
+    - Domain: amazon.com.br
+    - Tag ID: smartdeal0358-21
+    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+
+18. 🇸🇬 Singapore
+    - Domain: amazon.sg
+    - Tag ID: smartdeal0358-21
+    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+
+19. 🇦🇪 United Arab Emirates
+    - Domain: amazon.ae
+    - Tag ID: smartdeal0358-21
+    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+
+20. 🇸🇦 Saudi Arabia
+    - Domain: amazon.sa
+    - Tag ID: smartdeal0358-21
+    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+
+21. 🇪🇬 Egypt
+    - Domain: amazon.eg
+    - Tag ID: smartdeal0358-21
+    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+
+--------------------------------------------------------------------------------
+ZERO 404 GUARANTEE & 24-HOUR COOKIE ATTRIBUTION
+--------------------------------------------------------------------------------
+  - No 404 Errors: Visitors never see a broken link regardless of which country they 
+    click from.
+  - Local Currency Payouts: Visitors purchase in their home currency (INR, GBP, EUR, 
+    CAD, AUD, JPY) with local Prime 1-day/2-day shipping.
+  - 24-Hour Cart Attribution: When a visitor lands on Amazon via your link, any item 
+    they add to their cart and purchase within 24 hours generates an affiliate commission 
+    credited to your Associate account.
+
+================================================================================
+5. MULTI-CURRENCY ENGINE & LIVE PRICE SYNCHRONIZATION
+================================================================================
+  - Supported Currencies: USD ($), INR (₹), GBP (£), EUR (€), CAD (CA$), AUD (AU$), 
+    JPY (¥), SEK (kr), BRL (R$), AED (AED), MXN (Mex$), PLN (zł), etc.
+  - Dynamic Conversion: Fetches real-time exchange rates from Open Exchange Rates API 
+    (https://open.er-api.com/v6/latest/USD).
+  - Out-of-Stock Handling: When an item is out of stock in a specific market (e.g., India), 
+    the hero price tag switches to "Not Available" and the primary CTA button adapts to 
+    local search fallback.
+
+================================================================================
+6. PINTEREST API V5 COMPLIANCE & OAUTH INTEGRATION
+================================================================================
+  - App Name: Cozy Room Decor Publisher Pro
+  - App ID: 1596368
+  - Authorization: Uses official OAuth 2.0 access tokens stored in environment variables.
+  - User-Directed Publishing: Pin publishing occurs strictly after the authorized account 
+    owner reviews generated Pin content and explicitly approves dispatch.
+  - Trial Sandbox Support: Supports base64 inline image payloads (source_type: "image_base64") 
+    so Pinterest Sandbox mode (api-sandbox.pinterest.com) posts successfully without 
+    needing external internet web crawling.
+
+================================================================================
+7. LEGAL COMPLIANCE & FTC DISCLOSURES
+================================================================================
+  - FTC Disclosure Banner: Present on root index.html, bridge pages, and legal documents:
+    "As an Amazon Associate, Cozy Room Finds earns from qualifying purchases."
+  - Legal Pages:
+      * Privacy Policy: https://adityasnalawade742-design.github.io/privacy-policy.html
+      * Terms of Service: https://adityasnalawade742-design.github.io/terms-of-service.html
+  - Developer Email: aditya.s.nalawade742@gmail.com
+
+================================================================================
+8. MASTER COMMANDS & ADMINISTRATIVE PROCEDURES
+================================================================================
+
+1. Start Web Console Server:
+   python web_console_server.py
+
+2. Rebuild All Landing Pages & Sync Matrix:
+   python rebuild_EVERY_single_bridge.py
+
+3. Delete a Product Campaign:
+   python delete_product.py <ASIN>
+   Example: python delete_product.py B0GYDXHF4G
+
+4. Run 21-Domain Price Sync:
+   python sync_exact_amazon_prices.py
+
+5. Validate Outgoing Affiliate Links & Tags:
+   python validate_all_affiliate_urls.py
+
+6. Run Master 20-Step Full Diagnostic Audit:
+   python scratch/master_full_project_auditor.py
+
+================================================================================
+END OF MASTER DOCUMENTATION GUIDE
+================================================================================
