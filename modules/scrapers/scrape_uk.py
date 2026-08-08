@@ -11,7 +11,7 @@ if hasattr(sys.stdout, "reconfigure"):
 repo = Path(__file__).resolve().parent.parent.parent  # C6 FIX: dynamic path
 registry_file = repo / "product_price_registry.json"
 
-from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, STATUS_NOT_MAPPED, get_now_iso
+from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, STATUS_NOT_MAPPED, get_now_iso, extract_page_asin
 
 def scrape_uk_prices():
     print("🇬🇧 [3/7] SCRAPING AMAZON UK (Amazon.co.uk)...")
@@ -55,10 +55,16 @@ def scrape_uk_prices():
             url = f"https://www.amazon.co.uk/dp/{target_asin}"
             price_str = None
             seller_name = None
+            detected_asin = None
+            identity_verified = False
 
             try:
                 page.goto(url, timeout=12000, wait_until="domcontentloaded")
                 time.sleep(0.5)
+
+                # Extract actual page ASIN and verify identity
+                detected_asin = extract_page_asin(page)
+                identity_verified = bool(detected_asin and target_asin and detected_asin.upper() == target_asin.upper())
 
                 merchant_el = page.query_selector("#merchant-info, #sellerProfileTriggerId, #bylineInfo")
                 if merchant_el:
@@ -99,7 +105,9 @@ def scrape_uk_prices():
                 is_direct=True,
                 seller=seller_name,
                 source_url=url,
-                existing_record=item["regional_prices"].get("UK")
+                existing_record=item["regional_prices"].get("UK"),
+                detected_asin=detected_asin,
+                identity_verified=identity_verified
             )
 
             item["regional_prices"]["UK"] = record

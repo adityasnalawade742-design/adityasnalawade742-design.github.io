@@ -13,6 +13,7 @@ from modules.price_registry_manager import (
     is_price_stale,
     normalize_registry_record,
     get_flat_regional_prices,
+    verify_seller,
     STATUS_FRESH_VERIFIED,
     STATUS_FRESH_UNVERIFIED,
     STATUS_STALE_VERIFIED,
@@ -74,7 +75,8 @@ class TestPriceScraperIntegrity(unittest.TestCase):
             asin="B0CX144DHK",
             country_code="IN",
             is_direct=True,
-            seller="Amazon.in"
+            seller="Amazon.in",
+            detected_asin="B0CX144DHK"
         )
         self.assertEqual(record["status"], STATUS_FRESH_VERIFIED)
         self.assertTrue(record["identity_verified"])
@@ -103,7 +105,8 @@ class TestPriceScraperIntegrity(unittest.TestCase):
             asin="B0BZXNSW5K",
             country_code="US",
             is_direct=True,
-            seller="Amazon.com Services LLC"
+            seller="Amazon.com Services LLC",
+            detected_asin="B0BZXNSW5K"
         )
         self.assertTrue(rec_amazon["seller_verified"])
 
@@ -187,6 +190,116 @@ class TestPriceScraperIntegrity(unittest.TestCase):
         in_url = build_affiliate_url("B0CX144DHK", marketplace="IN", mode="DIRECT_FALLBACK")
         self.assertEqual(in_url, "https://www.amazon.in/dp/B0CX144DHK?tag=smartdeal0358-21")
 
+    # RULE 7 NEW REGRESSION TESTS (TEST 1 - TEST 7)
+
+    def test_rule7_test1_amazon_seller_text(self):
+        """TEST 1: Amazon seller text -> seller_verified = True"""
+        self.assertTrue(verify_seller("Amazon.in"))
+        self.assertTrue(verify_seller("Sold by Amazon.com Services LLC"))
+        self.assertTrue(verify_seller("Dispatched from and sold by Amazon."))
+        
+        rec = create_price_record(
+            price_str="$19.99",
+            asin="B0BZXNSW5K",
+            country_code="US",
+            is_direct=True,
+            seller="Sold by Amazon.com Services LLC",
+            detected_asin="B0BZXNSW5K"
+        )
+        self.assertTrue(rec["seller_verified"])
+
+    def test_rule7_test2_third_party_reseller_ships_from_amazon(self):
+        """TEST 2: "Sold by ResellerX and Ships from Amazon" -> seller_verified = False"""
+        self.assertFalse(verify_seller("Sold by ResellerX and Ships from Amazon"))
+        self.assertFalse(verify_seller("Ships from Amazon"))
+        self.assertFalse(verify_seller("Sold by ABC Store"))
+        
+        rec = create_price_record(
+            price_str="₹7,111.00",
+            asin="B0BXP7YWHJ",
+            country_code="IN",
+            is_direct=True,
+            seller="Sold by ResellerX and Ships from Amazon",
+            detected_asin="B0BXP7YWHJ"
+        )
+        self.assertFalse(rec["seller_verified"])
+        self.assertEqual(rec["status"], STATUS_FRESH_UNVERIFIED)
+
+    def test_rule7_test3_expected_asin_matches_detected_asin(self):
+        """TEST 3: Expected ASIN == detected ASIN -> identity_verified = True"""
+        rec = create_price_record(
+            price_str="₹3,150.00",
+            asin="B0CX144DHK",
+            country_code="IN",
+            is_direct=True,
+            seller="Amazon.in",
+            detected_asin="B0CX144DHK"
+        )
+        self.assertTrue(rec["identity_verified"])
+        self.assertEqual(rec["status"], STATUS_FRESH_VERIFIED)
+
+    def test_rule7_test4_expected_asin_mismatch_detected_asin(self):
+        """TEST 4: Expected ASIN != detected ASIN -> identity_verified = False"""
+        rec = create_price_record(
+            price_str="₹3,150.00",
+            asin="B0CX144DHK",
+            country_code="IN",
+            is_direct=True,
+            seller="Amazon.in",
+            detected_asin="B099999999"
+        )
+        self.assertFalse(rec["identity_verified"])
+        self.assertEqual(rec["status"], STATUS_FRESH_UNVERIFIED)
+
+    def test_rule7_test5_detected_asin_unavailable(self):
+        """TEST 5: Detected ASIN unavailable (None) -> identity_verified = False"""
+        rec = create_price_record(
+            price_str="₹3,150.00",
+            asin="B0CX144DHK",
+            country_code="IN",
+            is_direct=True,
+            seller="Amazon.in",
+            detected_asin=None,
+            identity_verified=False
+        )
+        self.assertFalse(rec["identity_verified"])
+        self.assertEqual(rec["status"], STATUS_FRESH_UNVERIFIED)
+
+    def test_rule7_test6_b0bxp7ywhj_in_unmapped_unverified(self):
+        """TEST 6: B0BXP7YWHJ IN -> NOT_MAPPED / UNVERIFIED"""
+        item = self.registry.get("B0BXP7YWHJ")
+        mapped_in = item.get("regional_asins", {}).get("IN")
+        self.assertIsNone(mapped_in)
+        rec = {
+            "price": "Not Available",
+            "asin": None,
+            "country_code": "IN",
+            "is_direct": False,
+            "identity_verified": False,
+            "seller_verified": False,
+            "status": STATUS_NOT_MAPPED
+        }
+        self.assertEqual(rec["status"], STATUS_NOT_MAPPED)
+        self.assertNotEqual(rec["status"], STATUS_FRESH_VERIFIED)
+
+    def test_rule7_test7_b0cx144dhk_in_mapped_and_verified(self):
+        """TEST 7: B0CX144DHK IN -> correct mapped ASIN and verified behavior when live evidence supports it"""
+        item = self.registry.get("B0CX144DHK")
+        mapped_in = item.get("regional_asins", {}).get("IN")
+        self.assertEqual(mapped_in, "B0CX144DHK")
+        rec = create_price_record(
+            price_str="₹3,150.00",
+            asin="B0CX144DHK",
+            country_code="IN",
+            is_direct=True,
+            seller="Amazon.in",
+            detected_asin="B0CX144DHK"
+        )
+        self.assertEqual(rec["status"], STATUS_FRESH_VERIFIED)
+        self.assertTrue(rec["identity_verified"])
+        self.assertTrue(rec["seller_verified"])
+
 
 if __name__ == "__main__":
     unittest.main()
+

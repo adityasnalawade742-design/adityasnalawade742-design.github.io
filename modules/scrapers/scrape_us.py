@@ -16,7 +16,7 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0"
 ]
 
-from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record
+from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, extract_page_asin
 
 def scrape_us_prices():
     import random
@@ -38,10 +38,16 @@ def scrape_us_prices():
             url = f"https://www.amazon.com/dp/{target_asin}"
             price_str = None
             seller_name = None
+            detected_asin = None
+            identity_verified = False
 
             try:
                 page.goto(url, timeout=12000, wait_until="domcontentloaded")
                 time.sleep(0.5)
+
+                # Extract actual page ASIN and verify identity
+                detected_asin = extract_page_asin(page)
+                identity_verified = bool(detected_asin and target_asin and detected_asin.upper() == target_asin.upper())
 
                 # Extract seller / merchant info if available
                 merchant_el = page.query_selector("#merchant-info, #sellerProfileTriggerId, #bylineInfo")
@@ -80,7 +86,9 @@ def scrape_us_prices():
                 is_direct=True,
                 seller=seller_name,
                 source_url=url,
-                existing_record=item["regional_prices"].get("US")
+                existing_record=item["regional_prices"].get("US"),
+                detected_asin=detected_asin,
+                identity_verified=identity_verified
             )
 
             item["regional_prices"]["US"] = record

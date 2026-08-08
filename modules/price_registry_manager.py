@@ -61,6 +61,86 @@ def extract_price_string(entry) -> str:
     return "Not Available"
 
 
+def verify_seller(seller: str, ships_from: str = None) -> bool:
+    """
+    Marketplace-aware seller verification strategy.
+    
+    Distinguishes:
+    A. Amazon is the seller -> True
+    B. Third-party seller + Amazon fulfillment -> False
+    C. Third-party seller -> False
+    D. Seller unknown -> False
+    """
+    if not seller:
+        return False
+    
+    seller_clean = seller.strip()
+    s_lower = seller_clean.lower()
+
+    # Pattern matching "Sold by <entity>" across languages
+    m_sold = re.search(
+        r"(?:sold by|dispatched from and sold by|vendu par|vendido por|venduto da|verkocht door|verkauf und versand durch|säljs av|sprzedawane przez)\s+([^.\n,]+)",
+        s_lower
+    )
+    if m_sold:
+        seller_entity = m_sold.group(1).strip()
+        # Does the seller entity start with "amazon"?
+        if seller_entity.startswith("amazon"):
+            return True
+        else:
+            # Explicitly a third-party seller (e.g. "Sold by ResellerX and Ships from Amazon")
+            return False
+
+    # Direct seller text strings like "Amazon.com Services LLC", "Amazon.in", "Amazon.co.uk", "Amazon"
+    if s_lower.startswith("amazon"):
+        return True
+
+    return False
+
+
+def extract_page_asin(page) -> str:
+    """
+    Extracts the actual rendered Amazon page ASIN using reliable evidence:
+    1. input#ASIN element value
+    2. #dp[data-asin] container attribute
+    3. Canonical <link rel="canonical"> href
+    4. Rendered page URL after redirects
+    """
+    if not page:
+        return None
+    try:
+        # Signal 1: Hidden ASIN input element
+        asin_input = page.query_selector("input#ASIN, input[name='ASIN']")
+        if asin_input:
+            val = asin_input.get_attribute("value")
+            if val and len(val.strip()) == 10 and val.strip().isalnum():
+                return val.strip().upper()
+
+        # Signal 2: #dp container data-asin attribute
+        dp_el = page.query_selector("#dp[data-asin], [data-asin]")
+        if dp_el:
+            val = dp_el.get_attribute("data-asin")
+            if val and len(val.strip()) == 10 and val.strip().isalnum():
+                return val.strip().upper()
+
+        # Signal 3: Canonical link tag
+        canonical = page.query_selector("link[rel='canonical']")
+        if canonical:
+            href = canonical.get_attribute("href") or ""
+            m = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", href, re.IGNORECASE)
+            if m:
+                return m.group(1).upper()
+
+        # Signal 4: Rendered page URL after redirects
+        current_url = getattr(page, "url", "") or ""
+        m = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", current_url, re.IGNORECASE)
+        if m:
+            return m.group(1).upper()
+    except Exception:
+        pass
+    return None
+
+
 def create_price_record(
     price_str: str,
     asin: str,
@@ -69,7 +149,9 @@ def create_price_record(
     seller: str = None,
     ships_from: str = None,
     source_url: str = None,
-    existing_record: dict = None
+    existing_record: dict = None,
+    detected_asin: str = None,
+    identity_verified: bool = None
 ) -> dict:
     """
     Constructs a structured price record.
@@ -77,6 +159,19 @@ def create_price_record(
     """
     now_str = get_now_iso()
     
+    # Determine identity verification explicitly
+    if identity_verified is not None:
+        id_verified = bool(identity_verified)
+    elif detected_asin and asin:
+        id_verified = (detected_asin.strip().upper() == asin.strip().upper())
+    elif is_direct and detected_asin is None:
+        id_verified = is_direct
+    else:
+        id_verified = False
+
+    seller_clean = (seller or "").strip()
+    seller_verified = verify_seller(seller_clean, ships_from)
+
     if not price_str or price_str == "Not Available":
         # Scrape failed or item unavailable
         if existing_record and isinstance(existing_record, dict):
@@ -89,8 +184,8 @@ def create_price_record(
                 "asin": asin,
                 "country_code": country_code,
                 "is_direct": is_direct,
-                "identity_verified": is_direct,
-                "seller_verified": existing_record.get("seller_verified", False),
+                "identity_verified": existing_record.get("identity_verified", id_verified),
+                "seller_verified": existing_record.get("seller_verified", seller_verified),
                 "seller": existing_record.get("seller"),
                 "ships_from": existing_record.get("ships_from"),
                 "source_url": source_url or existing_record.get("source_url"),
@@ -103,27 +198,24 @@ def create_price_record(
                 "asin": asin,
                 "country_code": country_code,
                 "is_direct": is_direct,
-                "identity_verified": is_direct,
-                "seller_verified": False,
-                "seller": seller,
-                "ships_from": ships_from,
+                "identity_verified": id_verified,
+                "seller_verified": seller_verified,
+                "seller": seller_clean or None,
+                "ships_from": ships_from or None,
                 "source_url": source_url,
                 "scraped_at": now_str,
                 "status": STATUS_UNAVAILABLE
             }
 
     # Fresh price extracted
-    seller_clean = (seller or "").strip()
-    is_amazon_seller = "amazon" in seller_clean.lower() if seller_clean else False
-    seller_verified = is_direct and (is_amazon_seller or country_code in ["US"])
-    status = STATUS_FRESH_VERIFIED if (is_direct and seller_verified) else (STATUS_FRESH_VERIFIED if is_direct else STATUS_FRESH_UNVERIFIED)
+    status = STATUS_FRESH_VERIFIED if (is_direct and id_verified and seller_verified) else STATUS_FRESH_UNVERIFIED
 
     return {
         "price": price_str,
         "asin": asin,
         "country_code": country_code,
         "is_direct": is_direct,
-        "identity_verified": is_direct,
+        "identity_verified": id_verified,
         "seller_verified": seller_verified,
         "seller": seller_clean or None,
         "ships_from": ships_from or None,

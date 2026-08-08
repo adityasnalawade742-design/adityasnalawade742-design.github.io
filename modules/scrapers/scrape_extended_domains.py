@@ -28,7 +28,7 @@ extended_domains = [
     ("EG", "Amazon.eg", "https://www.amazon.eg/dp/", "E£")
 ]
 
-from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, STATUS_NOT_MAPPED, get_now_iso
+from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, STATUS_NOT_MAPPED, get_now_iso, extract_page_asin
 
 def scrape_extended_domains():
     print("🌍 SCRAPING ALL 14 EXTENDED GLOBAL AMAZON DOMAINS...")
@@ -68,10 +68,16 @@ def scrape_extended_domains():
                 url = f"{base_url}{target_asin}"
                 price_str = None
                 seller_name = None
+                detected_asin = None
+                identity_verified = False
 
                 try:
                     page.goto(url, timeout=8000, wait_until="domcontentloaded")
                     time.sleep(0.3)
+
+                    # Extract actual page ASIN and verify identity
+                    detected_asin = extract_page_asin(page)
+                    identity_verified = bool(detected_asin and target_asin and detected_asin.upper() == target_asin.upper())
 
                     merchant_el = page.query_selector("#merchant-info, #sellerProfileTriggerId, #bylineInfo")
                     if merchant_el:
@@ -116,7 +122,9 @@ def scrape_extended_domains():
                     is_direct=True,
                     seller=seller_name,
                     source_url=url,
-                    existing_record=item["regional_prices"].get(cc)
+                    existing_record=item["regional_prices"].get(cc),
+                    detected_asin=detected_asin,
+                    identity_verified=identity_verified
                 )
 
                 item["regional_prices"][cc] = record

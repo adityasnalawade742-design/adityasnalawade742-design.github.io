@@ -21,8 +21,17 @@ class TestBridgeGeoRouting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.browser.close()
-        cls.playwright.stop()
+        try:
+            if cls.browser and cls.browser.is_connected():
+                cls.browser.close()
+            cls.playwright.stop()
+        except Exception:
+            pass
+
+    def get_browser(self):
+        if not hasattr(self.__class__, "browser") or self.browser is None or not self.browser.is_connected():
+            self.__class__.browser = self.playwright.chromium.launch(headless=True, args=["--no-sandbox", "--disable-setuid-sandbox"])
+        return self.browser
 
     def test_code_structure_has_network_first_and_resolution_lock(self):
         content = self.sample_bridge.read_text(encoding="utf-8")
@@ -39,7 +48,7 @@ class TestBridgeGeoRouting(unittest.TestCase):
         EXPECTED RESULT: IN (amazon.in + smartdeal0358-21)
         """
         file_url = f"file:///{self.sample_bridge.resolve()}".replace("\\", "/")
-        context = self.browser.new_context(
+        context = self.get_browser().new_context(
             timezone_id="America/New_York",
             locale="en-US",
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -71,7 +80,7 @@ class TestBridgeGeoRouting(unittest.TestCase):
         EXPECTED RESULT: US (amazon.com + smartdeal0358-20)
         """
         file_url = f"file:///{self.sample_bridge.resolve()}".replace("\\", "/")
-        context = self.browser.new_context(
+        context = self.get_browser().new_context(
             timezone_id="Asia/Kolkata",
             locale="en-IN",
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -99,7 +108,7 @@ class TestBridgeGeoRouting(unittest.TestCase):
         EXPECTED RESULT: GB (canonical amazon.com + smartdeal0358-20)
         """
         file_url = f"file:///{self.sample_bridge.resolve()}".replace("\\", "/")
-        context = self.browser.new_context(
+        context = self.get_browser().new_context(
             timezone_id="America/New_York",
             locale="en-US"
         )
@@ -129,7 +138,7 @@ class TestBridgeGeoRouting(unittest.TestCase):
         EXPECTED RESULT: IN (amazon.in + smartdeal0358-21) via 1.5s fallback
         """
         file_url = f"file:///{self.sample_bridge.resolve()}".replace("\\", "/")
-        context = self.browser.new_context(
+        context = self.get_browser().new_context(
             timezone_id="Asia/Kolkata",
             locale="en-IN"
         )
@@ -157,7 +166,7 @@ class TestBridgeGeoRouting(unittest.TestCase):
         EXPECTED RESULT: US safe fallback (canonical amazon.com + smartdeal0358-20)
         """
         file_url = f"file:///{self.sample_bridge.resolve()}".replace("\\", "/")
-        context = self.browser.new_context(
+        context = self.get_browser().new_context(
             timezone_id="UTC",
             locale="en-US"
         )
@@ -183,8 +192,8 @@ class TestBridgeGeoRouting(unittest.TestCase):
         Network trace returns IN
         EXPECTED RESULT: US (explicit developer override respected)
         """
-        file_url = f"file:///{self.sample_bridge.resolve()}?country=US".replace("\\", "/")
-        context = self.browser.new_context()
+        file_url = f"{self.sample_bridge.as_uri()}?country=US"
+        context = self.get_browser().new_context()
         context.route("https://www.cloudflare.com/cdn-cgi/trace*", lambda route: route.fulfill(
             status=200,
             content_type="text/plain",
@@ -210,7 +219,7 @@ class TestBridgeGeoRouting(unittest.TestCase):
         unlisted_bridge = ROOT / "bridge_B0BZXNSW5K.html"
         direct_bridge = ROOT / "bridge_B0CX144DHK.html"
         
-        context = self.browser.new_context()
+        context = self.get_browser().new_context()
 
         # TEST 1: ?country=US
         page = context.new_page()
