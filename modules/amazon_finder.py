@@ -11,6 +11,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from config import NICHE, AMAZON_ASSOCIATE_TAG, SERPAPI_KEY
+from modules.affiliate_manager import build_affiliate_url
 from modules.automated_product_selector import is_asin_published_on_homepage
 from modules.amazon_extractor import is_adult_aesthetic_product, select_clean_photo_or_skip, get_product_details_and_photos, classify_product_category
 
@@ -266,7 +267,7 @@ def _scrape_amazon_search(query: str, num_results: int = 10, min_price: float = 
             img_el = card.find("img", {"class": "s-image"})
             thumb_url = img_el.get("src", "") if img_el else ""
 
-            affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+            affiliate_url = build_affiliate_url(asin)
             cat_key = classify_product_category(title)
 
             results.append({
@@ -554,7 +555,7 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
             print(f"[Amazon Finder] Skipping {asin} — no thumbnail in result")
             continue
 
-        affiliate_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+        affiliate_url = build_affiliate_url(asin)
         cat_key = classify_product_category(title)
 
         parsed_products.append({
@@ -585,8 +586,7 @@ def _parse_raw_serp_results(results, num_results: int, min_price: float, max_pri
 
 
 def fetch_sample_amazon_products(niche: str = NICHE):
-    """Fallback sample products formatted with user affiliate tag and official Amazon Associates links."""
-    tag = AMAZON_ASSOCIATE_TAG
+    """Fallback sample products formatted with canonical affiliate URLs."""
     return [
         {
             "id": "B0BQBKWSKK",
@@ -595,7 +595,7 @@ def fetch_sample_amazon_products(niche: str = NICHE):
             "price": "$25.99",
             "rating": "4.7",
             "reviews_count": 1420,
-            "affiliate_url": f"https://www.amazon.com/dp/B0BQBKWSKK?tag={tag}",
+            "affiliate_url": build_affiliate_url("B0BQBKWSKK"),
             "original_image_url": "https://m.media-amazon.com/images/I/71qCnqRyWHL._AC_SL1500_.jpg",
             "features": ["4.7 Amazon Rating", "1420 Customer Reviews", "Volcano Erupting Flame Diffuser"]
         },
@@ -606,7 +606,7 @@ def fetch_sample_amazon_products(niche: str = NICHE):
             "price": "$29.99",
             "rating": "4.8",
             "reviews_count": 890,
-            "affiliate_url": f"https://www.amazon.com/dp/B0F488XNNB?tag={tag}",
+            "affiliate_url": build_affiliate_url("B0F488XNNB"),
             "original_image_url": "https://m.media-amazon.com/images/I/61Ci-1lZHNL._AC_SX679_.jpg",
             "features": ["4.8 Amazon Rating", "890 Customer Reviews", "Kariosid Glass Mushroom Lamp"]
         },
@@ -617,7 +617,7 @@ def fetch_sample_amazon_products(niche: str = NICHE):
             "price": "$22.99",
             "rating": "4.6",
             "reviews_count": 640,
-            "affiliate_url": f"https://www.amazon.com/dp/B0BZYN1MRP?tag={tag}",
+            "affiliate_url": build_affiliate_url("B0BZYN1MRP"),
             "original_image_url": "https://m.media-amazon.com/images/I/91OBhVIxJqL._AC_SX679_.jpg",
             "features": ["4.6 Amazon Rating", "640 Customer Reviews", "GGK Smiling Mushrooms Neon Sign"]
         },
@@ -628,7 +628,7 @@ def fetch_sample_amazon_products(niche: str = NICHE):
             "price": "$34.99",
             "rating": "4.9",
             "reviews_count": 1120,
-            "affiliate_url": f"https://www.amazon.com/dp/B0G3X63T88?tag={tag}",
+            "affiliate_url": build_affiliate_url("B0G3X63T88"),
             "original_image_url": "https://m.media-amazon.com/images/I/71FuFo33wOL._AC_SX679_PIbundle-6,TopRight,0,0_SH20_.jpg",
             "features": ["4.9 Amazon Rating", "1120 Customer Reviews", "Lily of The Valley Flower Lamp"]
         },
@@ -639,7 +639,7 @@ def fetch_sample_amazon_products(niche: str = NICHE):
             "price": "$27.99",
             "rating": "4.7",
             "reviews_count": 530,
-            "affiliate_url": f"https://www.amazon.com/dp/B0FVXXF9XJ?tag={tag}",
+            "affiliate_url": build_affiliate_url("B0FVXXF9XJ"),
             "original_image_url": "https://m.media-amazon.com/images/I/61llXJeXxgL._AC_SX679_.jpg",
             "features": ["4.7 Amazon Rating", "530 Customer Reviews", "Retro Egg Tart Glass Mushroom Lamp"]
         }

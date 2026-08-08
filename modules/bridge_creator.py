@@ -2,6 +2,12 @@ from pathlib import Path
 from jinja2 import Template
 import json
 from config import BRIDGE_DIR, IMAGES_DIR, AMAZON_ASSOCIATE_TAG
+from modules.affiliate_manager import (
+    build_affiliate_url,
+    load_affiliate_config,
+    get_canonical_tag,
+    is_onelink_enabled_for_country
+)
 
 BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -485,19 +491,17 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             </div>
         </div>
 
+        <!-- FTC Affiliate Disclosure Badge -->
+        <div class="ftc-disclosure-badge" style="font-size: 11.5px; color: #94a3b8; margin-bottom: 10px; text-align: center; background: rgba(255,255,255,0.04); border-radius: 6px; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.08);">
+            As an Amazon Associate, Cozy Room Finds earns from qualifying purchases.
+        </div>
+
         <!-- High-Converting CTA -->
         {% set clean_words = product.title.split()[:4] | join(' ') %}
-        {% if not is_in_direct %}
-        <a id="buyBtn" href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">CHECK ON AMAZON (US $)</span>
-            <span>➔</span>
-        </a>
-        {% else %}
-        <a id="buyBtn" href="https://www.amazon.com/dp/{{ asin }}?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
+        <a id="buyBtn" href="{{ canonical_affiliate_url or affiliate_url }}" class="btn-amazon" target="_blank" rel="nofollow noopener">
             <span id="buyBtnText">BUY ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
-        {% endif %}
 
         <div class="guarantee">
             <span>🔒 Official Amazon Store</span>
@@ -665,6 +669,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     .catch(e => {});
             } catch(e) {}
 
+            const onelinkCountries = {{ onelink_countries_json | safe if onelink_countries_json else '["US","CA","GB","UK","DE","FR","IT","ES"]' }};
+            const canonicalUrl = "{{ canonical_affiliate_url or affiliate_url }}";
+
             const associateTagMap = {
                 "US": "smartdeal0358-20",
                 "CA": "smartdeal0302-20",
@@ -728,9 +735,39 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     });
                 }
 
+                // A. ONELINK ENABLED MARKETPLACES (US, CA, UK/GB, DE, FR, IT, ES)
+                if (onelinkCountries.includes(targetCC)) {
+                    if (buyBtn) buyBtn.href = canonicalUrl;
+                    if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? 'BUY ON AMAZON (US $)' : `BUY ON ${target.label}`;
+                    if (geoBox) geoBox.style.display = 'none';
+                    return;
+                }
+
+                // B. INDIA FALLBACK (amazon.in with smartdeal0358-21)
+                if (targetCC === 'IN') {
+                    const inAsin = regionalAsins['IN'] || (directRegions.includes('IN') ? currentAsin : null);
+                    if (inAsin) {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.in/dp/${inAsin}?tag=smartdeal0358-21`;
+                        if (buyBtnText) buyBtnText.innerText = 'BUY ON AMAZON INDIA (₹)';
+                        if (geoBox) geoBox.style.display = 'none';
+                    } else {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.in/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                        if (buyBtnText) buyBtnText.innerText = 'SEARCH LOCAL DEALS ON AMAZON INDIA (₹)';
+                        if (geoBox) {
+                            const titleEl = document.getElementById('geoNoticeTitle');
+                            const descEl = document.getElementById('geoNoticeDesc');
+                            if (titleEl) titleEl.innerText = 'Item Ships from Amazon US (Not Directly Listed on amazon.in)';
+                            if (descEl) descEl.innerText = "This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on amazon.in for fast delivery.";
+                            geoBox.style.display = 'flex';
+                        }
+                    }
+                    return;
+                }
+
+                // C. NON-ONELINK DIRECT MATRIX / SEARCH FALLBACK
                 if (isDirectListing && targetAsin) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
-                    if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
+                    if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}${tagSearchParam}`;
@@ -875,7 +912,19 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
         except Exception as e_mat:
             print(f"[Bridge Creator Warning] Matrix load issue: {e_mat}")
 
-    aff_url = product_data.get("affiliate_url") or f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+    canon_url = build_affiliate_url(asin, marketplace="US")
+    canon_tag = get_canonical_tag()
+    aff_url = product_data.get("affiliate_url") or canon_url
+    
+    cfg = load_affiliate_config()
+    onelink_countries = [
+        cc for cc, info in cfg.get("marketplaces", {}).items()
+        if info.get("routing_mode") == "ONELINK" and info.get("oneLink_enabled_for_account", False)
+    ]
+    if "US" not in onelink_countries:
+        onelink_countries.append("US")
+    if "GB" in onelink_countries and "UK" not in onelink_countries:
+        onelink_countries.append("UK")
     
     tag_config_json = "{}"
     tag_config_file = _MODULE_DIR / "affiliate_tag_config.json"
@@ -893,6 +942,9 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
         seo=dict(seo_data) if seo_data else {},
         asin=asin,
         affiliate_url=aff_url,
+        canonical_affiliate_url=canon_url,
+        canonical_tag=canon_tag,
+        onelink_countries_json=json.dumps(onelink_countries),
         hook_image_rel=hook_img_rel,
         raw_images=raw_images_rel,
         domain_tag_map_json=tag_config_json

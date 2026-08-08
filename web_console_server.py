@@ -22,6 +22,7 @@ if hasattr(sys.stdout, "reconfigure"):
 _PROJECT_ROOT = Path(__file__).resolve().parent  # C1 FIX: dynamic — works regardless of where project lives
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
+from modules.affiliate_manager import build_affiliate_url, load_affiliate_config
 from modules.amazon_extractor import (
     get_product_details_and_photos,
     select_clean_photo_or_skip,
@@ -324,6 +325,9 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         elif parsed.path == '/api/auth/callback':
             self.handle_api_auth_callback(parsed.query)
             return
+        elif parsed.path == '/api/affiliate_diagnostics':
+            self.handle_api_affiliate_diagnostics()
+            return
         else:
             return super().do_GET()
 
@@ -582,6 +586,13 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json({'status': 'error', 'message': str(e)})
 
+    def handle_api_affiliate_diagnostics(self):
+        try:
+            cfg = load_affiliate_config()
+            self.send_json({'status': 'success', 'affiliate_config': cfg})
+        except Exception as e:
+            self.send_json({'status': 'error', 'message': str(e)})
+
     def handle_api_audit_links(self):
         try:
             # BUG-3 FIX: was pointing to non-existent scratch/master_zero_404_audit.py
@@ -798,7 +809,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             asin = target.split('/dp/')[1].split('?')[0].split('/')[0]
         else:
             asin = target.upper()
-            amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-20"
+            amazon_url = build_affiliate_url(asin)
 
         try:
             prod = get_product_details_and_photos(amazon_url)
@@ -1604,7 +1615,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                     print(f"[n8n Dispatcher] ⚙️ Processing ASIN: {asin} | Chosen Photo: {(chosen_photo or 'N/A')[:40]}...")
 
                     # 1. Fetch Product Data
-                    amazon_url = f"https://www.amazon.com/dp/{asin}?tag=smartdeal0358-20"
+                    amazon_url = build_affiliate_url(asin)
                     prod = get_product_details_and_photos(amazon_url) or {
                         'title': title, 'price': price, 'features': ['Aesthetic Decor', 'Cozy Glow', 'Modern Style'],
                         'category': 'decor', 'url': amazon_url

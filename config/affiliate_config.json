@@ -1,0 +1,252 @@
+{
+  "canonical": {
+    "marketplace": "US",
+    "country_code": "US",
+    "amazon_domain": "amazon.com",
+    "tracking_id": "smartdeal0358-20"
+  },
+  "marketplaces": {
+    "US": {
+      "marketplace": "US",
+      "country_code": "US",
+      "amazon_domain": "amazon.com",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "US Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "CA": {
+      "marketplace": "CA",
+      "country_code": "CA",
+      "amazon_domain": "amazon.ca",
+      "tracking_id": "smartdeal0302-20",
+      "associates_account": "CA Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "GB": {
+      "marketplace": "GB",
+      "country_code": "GB",
+      "amazon_domain": "amazon.co.uk",
+      "tracking_id": "smartdea04b3a-21",
+      "associates_account": "UK Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "UK": {
+      "marketplace": "GB",
+      "country_code": "UK",
+      "amazon_domain": "amazon.co.uk",
+      "tracking_id": "smartdea04b3a-21",
+      "associates_account": "UK Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "DE": {
+      "marketplace": "DE",
+      "country_code": "DE",
+      "amazon_domain": "amazon.de",
+      "tracking_id": "smartdeal0bb4-21",
+      "associates_account": "DE Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "FR": {
+      "marketplace": "FR",
+      "country_code": "FR",
+      "amazon_domain": "amazon.fr",
+      "tracking_id": "smartdeal0962-21",
+      "associates_account": "FR Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "IT": {
+      "marketplace": "IT",
+      "country_code": "IT",
+      "amazon_domain": "amazon.it",
+      "tracking_id": "smartdea03a8d-21",
+      "associates_account": "IT Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "ES": {
+      "marketplace": "ES",
+      "country_code": "ES",
+      "amazon_domain": "amazon.es",
+      "tracking_id": "smartdeal0b46-21",
+      "associates_account": "ES Associates",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
+    },
+    "IN": {
+      "marketplace": "IN",
+      "country_code": "IN",
+      "amazon_domain": "amazon.in",
+      "tracking_id": "smartdeal0358-21",
+      "associates_account": "IN Associates",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": true
+    },
+    "JP": {
+      "marketplace": "JP",
+      "country_code": "JP",
+      "amazon_domain": "amazon.co.jp",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "AU": {
+      "marketplace": "AU",
+      "country_code": "AU",
+      "amazon_domain": "amazon.com.au",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "SE": {
+      "marketplace": "SE",
+      "country_code": "SE",
+      "amazon_domain": "amazon.se",
+      "tracking_id": "smartdeal0bb4-21",
+      "associates_account": "EU Portal",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "NL": {
+      "marketplace": "NL",
+      "country_code": "NL",
+      "amazon_domain": "amazon.nl",
+      "tracking_id": "smartdeal0bb4-21",
+      "associates_account": "EU Portal",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "PL": {
+      "marketplace": "PL",
+      "country_code": "PL",
+      "amazon_domain": "amazon.pl",
+      "tracking_id": "smartdeal0bb4-21",
+      "associates_account": "EU Portal",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "TR": {
+      "marketplace": "TR",
+      "country_code": "TR",
+      "amazon_domain": "amazon.com.tr",
+      "tracking_id": "smartdeal0bb4-21",
+      "associates_account": "EU Portal",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "BE": {
+      "marketplace": "BE",
+      "country_code": "BE",
+      "amazon_domain": "amazon.com.be",
+      "tracking_id": "smartdeal0962-21",
+      "associates_account": "EU Portal",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "MX": {
+      "marketplace": "MX",
+      "country_code": "MX",
+      "amazon_domain": "amazon.com.mx",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "BR": {
+      "marketplace": "BR",
+      "country_code": "BR",
+      "amazon_domain": "amazon.com.br",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "SG": {
+      "marketplace": "SG",
+      "country_code": "SG",
+      "amazon_domain": "amazon.sg",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "AE": {
+      "marketplace": "AE",
+      "country_code": "AE",
+      "amazon_domain": "amazon.ae",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "SA": {
+      "marketplace": "SA",
+      "country_code": "SA",
+      "amazon_domain": "amazon.sa",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": true,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    },
+    "EG": {
+      "marketplace": "EG",
+      "country_code": "EG",
+      "amazon_domain": "amazon.eg",
+      "tracking_id": "smartdeal0358-20",
+      "associates_account": "OneLink linked",
+      "oneLink_supported_by_amazon": false,
+      "oneLink_enabled_for_account": false,
+      "routing_mode": "DIRECT_FALLBACK",
+      "verified": false
+    }
+  }
+}

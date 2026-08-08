@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0D8P8CSYP_hook.jpg?v=1786191538" alt="Cute Bird Touch Control Nightstand Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0D8P8CSYP_hook.jpg?v=1786199376" alt="Cute Bird Touch Control Nightstand Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D8P8CSYP_hook.jpg?v=1786191538', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D8P8CSYP_hook.jpg?v=1786199376', this)">✨ Commercial View</button>
             
         </div>
 
@@ -479,14 +479,17 @@
             </div>
         </div>
 
+        <!-- FTC Affiliate Disclosure Badge -->
+        <div class="ftc-disclosure-badge" style="font-size: 11.5px; color: #94a3b8; margin-bottom: 10px; text-align: center; background: rgba(255,255,255,0.04); border-radius: 6px; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.08);">
+            As an Amazon Associate, Cozy Room Finds earns from qualifying purchases.
+        </div>
+
         <!-- High-Converting CTA -->
         
-        
         <a id="buyBtn" href="https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-20" class="btn-amazon" target="_blank" rel="nofollow noopener">
-            <span id="buyBtnText">CHECK ON AMAZON (US $)</span>
+            <span id="buyBtnText">BUY ON AMAZON (US $)</span>
             <span>➔</span>
         </a>
-        
 
         <div class="guarantee">
             <span>🔒 Official Amazon Store</span>
@@ -587,7 +590,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Cute Bird Touch Control Nightstand Lamp");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0D8P8CSYP_hook.jpg?v=1786191538";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0D8P8CSYP_hook.jpg?v=1786199376";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -660,6 +663,9 @@
                     .catch(e => {});
             } catch(e) {}
 
+            const onelinkCountries = ["US", "CA", "GB", "UK", "DE", "FR", "IT", "ES"];
+            const canonicalUrl = "https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-20";
+
             const associateTagMap = {
                 "US": "smartdeal0358-20",
                 "CA": "smartdeal0302-20",
@@ -723,9 +729,39 @@
                     });
                 }
 
+                // A. ONELINK ENABLED MARKETPLACES (US, CA, UK/GB, DE, FR, IT, ES)
+                if (onelinkCountries.includes(targetCC)) {
+                    if (buyBtn) buyBtn.href = canonicalUrl;
+                    if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? 'BUY ON AMAZON (US $)' : `BUY ON ${target.label}`;
+                    if (geoBox) geoBox.style.display = 'none';
+                    return;
+                }
+
+                // B. INDIA FALLBACK (amazon.in with smartdeal0358-21)
+                if (targetCC === 'IN') {
+                    const inAsin = regionalAsins['IN'] || (directRegions.includes('IN') ? currentAsin : null);
+                    if (inAsin) {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.in/dp/${inAsin}?tag=smartdeal0358-21`;
+                        if (buyBtnText) buyBtnText.innerText = 'BUY ON AMAZON INDIA (₹)';
+                        if (geoBox) geoBox.style.display = 'none';
+                    } else {
+                        if (buyBtn) buyBtn.href = `https://www.amazon.in/s?k=${prodKeywords}&tag=smartdeal0358-21`;
+                        if (buyBtnText) buyBtnText.innerText = 'SEARCH LOCAL DEALS ON AMAZON INDIA (₹)';
+                        if (geoBox) {
+                            const titleEl = document.getElementById('geoNoticeTitle');
+                            const descEl = document.getElementById('geoNoticeDesc');
+                            if (titleEl) titleEl.innerText = 'Item Ships from Amazon US (Not Directly Listed on amazon.in)';
+                            if (descEl) descEl.innerText = "This specific US model code is not directly listed in your region. We've automatically linked equivalent local deals on amazon.in for fast delivery.";
+                            geoBox.style.display = 'flex';
+                        }
+                    }
+                    return;
+                }
+
+                // C. NON-ONELINK DIRECT MATRIX / SEARCH FALLBACK
                 if (isDirectListing && targetAsin) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
-                    if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? `CHECK DEAL ON AMAZON` : `BUY ON ${target.label}`;
+                    if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
                     if (geoBox) geoBox.style.display = 'none';
                 } else {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/s?k=${prodKeywords}${tagSearchParam}`;

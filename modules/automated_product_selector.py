@@ -2,6 +2,7 @@ import json
 import re
 from pathlib import Path
 from config import AMAZON_ASSOCIATE_TAG
+from modules.affiliate_manager import build_affiliate_url
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent  # C4 FIX: dynamic path
 PROCESSED_FILE = PROJECT_ROOT / "processed_asins.json"
@@ -12,28 +13,28 @@ REGISTRY_FILE = PROJECT_ROOT / "product_price_registry.json"
 VIRAL_HOME_DECOR_QUEUE = [
     {
         "id": "B0BQBKWSKK",
-        "url": f"https://www.amazon.com/dp/B0BQBKWSKK?tag={AMAZON_ASSOCIATE_TAG}",
+        "url": build_affiliate_url("B0BQBKWSKK"),
         "niche": "Home Fragrance & Room Decor",
         "title": "Volcano Erupting Flame Essential Oil Diffuser with Warm LED Glow",
         "target_price": "$25.99"
     },
     {
         "id": "B0FRS84KT9",
-        "url": f"https://www.amazon.com/dp/B0FRS84KT9?tag={AMAZON_ASSOCIATE_TAG}",
+        "url": build_affiliate_url("B0FRS84KT9"),
         "niche": "Nightstand & Desk Decor",
         "title": "Acrylic Illuminated Glowing LED Note Memo Board with Wood Base",
         "target_price": "$29.99"
     },
     {
         "id": "B08HJ2M49T",
-        "url": f"https://www.amazon.com/dp/B08HJ2M49T?tag={AMAZON_ASSOCIATE_TAG}",
+        "url": build_affiliate_url("B08HJ2M49T"),
         "niche": "Sunlight Window Decor",
         "title": "Crystal Suncatcher Prism Window Hanging Rainbow Decor",
         "target_price": "$14.99"
     },
     {
         "id": "B0B8Z7X5M1",
-        "url": f"https://www.amazon.com/dp/B0B8Z7X5M1?tag={AMAZON_ASSOCIATE_TAG}",
+        "url": build_affiliate_url("B0B8Z7X5M1"),
         "niche": "Bedroom & Vanity Mirror Decor",
         "title": "Minimalist Asymmetric Wavy Body Mirror for Vanity & Bedroom",
         "target_price": "$34.99"

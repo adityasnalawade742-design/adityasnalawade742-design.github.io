@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageFilter
 from config import SERPAPI_KEY, AMAZON_ASSOCIATE_TAG
+from modules.affiliate_manager import build_affiliate_url
 
 def extract_asin_from_url(url: str) -> str:
     """Extracts 10-character Amazon ASIN from any raw Amazon product URL or query string."""
@@ -530,7 +531,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 lifestyle_flags = [is_lifestyle_photo(img) for img in sorted_photos]
                 has_lifestyle = any(lifestyle_flags)
                 
-                affiliate_url = f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+                affiliate_url = build_affiliate_url(asin)
                 
                 features_list = p.get("features", []) or p.get("description", "")
                 if isinstance(features_list, list):
@@ -577,7 +578,7 @@ def get_product_details_and_photos(url_or_asin: str) -> dict:
                 "price": "$14.99",
                 "rating": "4.6",
                 "reviews_count": 500,
-                "affiliate_url": f"https://www.{domain}/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}",
+                "affiliate_url": build_affiliate_url(asin),
                 "original_image_url": photos[0] if photos else "",
                 "all_photos": photos,
                 "features": f"Aesthetic {title} for cozy room decor."

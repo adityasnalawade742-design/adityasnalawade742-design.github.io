@@ -17,6 +17,7 @@ from modules.amazon_extractor import get_product_details_and_photos
 from modules.automated_product_selector import get_next_automated_product, save_processed_asin, is_asin_published_on_homepage
 from modules.image_generator import create_multi_photo_reference_sheet, generate_cozy_image
 from modules.html_overlay_engine import render_html_overlay
+from modules.affiliate_manager import build_affiliate_url
 from modules.vision_prompt import generate_cozy_image_prompt
 from modules.seo_copywriter import generate_pin_seo_data
 from modules.bridge_creator import generate_bridge_page
@@ -26,7 +27,7 @@ def run_n8n_triggered_pipeline(asin=None, amazon_url=None):
     print("🤖 === N8N TRIGGERED PINTEREST AFFILIATE PIPELINE ===")
     
     if asin and not amazon_url:
-        amazon_url = f"https://www.amazon.com/dp/{asin}?tag={AMAZON_ASSOCIATE_TAG}"
+        amazon_url = build_affiliate_url(asin)
     
     if asin and is_asin_published_on_homepage(asin):
         msg = f"⚠️ ASIN {asin} is already published on the homepage. Skipping generation until it is deleted from the homepage."

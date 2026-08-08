@@ -9,7 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-AMAZON_ASSOCIATE_TAG = os.getenv("AMAZON_ASSOCIATE_TAG", "smartdeal0358-21")
+AMAZON_ASSOCIATE_TAG = os.getenv("AMAZON_ASSOCIATE_TAG", "smartdeal0358-20")
+INDIA_ASSOCIATE_TAG = os.getenv("INDIA_ASSOCIATE_TAG", "smartdeal0358-21")
 
 # Multi-Key SerpAPI Support (comma-separated or SERPAPI_KEY_2, SERPAPI_KEY_3)
 raw_serp_key = os.getenv("SERPAPI_KEY", "")

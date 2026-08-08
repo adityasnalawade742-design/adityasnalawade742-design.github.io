@@ -23,11 +23,13 @@ RAW_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 from modules.html_overlay_engine import render_html_overlay
 from modules.amazon_extractor import get_product_details_and_photos
 
+from modules.affiliate_manager import build_affiliate_url
+
 # Master Active Product Registry Seed
 DEFAULT_REGISTRY = {
     "B0GYDXHF4G": {
         "title": "Flame Aroma Essential Oil Diffuser Dark Crackle",
-        "url": "https://www.amazon.com/dp/B0GYDXHF4G?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0GYDXHF4G"),
         "current_price": "$35.00",
         "headline": "Flame Aroma Essential Oil Diffuser",
         "subtitle": "REALISTIC FLAME ATMOSPHERE",
@@ -39,7 +41,7 @@ DEFAULT_REGISTRY = {
     },
     "B0FXLYXM32": {
         "title": "Pocetry 22\"x30\" White Wavy Wall Mirror for Vanity",
-        "url": "https://www.amazon.com/dp/B0FXLYXM32?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0FXLYXM32"),
         "current_price": "$76.49",
         "headline": "White Wavy Wall Vanity Mirror",
         "subtitle": "ELEVATE YOUR VANITY SPACE",
@@ -51,7 +53,7 @@ DEFAULT_REGISTRY = {
     },
     "B0C2YLN3H4": {
         "title": "White Ceramic Donut Vase Set of 2",
-        "url": "https://www.amazon.com/dp/B0C2YLN3H4?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0C2YLN3H4"),
         "current_price": "$13.49",
         "headline": "White Ceramic Donut Vase Set",
         "subtitle": "MODERN MINIMALIST VASE",
@@ -63,7 +65,7 @@ DEFAULT_REGISTRY = {
     },
     "B07HP22QTZ": {
         "title": "Suncatcher Crystal Ball Prism Window Rainbow Maker",
-        "url": "https://www.amazon.com/dp/B07HP22QTZ?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B07HP22QTZ"),
         "current_price": "$9.99",
         "headline": "Crystal Prism Window Suncatcher",
         "subtitle": "RAINBOW SPECTRUM MAKER",
@@ -75,7 +77,7 @@ DEFAULT_REGISTRY = {
     },
     "B0BZXNSW5K": {
         "title": "Fenmzee Bedside Table Touch Lamp",
-        "url": "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0BZXNSW5K"),
         "current_price": "$19.99",
         "headline": "Dimmable Touch Nightstand Lamp",
         "subtitle": "WARM BEDTIME GLOW",
@@ -87,7 +89,7 @@ DEFAULT_REGISTRY = {
     },
     "B0DXKGL1T2": {
         "title": "Lily of the Valley Flower Table Lamp",
-        "url": "https://www.amazon.co.uk/dp/B0DXKGL1T2?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0DXKGL1T2"),
         "current_price": "$36.38",
         "headline": "Lily of the Valley Flower Lamp",
         "subtitle": "VINTAGE FLORAL GLOW",
@@ -99,7 +101,7 @@ DEFAULT_REGISTRY = {
     },
     "B0D1FRDFFX": {
         "title": "Dawnwake Mushroom Touch Table Lamp",
-        "url": "https://www.amazon.com/dp/B0D1FRDFFX?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0D1FRDFFX"),
         "current_price": "$39.98",
         "headline": "Glass Mushroom Touch Accent Lamp",
         "subtitle": "COZY AMBIENT GLOW",
@@ -111,7 +113,7 @@ DEFAULT_REGISTRY = {
     },
     "B0D8P8CSYP": {
         "title": "Cute Bird Dimmable Touch Night Lamp",
-        "url": "https://www.amazon.com/dp/B0D8P8CSYP?tag=smartdeal0358-21",
+        "url": build_affiliate_url("B0D8P8CSYP"),
         "current_price": "$20.56",
         "headline": "Cute Bird Dimmable Touch Lamp",
         "subtitle": "SOFT NIGHTSTAND LIGHT",
