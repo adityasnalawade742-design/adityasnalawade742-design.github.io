@@ -5,8 +5,8 @@
     "current_price": "$76.49",
     "regional_prices": {
       "US": "$76.49",
-      "IN": "₹899.00",
-      "UK": "£126.73",
+      "IN": "₹539.00",
+      "UK": "£126.42",
       "DE": "€119,57",
       "CA": "$139.99",
       "AU": "A$116.26",
@@ -46,7 +46,7 @@
       "DE": "€16.84",
       "CA": "CA$44.05",
       "AU": "A$26.88",
-      "JP": "¥4,644",
+      "JP": "¥4,650",
       "FR": "34,90€",
       "ES": "34,51€",
       "IT": "36,05€",
@@ -74,15 +74,15 @@
   "B07HP22QTZ": {
     "title": "Hanging Crystal Suncatcher Prism",
     "asin": "B07HP22QTZ",
-    "current_price": "$14.99",
+    "current_price": "$855.65",
     "regional_prices": {
-      "US": "$14.99",
-      "IN": "₹2,748.14",
-      "UK": "£12.37",
+      "US": "$855.65",
+      "IN": "₹2,749.18",
+      "UK": "£12.30",
       "DE": "€8.75",
-      "CA": "CA$19.99",
+      "CA": "CA$11.29",
       "AU": "A$28.32",
-      "JP": "¥3,651",
+      "JP": "¥3,581",
       "FR": "15,99€",
       "ES": "Not Available",
       "IT": "Not Available",
@@ -114,7 +114,7 @@
     "regional_prices": {
       "US": "$19.99",
       "IN": "₹475.00",
-      "UK": "£13.99",
+      "UK": "£19.98",
       "DE": "€18.39",
       "CA": "CA$26.99",
       "AU": "A$30.38",
@@ -186,7 +186,7 @@
     "regional_prices": {
       "US": "$41.34",
       "IN": "₹10,996.51",
-      "UK": "£13.99",
+      "UK": "£39.09",
       "DE": "€33,99",
       "CA": "CA$48.93",
       "AU": "A$54.69",
@@ -218,10 +218,10 @@
   "B0D8P8CSYP": {
     "title": "Cute Bird Touch Control Nightstand Lamp",
     "asin": "B0D8P8CSYP",
-    "current_price": "$9.98",
+    "current_price": "$985.10",
     "regional_prices": {
-      "US": "$9.98",
-      "IN": "₹3,878.00",
+      "US": "$985.10",
+      "IN": "₹3,749.00",
       "UK": "£25.99",
       "DE": "€24,99",
       "CA": "CA$21.76",
@@ -311,7 +311,7 @@
       "IN": "₹3,150.00",
       "UK": "£29.99",
       "DE": "€34.50",
-      "CA": "CA$136.58",
+      "CA": "CA$59.99",
       "AU": "A$57.99",
       "JP": "¥5,800",
       "SE": "395,00kr",
@@ -342,7 +342,7 @@
   "B0CJC549C6": {
     "asin": "B0CJC549C6",
     "title": "Matte Black Thinker Statue Set",
-    "current_price": "$19.99",
+    "current_price": "$887.38",
     "description": "Transform your bookshelf or coffee table with this viral 3-piece Quoowiit Black Thinker Statue Set! Features minimalist matte black ceramic craftsmanship designed for modern aesthetic home decor. Tap link to check live price on Amazon! #thinkerstatue #bookshelfdecor #cozyroomdecor #aestheticfinds #amazonfinds",
     "features": [
       "SET OF 3 STATUES",
@@ -351,11 +351,11 @@
       "BOOKSHELF & DESK DECOR"
     ],
     "regional_prices": {
-      "US": "$19.99",
-      "IN": "₹2,469.00",
+      "US": "$887.38",
+      "IN": "₹5,738.00",
       "UK": "£19.99",
-      "DE": "€21,99",
-      "CA": "CA$39.29",
+      "DE": "€13,80",
+      "CA": "CA$39.26",
       "AU": "A$55.51",
       "JP": "¥4,901",
       "SE": "564,37kr",
@@ -385,7 +385,7 @@
   "B0CJ4Q4PZQ": {
     "asin": "B0CJ4Q4PZQ",
     "title": "Pink Striped Glass Mushroom Lamp",
-    "current_price": "$34.99",
+    "current_price": "$986.09",
     "description": "Elevate your nightstand aesthetic with this viral ONEWISH Pink Striped Glass Mushroom Lamp! Features warm ambient lighting and elegant hand-blown glass craftsmanship for cozy bedroom vibes. Tap link to shop now on Amazon! #mushroomlamp #bedsidelamp #cozyroomdecor #aestheticroom #amazonfinds",
     "features": [
       "HAND-BLOWN STRIPED GLASS",
@@ -394,13 +394,13 @@
       "BULB INCLUDED"
     ],
     "regional_prices": {
-      "US": "$34.99",
-      "IN": "₹2,899.00",
+      "US": "$986.09",
+      "IN": "₹7,835.00",
       "UK": "£19.99",
       "DE": "€33,99",
       "CA": "CA$46.99",
       "AU": "Not Available",
-      "JP": "¥1,918",
+      "JP": "¥2,339",
       "SE": "210,00kr",
       "FR": "31,99 €",
       "ES": "21,98 €",
@@ -439,9 +439,9 @@
     "regional_prices": {
       "US": "$44.09",
       "IN": "₹2,899.00",
-      "UK": "£69.53",
-      "DE": "€18,20",
-      "CA": "CA$118.25",
+      "UK": "£69.86",
+      "DE": "€29,99",
+      "CA": "CA$123.49",
       "AU": "Not Available",
       "JP": "¥5,400",
       "SE": "570,44kr",
@@ -529,7 +529,7 @@
       "DE": "€22,99",
       "CA": "CA$62.65",
       "AU": "Not Available",
-      "JP": "¥2,999",
+      "JP": "¥2,788",
       "SE": "289,99kr",
       "FR": "38,21€",
       "ES": "37,32€",
@@ -568,11 +568,11 @@
     "regional_prices": {
       "US": "$12.49",
       "IN": "₹2,899.00",
-      "UK": "£37.24",
+      "UK": "£19.99",
       "DE": "€11,89",
       "CA": "CA$55.56",
       "AU": "Not Available",
-      "JP": "¥2,339",
+      "JP": "¥2,599",
       "SE": "633,23kr",
       "FR": "28,99 €",
       "ES": "29,99 €",
@@ -611,8 +611,8 @@
     "regional_prices": {
       "US": "$84.06",
       "IN": "Not Available",
-      "UK": "£89.99",
-      "DE": "€59,46",
+      "UK": "£33.98",
+      "DE": "€33,99",
       "CA": "Not Available",
       "AU": "Not Available",
       "JP": "¥2,347",
@@ -654,7 +654,7 @@
       "US": "$16.99",
       "IN": "Not Available",
       "UK": "£38.26",
-      "DE": "€34,77",
+      "DE": "€35,54",
       "CA": "CA$71.91",
       "AU": "Not Available",
       "JP": "¥6,892",
@@ -683,7 +683,7 @@
   "B0DC6HDMRM": {
     "asin": "B0DC6HDMRM",
     "title": "Lukasa Candle Warmer Lamp, with",
-    "current_price": "$24.99",
+    "current_price": "$950.83",
     "description": "Enjoy your favorite scented candles safely with zero open flame or smoke! This viral Dimmable Candle Warmer Lamp uses top-down warming light to melt wax evenly and release rich fragrance throughout your room. Tap link to check price on Amazon! #candlewarmer #flamefree #cozyroomdecor #candlelamp #amazonfinds",
     "features": [
       "FLAME-FREE HEATING",
@@ -692,7 +692,13 @@
       "FITS YANKEE CANDLES"
     ],
     "regional_prices": {
-      "US": "$24.99"
+      "US": "$950.83",
+      "IN": "Not Available",
+      "UK": "£19.98",
+      "DE": "Not Available",
+      "CA": "CA$29.99",
+      "AU": "Not Available",
+      "JP": "Not Available"
     },
     "regional_asins": {
       "US": "B0DC6HDMRM"
@@ -714,7 +720,13 @@
       "BEDSIDE ELEGANCE"
     ],
     "regional_prices": {
-      "US": "$35.99"
+      "US": "$35.99",
+      "IN": "Not Available",
+      "UK": "£49.99",
+      "DE": "€42,49",
+      "CA": "CA$54.99",
+      "AU": "Not Available",
+      "JP": "Not Available"
     },
     "regional_asins": {
       "US": "B0D1G6ZL7Y"
@@ -735,7 +747,13 @@
       "EASY SETUP"
     ],
     "regional_prices": {
-      "US": "$19.99"
+      "US": "$19.99",
+      "IN": "Not Available",
+      "UK": "Not Available",
+      "DE": "Not Available",
+      "CA": "CA$27.99",
+      "AU": "Not Available",
+      "JP": "¥4,598"
     },
     "regional_asins": {
       "US": "B0FFG48KCY"
@@ -756,7 +774,13 @@
       "EASY SETUP"
     ],
     "regional_prices": {
-      "US": "$38.99"
+      "US": "$38.99",
+      "IN": "Not Available",
+      "UK": "£26.99",
+      "DE": "€54,82",
+      "CA": "CA$39.99",
+      "AU": "A$68.28",
+      "JP": "¥7,951"
     },
     "regional_asins": {
       "US": "B0BYP7XB7S"
@@ -777,7 +801,13 @@
       "NIGHTSTAND ACCENT"
     ],
     "regional_prices": {
-      "US": "$28.99"
+      "US": "$28.99",
+      "IN": "Not Available",
+      "UK": "£31.45",
+      "DE": "Not Available",
+      "CA": "Not Available",
+      "AU": "Not Available",
+      "JP": "Not Available"
     },
     "regional_asins": {
       "US": "B0DQTM3L9J"
@@ -789,7 +819,7 @@
   "B0CM5RK1K5": {
     "asin": "B0CM5RK1K5",
     "title": "Asymmetrical Wavy Mirror for Wall",
-    "current_price": "$42.99",
+    "current_price": "$640.61",
     "description": "Tired of plain boring mirrors? Give your bedroom the ultimate aesthetic upgrade with this viral White Wavy Wall Vanity Mirror. Features solid cream curvy framing and high-definition glass that illuminates your space. Tap link to shop now on Amazon! #wavymirror #vanitydecor #aestheticroom #cozyroomdecor #amazonfinds",
     "features": [
       "CREAM WAVY FRAME",
@@ -798,7 +828,13 @@
       "WALL & VANITY MOUNT"
     ],
     "regional_prices": {
-      "US": "$42.99"
+      "US": "$640.61",
+      "IN": "₹15,318.00",
+      "UK": "£58.09",
+      "DE": "€72,78",
+      "CA": "CA$73.49",
+      "AU": "Not Available",
+      "JP": "¥9,814"
     },
     "regional_asins": {
       "US": "B0CM5RK1K5"
