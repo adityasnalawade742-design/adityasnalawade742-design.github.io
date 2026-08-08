@@ -764,5 +764,26 @@
     "direct_regions": [
       "US"
     ]
+  },
+  "B0DQTM3L9J": {
+    "asin": "B0DQTM3L9J",
+    "title": "Lily of The Valley Lamp - Handmade",
+    "current_price": "$28.99",
+    "description": "Transform your nightstand into a botanical fairy tale sanctuary! This viral Floral Table Lamp emits a delicate warm glow through handcrafted floral glass petals. Tap link to check price on Amazon! #flowerlamp #aestheticdecor #cozyroomdecor #aestheticlamp #amazonfinds",
+    "features": [
+      "HANDCRAFTED GLASS PETALS",
+      "WARM FLORAL GLOW",
+      "VINTAGE GREEN STEM",
+      "NIGHTSTAND ACCENT"
+    ],
+    "regional_prices": {
+      "US": "$28.99"
+    },
+    "regional_asins": {
+      "US": "B0DQTM3L9J"
+    },
+    "direct_regions": [
+      "US"
+    ]
   }
 }
