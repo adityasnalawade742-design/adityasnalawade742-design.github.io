@@ -31,7 +31,7 @@
       "offers": {
         "@type": "Offer",
         "priceCurrency": "USD",
-        "price": "42.99",
+        "price": "640.61",
         "availability": "https://schema.org/InStock",
         "url": "https://adityasnalawade742-design.github.io/bridge_B0CM5RK1K5.html"
       },
@@ -423,18 +423,18 @@
         <h1>Asymmetrical Wavy Mirror for Wall</h1>
 
         <div class="price-container">
-            <div class="price">$42.99</div>
+            <div class="price">$640.61</div>
             <div class="prime-badge">⚡ Prime 2-Day Free Shipping</div>
         </div>
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0CM5RK1K5_hook.jpg?v=1786220102" alt="Asymmetrical Wavy Mirror for Wall">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0CM5RK1K5_hook.jpg?v=1786222077" alt="Asymmetrical Wavy Mirror for Wall">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0CM5RK1K5_hook.jpg?v=1786220102', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0CM5RK1K5_hook.jpg?v=1786222077', this)">✨ Commercial View</button>
             
         </div>
 
@@ -590,7 +590,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Asymmetrical Wavy Mirror for Wall");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0CM5RK1K5_hook.jpg?v=1786220102";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0CM5RK1K5_hook.jpg?v=1786222077";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -649,7 +649,7 @@
             const currentAsin = "B0CM5RK1K5";
             const prodKeywords = encodeURIComponent("Asymmetrical Wavy Mirror for Wall").replace(/%20/g, "+").replace(/%2C/gi, "+");
             const directRegions = ["US"];
-            const regionalMatrix = {"US": "$42.99"};
+            const regionalMatrix = {"AU": "Not Available", "CA": "CA$73.49", "DE": "\u20ac72,78", "IN": "\u20b915,318.00", "JP": "\u00a59,814", "UK": "\u00a358.09", "US": "$640.61"};
             const regionalAsins = {"US": "B0CM5RK1K5"};
 
             let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "PLN": 3.95, "SEK": 10.50 };
@@ -779,7 +779,7 @@
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
-                    const baseUsd = parseFloat("$42.99".replace(/[^0-9.]/g, '') || '20.00');
+                    const baseUsd = parseFloat("$640.61".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const isUsd = (targetCC === 'US');
                     const displayVal = `${sym}${converted}`;

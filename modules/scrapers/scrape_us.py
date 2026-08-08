@@ -16,6 +16,8 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0"
 ]
 
+from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record
+
 def scrape_us_prices():
     import random
     import re
@@ -31,18 +33,20 @@ def scrape_us_prices():
         page = context.new_page()
 
         for asin, item in registry.items():
-            if "regional_prices" not in item:
-                item["regional_prices"] = {}
-            if "regional_asins" not in item:
-                item["regional_asins"] = {}
-
+            normalize_registry_record(item)
             target_asin = item.get("regional_asins", {}).get("US") or asin
             url = f"https://www.amazon.com/dp/{target_asin}"
             price_str = None
+            seller_name = None
 
             try:
                 page.goto(url, timeout=12000, wait_until="domcontentloaded")
                 time.sleep(0.5)
+
+                # Extract seller / merchant info if available
+                merchant_el = page.query_selector("#merchant-info, #sellerProfileTriggerId, #bylineInfo")
+                if merchant_el:
+                    seller_name = merchant_el.inner_text().strip()
 
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
@@ -69,16 +73,23 @@ def scrape_us_prices():
                 if num_val > 10000:
                     price_str = None
 
+            record = create_price_record(
+                price_str=price_str,
+                asin=target_asin,
+                country_code="US",
+                is_direct=True,
+                seller=seller_name,
+                source_url=url,
+                existing_record=item["regional_prices"].get("US")
+            )
+
+            item["regional_prices"]["US"] = record
+            final_p = extract_price_string(record)
             if price_str:
-                item["regional_prices"]["US"] = price_str
-                item["current_price"] = price_str
-                print(f"  • [{asin}] US Price: {price_str}")
+                item["current_price"] = final_p
+                print(f"  • [{asin}] US Price: {final_p}")
             else:
-                existing = item["regional_prices"].get("US", item.get("current_price"))
-                if not existing or "INR" in str(existing) or "₹" in str(existing):
-                    existing = item.get("current_price", "$19.99")
-                item["regional_prices"]["US"] = existing
-                print(f"  • [{asin}] US Price (Preserved): {existing}")
+                print(f"  • [{asin}] US Price (Preserved): {final_p}")
 
         browser.close()
 

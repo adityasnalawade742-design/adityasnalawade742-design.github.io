@@ -28,6 +28,8 @@ extended_domains = [
     ("EG", "Amazon.eg", "https://www.amazon.eg/dp/", "E£")
 ]
 
+from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, STATUS_NOT_MAPPED, get_now_iso
+
 def scrape_extended_domains():
     print("🌍 SCRAPING ALL 14 EXTENDED GLOBAL AMAZON DOMAINS...")
     registry = json.loads(registry_file.read_text(encoding="utf-8"))
@@ -42,16 +44,38 @@ def scrape_extended_domains():
         for cc, name, base_url, symbol in extended_domains:
             print(f"\n📌 Processing Domain: {name} [{cc}]...")
             for asin, item in registry.items():
-                if "regional_prices" not in item:
-                    item["regional_prices"] = {}
+                normalize_registry_record(item)
+                mapped_asin = item.get("regional_asins", {}).get(cc)
 
-                target_asin = item.get("regional_asins", {}).get(cc) or asin
+                # ELIMINATE US-ASIN FALLBACK SCRAPER POLLUTION
+                if not mapped_asin:
+                    item["regional_prices"][cc] = {
+                        "price": "Not Available",
+                        "asin": None,
+                        "country_code": cc,
+                        "is_direct": False,
+                        "identity_verified": False,
+                        "seller_verified": False,
+                        "seller": None,
+                        "ships_from": None,
+                        "source_url": None,
+                        "scraped_at": get_now_iso(),
+                        "status": STATUS_NOT_MAPPED
+                    }
+                    continue
+
+                target_asin = mapped_asin
                 url = f"{base_url}{target_asin}"
                 price_str = None
+                seller_name = None
 
                 try:
                     page.goto(url, timeout=8000, wait_until="domcontentloaded")
                     time.sleep(0.3)
+
+                    merchant_el = page.query_selector("#merchant-info, #sellerProfileTriggerId, #bylineInfo")
+                    if merchant_el:
+                        seller_name = merchant_el.inner_text().strip()
 
                     offscreen = page.query_selector(".a-price .a-offscreen")
                     if offscreen:
@@ -85,12 +109,22 @@ def scrape_extended_domains():
                 except Exception as e:
                     print(f"  ⚠️ {cc} scrape error for {asin}: {e}")
 
+                record = create_price_record(
+                    price_str=price_str,
+                    asin=target_asin,
+                    country_code=cc,
+                    is_direct=True,
+                    seller=seller_name,
+                    source_url=url,
+                    existing_record=item["regional_prices"].get(cc)
+                )
+
+                item["regional_prices"][cc] = record
+                final_p = extract_price_string(record)
                 if price_str:
-                    item["regional_prices"][cc] = price_str
-                    print(f"  • [{asin}] {cc} Price: {price_str}")
+                    print(f"  • [{asin}] {cc} Price: {final_p}")
                 else:
-                    existing = item["regional_prices"].get(cc, "Not Available")
-                    item["regional_prices"][cc] = existing
+                    print(f"  • [{asin}] {cc} Price (Preserved): {final_p}")
 
         browser.close()
 

@@ -985,7 +985,10 @@ def generate_bridge_page(product_data: dict, seo_data: dict, asin: str) -> str:
     Saves file to root repository directory as bridge_{asin}.html.
     """
     import time
+    from modules.price_registry_manager import get_flat_regional_prices
     product_data = dict(product_data) if product_data else {}
+    if "regional_prices" in product_data:
+        product_data["regional_prices"] = get_flat_regional_prices(product_data)
     seo_data = dict(seo_data) if seo_data else {}
 
     output_filename = f"bridge_{asin}.html"

@@ -58,8 +58,11 @@ direct_matrix = {}
 if matrix_file.exists():
     direct_matrix = json.loads(matrix_file.read_text(encoding="utf-8"))
 
+from modules.price_registry_manager import extract_price_string
+
 def safe_reg_price(rp_dict, region_key):
-    val = rp_dict.get(region_key, "Not Available")
+    raw_val = rp_dict.get(region_key, "Not Available")
+    val = extract_price_string(raw_val)
     if region_key != "IN" and ("INR" in str(val) or "₹" in str(val)):
         return "Not Available"
     return val

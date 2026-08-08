@@ -11,6 +11,8 @@ if hasattr(sys.stdout, "reconfigure"):
 repo = Path(__file__).resolve().parent.parent.parent  # C6 FIX: dynamic path
 registry_file = repo / "product_price_registry.json"
 
+from modules.price_registry_manager import create_price_record, extract_price_string, normalize_registry_record, STATUS_NOT_MAPPED, get_now_iso
+
 def scrape_uk_prices():
     print("🇬🇧 [3/7] SCRAPING AMAZON UK (Amazon.co.uk)...")
     registry = json.loads(registry_file.read_text(encoding="utf-8"))
@@ -28,16 +30,39 @@ def scrape_uk_prices():
         page = context.new_page()
 
         for asin, item in registry.items():
-            if "regional_prices" not in item:
-                item["regional_prices"] = {}
+            normalize_registry_record(item)
+            mapped_asin = item.get("regional_asins", {}).get("UK")
+            
+            # ELIMINATE US-ASIN FALLBACK SCRAPER POLLUTION
+            if not mapped_asin:
+                item["regional_prices"]["UK"] = {
+                    "price": "Not Available",
+                    "asin": None,
+                    "country_code": "UK",
+                    "is_direct": False,
+                    "identity_verified": False,
+                    "seller_verified": False,
+                    "seller": None,
+                    "ships_from": None,
+                    "source_url": None,
+                    "scraped_at": get_now_iso(),
+                    "status": STATUS_NOT_MAPPED
+                }
+                print(f"  • [{asin}] UK Price: Not Mapped (US ASIN Fallback Prohibited)")
+                continue
 
-            target_asin = item.get("regional_asins", {}).get("UK") or asin
+            target_asin = mapped_asin
             url = f"https://www.amazon.co.uk/dp/{target_asin}"
             price_str = None
+            seller_name = None
 
             try:
                 page.goto(url, timeout=12000, wait_until="domcontentloaded")
                 time.sleep(0.5)
+
+                merchant_el = page.query_selector("#merchant-info, #sellerProfileTriggerId, #bylineInfo")
+                if merchant_el:
+                    seller_name = merchant_el.inner_text().strip()
 
                 offscreen = page.query_selector(".a-price .a-offscreen")
                 if offscreen:
@@ -67,13 +92,22 @@ def scrape_uk_prices():
             except Exception as e:
                 print(f"  ⚠️ UK scrape error for {asin}: {e}")
 
+            record = create_price_record(
+                price_str=price_str,
+                asin=target_asin,
+                country_code="UK",
+                is_direct=True,
+                seller=seller_name,
+                source_url=url,
+                existing_record=item["regional_prices"].get("UK")
+            )
+
+            item["regional_prices"]["UK"] = record
+            final_p = extract_price_string(record)
             if price_str:
-                item["regional_prices"]["UK"] = price_str
-                print(f"  • [{asin}] UK Price: {price_str}")
+                print(f"  • [{asin}] UK Price: {final_p}")
             else:
-                existing = item["regional_prices"].get("UK", "Not Available")
-                item["regional_prices"]["UK"] = existing
-                print(f"  • [{asin}] UK Price (Preserved): {existing}")
+                print(f"  • [{asin}] UK Price (Preserved): {final_p}")
 
         browser.close()
 
