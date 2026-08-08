@@ -1,6 +1,6 @@
 # 📌 Pinterest Auto-Affiliate Automation System — Master Project State & Handoff Guide
 
-> **Last Updated**: August 3, 2026  
+> **Last Updated**: August 9, 2026  
 > **Repository**: `G:\CLI\pinterest-auto-affiliate`  
 > **Remote Origin**: `https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io.git`  
 > **Live Showcase**: [https://adityasnalawade742-design.github.io/index.html](https://adityasnalawade742-design.github.io/index.html)  
@@ -12,7 +12,7 @@
 > **Developer Contact Email**: `aditya.s.nalawade742@gmail.com`  
 > **Pinterest Account**: `@adityasnalawade0703`  
 > **Git Branch**: `main`  
-> **System Health Verification Status**: ✅ **100% PASS** (`check_fixes.py`)  
+> **System Health Verification Status**: ✅ **100% PASS** (`check_fixes.py` & `test_price_scraper_integrity.py`)  
 
 ---
 
@@ -24,44 +24,23 @@ An **end-to-end automated affiliate marketing & landing page generation platform
 
 ## 2. Complete Summary of Fixed Issues & New Features
 
-### A. Homepage (`index.html`) & SEO Fixes
-- ✅ **Added SEO Canonical Tag**: Added `<link rel="canonical" href="https://adityasnalawade742-design.github.io/index.html">`.
-- ✅ **Fixed SVG Favicon Encoding**: Fixed data URI entity encoding issue (`&lt;svg...&gt;` → standard `<svg...>`).
-- ✅ **Cleaned Grid Structure**: Removed orphaned `<!-- Card TESTASIN12 -->` comment.
-- ✅ **Standardized Asset Paths**: Fixed image path for ASIN `B0C2YLN3H4` (`focus_product_B0C2YLN3H4_hook.jpg`).
-- ✅ **Currency Dropdown Sync**: Expanded dropdown to 46 currencies (added `ARS`, `CNY`, `HKD`, `TWD`, `QAR`, `KWD`, `BHD`, `OMR`, `NGN`, `KES`, `UYU`).
+### A. Scraper & Verification Integrity Fixes
+- ✅ **Marketplace-Aware Seller Verification (`verify_seller`)**: Replaced unsafe `"amazon" in seller_clean.lower()` with a robust strategy that distinguishes Amazon seller (Case A), third-party seller + Amazon fulfillment (Case B), third-party seller (Case C), and seller unknown (Case D).
+- ✅ **Rendered-Page ASIN Identity Verification (`extract_page_asin`)**: Extracts actual ASIN from rendered Amazon pages (`input#ASIN`, `#dp[data-asin]`, `<link rel="canonical">`, and URL redirects) and enforces `detected_asin == target_asin`.
+- ✅ **Verified Price Requirement**: Enforced that `STATUS_FRESH_VERIFIED` strictly requires `is_direct == True`, `identity_verified == True`, AND `seller_verified == True`.
+- ✅ **Rule 7 Regression Tests**: Added 7 new test cases to `test_price_scraper_integrity.py` (total 16 tests passing).
 
-### B. Landing/Bridge Pages Audit & Fixes (All 9 Products)
-- ✅ **Added Canonical Links**: Added `<link rel="canonical" href=".../bridge_{asin}.html">` to all 9 bridge pages.
-- ✅ **Product-Specific Buyer Reviews**: Replaced hardcoded bedside lamp reviews on non-lamp products (suncatcher, ceramic donut vases, mushroom lamp, bird lamp) with product-specific verified buyer reviews.
+### B. Read-Only Takeover Audit
+- ✅ **12-Point System Audit**: Verified git status, HEAD commit, architecture, scraper architecture, schema, OneLink routing, India routing, geo-detection, test suites, and documentation alignment (Verdict: 🟢 **TAKEOVER CONSISTENT**).
 
-### C. Core Generator & Source Template Engine (`modules/bridge_creator.py`)
-- ✅ **Template Canonical Tag**: Added `<link rel="canonical">` into `BRIDGE_PAGE_TEMPLATE` for future products.
-- ✅ **Dynamic Review Fallback**: Replaced hardcoded lamp review with `{{ product.buyer_review or '...' }}` with universal home decor fallback.
-- ✅ **Universal Feature Fallbacks**: Replaced USB-C/linen shade lamp fallbacks with universal room aesthetic features.
-- ✅ **Clean Title Formatting**: Fixed `update_showcase_index_page()` so titles shorter than 50 chars don't get unwanted `...` appended.
-- ✅ **Index Card Data Attributes**: Updated `update_showcase_index_page()` to populate `data-base-usd`, `data-category`, `data-direct-regions`, `data-price-us`, and `data-price-{region}` attributes automatically for newly injected cards.
-
-### D. Web Console Server (`web_console_server.py` & `admin_console.html`)
-- ✅ **Safe Git Push Execution**: Wrapped single campaign git push in `try/except` with `check=False` to prevent network timeouts from failing tasks.
-- ✅ **Local Image Fallback in Batch Prep**: Updated `handle_api_prepare_n8n_batch` to recognize pre-cached local images in `raw_images/raw_{asin}.jpg`.
-- ✅ **0-Byte Image Guard**: Added `st_size > 5000` size checks in `handle_api_create_bridge_page` to prevent 0-byte corrupt image traps.
+### C. Test Suite & Validation
+- ✅ **Full Regression Suite 100% PASS**: `test_price_scraper_integrity.py` (16/16 PASS), `check_fixes.py` (20/20 PASS), `test_affiliate_routing.py` (8/8 PASS), `audit_all_affiliate_tags.py` (23/23 PASS), `validate_all_affiliate_urls.py` (23/23 PASS), `test_bridge_geo_routing.py` (8/8 PASS).
 
 ---
 
-## 3. Active Portfolio Products (9 Items)
+## 3. Active Portfolio Products (23 Items)
 
-| # | ASIN | Product Title | USD Price | Landing Page |
-| :-: | :--- | :--- | :--- | :--- |
-| 1 | **`B0DZD1X83N`** | Minimalist Wood Base Bedside Table Lamp | $20.00 | [bridge_B0DZD1X83N.html](./bridge_B0DZD1X83N.html) |
-| 2 | **`B0GYDXHF4G`** | Flame Aroma Essential Oil Diffuser | $35.00 | [bridge_B0GYDXHF4G.html](./bridge_B0GYDXHF4G.html) |
-| 3 | **`B0FXLYXM32`** | White Wavy Floor Standing Mirror | $76.49 | [bridge_B0FXLYXM32.html](./bridge_B0FXLYXM32.html) |
-| 4 | **`B0C2YLN3H4`** | Modern Ceramic Donut Vase Set of 2 | $28.99 | [bridge_B0C2YLN3H4.html](./bridge_B0C2YLN3H4.html) |
-| 5 | **`B07HP22QTZ`** | Hanging Crystal Suncatcher Prism | $12.99 | [bridge_B07HP22QTZ.html](./bridge_B07HP22QTZ.html) |
-| 6 | **`B0BZXNSW5K`** | Touch Control Dimmable Bedside Lamp | $19.99 | [bridge_B0BZXNSW5K.html](./bridge_B0BZXNSW5K.html) |
-| 7 | **`B0DXKGL1T2`** | Lily of the Valley Flower Desk Lamp | $38.57 | [bridge_B0DXKGL1T2.html](./bridge_B0DXKGL1T2.html) |
-| 8 | **`B0D1FRDFFX`** | Handmade Glass Mushroom Ambient Lamp | $35.98 | [bridge_B0D1FRDFFX.html](./bridge_B0D1FRDFFX.html) |
-| 9 | **`B0D8P8CSYP`** | Cute Bird Touch Control Nightstand Lamp | $18.99 | [bridge_B0D8P8CSYP.html](./bridge_B0D8P8CSYP.html) |
+Catalog consists of 23 active ASINs (`B0FXLYXM32`, `B0C2YLN3H4`, `B07HP22QTZ`, `B0BZXNSW5K`, `B0DXKGL1T2`, `B0D1FRDFFX`, `B0D8P8CSYP`, `B0FGJ1S73D`, `B0CX144DHK`, `B0CJC549C6`, `B0CJ4Q4PZQ`, `B0BQGC76VX`, `B0C7WFZZ7D`, `B0BXP7YWHJ`, `B0D6YRJLCP`, `B0D5YNHXQ7`, `B0BPM41R5C`, `B0DC6HDMRM`, `B0D1G6ZL7Y`, `B0FFG48KCY`, `B0BYP7XB7S`, `B0DQTM3L9J`, `B0CM5RK1K5`).
 
 ---
 
@@ -69,34 +48,23 @@ An **end-to-end automated affiliate marketing & landing page generation platform
 
 When starting a new session or switching AGY accounts:
 
-1. **Verify System Integrity**:
+1. **Pull Latest Code**:
    ```bash
+   git pull origin main
+   ```
+2. **Verify System Integrity**:
+   ```bash
+   python test_price_scraper_integrity.py
    python check_fixes.py
    ```
-2. **Run Zero-Drift Daily Health Check**:
+3. **Run Zero-Drift Daily Health Check**:
    ```bash
    python run_daily_health_check.py
    ```
-3. **Launch Web Console Server**:
+4. **Launch Web Console Server**:
    ```bash
    python -u web_console_server.py
    ```
-4. **Open Admin Console**: Go to `http://localhost:5000` in your browser.
+5. **Open Admin Console**: Go to `http://localhost:5000` in your browser.
 
-All code edits, template fixes, and landing pages are saved in Git and deployed live on GitHub Pages!
-
----
-
-## 5. Amazon Associate Store IDs Across Regions
-
-| Region | Store ID |
-| :--- | :--- |
-| 🇺🇸 US | `smartdeal0358-20` |
-| 🇨🇦 CA | `smartdeal0302-20` |
-| 🇮🇳 IN | `smartdeal0358-21` |
-| 🇬🇧 UK / GB | `smartdea04b3a-21` |
-| 🇩🇪 DE | `smartdeal0bb4-21` |
-| 🇫🇷 FR | `smartdeal0962-21` |
-| 🇪🇸 ES | `smartdeal0b46-21` |
-| 🇮🇹 IT | `smartdea03a8d-21` |
-| All others (SE, NL, PL, TR, BE, MX, BR, SG, AE, SA, EG, JP, AU) | OneLink → nearest native tag |
+All code edits, template fixes, verification rules, and landing pages are saved in Git and deployed live on GitHub Pages!

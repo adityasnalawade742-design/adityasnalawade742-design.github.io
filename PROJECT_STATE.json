@@ -1,16 +1,16 @@
 {
   "project_name": "pinterest-auto-affiliate",
-  "version": "3.3.0",
-  "last_updated": "2026-08-09T02:18:00Z",
+  "version": "3.4.0",
+  "last_updated": "2026-08-09T02:44:00Z",
   "active_products_count": 23,
   "onelink_marketplaces_count": 10,
   "onelink_country_codes": ["US", "CA", "GB", "UK", "FR", "DE", "IT", "ES", "NL", "PL", "SE"],
   "canonical_us_tag": "smartdeal0358-20",
   "india_fallback_tag": "smartdeal0358-21",
-  "scraper_integrity_remediation": "ACTIVE_7_DAY_TTL_AND_PROHIBITED_FALLBACK",
+  "seller_and_asin_verification": "MARKETPLACE_AWARE_SELLER_AND_RENDERED_PAGE_ASIN_VERIFIED",
   "pinterest_app_id": "1596368",
   "pinterest_sandbox_board_id": "1092545259543959836",
   "pinterest_sandbox_status": "23_PINS_PUBLISHED_100_PERCENT_PASS",
-  "test_suite_status": "ALL_PASS",
+  "test_suite_status": "ALL_PASS_100_PERCENT",
   "github_pages_url": "https://adityasnalawade742-design.github.io/"
 }

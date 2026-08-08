@@ -32,32 +32,34 @@
 
 ## 🚀 Major Milestones Completed & Verified
 
-1. **Price Scraper Integrity Remediation & Targeted Audit**:
-   - Built [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py) to manage structured price records, DOM seller info, status semantics (`FRESH_VERIFIED`, `FRESH_UNVERIFIED`, `STALE_VERIFIED`, `NOT_MAPPED`), and 7-day TTL stale price logic.
-   - Prohibited US ASIN fallback scraper pollution across all regional domain scrapers (`scrape_in.py`, `scrape_uk.py`, `scrape_extended_domains.py`).
-   - Created [`test_price_scraper_integrity.py`](file:///G:/CLI/pinterest-auto-affiliate/test_price_scraper_integrity.py) with 9/9 PASS.
-   - Targeted read-only audit completed: Verified identity isolation on `B0BXP7YWHJ` (`NOT_MAPPED`) and `B0CX144DHK` (`FRESH_VERIFIED`).
+1. **Marketplace-Aware Seller Verification & Rendered-Page ASIN Identity Fix**:
+   - Upgraded [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py) with `verify_seller()` (distinguishes Amazon seller, 3rd party + Amazon fulfillment, and 3rd party) and `extract_page_asin()` (extracts ASIN from `input#ASIN`, `#dp[data-asin]`, canonical tag, and page URL).
+   - Enforced that `STATUS_FRESH_VERIFIED` strictly requires `is_direct == True`, `identity_verified == True`, AND `seller_verified == True`.
+   - Updated scrapers (`scrape_us.py`, `scrape_in.py`, `scrape_uk.py`, `scrape_extended_domains.py`).
+   - Added Rule 7 Tests 1–7 to [`test_price_scraper_integrity.py`](file:///G:/CLI/pinterest-auto-affiliate/test_price_scraper_integrity.py) (16/16 PASS).
 
-2. **Verified 10-Marketplace OneLink Architecture**:
-   - `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` configured for OneLink canonical URL routing (`amazon.com/dp/{ASIN}?tag=smartdeal0358-20`).
+2. **Read-Only Takeover Audit**:
+   - Completed 12-point project state takeover audit (Verdict: 🟢 **TAKEOVER CONSISTENT**).
 
-3. **India Tag & Direct Listing Isolation**:
-   - Preserved `smartdeal0358-21` isolation for India (`amazon.in/dp/...` or `amazon.in/s?k=...`).
-
-4. **Automated Test Suite Verification (100% PASS)**:
-   - `python check_fixes.py` (PASS)
+3. **Automated Test Suite Verification (100% PASS)**:
+   - `python test_price_scraper_integrity.py` (16/16 PASS)
+   - `python check_fixes.py` (20/20 PASS)
    - `python test_affiliate_routing.py` (8/8 PASS)
-   - `python audit_all_affiliate_tags.py` (PASS)
+   - `python audit_all_affiliate_tags.py` (23/23 PASS)
    - `python validate_all_affiliate_urls.py` (23/23 PASS)
    - `python test_bridge_geo_routing.py` (8/8 PASS)
-   - `python test_price_scraper_integrity.py` (9/9 PASS)
 
 ---
 
 ## 📌 Instructions for Resuming in a New Session / Account
 
 1. All code, templates, and documentation are committed and pushed to `main`.
-2. To post all 23 pins live to production boards once Pinterest grants Standard Access:
+2. To verify system status in a new AGY account or session:
+   ```powershell
+   python test_price_scraper_integrity.py
+   python check_fixes.py
+   ```
+3. To post all 23 pins live to production boards once Pinterest grants Standard Access:
    ```powershell
    python publish_all_homepage_pins.py prod
    ```
