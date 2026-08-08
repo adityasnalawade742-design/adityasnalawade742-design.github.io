@@ -1553,6 +1553,11 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
             cat_val = reg_entry.get('category') or classify_product_category(title)
             target_board_id = get_board_for_category(cat_val)
 
+            import base64
+            b64_str = ""
+            if Path(hook_img_path).exists():
+                b64_str = base64.b64encode(Path(hook_img_path).read_bytes()).decode('utf-8')
+
             self.send_json({
                 'status': 'success',
                 'asin': asin,
@@ -1560,6 +1565,7 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
                 'board_id': target_board_id,
                 'bridge_url': bridge_url,
                 'hook_image_url': hook_image_url,
+                'image_base64': b64_str,
                 'message': f'Bridge page and hook image created for {asin}. Deploying to GitHub Pages...'
             })
         except Exception as e:
