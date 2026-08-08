@@ -1,4 +1,5 @@
 {
+  "name": "Pinterest Automated Affiliate Pipeline Pro",
   "nodes": [
     {
       "parameters": {
@@ -49,16 +50,16 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $json;\n\n    // 1. Title Sanitizer (Max 35 chars)\n    let title = (item.title || '').trim();\n    if (!title || title.startsWith('Product B0') || title.startsWith('Product ')) {\n      title = (item.image_hook || item.pin_title || '').trim();\n    }\n    if (title.length > 35) {\n      const words = title.split(' ');\n      let shortW = [];\n      let cLen = 0;\n      for (const w of words) {\n        if (cLen + w.length + 1 <= 35) {\n          shortW.push(w);\n          cLen += w.length + 1;\n        } else break;\n      }\n      title = shortW.length > 0 ? shortW.join(' ') : title.substring(0, 35);\n    }\n\n    // 2. Price Sanitizer\n    let price = (item.price || '').toString().trim();\n    if (price.startsWith('.')) price = '$19' + price;\n    if (price && !price.startsWith('$') && !/[₹£€¥]/.test(price)) price = '$' + price;\n\n    return {\n      json: {\n        ...item,\n        asin: item.asin,\n        title: title,\n        price: price,\n        pin_title: item.pin_title || title,\n        pin_description: item.pin_description || '',\n        badge_hook: item.badge_hook || 'VIRAL ROOM FIND',\n        chosen_photo_url: item.chosen_photo_url || item.winner_photo\n      }\n    };\n"
+        "jsCode": "const item = $json;\n\n    // 1. Title Sanitizer (Max 35 chars)\n    let title = (item.title || '').trim();\n    if (!title || title.startsWith('Product B0') || title.startsWith('Product ')) {\n      title = (item.image_hook || item.pin_title || '').trim();\n    }\n    if (title.length > 35) {\n      const words = title.split(' ');\n      let shortW = [];\n      let cLen = 0;\n      for (const w of words) {\n        if (cLen + w.length + 1 <= 35) {\n          shortW.push(w);\n          cLen += w.length + 1;\n        } else break;\n      }\n      title = shortW.length > 0 ? shortW.join(' ') : title.substring(0, 35);\n    }\n\n    // 2. Price Sanitizer\n    let price = (item.price || '').toString().trim();\n    if (price.startsWith('.')) price = '$19' + price;\n    if (price && !price.startsWith('$') && !/[₹£€¥]/.test(price)) price = '$' + price;\n\n    return {\n      json: {\n        ...item,\n        asin: item.asin,\n        title: title,\n        price: price,\n        pin_title: item.pin_title || title,\n        pin_description: item.pin_description || '',\n        badge_hook: item.badge_hook || 'VIRAL ROOM FIND',\n        chosen_photo_url: item.chosen_photo_url || item.winner_photo\n      }\n    };"
       },
+      "id": "d10ed056-f120-42bc-8a26-d2f246c98287",
+      "name": "Code in JavaScript",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         688,
         496
-      ],
-      "id": "d10ed056-f120-42bc-8a26-d2f246c98287",
-      "name": "Code in JavaScript"
+      ]
     },
     {
       "parameters": {
