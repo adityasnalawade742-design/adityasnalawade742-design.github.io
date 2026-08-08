@@ -1,7 +1,7 @@
 ================================================================================
 🏛️ PINTEREST AUTO-AFFILIATE PLATFORM: COMPLETE SYSTEM & GLOBAL LINKING GUIDE
 ================================================================================
-Document Version: 2.0 (Master Production Reference)
+Document Version: 3.0 (Master Production Reference - Authoritative Geo & Pricing Edition)
 Platform Owner: Aditya Santosh Nalawade (Cozy Room Finds)
 Application Name: Cozy Room Decor Publisher Pro (App ID: 1596368)
 Target Audience: System Engineers, Operations Team, Pinterest Reviewers & Admins
@@ -11,20 +11,27 @@ Target Audience: System Engineers, Operations Team, Pinterest Reviewers & Admins
 ================================================================================
 This platform is an automated, high-converting affiliate marketing and multi-region 
 e-commerce ecosystem. It converts visual traffic from Pinterest into Amazon Associate 
-affiliate commissions with a 100% Zero 404-Error Guarantee across 21 international 
-Amazon marketplaces.
+affiliate commissions with a 100% Zero 404-Error Guarantee across international 
+Amazon marketplaces using Amazon OneLink and direct local store fallback routing.
 
 Core Platform Pillars:
-  1. 100% User-Directed Publishing: Complies with Pinterest API v5 Guidelines.
+  1. 100% User-Directed Publishing: Complies strictly with Pinterest API v5 Guidelines.
   2. 8K AI Image Generation: Uses Replicate Flux Dev AI model to turn product photos 
      into commercial lifestyle room scenes.
   3. Playwright Price Badge Overlay: Renders custom graphic price badges on top of 
      generated AI visuals.
-  4. 21-Domain Regional Geo Matrix: Automatically routes global visitors to their native 
-     local Amazon store (e.g., amazon.in for India, amazon.co.uk for UK, amazon.de for 
-     Germany, amazon.ca for Canada, etc.) carrying official Associate Tag IDs.
-  5. 45-World Currency Engine: Automatically converts product prices into the visitor's 
-     local currency using real-time open exchange rates.
+  4. Authoritative Network-First Geo Engine: Uses Cloudflare trace and cascading IP 
+     APIs with a 1.5-second fallback deadline and single-resolution guard (`commitResolution`).
+  5. Amazon OneLink Integration: Preserves canonical Amazon.com URLs (`smartdeal0358-20`) 
+     for OneLink countries (US, CA, UK/GB, DE, FR, IT, ES), letting Amazon servers execute 
+     seamless regional store routing.
+  6. Verified vs Unverified Pricing Engine: Displays `✨ VERIFIED DEAL` strictly when 
+     a direct regional ASIN is verified, and labels reseller/import prices as 
+     `⚠️ UNLISTED IN REGION • Approx. [price]`.
+  7. Geo-Aware Shipping & Prime Messaging: Displays `⚡ Prime 2-Day Free Shipping` for 
+     US visitors, `📦 Amazon OneLink International Delivery` for OneLink countries, 
+     `📦 Amazon India Delivery Available` for direct India listings, and 
+     `📦 US Import • Search Amazon.in Deals` for search fallbacks.
 
 ================================================================================
 2. THE 5-LAYER TECHNICAL ARCHITECTURE
@@ -42,10 +49,10 @@ Functions:
   - Calculates precision prompt strength values (0.78 for cutouts, 0.50 for relighting).
 
 --------------------------------------------------------------------------------
-LAYER 2: FLASK WEB CONSOLE SERVER (PORT 5000)
+LAYER 2: FLASK WEB CONSOLE SERVER (PORT 5000 - LOCALHOST BOUND)
 --------------------------------------------------------------------------------
 File: web_console_server.py
-Access URL: http://localhost:5000/console or http://127.0.0.1:5000/
+Access URL: http://127.0.0.1:5000/ (Bound strictly to localhost for security)
 Functions:
   - Serves an interactive local web control dashboard (admin_console.html).
   - Handles single-product discovery, batch extraction, and image selection.
@@ -83,12 +90,13 @@ Functions:
   - Headless Playwright browser launches HTML template (glassmorphism dark badge card).
   - Overlays headline, price tag, rating, and feature bullets onto the generated AI visual.
   - Compiles full Jinja2 luxury bridge page (bridge_{ASIN}.html).
+  - Embeds Network-First geo-detection engine with single-resolution lock (`commitResolution`).
   - Dynamically inserts product card wrapper into root index.html showcase grid.
 
 --------------------------------------------------------------------------------
 LAYER 5: PUBLIC STOREFRONT CATALOG & GITHUB PAGES DEPLOYMENT
 --------------------------------------------------------------------------------
-Files: index.html, .github/workflows/pages.yml
+Files: index.html, sitemap.xml, .github/workflows/pages.yml
 Live Domain: https://adityasnalawade742-design.github.io/
 Functions:
   - Serves static e-commerce catalog featuring search input, clear button (✕), category 
@@ -101,7 +109,7 @@ Functions:
 ================================================================================
 
 Step 1: Product Selection & Discovery
-  - Enter product ASIN or keyword in Web Console (http://localhost:5000).
+  - Enter product ASIN or keyword in Web Console (http://127.0.0.1:5000).
   - Scraper fetches listing title, price, bullet features, and top 5 image options.
 
 Step 2: User Approval & Batch Dispatch
@@ -123,175 +131,72 @@ Step 5: Pinterest Pin Publishing
   - Pin goes live on your target Pinterest board.
 
 ================================================================================
-4. 21-DOMAIN INTERNATIONAL GEO MATRIX & GLOBAL LINKING MECHANICS
+4. GEO-ROUTING ENGINE, ONELINK & AFFILIATE TAG COMPLIANCE
 ================================================================================
 
 --------------------------------------------------------------------------------
-THE PROBLEM WITH STANDARD AFFILIATE LINKS
+AUTHORITATIVE NETWORK-FIRST GEO ENGINE (bridge_{ASIN}.html)
 --------------------------------------------------------------------------------
-If an international visitor from India, UK, or Germany clicks a standard US Amazon link 
-(amazon.com/dp/ASIN):
-  1. Amazon US charges high international shipping fees and import duties (causing 95%+ 
-     visitor bounce rate).
-  2. If that specific ASIN is not listed in Amazon US, the visitor gets Amazon's 
-     infamous 404 "Looking for something? We're sorry" dog error page.
+When a visitor lands on a bridge page from Pinterest, our embedded JavaScript geo-engine 
+executes dynamically:
 
---------------------------------------------------------------------------------
-OUR SOLUTION: 0MS CLIENT-SIDE GEO-REDIRECTOR (bridge_{ASIN}.html)
---------------------------------------------------------------------------------
-Every Pin published on Pinterest links back to a dedicated luxury landing page:
-  https://adityasnalawade742-design.github.io/bridge_{ASIN}.html
+  1. Network IP Geo Detection (PRIMARY):
+     - Fetches `https://www.cloudflare.com/cdn-cgi/trace` and fallback IP APIs.
+     - Network IP result is strictly authoritative when it returns a valid country code.
 
-When an international visitor opens this page, our embedded JavaScript geo-engine 
-executes instantly in 0 milliseconds:
+  2. 1.5-Second Fallback Deadline Timer:
+     - Sets a 1500ms timeout deadline. Timezone and language signals are evaluated 
+       ONLY if network requests fail or time out.
 
-  1. Country Detection:
-     - Checks URL parameter first (e.g., ?country=IN or ?country=UK).
-     - If omitted, inspects browser timezone (Intl.DateTimeFormat) and IP geolocation 
-       service (ipapi.co).
-     - Resolves 2-letter country code (US, IN, GB, DE, CA, FR, ES, IT, SE, NL, PL, TR, 
-       BE, JP, AU, MX, BR, SG, AE, SA, EG).
-
-  2. Matrix Lookup (global_direct_matrix.json):
-     - The system checks if the exact product ASIN has been empirically verified to exist 
-       in that country's local Amazon catalog.
-
-  3. Routing Execution:
-     - Direct ASIN Match (YES): Redirects visitor directly to local product page:
-       Example: https://www.amazon.in/dp/B0BZXNSW5K?tag=smartdeal0358-21
-     - Targeted Search Fallback (NO): Redirects visitor to local category search results:
-       Example: https://www.amazon.in/s?k=Touch+Bedside+Lamp&tag=smartdeal0358-21
+  3. Single-Resolution Guard (`commitResolution`):
+     - Prevents race conditions and guarantees that exactly ONE country decision is 
+       committed per page load. Late network callbacks cannot overwrite a committed state.
 
 --------------------------------------------------------------------------------
-EXACT BREAKDOWN OF ALL 21 REGIONAL AMAZON DOMAINS & STORE TAGS
+AMAZON ONELINK & INDIA ROUTING RULES
 --------------------------------------------------------------------------------
+  - OneLink Countries (US, CA, GB/UK, DE, FR, IT, ES):
+    Preserves canonical URL: https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20
+    Amazon OneLink handles server-side store redirection on Amazon servers.
 
- 1. 🇺🇸 United States
-    - Domain: amazon.com
-    - Tag ID: smartdeal0358-20
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
+  - India Direct Listing (Verified Direct ASIN in regional_asins):
+    CTA: https://www.amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21
+    Badge: 📦 Amazon India Delivery Available
+    Tag: ✨ VERIFIED DEAL • ₹[Price]
 
- 2. 🇮🇳 India
-    - Domain: amazon.in
-    - Tag ID: smartdeal0358-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 3. 🇬🇧 United Kingdom
-    - Domain: amazon.co.uk
-    - Tag ID: smartdea04b3a-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 4. 🇩🇪 Germany
-    - Domain: amazon.de
-    - Tag ID: smartdeal0bb4-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 5. 🇨🇦 Canada
-    - Domain: amazon.ca
-    - Tag ID: smartdeal0302-20
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 6. 🇫🇷 France
-    - Domain: amazon.fr
-    - Tag ID: smartdeal0962-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 7. 🇪🇸 Spain
-    - Domain: amazon.es
-    - Tag ID: smartdeal0b46-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 8. 🇮🇹 Italy
-    - Domain: amazon.it
-    - Tag ID: smartdea03a8d-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
- 9. 🇸🇪 Sweden
-    - Domain: amazon.se
-    - Tag ID: smartdeal0bb4-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-10. 🇳🇱 Netherlands
-    - Domain: amazon.nl
-    - Tag ID: smartdeal0bb4-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-11. 🇵🇱 Poland
-    - Domain: amazon.pl
-    - Tag ID: smartdeal0bb4-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-12. 🇹🇷 Turkey
-    - Domain: amazon.com.tr
-    - Tag ID: smartdeal0bb4-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-13. 🇧🇪 Belgium
-    - Domain: amazon.com.be
-    - Tag ID: smartdeal0962-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-14. 🇯🇵 Japan
-    - Domain: amazon.co.jp
-    - Tag ID: smartdeal0358-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-15. 🇦🇺 Australia
-    - Domain: amazon.com.au
-    - Tag ID: smartdeal0358-21
-    - Strategy: Direct ASIN Page (/dp/{ASIN}) when verified, else Category Search.
-
-16. 🇲🇽 Mexico
-    - Domain: amazon.com.mx
-    - Tag ID: smartdeal0358-21
-    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
-
-17. 🇧🇷 Brazil
-    - Domain: amazon.com.br
-    - Tag ID: smartdeal0358-21
-    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
-
-18. 🇸🇬 Singapore
-    - Domain: amazon.sg
-    - Tag ID: smartdeal0358-21
-    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
-
-19. 🇦🇪 United Arab Emirates
-    - Domain: amazon.ae
-    - Tag ID: smartdeal0358-21
-    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
-
-20. 🇸🇦 Saudi Arabia
-    - Domain: amazon.sa
-    - Tag ID: smartdeal0358-21
-    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
-
-21. 🇪🇬 Egypt
-    - Domain: amazon.eg
-    - Tag ID: smartdeal0358-21
-    - Strategy: Targeted Category Search Fallback (/s?k={keywords}).
+  - India Search Fallback (No Direct ASIN in regional_asins):
+    CTA: https://www.amazon.in/s?k={keywords}&tag=smartdeal0358-21
+    Badge: 📦 US Import • Search Amazon.in Deals
+    Tag: ⚠️ UNLISTED IN REGION • Approx. ₹[Price]
+    Banner: Item Ships from Amazon US (Not Directly Listed on amazon.in)
 
 --------------------------------------------------------------------------------
-ZERO 404 GUARANTEE & 24-HOUR COOKIE ATTRIBUTION
+ASSOCIATE TAG ISOLATION GUARANTEE
 --------------------------------------------------------------------------------
-  - No 404 Errors: Visitors never see a broken link regardless of which country they 
-    click from.
-  - Local Currency Payouts: Visitors purchase in their home currency (INR, GBP, EUR, 
-    CAD, AUD, JPY) with local Prime 1-day/2-day shipping.
-  - 24-Hour Cart Attribution: When a visitor lands on Amazon via your link, any item 
-    they add to their cart and purchase within 24 hours generates an affiliate commission 
-    credited to your Associate account.
+  - smartdeal0358-20 : Used EXCLUSIVELY for US/OneLink canonical URLs on amazon.com.
+  - smartdeal0358-21 : Used EXCLUSIVELY for Amazon India URLs on amazon.in.
+  - Zero tag cross-contamination exists across Python code, JSON configs, n8n, or HTML.
 
 ================================================================================
-5. MULTI-CURRENCY ENGINE & LIVE PRICE SYNCHRONIZATION
+5. VERIFIED VS UNVERIFIED PRICING & SHIPPING MESSAGING
 ================================================================================
-  - Supported Currencies: USD ($), INR (₹), GBP (£), EUR (€), CAD (CA$), AUD (AU$), 
-    JPY (¥), SEK (kr), BRL (R$), AED (AED), MXN (Mex$), PLN (zł), etc.
-  - Dynamic Conversion: Fetches real-time exchange rates from Open Exchange Rates API 
-    (https://open.er-api.com/v6/latest/USD).
-  - Out-of-Stock Handling: When an item is out of stock in a specific market (e.g., India), 
-    the hero price tag switches to "Not Available" and the primary CTA button adapts to 
-    local search fallback.
+
+--------------------------------------------------------------------------------
+VERIFIED PRICE LABELING RULE
+--------------------------------------------------------------------------------
+A price is labeled `✨ VERIFIED DEAL` ONLY when `isDirectListing === true` (verified 
+regional ASIN or US source listing). Unlisted reseller import prices or search fallbacks 
+are labeled `⚠️ UNLISTED IN REGION • Approx. [price]`. Real-time exchange rate conversions 
+are explicitly prefixed with `Approx.`.
+
+--------------------------------------------------------------------------------
+GEO-AWARE SHIPPING BADGES
+--------------------------------------------------------------------------------
+  - US Visitors (`targetCC === 'US'`): ⚡ Prime 2-Day Free Shipping
+  - OneLink Visitors (`CA`, `GB`, `UK`, `DE`, `FR`, `IT`, `ES`): 📦 Amazon OneLink International Delivery
+  - India Direct Listing (`IN` + direct ASIN): 📦 Amazon India Delivery Available
+  - India Search Fallback (`IN` + unlisted ASIN): 📦 US Import • Search Amazon.in Deals
+  - Other / Unknown Countries: 📦 Amazon Global Delivery
 
 ================================================================================
 6. PINTEREST API V5 COMPLIANCE & OAUTH INTEGRATION
@@ -319,24 +224,24 @@ ZERO 404 GUARANTEE & 24-HOUR COOKIE ATTRIBUTION
 8. MASTER COMMANDS & ADMINISTRATIVE PROCEDURES
 ================================================================================
 
-1. Start Web Console Server:
+1. Start Web Console Server (Localhost 127.0.0.1:5000):
    python web_console_server.py
 
-2. Rebuild All Landing Pages & Sync Matrix:
+2. Rebuild All Landing Pages & Sitemap:
    python rebuild_EVERY_single_bridge.py
 
-3. Delete a Product Campaign:
-   python delete_product.py <ASIN>
-   Example: python delete_product.py B0GYDXHF4G
-
-4. Run 21-Domain Price Sync:
-   python sync_exact_amazon_prices.py
-
-5. Validate Outgoing Affiliate Links & Tags:
+3. Run Complete Automated Verification Suite:
+   python check_fixes.py
+   python test_affiliate_routing.py
+   python audit_all_affiliate_tags.py
    python validate_all_affiliate_urls.py
+   python test_bridge_geo_routing.py
 
-6. Run Master 20-Step Full Diagnostic Audit:
-   python scratch/master_full_project_auditor.py
+4. Delete a Product Campaign:
+   python delete_product.py <ASIN>
+
+5. Run 21-Domain Sequential Price Sync:
+   python sync_exact_amazon_prices.py
 
 ================================================================================
 END OF MASTER DOCUMENTATION GUIDE
