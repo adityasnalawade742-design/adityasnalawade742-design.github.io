@@ -1,7 +1,7 @@
 ================================================================================
 🏛️ PINTEREST AUTO-AFFILIATE PLATFORM: COMPLETE SYSTEM & GLOBAL LINKING GUIDE
 ================================================================================
-Document Version: 3.0 (Master Production Reference - Authoritative Geo & Pricing Edition)
+Document Version: 3.0 (Master Enterprise Production Reference)
 Platform Owner: Aditya Santosh Nalawade (Cozy Room Finds)
 Application Name: Cozy Room Decor Publisher Pro (App ID: 1596368)
 Target Audience: System Engineers, Operations Team, Pinterest Reviewers & Admins
@@ -40,9 +40,10 @@ Core Platform Pillars:
 --------------------------------------------------------------------------------
 LAYER 1: DISCOVERY & AMAZON SCRAPER ENGINE
 --------------------------------------------------------------------------------
-Files: modules/scrapers/scrape_us.py, modules/amazon_extractor.py
+Files: modules/scrapers/scrape_us.py, modules/amazon_extractor.py, product_price_registry.json
 Functions:
-  - Scrapes raw product metadata directly from Amazon US and international listings.
+  - Scrapes raw product metadata directly from Amazon US and international listings using 
+    headless Playwright browsers and BeautifulSoup4 parsing.
   - Extracts ASIN code, product title, USD list price, star rating, bullet features, 
     and high-resolution image URLs (SL1500 resolution).
   - Classifies listing photos into "White Cutout Studio Photos" vs "Existing Lifestyle Photos".
@@ -131,87 +132,196 @@ Step 5: Pinterest Pin Publishing
   - Pin goes live on your target Pinterest board.
 
 ================================================================================
-4. GEO-ROUTING ENGINE, ONELINK & AFFILIATE TAG COMPLIANCE
+4. AUTHORITATIVE NETWORK-FIRST GEO ENGINE & ROUTING MECHANICS
 ================================================================================
 
 --------------------------------------------------------------------------------
-AUTHORITATIVE NETWORK-FIRST GEO ENGINE (bridge_{ASIN}.html)
+CLIENT-SIDE GEO DETECTION ARCHITECTURE (bridge_{ASIN}.html)
 --------------------------------------------------------------------------------
-When a visitor lands on a bridge page from Pinterest, our embedded JavaScript geo-engine 
-executes dynamically:
+When an international visitor opens any bridge landing page, our embedded client-side 
+JavaScript engine executes dynamic geo-resolution:
 
-  1. Network IP Geo Detection (PRIMARY):
-     - Fetches `https://www.cloudflare.com/cdn-cgi/trace` and fallback IP APIs.
-     - Network IP result is strictly authoritative when it returns a valid country code.
+  1. Network IP Geo Detection (PRIMARY AUTHORITATIVE SOURCE):
+     - Initiates an immediate fetch to `https://www.cloudflare.com/cdn-cgi/trace`.
+     - Cascades to secondary IP APIs (`ipwho.is`, `freeipapi.com`, `api.country.is`, `ipapi.co`) 
+       if Cloudflare trace fails.
+     - The Network IP response is strictly authoritative when it returns a valid 2-letter 
+       country code.
 
   2. 1.5-Second Fallback Deadline Timer:
-     - Sets a 1500ms timeout deadline. Timezone and language signals are evaluated 
-       ONLY if network requests fail or time out.
+     - Sets a 1500ms deadline (`setTimeout(..., 1500)`).
+     - Passive timezone (`Intl.DateTimeFormat`) and browser language (`navigator.language`) 
+       detection runs ONLY if network requests time out or fail.
+     - Timezone/language signals NEVER execute synchronously on page load to commit 
+       affiliate URLs.
 
   3. Single-Resolution Guard (`commitResolution`):
-     - Prevents race conditions and guarantees that exactly ONE country decision is 
-       committed per page load. Late network callbacks cannot overwrite a committed state.
+     - `let isResolved = false` lock guarantees that exactly ONE country decision is 
+       committed per page view.
+     - Once resolution is committed, late network callbacks or fallback timers are 
+       ignored, eliminating race conditions.
+
+  4. Safe Default Href Protection:
+     - The CTA button `href` remains locked to the canonical OneLink URL 
+       (`https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20`) until `commitResolution()` 
+       executes and applies target routing.
+
+================================================================================
+5. AMAZON ONELINK INTEGRATION & ASSOCIATE TAG ISOLATION
+================================================================================
 
 --------------------------------------------------------------------------------
-AMAZON ONELINK & INDIA ROUTING RULES
+ONELINK MARKETPLACE ROUTING (US, CA, UK/GB, DE, FR, IT, ES)
 --------------------------------------------------------------------------------
-  - OneLink Countries (US, CA, GB/UK, DE, FR, IT, ES):
-    Preserves canonical URL: https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20
-    Amazon OneLink handles server-side store redirection on Amazon servers.
+For visitors from Amazon OneLink enabled countries (United States, Canada, United Kingdom, 
+Germany, France, Italy, Spain):
+  - The bridge JavaScript sets the CTA link to canonical Amazon US:
+    `https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20`
+  - The client browser navigates to Amazon.com.
+  - Amazon OneLink (enabled on the Amazon Associate Console for tag `smartdeal0358-20`) 
+    detects the visitor's local IP on Amazon servers and redirects them to their local store 
+    (e.g., amazon.co.uk or amazon.de) while preserving affiliate attribution.
 
-  - India Direct Listing (Verified Direct ASIN in regional_asins):
-    CTA: https://www.amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21
-    Badge: 📦 Amazon India Delivery Available
-    Tag: ✨ VERIFIED DEAL • ₹[Price]
+--------------------------------------------------------------------------------
+INDIA DIRECT VS SEARCH FALLBACK ROUTING
+--------------------------------------------------------------------------------
+For visitors from India (`IN`):
+  - Case A: Verified Direct Listing (`regional_asins['IN']` exists):
+    CTA URL: `https://www.amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21`
+    Button Text: `BUY ON AMAZON INDIA (₹)`
+    Badge: `📦 Amazon India Delivery Available`
+    Tag Label: `✨ VERIFIED DEAL • ₹[Price]`
 
-  - India Search Fallback (No Direct ASIN in regional_asins):
-    CTA: https://www.amazon.in/s?k={keywords}&tag=smartdeal0358-21
-    Badge: 📦 US Import • Search Amazon.in Deals
-    Tag: ⚠️ UNLISTED IN REGION • Approx. ₹[Price]
-    Banner: Item Ships from Amazon US (Not Directly Listed on amazon.in)
+  - Case B: Search Fallback (`regional_asins['IN']` missing):
+    CTA URL: `https://www.amazon.in/s?k={keywords}&tag=smartdeal0358-21`
+    Button Text: `SEARCH LOCAL DEALS ON AMAZON INDIA (₹)`
+    Badge: `📦 US Import • Search Amazon.in Deals`
+    Tag Label: `⚠️ UNLISTED IN REGION • Approx. ₹[Price]`
+    Notice Banner: `Item Ships from Amazon US (Not Directly Listed on amazon.in)`
 
 --------------------------------------------------------------------------------
 ASSOCIATE TAG ISOLATION GUARANTEE
 --------------------------------------------------------------------------------
-  - smartdeal0358-20 : Used EXCLUSIVELY for US/OneLink canonical URLs on amazon.com.
-  - smartdeal0358-21 : Used EXCLUSIVELY for Amazon India URLs on amazon.in.
-  - Zero tag cross-contamination exists across Python code, JSON configs, n8n, or HTML.
+  - `smartdeal0358-20` : Used EXCLUSIVELY for canonical US/OneLink URLs on `amazon.com`.
+  - `smartdeal0358-21` : Used EXCLUSIVELY for Amazon India URLs on `amazon.in`.
+  - Zero tag cross-contamination exists across Python scripts, JSON configs, n8n, or HTML.
 
 ================================================================================
-5. VERIFIED VS UNVERIFIED PRICING & SHIPPING MESSAGING
+6. VERIFIED VS UNVERIFIED PRICING ENGINE
 ================================================================================
 
 --------------------------------------------------------------------------------
 VERIFIED PRICE LABELING RULE
 --------------------------------------------------------------------------------
 A price is labeled `✨ VERIFIED DEAL` ONLY when `isDirectListing === true` (verified 
-regional ASIN or US source listing). Unlisted reseller import prices or search fallbacks 
-are labeled `⚠️ UNLISTED IN REGION • Approx. [price]`. Real-time exchange rate conversions 
-are explicitly prefixed with `Approx.`.
+regional ASIN mapping or US canonical source listing). 
+
+If `isDirectListing === false` (e.g. reseller import price, keyword search fallback), 
+the price tag is NEVER presented as a verified deal. It is explicitly labeled:
+`⚠️ UNLISTED IN REGION • Approx. [price]`
 
 --------------------------------------------------------------------------------
-GEO-AWARE SHIPPING BADGES
+EXCHANGE RATE CURRENCY CONVERSION
 --------------------------------------------------------------------------------
-  - US Visitors (`targetCC === 'US'`): ⚡ Prime 2-Day Free Shipping
-  - OneLink Visitors (`CA`, `GB`, `UK`, `DE`, `FR`, `IT`, `ES`): 📦 Amazon OneLink International Delivery
-  - India Direct Listing (`IN` + direct ASIN): 📦 Amazon India Delivery Available
-  - India Search Fallback (`IN` + unlisted ASIN): 📦 US Import • Search Amazon.in Deals
-  - Other / Unknown Countries: 📦 Amazon Global Delivery
+  - Real-time exchange rates fetched from Open Exchange Rates API 
+    (`https://open.er-api.com/v6/latest/USD`).
+  - Converted regional prices without a direct listing are explicitly prefixed as `Approx.`:
+    Example: `Approx. ₹7,096.67` or `Approx. £66.29` or `Approx. kr289,99`.
 
 ================================================================================
-6. PINTEREST API V5 COMPLIANCE & OAUTH INTEGRATION
+7. GEO-AWARE SHIPPING & PRIME MESSAGING BADGES
 ================================================================================
-  - App Name: Cozy Room Decor Publisher Pro
-  - App ID: 1596368
-  - Authorization: Uses official OAuth 2.0 access tokens stored in environment variables.
+
+The `.prime-badge` element updates dynamically based on visitor country and routing mode:
+  - US Visitors (`targetCC === 'US'`): `⚡ Prime 2-Day Free Shipping`
+  - OneLink Visitors (`CA`, `GB`, `UK`, `DE`, `FR`, `IT`, `ES`): `📦 Amazon OneLink International Delivery`
+  - India Direct Listing (`IN` + direct ASIN): `📦 Amazon India Delivery Available`
+  - India Search Fallback (`IN` + unlisted ASIN): `📦 US Import • Search Amazon.in Deals`
+  - Other / Unknown Countries: `📦 Amazon Global Delivery`
+
+No unsupported or unverified delivery-time promises are ever displayed to non-US visitors.
+
+================================================================================
+8. 21-DOMAIN INTERNATIONAL REGIONAL MATRIX & STORE TAG CATALOG
+================================================================================
+
+ 1. 🇺🇸 United States
+    - Domain: amazon.com | Tag: smartdeal0358-20 | Strategy: Direct / OneLink Canonical
+ 2. 🇮🇳 India
+    - Domain: amazon.in | Tag: smartdeal0358-21 | Strategy: Direct ASIN or Search Fallback
+ 3. 🇬🇧 United Kingdom
+    - Domain: amazon.co.uk | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+ 4. 🇩🇪 Germany
+    - Domain: amazon.de | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+ 5. 🇨🇦 Canada
+    - Domain: amazon.ca | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+ 6. 🇫🇷 France
+    - Domain: amazon.fr | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+ 7. 🇪🇸 Spain
+    - Domain: amazon.es | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+ 8. 🇮🇹 Italy
+    - Domain: amazon.it | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+ 9. 🇸🇪 Sweden
+    - Domain: amazon.se | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+10. 🇳🇱 Netherlands
+    - Domain: amazon.nl | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+11. 🇵🇱 Poland
+    - Domain: amazon.pl | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+12. 🇹🇷 Turkey
+    - Domain: amazon.com.tr | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+13. 🇧🇪 Belgium
+    - Domain: amazon.com.be | Tag: smartdeal0358-20 (via OneLink) | Strategy: OneLink Canonical
+14. 🇯🇵 Japan
+    - Domain: amazon.co.jp | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+15. 🇦🇺 Australia
+    - Domain: amazon.com.au | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+16. 🇲🇽 Mexico
+    - Domain: amazon.com.mx | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+17. 🇧🇷 Brazil
+    - Domain: amazon.com.br | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+18. 🇸🇬 Singapore
+    - Domain: amazon.sg | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+19. 🇦🇪 United Arab Emirates
+    - Domain: amazon.ae | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+20. 🇸🇦 Saudi Arabia
+    - Domain: amazon.sa | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+21. 🇪🇬 Egypt
+    - Domain: amazon.eg | Tag: smartdeal0358-20 | Strategy: Global Delivery Fallback
+
+================================================================================
+9. DAILY PRICE SYNC & ZERO-DRIFT PIPELINE
+================================================================================
+
+Automated daily cron entrypoint: `sync_exact_amazon_prices.py`
+Execution sequence:
+  1. `sync_all_regional_prices_master.py`: Executes Playwright scrapers (`scrape_us.py`, 
+     `scrape_in.py`, `scrape_uk.py`, `scrape_de.py`, etc.) sequentially. Updates `product_price_registry.json`.
+  2. `run_daily_health_check.py`: Performs zero-drift price audits, updates `index.html` data attributes.
+  3. `validate_all_affiliate_urls.py`: Validates outgoing affiliate links and Store IDs.
+  4. `rebuild_EVERY_single_bridge.py`: Re-compiles all bridge HTML pages, generates `sitemap.xml`, and commits/pushes live to GitHub Pages.
+
+================================================================================
+10. PINTEREST API V5 COMPLIANCE & OAUTH INTEGRATION
+================================================================================
+  - App Name: Cozy Room Decor Publisher Pro (App ID: 1596368)
+  - Authorization: OAuth 2.0 access tokens stored securely in `.env`.
   - User-Directed Publishing: Pin publishing occurs strictly after the authorized account 
     owner reviews generated Pin content and explicitly approves dispatch.
-  - Trial Sandbox Support: Supports base64 inline image payloads (source_type: "image_base64") 
-    so Pinterest Sandbox mode (api-sandbox.pinterest.com) posts successfully without 
-    needing external internet web crawling.
+  - Trial Sandbox Support: Supports base64 inline image payloads (`source_type: "image_base64"`) 
+    so Pinterest Sandbox mode (`api-sandbox.pinterest.com`) posts successfully without 
+    requiring external web crawling.
 
 ================================================================================
-7. LEGAL COMPLIANCE & FTC DISCLOSURES
+11. SECURITY HARDENING & LOCALHOST ISOLATION
+================================================================================
+  - Web Console Binding: Bound strictly to `127.0.0.1:5000` in `web_console_server.py` 
+    (L1945 & L1952), preventing public WAN access.
+  - Secret Isolation: API tokens (`PINTEREST_ACCESS_TOKEN`, `REPLICATE_API_TOKEN`) loaded via `.env`. 
+    Zero plaintext keys exist in client-side HTML or public repositories.
+  - Input Validation: Path traversal protection implemented across all local API handlers.
+
+================================================================================
+12. LEGAL COMPLIANCE & FTC DISCLOSURES
 ================================================================================
   - FTC Disclosure Banner: Present on root index.html, bridge pages, and legal documents:
     "As an Amazon Associate, Cozy Room Finds earns from qualifying purchases."
@@ -221,7 +331,7 @@ GEO-AWARE SHIPPING BADGES
   - Developer Email: aditya.s.nalawade742@gmail.com
 
 ================================================================================
-8. MASTER COMMANDS & ADMINISTRATIVE PROCEDURES
+13. AUTOMATED TEST SUITE & VERIFICATION COMMANDS
 ================================================================================
 
 1. Start Web Console Server (Localhost 127.0.0.1:5000):
