@@ -219,10 +219,19 @@ try:
         res = subprocess.run(["npx.cmd" if os.name == "nt" else "npx", "astro", "build"], cwd=str(astro_dir), check=True, capture_output=True, text=True)
         print(" ✅ Astro build completed successfully!")
         
-        # Deploy dist/ index and bridge routes to root
+        # Deploy dist/ index, _astro CSS assets, and bridge routes to root
         import shutil
         dist_index = astro_dir / "dist" / "index.html"
         dist_bridge = astro_dir / "dist" / "bridge"
+        dist_astro_assets = astro_dir / "dist" / "_astro"
+        
+        if dist_astro_assets.exists():
+            root_astro_assets = repo_dir / "_astro"
+            if root_astro_assets.exists():
+                shutil.rmtree(root_astro_assets)
+            shutil.copytree(dist_astro_assets, root_astro_assets)
+            print(" ✅ Deployed Tailwind v4 compiled CSS assets (_astro/)!")
+
         if dist_index.exists():
             shutil.copy(dist_index, repo_dir / "index.html")
             print(" ✅ Updated root index.html with Astro Vercel Design build!")
@@ -234,6 +243,7 @@ try:
                     if b_html.exists():
                         shutil.copy(b_html, repo_dir / f"bridge_{asin_code}.html")
                         print(f" ✅ Deployed Astro landing page: bridge_{asin_code}.html")
+
 except Exception as e_astro:
     print(f" ⚠️ Warning executing Astro build: {e_astro}")
 
