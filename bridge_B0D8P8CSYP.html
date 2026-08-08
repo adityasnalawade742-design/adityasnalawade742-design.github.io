@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0D8P8CSYP_hook.jpg?v=1786199376" alt="Cute Bird Touch Control Nightstand Lamp">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0D8P8CSYP_hook.jpg?v=1786208908" alt="Cute Bird Touch Control Nightstand Lamp">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D8P8CSYP_hook.jpg?v=1786199376', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0D8P8CSYP_hook.jpg?v=1786208908', this)">✨ Commercial View</button>
             
         </div>
 
@@ -590,7 +590,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Cute Bird Touch Control Nightstand Lamp");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0D8P8CSYP_hook.jpg?v=1786199376";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0D8P8CSYP_hook.jpg?v=1786208908";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -777,97 +777,119 @@
             }
             window.applyGeoRedirect = applyGeoRedirect;
 
-            // ⚡ Auto-Detect Visitor Country on Page Load & Execute applyGeoRedirect
-            let isForced = false;
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const forcedCountry = urlParams.get('country') || urlParams.get('geo');
-                if (forcedCountry) {
-                    applyGeoRedirect(forcedCountry.toUpperCase());
-                    isForced = true;
-                }
-            } catch(e) {}
+            // ⚡ Single-Resolution Network-First Auto-Detection Engine with 1.5s Deadline
+            (function() {
+                let isResolved = false;
+                let fallbackTimer = null;
 
-            if (!isForced) {
-                // Step 1: 0ms Instant Synchronous Geo Detection
+                function commitResolution(countryCode, source) {
+                    if (isResolved) return;
+                    isResolved = true;
+                    if (fallbackTimer) {
+                        clearTimeout(fallbackTimer);
+                        fallbackTimer = null;
+                    }
+                    if (countryCode && countryCode.length === 2 && countryCode !== 'XX') {
+                        applyGeoRedirect(countryCode.toUpperCase());
+                    }
+                }
+
+                // Step 0: Explicit Debug Override via URL query params (?country= / ?geo=)
                 try {
-                    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-                    const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
-                    const tzCountryMap = {
-                        'new_york': 'US', 'chicago': 'US', 'los_angeles': 'US', 'denver': 'US', 'phoenix': 'US', 'detroit': 'US', 'indiana': 'US', 'alaska': 'US', 'honolulu': 'US',
-                        'kolkata': 'IN', 'calcutta': 'IN',
-                        'london': 'GB', 'dublin': 'IE',
-                        'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',
-                        'paris': 'FR', 'rome': 'IT', 'madrid': 'ES', 'lisbon': 'ES',
-                        'amsterdam': 'NL', 'brussels': 'BE', 'stockholm': 'SE', 'oslo': 'SE', 'copenhagen': 'SE', 'helsinki': 'SE', 'warsaw': 'PL',
-                        'prague': 'DE', 'budapest': 'DE', 'bucharest': 'DE', 'athens': 'DE', 'istanbul': 'TR',
-                        'tokyo': 'JP', 'sydney': 'AU', 'melbourne': 'AU',
-                        'toronto': 'CA', 'vancouver': 'CA',
-                        'singapore': 'SG', 'dubai': 'AE', 'riyadh': 'SA', 'cairo': 'EG',
-                        'mexico_city': 'MX', 'sao_paulo': 'BR'
-                    };
-                    let detected = null;
-                    for (const [tzPart, cc] of Object.entries(tzCountryMap)) {
-                        if (tz.includes(tzPart)) {
-                            detected = cc;
-                            break;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const forcedCountry = urlParams.get('country') || urlParams.get('geo');
+                    if (forcedCountry) {
+                        commitResolution(forcedCountry.toUpperCase(), 'DEBUG_OVERRIDE');
+                        return;
+                    }
+                } catch(e) {}
+
+                // Helper: Passive Timezone / Language Fallback Detection
+                function detectTimezoneOrLanguage() {
+                    try {
+                        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                        const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
+                        const tzCountryMap = {
+                            'new_york': 'US', 'chicago': 'US', 'los_angeles': 'US', 'denver': 'US', 'phoenix': 'US', 'detroit': 'US', 'indiana': 'US', 'alaska': 'US', 'honolulu': 'US',
+                            'kolkata': 'IN', 'calcutta': 'IN',
+                            'london': 'GB', 'dublin': 'IE',
+                            'berlin': 'DE', 'vienna': 'AT', 'zurich': 'CH',
+                            'paris': 'FR', 'rome': 'IT', 'madrid': 'ES', 'lisbon': 'ES',
+                            'amsterdam': 'NL', 'brussels': 'BE', 'stockholm': 'SE', 'oslo': 'SE', 'copenhagen': 'SE', 'helsinki': 'SE', 'warsaw': 'PL',
+                            'prague': 'DE', 'budapest': 'DE', 'bucharest': 'DE', 'athens': 'DE', 'istanbul': 'TR',
+                            'tokyo': 'JP', 'sydney': 'AU', 'melbourne': 'AU',
+                            'toronto': 'CA', 'vancouver': 'CA',
+                            'singapore': 'SG', 'dubai': 'AE', 'riyadh': 'SA', 'cairo': 'EG',
+                            'mexico_city': 'MX', 'sao_paulo': 'BR'
+                        };
+                        for (const [tzPart, cc] of Object.entries(tzCountryMap)) {
+                            if (tz.includes(tzPart)) return cc;
                         }
-                    }
-                    if (!detected) {
-                        if (lang.includes('en-in') || lang.includes('-in') || lang.includes('hi')) detected = 'IN';
-                        else if (lang.includes('en-gb') || lang.includes('-gb')) detected = 'GB';
-                        else if (lang.includes('-fr') || lang.includes('fr-')) detected = 'FR';
-                        else if (lang.includes('-de') || lang.includes('de-')) detected = 'DE';
-                        else if (lang.includes('-jp') || lang.includes('ja-')) detected = 'JP';
-                        else if (lang.includes('-au')) detected = 'AU';
-                        else if (lang.includes('-ca')) detected = 'CA';
-                    }
-                    if (detected) {
-                        applyGeoRedirect(detected);
-                    }
-                } catch(e_sync) {}
-
-                // Step 2: Unblockable Cloudflare Network Trace
-                fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
-                    .then(res => res.text())
-                    .then(text => {
-                        const locMatch = text.match(/^loc=(.+)$/m);
-                        if (locMatch && locMatch[1]) {
-                            const country = locMatch[1].trim().toUpperCase();
-                            if (country && country.length === 2 && country !== 'XX') {
-                                applyGeoRedirect(country);
-                                return;
-                            }
-                        }
-                        fallbackFetchIP();
-                    })
-                    .catch(() => fallbackFetchIP());
-            }
-
-            function fallbackFetchIP() {
-                const ipProviders = [
-                    'https://ipwho.is/',
-                    'https://freeipapi.com/api/json',
-                    'https://api.country.is',
-                    'https://ipapi.co/json/'
-                ];
-
-                function tryFetchIP(index) {
-                    if (index >= ipProviders.length) return;
-                    fetch(ipProviders[index] + '?t=' + Date.now(), { cache: 'no-store' })
-                        .then(r => r.json())
-                        .then(d => {
-                            const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
-                            if (c && c.length === 2) {
-                                applyGeoRedirect(c);
-                            } else {
-                                tryFetchIP(index + 1);
-                            }
-                        })
-                        .catch(() => tryFetchIP(index + 1));
+                        if (lang.includes('en-in') || lang.includes('-in') || lang.includes('hi')) return 'IN';
+                        if (lang.includes('en-gb') || lang.includes('-gb')) return 'GB';
+                        if (lang.includes('-fr') || lang.includes('fr-')) return 'FR';
+                        if (lang.includes('-de') || lang.includes('de-')) return 'DE';
+                        if (lang.includes('-jp') || lang.includes('ja-')) return 'JP';
+                        if (lang.includes('-au')) return 'AU';
+                        if (lang.includes('-ca')) return 'CA';
+                    } catch(e) {}
+                    return 'US';
                 }
-                tryFetchIP(0);
-            }
+
+                // Step 1: Set 1.5s (1500ms) Deadline for Network/IP Detection
+                fallbackTimer = setTimeout(function() {
+                    if (!isResolved) {
+                        const fallbackCC = detectTimezoneOrLanguage();
+                        commitResolution(fallbackCC, 'FALLBACK_SYNC');
+                    }
+                }, 1500);
+
+                // Step 2: Primary Authoritative Network/IP Detection (Cloudflare trace + Cascading IP APIs)
+                try {
+                    fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
+                        .then(res => res.text())
+                        .then(text => {
+                            const locMatch = text.match(/^loc=(.+)$/m);
+                            if (locMatch && locMatch[1]) {
+                                const country = locMatch[1].trim().toUpperCase();
+                                if (country && country.length === 2 && country !== 'XX') {
+                                    commitResolution(country, 'NETWORK_CLOUDFLARE');
+                                    return;
+                                }
+                            }
+                            fallbackFetchIP();
+                        })
+                        .catch(() => fallbackFetchIP());
+                } catch(e_net) {
+                    fallbackFetchIP();
+                }
+
+                function fallbackFetchIP() {
+                    if (isResolved) return;
+                    const ipProviders = [
+                        'https://ipwho.is/',
+                        'https://freeipapi.com/api/json',
+                        'https://api.country.is',
+                        'https://ipapi.co/json/'
+                    ];
+
+                    function tryFetchIP(index) {
+                        if (isResolved || index >= ipProviders.length) return;
+                        fetch(ipProviders[index] + '?t=' + Date.now(), { cache: 'no-store' })
+                            .then(r => r.json())
+                            .then(d => {
+                                const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
+                                if (c && c.length === 2 && c !== 'XX') {
+                                    commitResolution(c, 'NETWORK_IP_API');
+                                } else {
+                                    tryFetchIP(index + 1);
+                                }
+                            })
+                            .catch(() => tryFetchIP(index + 1));
+                    }
+                    tryFetchIP(0);
+                }
+            })();
         })();
     </script>
 </body>

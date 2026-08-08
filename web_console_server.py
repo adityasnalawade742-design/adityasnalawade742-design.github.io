@@ -1942,18 +1942,18 @@ def run_server():
     active_port = PORT
     for p in candidate_ports:
         try:
-            server = ThreadedHTTPServer(('localhost', p), WebConsoleHandler)
+            server = ThreadedHTTPServer(('127.0.0.1', p), WebConsoleHandler)
             active_port = p
             break
         except OSError:
             continue
 
     if not server:
-        server = ThreadedHTTPServer(('localhost', 0), WebConsoleHandler)
+        server = ThreadedHTTPServer(('127.0.0.1', 0), WebConsoleHandler)
         active_port = server.server_address[1]
 
-    print(f"[Web Console] Threaded Server running on http://localhost:{active_port}")
-    print(f"[Web Console] Open http://localhost:{active_port} in your browser to verify products & images!")
+    print(f"[Web Console] Threaded Server running on http://127.0.0.1:{active_port}")
+    print(f"[Web Console] Open http://127.0.0.1:{active_port} in your browser to verify products & images!")
     server.serve_forever()
 
 if __name__ == '__main__':
