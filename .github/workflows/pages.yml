@@ -27,7 +27,7 @@ jobs:
       - name: Stage Static Web Assets
         run: |
           mkdir -p _site
-          cp -r index.html bridge_*.html focus_product_*.jpg images/ fonts/ "price tags"/ raw_images/ bridge_pages/ privacy-policy.html privacy.html sitemap.xml robots.txt global_direct_matrix.json product_price_registry.json .nojekyll _site/ 2>/dev/null || true
+          cp -r *.html focus_product_*.jpg images/ fonts/ "price tags"/ raw_images/ bridge_pages/ sitemap.xml robots.txt global_direct_matrix.json product_price_registry.json .nojekyll _site/ 2>/dev/null || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
