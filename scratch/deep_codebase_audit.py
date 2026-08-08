@@ -9,6 +9,12 @@ import sys
 import re
 from pathlib import Path
 
+import io
+
+# Ensure UTF-8 output encoding for Windows PowerShell
+if hasattr(sys.stdout, "buffer"):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+
 ROOT = Path(__file__).resolve().parent.parent
 
 print("=" * 80)
