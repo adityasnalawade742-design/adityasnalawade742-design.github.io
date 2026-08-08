@@ -49,16 +49,7 @@ master_catalog = {
         "description": "Handcrafted white ceramic donut vases for pampas grass and modern minimalist home decor.",
         "direct_regions": ["US", "IN", "DE", "SE", "SG", "CA", "AU", "JP"]
     },
-    "B0GYDXHF4G": {
-        "search_keywords": "Volcano Flame Aroma Diffuser Lamp",
-        "title": "Flame Aroma Essential Oil Diffuser Dark Crackle Flame Effect",
-        "price": "$35.00",
-        "rating": "4.9",
-        "features": ["REALISTIC FLAME EFFECT", "ULTRASONIC MIST HUMIDIFIER", "SILENT SLEEP OPERATION", "AUTO SHUTOFF SAFETY"],
-        "category": "lighting decor",
-        "description": "Cozy ambient flame effect humidifier and essential oil diffuser in dark crackle finish. Realistic flame glow for bedroom relaxation.",
-        "direct_regions": ["US", "DE", "SE", "CA", "JP"]
-    },
+
     "B0FXLYXM32": {
         "search_keywords": "White Wavy Wall Body Standing Mirror",
         "title": "White Wavy Wall Vanity Mirror Aesthetic Squiggle Mirror",
