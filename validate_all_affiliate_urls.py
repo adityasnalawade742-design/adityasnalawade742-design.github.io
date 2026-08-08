@@ -61,9 +61,16 @@ link_errors = []
 total_links_tested = 0
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-    page = context.new_page()
+    browser = p.chromium.launch(headless=True, args=["--no-sandbox", "--disable-setuid-sandbox"])
+    try:
+        context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        page = context.new_page()
+    except Exception as e_ctx:
+        print(f"⚠️ Context creation warning: {e_ctx}. Re-launching browser...")
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context()
+        page = context.new_page()
+
 
     for bf in bridge_files:
         asin = bf.name.replace("bridge_", "").replace(".html", "")
