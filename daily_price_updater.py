@@ -221,7 +221,24 @@ def regenerate_clean_graphic_with_new_price(asin: str, item_data: dict, new_pric
     Re-renders Playwright graphic overlay using the clean raw image with NO text,
     stamping the new exact price into the price tag!
     """
-    raw_img = BASE_DIR / item_data["raw_image"]
+    # Priority 1: Check flux_clean_images folder for clean AI Flux Dev image
+    flux_clean_dir = BASE_DIR / "flux_clean_images"
+    flux_candidates = [
+        flux_clean_dir / f"clean_focus_product_{asin}.jpg",
+        flux_clean_dir / f"clean_{asin}.jpg",
+        flux_clean_dir / f"focus_product_{asin}.jpg",
+        flux_clean_dir / f"focus_product_{asin}_ai.jpg",
+        flux_clean_dir / f"flux_{asin}.jpg"
+    ]
+    
+    raw_img = None
+    for cand in flux_candidates:
+        if cand.exists():
+            raw_img = cand
+            break
+            
+    if not raw_img or not raw_img.exists():
+        raw_img = BASE_DIR / item_data["raw_image"]
     
     # Fallback to generated image.jpg or current hook image if raw image file missing
     if not raw_img.exists():

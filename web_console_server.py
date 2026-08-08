@@ -147,11 +147,10 @@ def run_async_batch_generation(batch_id, items):
     })
     
     for idx, item in enumerate(items, 1):
-        asin = item.get('asin')
-        selected_photo = item.get('selected_photo')
-        title = item.get('title', f'Product {asin}')
-        price = item.get('price', '$19.99')
-        prompt_strength = item.get('prompt_strength', 0.35)
+        prompt_strength = item.get('prompt_strength')
+        if not prompt_strength:
+            from modules.amazon_extractor import calculate_precision_prompt_strength
+            prompt_strength = calculate_precision_prompt_strength(title)
         
         update_task_status(batch_id, {
             'status': 'processing',
@@ -962,11 +961,10 @@ class WebConsoleHandler(SimpleHTTPRequestHandler):
         body = self.rfile.read(content_length)
         data = json.loads(body.decode('utf-8'))
 
-        asin = data.get('asin')
-        selected_photo = data.get('selected_photo')
-        title = data.get('title', '')
-        price = data.get('price', '$19.99')
-        prompt_strength = data.get('prompt_strength', 0.50)
+        prompt_strength = data.get('prompt_strength')
+        if not prompt_strength:
+            from modules.amazon_extractor import calculate_precision_prompt_strength
+            prompt_strength = calculate_precision_prompt_strength(title)
 
         title_clean = title.replace('"', '\\"').replace("'", "\\'")
         price_clean = price.replace('"', '\\"')

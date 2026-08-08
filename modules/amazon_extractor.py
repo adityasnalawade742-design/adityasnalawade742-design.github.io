@@ -255,20 +255,66 @@ def score_product_photo(image_url: str, title: str = "") -> dict:
     is_white_bg = not is_lifestyle
 
     title_lwr = (title or "").lower()
-    is_set_or_multi = any(kw in title_lwr for kw in ["set of", "pack of", " 2 ", " 3 ", " 4 ", "pcs", "pair", "crystal", "prism", "vases"])
+    
+    # 1. Multi-Pack / Item Sets / Delicate Intricate Items -> 0.25 - 0.28 (Strict Item Count Lock)
+    is_multi_pack = any(kw in title_lwr for kw in [
+        "set of", "pack of", " 2 ", " 3 ", " 4 ", "pcs", "pair", "duo", "trio",
+        "set 2", "set 3", "2 pack", "3 pack", "piece set", "suncatcher", "prism",
+        "crystal", "vases set", "vase set", "2-piece", "3-piece"
+    ])
+    
+    # 2. Fragile Glass & Ambient Lighting Items -> 0.42 - 0.45 (Glow & Reflection Protection)
+    is_glass_lighting = any(kw in title_lwr for kw in [
+        "glass mushroom", "striped glass", "bedside lamp", "table lamp", 
+        "candle warmer", "flame diffuser", "aroma diffuser", "nightstand lamp"
+    ])
+    
+    # 3. Mirrors & Sculptures -> 0.48 - 0.50 (Frame & Form Protection)
+    is_mirror_statue = any(kw in title_lwr for kw in [
+        "mirror", "vanity mirror", "wavy mirror", "statue", "thinker", "sculpture", "ornament"
+    ])
 
     if not has_text:
         if is_white_bg:
-            return {"score": 95, "prompt_strength": 0.82, "is_white_bg": True, "reason": "clean_white_cutout"}
-        elif is_set_or_multi:
+            # White Cutout Studio Background -> 0.78 - 0.82 (Complete Room Synthesis)
+            return {"score": 95, "prompt_strength": 0.80, "is_white_bg": True, "reason": "clean_white_cutout"}
+        elif is_multi_pack:
+            # Multi-Pack / Intricate Items -> 0.28 (100% Item Count & Shape Lock)
             return {"score": 75, "prompt_strength": 0.28, "is_white_bg": False, "reason": "clean_lifestyle_multipack"}
+        elif is_glass_lighting:
+            # Fragile Glass & Lighting -> 0.44 (Ambient Glow & Glass Preservation)
+            return {"score": 85, "prompt_strength": 0.44, "is_white_bg": False, "reason": "clean_lifestyle_lighting"}
+        elif is_mirror_statue:
+            # Single Mirror & Sculpture -> 0.48 (Frame Geometry & Shadow Lock)
+            return {"score": 88, "prompt_strength": 0.48, "is_white_bg": False, "reason": "clean_lifestyle_sculpture"}
         else:
+            # General Single Product -> 0.46 (Cozy Room Enhancement)
             vibe = calculate_cozy_vibe_score(image_url)
             score = max(70, min(90, int(60 + (vibe * 3.0))))
-            return {"score": score, "prompt_strength": 0.48, "is_white_bg": False, "reason": "clean_lifestyle_single"}
+            return {"score": score, "prompt_strength": 0.46, "is_white_bg": False, "reason": "clean_lifestyle_single"}
     else:
-        # Minor overlay present — still usable at low transformation strength instead of binary discard
+        # Minor overlay present — safe touch-up -> 0.20
         return {"score": 35, "prompt_strength": 0.20, "is_white_bg": is_white_bg, "reason": "minor_text_overlay"}
+
+
+def calculate_precision_prompt_strength(title: str = "", is_white_bg: bool = False) -> float:
+    """
+    Precision Strength Calculator based on product geometry, material type, and background context:
+      - 0.28: Multi-Packs / Sets (2-piece, 3-piece, suncatchers, crystal clusters)
+      - 0.44: Fragile Glass & Ambient Lighting (mushroom lamps, candle warmers)
+      - 0.48: Mirrors, Thinker Statues, and Sculptures
+      - 0.80: Pure Studio White Cutouts (Complete Room Synthesis)
+    """
+    title_lwr = (title or "").lower()
+    if is_white_bg:
+        return 0.80
+    elif any(kw in title_lwr for kw in ["set of", "pack of", " 2 ", " 3 ", " 4 ", "pcs", "pair", "duo", "trio", "set 2", "set 3", "2 pack", "3 pack", "piece set", "suncatcher", "prism", "crystal", "vases set", "vase set", "2-piece", "3-piece"]):
+        return 0.28
+    elif any(kw in title_lwr for kw in ["glass mushroom", "striped glass", "bedside lamp", "table lamp", "candle warmer", "flame diffuser", "aroma diffuser", "nightstand lamp"]):
+        return 0.44
+    elif any(kw in title_lwr for kw in ["mirror", "vanity mirror", "wavy mirror", "statue", "thinker", "sculpture", "ornament"]):
+        return 0.48
+    return 0.46
 
 
 def select_clean_photo_or_skip(photos: list, title: str = "") -> tuple:

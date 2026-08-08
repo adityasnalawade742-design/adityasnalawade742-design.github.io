@@ -216,13 +216,29 @@ def generate_cozy_image(
                     file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
                     with open(file_path, "wb") as f:
                         f.write(res.content)
-                    print(f"[Image Gen - SUCCESS] Saved authentic Replicate FLUX-Dev image ({len(res.content)} bytes) to: {file_path}")
+                    
+                    # Save dedicated clean Flux Dev image copy
+                    flux_clean_dir = IMAGES_DIR.parent.parent / "flux_clean_images"
+                    flux_clean_dir.mkdir(exist_ok=True)
+                    clean_path = flux_clean_dir / f"clean_{filename_prefix}.jpg"
+                    with open(clean_path, "wb") as f:
+                        f.write(res.content)
+                    
+                    print(f"[Image Gen - SUCCESS] Saved authentic Replicate FLUX-Dev image to: {file_path} & {clean_path}")
                     return str(file_path)
             elif hasattr(out[0], "read"):
+                content = out[0].read()
                 file_path = IMAGES_DIR / f"{filename_prefix}.jpg"
                 with open(file_path, "wb") as f:
-                    f.write(out[0].read())
-                print(f"[Image Gen - SUCCESS] Saved authentic Replicate FLUX-Dev image file stream to: {file_path}")
+                    f.write(content)
+                
+                flux_clean_dir = IMAGES_DIR.parent.parent / "flux_clean_images"
+                flux_clean_dir.mkdir(exist_ok=True)
+                clean_path = flux_clean_dir / f"clean_{filename_prefix}.jpg"
+                with open(clean_path, "wb") as f:
+                    f.write(content)
+                
+                print(f"[Image Gen - SUCCESS] Saved authentic Replicate FLUX-Dev image stream to: {file_path} & {clean_path}")
                 return str(file_path)
 
     print("[Image Gen - Replicate] ⚠️ Prediction did not finish in time, returning selected listing photo...")
