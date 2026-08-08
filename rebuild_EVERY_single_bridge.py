@@ -212,13 +212,39 @@ try:
 except Exception as e_sm:
     print(f" ⚠️ Warning generating sitemap: {e_sm}")
 
+print("\n[Master Rebuilder] 🚀 Executing Astro 5 SSG Build (shining-spectrum)...")
+try:
+    astro_dir = repo_dir / "shining-spectrum"
+    if astro_dir.exists():
+        res = subprocess.run(["npx.cmd" if os.name == "nt" else "npx", "astro", "build"], cwd=str(astro_dir), check=True, capture_output=True, text=True)
+        print(" ✅ Astro build completed successfully!")
+        
+        # Deploy dist/ index and bridge routes to root
+        import shutil
+        dist_index = astro_dir / "dist" / "index.html"
+        dist_bridge = astro_dir / "dist" / "bridge"
+        if dist_index.exists():
+            shutil.copy(dist_index, repo_dir / "index.html")
+            print(" ✅ Updated root index.html with Astro Vercel Design build!")
+        if dist_bridge.exists():
+            for b_folder in dist_bridge.glob("*"):
+                if b_folder.is_dir():
+                    asin_code = b_folder.name
+                    b_html = b_folder / "index.html"
+                    if b_html.exists():
+                        shutil.copy(b_html, repo_dir / f"bridge_{asin_code}.html")
+                        print(f" ✅ Deployed Astro landing page: bridge_{asin_code}.html")
+except Exception as e_astro:
+    print(f" ⚠️ Warning executing Astro build: {e_astro}")
+
 print("\n[Master Rebuilder] Pushing 100% of rebuilt bridge pages live to GitHub Pages...")
 try:
     subprocess.run(["git", "add", "-A"], check=True, cwd=str(repo_dir))  # C7 FIX: explicit cwd
-    subprocess.run(["git", "commit", "-m", "rebuild 100% of all portfolio landing pages with universal multi-region geo-redirector"], check=False, cwd=str(repo_dir))
+    subprocess.run(["git", "commit", "-m", "rebuild 100% of all portfolio landing pages with Astro 5 Vercel design system"], check=False, cwd=str(repo_dir))
     subprocess.run(["git", "push", "origin", "main"], check=True, cwd=str(repo_dir))
     print(" ✅ Git Commit & Push 100% Successful!")
 except Exception as e:
     print(f" ⚠️ Git push warning: {e}")
 
-print("\n🎉 ALL PORTFOLIO LANDING PAGES REBUILT AND DEPLOYED LIVE!")
+print("\n🎉 ALL PORTFOLIO LANDING PAGES REBUILT AND DEPLOYED LIVE WITH ASTRO 5 VERCEL DESIGN SYSTEM!")
+
