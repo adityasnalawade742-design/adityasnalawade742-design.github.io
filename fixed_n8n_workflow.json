@@ -216,7 +216,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api-sandbox.pinterest.com/v5/pins",
+        "url": "https://api.pinterest.com/v5/pins",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendHeaders": true,
