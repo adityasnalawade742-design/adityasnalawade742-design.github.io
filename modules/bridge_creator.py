@@ -783,22 +783,21 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             }
             window.applyGeoRedirect = applyGeoRedirect;
 
-            // ⚡ Instant 0ms Sync + Background Network IP Refinement Engine
+            // ⚡ Single-Resolution Network-First Auto-Detection Engine (1.5s Fallback Deadline)
             (function() {
-                let currentResolvedCC = null;
-                let networkResolved = false;
+                let isResolved = false;
+                let fallbackTimer = null;
 
-                function executeGeoRedirect(cc, source) {
-                    if (!cc || cc.length !== 2 || cc === 'XX') return;
-                    cc = cc.toUpperCase();
-                    // If network IP already resolved, do not allow passive fallbacks to overwrite it
-                    if (networkResolved && (source === 'INSTANT_SYNC' || source === 'TIMEOUT_FALLBACK')) return;
-                    
-                    if (source === 'NETWORK') {
-                        networkResolved = true;
+                function commitResolution(countryCode, source) {
+                    if (isResolved) return;
+                    isResolved = true;
+                    if (fallbackTimer) {
+                        clearTimeout(fallbackTimer);
+                        fallbackTimer = null;
                     }
-                    currentResolvedCC = cc;
-                    applyGeoRedirect(cc);
+                    if (countryCode && countryCode.length === 2 && countryCode !== 'XX') {
+                        applyGeoRedirect(countryCode.toUpperCase());
+                    }
                 }
 
                 // Step 0: Explicit Debug Override via URL query params (?country= / ?geo=)
@@ -806,14 +805,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     const urlParams = new URLSearchParams(window.location.search);
                     const forcedCountry = urlParams.get('country') || urlParams.get('geo');
                     if (forcedCountry) {
-                        executeGeoRedirect(forcedCountry.toUpperCase(), 'DEBUG_OVERRIDE');
-                        networkResolved = true;
+                        commitResolution(forcedCountry.toUpperCase(), 'DEBUG_OVERRIDE');
                         return;
                     }
                 } catch(e) {}
 
-                // Step 1: 0ms Instant Synchronous Geo Detection (Timezone + Language)
-                function detectInstantSync() {
+                // Helper: Passive Timezone / Language Fallback Detection (Used ONLY on Timeout)
+                function detectTimezoneOrLanguage() {
                     try {
                         const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
                         const lang = (navigator.language || navigator.languages?.join(',') || '').toLowerCase();
@@ -844,11 +842,15 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     return 'US';
                 }
 
-                // Immediately execute 0ms instant redirect on page render
-                const instantCC = detectInstantSync();
-                executeGeoRedirect(instantCC, 'INSTANT_SYNC');
+                // Step 1: Set 1.5s (1500ms) Deadline for Network/IP Detection
+                fallbackTimer = setTimeout(function() {
+                    if (!isResolved) {
+                        const fallbackCC = detectTimezoneOrLanguage();
+                        commitResolution(fallbackCC, 'FALLBACK_TIMEOUT');
+                    }
+                }, 1500);
 
-                // Step 2: Asynchronous Authoritative Network IP Verification (Cloudflare trace + Cascading IP APIs)
+                // Step 2: Authoritative Network/IP Detection (Cloudflare trace + Cascading IP APIs)
                 try {
                     fetch('https://www.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { cache: 'no-store' })
                         .then(res => res.text())
@@ -857,7 +859,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                             if (locMatch && locMatch[1]) {
                                 const country = locMatch[1].trim().toUpperCase();
                                 if (country && country.length === 2 && country !== 'XX') {
-                                    executeGeoRedirect(country, 'NETWORK');
+                                    commitResolution(country, 'NETWORK_CLOUDFLARE');
                                     return;
                                 }
                             }
@@ -869,6 +871,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 }
 
                 function fallbackFetchIP() {
+                    if (isResolved) return;
                     const ipProviders = [
                         'https://ipwho.is/',
                         'https://freeipapi.com/api/json',
@@ -877,13 +880,13 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     ];
 
                     function tryFetchIP(index) {
-                        if (networkResolved || index >= ipProviders.length) return;
+                        if (isResolved || index >= ipProviders.length) return;
                         fetch(ipProviders[index] + '?t=' + Date.now(), { cache: 'no-store' })
                             .then(r => r.json())
                             .then(d => {
                                 const c = (d.country_code || d.countryCode || d.country || '').toUpperCase();
                                 if (c && c.length === 2 && c !== 'XX') {
-                                    executeGeoRedirect(c, 'NETWORK');
+                                    commitResolution(c, 'NETWORK_IP_API');
                                 } else {
                                     tryFetchIP(index + 1);
                                 }

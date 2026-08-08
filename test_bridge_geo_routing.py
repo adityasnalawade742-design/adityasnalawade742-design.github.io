@@ -26,8 +26,9 @@ class TestBridgeGeoRouting(unittest.TestCase):
 
     def test_code_structure_has_network_first_and_resolution_lock(self):
         content = self.sample_bridge.read_text(encoding="utf-8")
-        self.assertIn("executeGeoRedirect(cc, source)", content, "Missing executeGeoRedirect engine function")
-        self.assertIn("detectInstantSync()", content, "Missing 0ms instant sync helper")
+        self.assertIn("commitResolution(countryCode, source)", content, "Missing commitResolution single-resolution function")
+        self.assertIn("fallbackTimer = setTimeout(function()", content, "Missing 1.5s fallback deadline timer")
+        self.assertIn("1500", content, "Missing 1500ms timeout parameter")
 
     def test_playwright_network_in_timezone_us_override(self):
         """
