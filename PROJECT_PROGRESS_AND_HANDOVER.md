@@ -1,6 +1,6 @@
 # 🚀 Pinterest Auto Affiliate Platform: Master Progress, Architecture & Handover Record
 
-> **SINGLE SOURCE OF TRUTH & AGENT HANDOVER GUIDE**: This document details the entire state of the project, technical architecture, verified asset counts, dynamic precision prompt strength engine, error fixes, Pinterest compliance updates, Amazon OneLink integration, scraper data integrity engine, and Pinterest Sandbox batch execution logs. Any AGY instance, subagent, or developer can inspect this document to immediately resume work from where we left off with zero context loss.
+> **SINGLE SOURCE OF TRUTH & AGENT HANDOVER GUIDE**: This document details the entire state of the project, technical architecture, verified asset counts, dynamic precision prompt strength engine, error fixes, Pinterest compliance updates, Amazon OneLink integration, scraper data integrity engine, seller verification audit findings, and Pinterest Sandbox batch execution logs. Any AGY instance, subagent, or developer can inspect this document to immediately resume work from where we left off with zero context loss.
 
 ---
 
@@ -32,11 +32,12 @@
 
 ---
 
-## ⚙️ Core Technical Architecture & Scraper Integrity Remediation
+## ⚙️ Core Technical Architecture & Recent Enhancements
 
 ### 1. 🛡️ Scraper Data Integrity & US ASIN Fallback Prohibition
 - **Prohibited US ASIN Fallback**: Scrapers ([`scrape_in.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/scrapers/scrape_in.py), [`scrape_uk.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/scrapers/scrape_uk.py), [`scrape_extended_domains.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/scrapers/scrape_extended_domains.py)) scrape a regional Amazon site ONLY IF `regional_asins[CC]` is explicitly mapped. Unmapped regions set status `NOT_MAPPED` without polluting the registry with third-party import reseller prices.
 - **DOM Seller & Merchant Tracking**: Scrapers inspect `#merchant-info`, `#sellerProfileTriggerId`, and `#bylineInfo` to capture `seller` and `ships_from` data.
+- **Targeted Audit Verdict**: Passed with warning (Yellow). Substring `"amazon"` in `#merchant-info` detects Amazon fulfillment, while product identity is strictly guarded via explicit `regional_asins` mapping.
 
 ### 2. ⏳ 7-Day Configurable TTL & Stale-Price Protection
 - Defined `PRICE_TTL_DAYS = 7` in [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py).

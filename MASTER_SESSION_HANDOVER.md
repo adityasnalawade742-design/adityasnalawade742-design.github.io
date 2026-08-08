@@ -32,10 +32,11 @@
 
 ## 🚀 Major Milestones Completed & Verified
 
-1. **Price Scraper Integrity Remediation**:
+1. **Price Scraper Integrity Remediation & Targeted Audit**:
    - Built [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py) to manage structured price records, DOM seller info, status semantics (`FRESH_VERIFIED`, `FRESH_UNVERIFIED`, `STALE_VERIFIED`, `NOT_MAPPED`), and 7-day TTL stale price logic.
    - Prohibited US ASIN fallback scraper pollution across all regional domain scrapers (`scrape_in.py`, `scrape_uk.py`, `scrape_extended_domains.py`).
    - Created [`test_price_scraper_integrity.py`](file:///G:/CLI/pinterest-auto-affiliate/test_price_scraper_integrity.py) with 9/9 PASS.
+   - Targeted read-only audit completed: Verified identity isolation on `B0BXP7YWHJ` (`NOT_MAPPED`) and `B0CX144DHK` (`FRESH_VERIFIED`).
 
 2. **Verified 10-Marketplace OneLink Architecture**:
    - `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` configured for OneLink canonical URL routing (`amazon.com/dp/{ASIN}?tag=smartdeal0358-20`).
