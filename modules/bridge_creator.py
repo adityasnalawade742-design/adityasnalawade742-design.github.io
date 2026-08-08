@@ -658,9 +658,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
             const regionalMatrix = {{ (product.regional_prices if product.regional_prices is defined else (product.regional_matrix if product.regional_matrix is defined else {})) | tojson }};
             const regionalAsins = {{ (product.regional_asins if product.regional_asins is defined else {}) | tojson }};
 
-            let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20 };
-            const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$" };
-            const countryToCurrencyMap = { "US": "USD", "CA": "CAD", "MX": "MXN", "BR": "BRL", "GB": "GBP", "UK": "GBP", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "IN": "INR", "JP": "JPY", "AU": "AUD" };
+            let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "PLN": 3.95, "SEK": 10.50 };
+            const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "PLN": "zł", "SEK": "kr" };
+            const countryToCurrencyMap = { "US": "USD", "CA": "CAD", "MX": "MXN", "BR": "BRL", "GB": "GBP", "UK": "GBP", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "PL": "PLN", "SE": "SEK", "IN": "INR", "JP": "JPY", "AU": "AUD" };
 
             try {
                 fetch('https://open.er-api.com/v6/latest/USD')
@@ -669,7 +669,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     .catch(e => {});
             } catch(e) {}
 
-            const onelinkCountries = {{ onelink_countries_json | safe if onelink_countries_json else '["US","CA","GB","UK","DE","FR","IT","ES"]' }};
+            const onelinkCountries = {{ onelink_countries_json | safe if onelink_countries_json else '["US","CA","GB","UK","DE","FR","IT","ES","NL","PL","SE"]' }};
             const canonicalUrl = "{{ canonical_affiliate_url or affiliate_url }}";
 
             const associateTagMap = {

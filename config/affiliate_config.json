@@ -134,9 +134,9 @@
       "tracking_id": "smartdeal0bb4-21",
       "associates_account": "EU Portal",
       "oneLink_supported_by_amazon": true,
-      "oneLink_enabled_for_account": false,
-      "routing_mode": "DIRECT_FALLBACK",
-      "verified": false
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
     },
     "NL": {
       "marketplace": "NL",
@@ -145,9 +145,9 @@
       "tracking_id": "smartdeal0bb4-21",
       "associates_account": "EU Portal",
       "oneLink_supported_by_amazon": true,
-      "oneLink_enabled_for_account": false,
-      "routing_mode": "DIRECT_FALLBACK",
-      "verified": false
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
     },
     "PL": {
       "marketplace": "PL",
@@ -156,9 +156,9 @@
       "tracking_id": "smartdeal0bb4-21",
       "associates_account": "EU Portal",
       "oneLink_supported_by_amazon": true,
-      "oneLink_enabled_for_account": false,
-      "routing_mode": "DIRECT_FALLBACK",
-      "verified": false
+      "oneLink_enabled_for_account": true,
+      "routing_mode": "ONELINK",
+      "verified": true
     },
     "TR": {
       "marketplace": "TR",

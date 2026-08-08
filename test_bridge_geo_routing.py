@@ -279,7 +279,37 @@ class TestBridgeGeoRouting(unittest.TestCase):
         self.assertEqual(badge, "📦 Amazon OneLink International Delivery")
         page.close()
 
-        # TEST 6: ?country=NO (Unlisted Region with Estimated Price Conversion)
+        # TEST 6: ?country=NL (OneLink Netherlands)
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=NL".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertEqual(badge, "📦 Amazon OneLink International Delivery", "Netherlands visitor must see OneLink delivery badge")
+        self.assertEqual(href, "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-20", "OneLink Netherlands must preserve canonical US URL")
+        page.close()
+
+        # TEST 7: ?country=PL (OneLink Poland)
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=PL".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertEqual(badge, "📦 Amazon OneLink International Delivery", "Poland visitor must see OneLink delivery badge")
+        self.assertEqual(href, "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-20", "OneLink Poland must preserve canonical US URL")
+        page.close()
+
+        # TEST 8: ?country=SE (OneLink Sweden)
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=SE".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertEqual(badge, "📦 Amazon OneLink International Delivery", "Sweden visitor must see OneLink delivery badge")
+        self.assertEqual(href, "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-20", "OneLink Sweden must preserve canonical US URL")
+        page.close()
+
+        # TEST 9: ?country=NO (Unlisted Region with Estimated Price Conversion)
         page = context.new_page()
         page.goto(f"file:///{unlisted_bridge.resolve()}?country=NO".replace("\\", "/"))
         page.wait_for_timeout(300)
@@ -295,3 +325,4 @@ class TestBridgeGeoRouting(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

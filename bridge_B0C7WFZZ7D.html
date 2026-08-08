@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0C7WFZZ7D_hook.jpg?v=1786211811" alt="Hollow Ceramic Snuggle Vase Set">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0C7WFZZ7D_hook.jpg?v=1786220102" alt="Hollow Ceramic Snuggle Vase Set">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0C7WFZZ7D_hook.jpg?v=1786211811', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0C7WFZZ7D_hook.jpg?v=1786220102', this)">✨ Commercial View</button>
             
         </div>
 
@@ -590,7 +590,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Hollow Ceramic Snuggle Vase Set");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0C7WFZZ7D_hook.jpg?v=1786211811";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0C7WFZZ7D_hook.jpg?v=1786220102";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -652,9 +652,9 @@
             const regionalMatrix = {"AE": "AED200.00", "AU": "Not Available", "BE": "56,00\u20ac", "BR": "R$408,66", "CA": "CA$71.28", "DE": "\u20ac57,74", "EG": "\u062c\u0646\u064a\u0647\u200e495.00\u200e", "ES": "55,19\u20ac", "FR": "57,54\u20ac", "IN": "\u20b92,899.00", "IT": "49,21\u20ac", "JP": "\u00a57,929", "MX": "Not Available", "NL": "\u20ac66,80", "PL": "429,25z\u0142", "SA": "\u0631\u064a\u0627\u0644\u200e249.64\u200e", "SE": "1 237,02kr", "SG": "S$76.86", "TR": "Not Available", "UK": "\u00a345.55", "US": "$12.49"};
             const regionalAsins = {"US": "B0C7WFZZ7D"};
 
-            let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20 };
-            const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$" };
-            const countryToCurrencyMap = { "US": "USD", "CA": "CAD", "MX": "MXN", "BR": "BRL", "GB": "GBP", "UK": "GBP", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "IN": "INR", "JP": "JPY", "AU": "AUD" };
+            let exchangeRates = { "USD": 1.0, "EUR": 0.92, "GBP": 0.78, "CAD": 1.36, "AUD": 1.52, "INR": 83.50, "JPY": 155.0, "BRL": 5.45, "MXN": 18.20, "PLN": 3.95, "SEK": 10.50 };
+            const currencySymbols = { "USD": "$", "EUR": "€", "GBP": "£", "CAD": "CA$", "AUD": "A$", "INR": "₹", "JPY": "¥", "BRL": "R$", "MXN": "Mex$", "PLN": "zł", "SEK": "kr" };
+            const countryToCurrencyMap = { "US": "USD", "CA": "CAD", "MX": "MXN", "BR": "BRL", "GB": "GBP", "UK": "GBP", "DE": "EUR", "FR": "EUR", "IT": "EUR", "ES": "EUR", "NL": "EUR", "PL": "PLN", "SE": "SEK", "IN": "INR", "JP": "JPY", "AU": "AUD" };
 
             try {
                 fetch('https://open.er-api.com/v6/latest/USD')
@@ -663,7 +663,7 @@
                     .catch(e => {});
             } catch(e) {}
 
-            const onelinkCountries = ["US", "CA", "GB", "UK", "DE", "FR", "IT", "ES"];
+            const onelinkCountries = ["US", "CA", "GB", "UK", "DE", "FR", "IT", "ES", "SE", "NL", "PL"];
             const canonicalUrl = "https://www.amazon.com/dp/B0C7WFZZ7D?tag=smartdeal0358-20";
 
             const associateTagMap = {
