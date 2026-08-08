@@ -248,15 +248,24 @@ try:
                         shutil.copy(b_html, repo_dir / f"bridge_{asin_code}.html")
                         print(f" ✅ Deployed Astro Vercel bridge page: bridge_{asin_code}.html")
 
-        # Sanitize asset URLs for 100% relative path resolution
-        for h_file in repo_dir.glob("*.html"):
-            if h_file.is_file():
-                h_text = h_file.read_text(encoding="utf-8")
-                h_text = h_text.replace('href="/./_astro/', 'href="_astro/')
-                h_text = h_text.replace('href="/_astro/', 'href="_astro/')
-                h_text = h_text.replace('src="/raw_images/', 'src="raw_images/')
-                h_file.write_text(h_text, encoding="utf-8")
-        print(" ✅ Sanitized HTML asset paths for relative CSS resolution!")
+        # Inline compiled Tailwind CSS bundle directly into every HTML file for 100% fail-safe rendering
+        css_files = list((repo_dir / "_astro").glob("*.css"))
+        if css_files:
+            css_content = css_files[0].read_text(encoding="utf-8")
+            style_tag = f"<style>{css_content}</style>"
+            import re
+
+            for h_file in repo_dir.glob("*.html"):
+                if h_file.is_file():
+                    h_text = h_file.read_text(encoding="utf-8")
+                    h_text = h_text.replace('href="/./_astro/', 'href="_astro/')
+                    h_text = h_text.replace('href="/_astro/', 'href="_astro/')
+                    h_text = h_text.replace('src="/raw_images/', 'src="raw_images/')
+                    # Inline CSS into style tag
+                    h_text = re.sub(r'<link\s+rel="stylesheet"\s+href="[^"]*_astro/[^"]*">', style_tag, h_text)
+                    h_file.write_text(h_text, encoding="utf-8")
+            print(" ✅ Inlined compiled Tailwind CSS into all HTML files for 100% fail-safe rendering!")
+
 
 
 
