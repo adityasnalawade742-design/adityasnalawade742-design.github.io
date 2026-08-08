@@ -80,6 +80,24 @@ def process_single_campaign_in_memory(asin, selected_photo, title, price, prompt
         'direct_regions': meta.get('direct_regions', verified_regions)
     }
 
+    # Ensure raw seller image is saved in raw_images/
+    raw_dir = WORKSPACE_DIR / "raw_images"
+    raw_dir.mkdir(exist_ok=True)
+    raw_file = raw_dir / f"raw_{asin}.jpg"
+    if selected_photo and not raw_file.exists():
+        try:
+            if str(selected_photo).startswith("http"):
+                import urllib.request
+                req = urllib.request.Request(selected_photo, headers={"User-Agent": "Mozilla/5.0"})
+                data = urllib.request.urlopen(req, timeout=10).read()
+                raw_file.write_bytes(data)
+            elif Path(selected_photo).exists():
+                import shutil
+                shutil.copy(selected_photo, raw_file)
+            print(f"  ✓ Saved raw image: {raw_file.name}")
+        except Exception as e:
+            print(f"  ⚠️ Error saving raw image: {e}")
+
     ref_sheet_path = create_multi_photo_reference_sheet([selected_photo], filename_prefix=f"product_{asin}", max_photos=1)
     cozy_prompt = generate_cozy_image_prompt(prod['title'], "Room Decor", prod['features'], ref_sheet_path, is_white_background=False)
     raw_image_path = generate_cozy_image(prompt=cozy_prompt, filename_prefix=f"focus_product_{asin}", init_image_path=selected_photo, prompt_strength=prompt_strength)
