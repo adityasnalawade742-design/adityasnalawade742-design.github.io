@@ -30,18 +30,22 @@
 
 ---
 
-## 🚀 Major Milestones Completed in Current Session
+## 🚀 Major Milestones Completed & Verified
 
-1. **Implemented Verified OneLink NL/PL/SE Fix**:
-   - Updated [`config/affiliate_config.json`](file:///G:/CLI/pinterest-auto-affiliate/config/affiliate_config.json) to set `NL`, `PL`, `SE` to `routing_mode: ONELINK` and `oneLink_enabled_for_account: true`.
-   - Updated [`modules/bridge_creator.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/bridge_creator.py) to include `NL`, `PL`, `SE` in `onelinkCountries` fallback string and currency map definitions (`PLN`, `SEK`).
-   - Rebuilt all 23 bridge pages via [`rebuild_EVERY_single_bridge.py`](file:///G:/CLI/pinterest-auto-affiliate/rebuild_EVERY_single_bridge.py) and deployed live to GitHub Pages.
-   - Performed live Playwright CDN verification confirming `NL`, `PL`, `SE`, `UK` visitors receive canonical `amazon.com/dp/{ASIN}?tag=smartdeal0358-20` CTA links and `📦 Amazon OneLink International Delivery` badges.
+1. **Verified 10-Marketplace OneLink Architecture**:
+   - `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` configured for OneLink canonical URL routing (`amazon.com/dp/{ASIN}?tag=smartdeal0358-20`).
+   - Rebuilt all 23 bridge pages via `rebuild_EVERY_single_bridge.py` and deployed live to GitHub Pages.
 
-2. **India Tag & Direct Listing Isolation**:
+2. **Price Verification & OneLink Routing Independence**:
+   - Verified that OneLink routing and Regional Price Verification are 100% separate concepts. Unlisted items in OneLink countries are tagged `⚠️ UNLISTED IN REGION • Approx. [price]` with red warning styling.
+
+3. **India Tag & Direct Listing Isolation**:
    - Preserved `smartdeal0358-21` isolation for India (`amazon.in/dp/...` or `amazon.in/s?k=...`).
 
-3. **Automated Test Suite Verification (100% PASS)**:
+4. **Pinterest Batch Publishing (100% PASS)**:
+   - Executed batch publishing of all 23 products to Pinterest API v5 Sandbox Board `1092545259543959836` with 100% success rate (`HTTP 201 Created`).
+
+5. **Automated Test Suite Verification (100% PASS)**:
    - `python check_fixes.py` (PASS)
    - `python test_affiliate_routing.py` (8/8 PASS)
    - `python audit_all_affiliate_tags.py` (PASS)
