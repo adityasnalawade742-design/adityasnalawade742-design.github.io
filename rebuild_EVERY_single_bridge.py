@@ -236,13 +236,18 @@ try:
             shutil.copy(dist_index, repo_dir / "index.html")
             print(" ✅ Updated root index.html with Astro Vercel Design build!")
         if dist_bridge.exists():
+            for b_file in dist_bridge.glob("*.html"):
+                asin_code = b_file.stem
+                shutil.copy(b_file, repo_dir / f"bridge_{asin_code}.html")
+                print(f" ✅ Deployed Astro Vercel bridge page: bridge_{asin_code}.html")
             for b_folder in dist_bridge.glob("*"):
                 if b_folder.is_dir():
                     asin_code = b_folder.name
                     b_html = b_folder / "index.html"
                     if b_html.exists():
                         shutil.copy(b_html, repo_dir / f"bridge_{asin_code}.html")
-                        print(f" ✅ Deployed Astro landing page: bridge_{asin_code}.html")
+                        print(f" ✅ Deployed Astro Vercel bridge page: bridge_{asin_code}.html")
+
 
 except Exception as e_astro:
     print(f" ⚠️ Warning executing Astro build: {e_astro}")
