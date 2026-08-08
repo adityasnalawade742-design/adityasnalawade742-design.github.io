@@ -429,12 +429,12 @@
 
         <!-- Hero Image -->
         <div class="img-container">
-            <img id="mainImage" class="hero-img" src="./focus_product_B0FFG48KCY_hook.jpg?v=1786211460" alt="Abstract Reading Thinker Statue">
+            <img id="mainImage" class="hero-img" src="./focus_product_B0FFG48KCY_hook.jpg?v=1786211812" alt="Abstract Reading Thinker Statue">
         </div>
 
         <!-- Image View Switcher -->
         <div class="img-tabs">
-            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FFG48KCY_hook.jpg?v=1786211460', this)">✨ Commercial View</button>
+            <button class="img-tab-btn active" onclick="switchImage('./focus_product_B0FFG48KCY_hook.jpg?v=1786211812', this)">✨ Commercial View</button>
             
         </div>
 
@@ -590,7 +590,7 @@
                 const pageUrl = encodeURIComponent(window.location.href);
                 const title = encodeURIComponent("Abstract Reading Thinker Statue");
                 const mainImg = document.getElementById('mainImage');
-                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FFG48KCY_hook.jpg?v=1786211460";
+                const imgSrc = mainImg ? mainImg.getAttribute('src') : "./focus_product_B0FFG48KCY_hook.jpg?v=1786211812";
                 const absoluteImgUrl = encodeURIComponent(new URL(imgSrc, window.location.href).href);
                 const pinBtn = document.getElementById('pinterestShareBtn');
                 if (pinBtn) {
@@ -743,13 +743,39 @@
                     }
                 }
 
-                // B. Geo-Aware Price Display & Labeling
+                // B. Geo-Aware Price Display & Labeling Engine
                 if (regPrice && regPrice === 'Not Available') {
                     priceTags.forEach(el => {
-                        if (el.classList.contains('tag')) { el.innerText = '🔴 OUT OF STOCK'; el.style.background = 'rgba(249, 115, 22, 0.25)'; el.style.color = '#fdba74'; el.style.borderColor = 'rgba(249, 115, 22, 0.4)'; } else { el.innerText = 'Out of Stock'; }
+                        if (el.classList.contains('tag')) {
+                            el.innerText = '🔴 OUT OF STOCK';
+                            el.style.background = 'rgba(249, 115, 22, 0.25)';
+                            el.style.color = '#fdba74';
+                            el.style.borderColor = 'rgba(249, 115, 22, 0.4)';
+                        } else {
+                            el.innerText = 'Out of Stock';
+                        }
                     });
                 } else if (regPrice) {
-                    priceTags.forEach(el => { if (el.classList.contains('tag')) el.innerText = `✨ VERIFIED DEAL • ${regPrice}`; else el.innerText = regPrice; });
+                    const isVerifiedPrice = isDirectListing;
+                    const finalTagText = isVerifiedPrice ? `✨ VERIFIED DEAL • ${regPrice}` : `⚠️ UNLISTED IN REGION • Approx. ${regPrice}`;
+                    const finalPriceText = isVerifiedPrice ? regPrice : `Approx. ${regPrice}`;
+
+                    priceTags.forEach(el => {
+                        if (el.classList.contains('tag')) {
+                            el.innerText = finalTagText;
+                            if (!isVerifiedPrice) {
+                                el.style.background = 'rgba(239, 68, 68, 0.25)';
+                                el.style.color = '#fca5a5';
+                                el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                            } else {
+                                el.style.background = '';
+                                el.style.color = '';
+                                el.style.borderColor = '';
+                            }
+                        } else {
+                            el.innerText = finalPriceText;
+                        }
+                    });
                 } else {
                     const rate = exchangeRates[targetCurr] || 1.0;
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
@@ -757,12 +783,24 @@
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const isUsd = (targetCC === 'US');
                     const displayVal = `${sym}${converted}`;
-                    const finalDisplayPrice = isUsd ? displayVal : `Approx. ${displayVal}`;
+                    const isVerifiedPrice = isUsd || isDirectListing;
+                    const finalTagText = isVerifiedPrice ? `✨ VERIFIED DEAL • ${displayVal}` : `⚠️ UNLISTED IN REGION • Approx. ${displayVal}`;
+                    const finalPriceText = isVerifiedPrice ? displayVal : `Approx. ${displayVal}`;
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
-                            el.innerText = isDirectListing ? `✨ VERIFIED DEAL • ${finalDisplayPrice}` : `⚠️ UNLISTED IN REGION • ${finalDisplayPrice}`;
-                            if (!isDirectListing) { el.style.background = 'rgba(239, 68, 68, 0.25)'; el.style.color = '#fca5a5'; el.style.borderColor = 'rgba(239, 68, 68, 0.4)'; }
-                        } else { el.innerText = finalDisplayPrice; }
+                            el.innerText = finalTagText;
+                            if (!isVerifiedPrice) {
+                                el.style.background = 'rgba(239, 68, 68, 0.25)';
+                                el.style.color = '#fca5a5';
+                                el.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                            } else {
+                                el.style.background = '';
+                                el.style.color = '';
+                                el.style.borderColor = '';
+                            }
+                        } else {
+                            el.innerText = finalPriceText;
+                        }
                     });
                 }
 
