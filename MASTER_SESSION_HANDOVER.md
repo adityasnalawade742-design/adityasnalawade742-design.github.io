@@ -11,7 +11,7 @@
 * **GitHub Repository**: `https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io.git`
 * **Live Site**: `https://adityasnalawade742-design.github.io/`
 * **Active Products**: **23 Verified Products** (100% compiled & deployed to GitHub Pages)
-* **Canonical US Tag (OneLink)**: `smartdeal0358-20`
+* **Canonical US Tag (OneLink)**: `smartdeal0358-20` (Active for 10 Marketplaces: US, CA, UK/GB, FR, DE, IT, ES, NL, PL, SE)
 * **India Fallback Tag**: `smartdeal0358-21`
 * **Pinterest Developer App**: Cozy Room Decor Publisher Pro (App ID: `1596368`)
 
@@ -32,54 +32,28 @@
 
 ## 🚀 Major Milestones Completed in Current Session
 
-1. **Authoritative Network-First Geo-Engine**:
-   - Reverted client-side JS in [`modules/bridge_creator.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/bridge_creator.py) to Network-First priority (Cloudflare trace + cascading IP APIs).
-   - Added 1.5s fallback deadline timer and single-resolution guard (`commitResolution`) preventing race conditions.
+1. **Implemented Verified OneLink NL/PL/SE Fix**:
+   - Updated [`config/affiliate_config.json`](file:///G:/CLI/pinterest-auto-affiliate/config/affiliate_config.json) to set `NL`, `PL`, `SE` to `routing_mode: ONELINK` and `oneLink_enabled_for_account: true`.
+   - Updated [`modules/bridge_creator.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/bridge_creator.py) to include `NL`, `PL`, `SE` in `onelinkCountries` fallback string and currency map definitions (`PLN`, `SEK`).
+   - Rebuilt all 23 bridge pages via [`rebuild_EVERY_single_bridge.py`](file:///G:/CLI/pinterest-auto-affiliate/rebuild_EVERY_single_bridge.py) and deployed live to GitHub Pages.
+   - Performed live Playwright CDN verification confirming `NL`, `PL`, `SE`, `UK` visitors receive canonical `amazon.com/dp/{ASIN}?tag=smartdeal0358-20` CTA links and `📦 Amazon OneLink International Delivery` badges.
 
-2. **Amazon OneLink & Associate Tag Isolation**:
-   - OneLink Countries (`US`, `CA`, `GB/UK`, `DE`, `FR`, `IT`, `ES`): Canonical URL `https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20` on `#buyBtn.href`.
-   - India (`IN`): Direct ASIN listing (`amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21`) or search fallback (`amazon.in/s?k=...`).
-   - Tag Isolation: 100% verified across all 23 bridge pages and homepage cards.
+2. **India Tag & Direct Listing Isolation**:
+   - Preserved `smartdeal0358-21` isolation for India (`amazon.in/dp/...` or `amazon.in/s?k=...`).
 
-3. **Verified vs Unverified Price Labeling**:
-   - Enforced `isDirectListing === true` requirement for `✨ VERIFIED DEAL` label.
-   - Unlisted reseller import prices labeled `⚠️ UNLISTED IN REGION • Approx. [price]`.
-   - Real-time exchange rate conversions prefixed with `Approx.`.
-
-4. **Geo-Aware Shipping Badges**:
-   - `⚡ Prime 2-Day Free Shipping` for US.
-   - `📦 Amazon OneLink International Delivery` for OneLink countries.
-   - `📦 Amazon India Delivery Available` for direct India listings.
-   - `📦 US Import • Search Amazon.in Deals` for search fallbacks.
-   - `📦 Amazon Global Delivery` for unknown countries.
-
-5. **Master System Guide Version 3.1**:
-   - Updated [`SYSTEM_SETUP_AND_GLOBAL_LINKING_GUIDE.txt`](file:///G:/CLI/pinterest-auto-affiliate/SYSTEM_SETUP_AND_GLOBAL_LINKING_GUIDE.txt) with accurate 404 detection terminology, OneLink verification caveats, and 21-country catalog classification.
-
-6. **Pinterest Sandbox Batch Execution (100% PASS)**:
-   - Built batch publisher script [`publish_all_homepage_pins.py`](file:///G:/CLI/pinterest-auto-affiliate/publish_all_homepage_pins.py).
-   - Exported complete JSON payload [`sandbox_pins_payload.json`](file:///G:/CLI/pinterest-auto-affiliate/sandbox_pins_payload.json).
-   - **Result**: **23 / 23 SUCCESSFUL (100% PASS)** posted to Sandbox Board `1092545259543959836` with valid Pin IDs returned. Logged in [`pinterest_campaign_tracker.json`](file:///G:/CLI/pinterest-auto-affiliate/pinterest_campaign_tracker.json).
-
----
-
-## 🧪 Automated Verification Commands
-
-```powershell
-python check_fixes.py
-python test_affiliate_routing.py
-python audit_all_affiliate_tags.py
-python validate_all_affiliate_urls.py
-python test_bridge_geo_routing.py
-```
+3. **Automated Test Suite Verification (100% PASS)**:
+   - `python check_fixes.py` (PASS)
+   - `python test_affiliate_routing.py` (8/8 PASS)
+   - `python audit_all_affiliate_tags.py` (PASS)
+   - `python validate_all_affiliate_urls.py` (23/23 PASS)
+   - `python test_bridge_geo_routing.py` (8/8 PASS including NL, PL, SE)
 
 ---
 
 ## 📌 Instructions for Resuming in a New Session / Account
 
 1. All code, templates, and documentation are committed and pushed to `main`.
-2. Web Console server is bound to `http://127.0.0.1:5000/`.
-3. To post all 23 pins live to production boards once Pinterest grants Standard Access:
+2. To post all 23 pins live to production boards once Pinterest grants Standard Access:
    ```powershell
    python publish_all_homepage_pins.py prod
    ```

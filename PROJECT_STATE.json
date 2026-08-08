@@ -1,8 +1,10 @@
 {
   "project_name": "pinterest-auto-affiliate",
-  "version": "3.1.0",
-  "last_updated": "2026-08-09T00:40:00Z",
+  "version": "3.2.0",
+  "last_updated": "2026-08-09T01:46:00Z",
   "active_products_count": 23,
+  "onelink_marketplaces_count": 10,
+  "onelink_country_codes": ["US", "CA", "GB", "UK", "FR", "DE", "IT", "ES", "NL", "PL", "SE"],
   "canonical_us_tag": "smartdeal0358-20",
   "india_fallback_tag": "smartdeal0358-21",
   "pinterest_app_id": "1596368",

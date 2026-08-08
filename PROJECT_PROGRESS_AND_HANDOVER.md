@@ -11,7 +11,7 @@
 * **Remote Git Repository**: [https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io.git](https://github.com/adityasnalawade742-design/adityasnalawade742-design.github.io.git)
 * **Master Local Directory**: `G:\CLI\pinterest-auto-affiliate`
 * **Target Git Branch**: `main` (Automatically triggers GitHub Pages deployment)
-* **Canonical US / OneLink Associate Tag**: **`smartdeal0358-20`** (OneLink enabled on Amazon Associate Console)
+* **Canonical US / OneLink Associate Tag**: **`smartdeal0358-20`** (OneLink active for 10 Marketplaces: US, CA, UK/GB, FR, DE, IT, ES, NL, PL, SE)
 * **India Fallback Associate Tag**: **`smartdeal0358-21`** (Amazon.in Associates Program)
 * **Pinterest Application**: **Cozy Room Decor Publisher Pro (App ID: 1596368)**
 * **Pinterest Sandbox Access Token**: Verified active in `.env` (`PINTEREST_SANDBOX_ACCESS_TOKEN`)
@@ -22,7 +22,7 @@
 ## 📊 Current System State & Verified Disk Assets
 
 * 📦 **Active Storefront Catalog** (`index.html`): **23 Products** (100% compiled & deployed)
-* 📄 **Active Bridge Landing Pages** (`bridge_*.html` & `bridge_pages/`): **23 Landing Pages**
+* 📄 **Active Bridge Landing Pages** (`bridge_*.html` & `bridge_pages/`): **23 Landing Pages** (100% rebuilt with 10-marketplace OneLink engine)
 * 🖼️ **Committed High-Res Lifestyle Visuals** (`focus_product_{ASIN}_hook.jpg`): **23 Files** (HTTP 200 verified on GitHub Pages CDN)
 * 🏷️ **Graphic Price Overlay Badges**: Rendered via Playwright overlay engine (`modules/html_overlay_engine.py`)
 * 📄 **Master System Text Guide**: [`SYSTEM_SETUP_AND_GLOBAL_LINKING_GUIDE.txt`](file:///G:/CLI/pinterest-auto-affiliate/SYSTEM_SETUP_AND_GLOBAL_LINKING_GUIDE.txt) (Version 3.1 Enterprise Reference Edition)
@@ -31,39 +31,34 @@
 
 ---
 
-## ⚙️ Core Technical Architecture & Recent Enhancements
+## ⚙️ Core Technical Architecture & Amazon OneLink Implementation
 
-### 1. 🌐 Authoritative Network-First Geo-Engine (`modules/bridge_creator.py`)
-- **Primary Detection**: Initiates fetch to `https://www.cloudflare.com/cdn-cgi/trace` and cascading IP APIs (`ipwho.is`, `freeipapi.com`, `api.country.is`, `ipapi.co`).
-- **1.5-Second Fallback Deadline**: Timezone (`Intl.DateTimeFormat`) and browser language detection execute ONLY if network requests time out or fail after 1500ms.
-- **Single-Resolution Guard (`commitResolution`)**: Prevents race conditions and guarantees that exactly ONE country decision is committed per page view. Late network callbacks cannot overwrite a committed resolution.
+### 1. 🛒 Verified Amazon OneLink Engine (10 Marketplaces)
+- **Verified OneLink Marketplaces**: `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` (10 active marketplaces).
+- **Canonical Destination CTA**: Sets `#buyBtn.href` to canonical Amazon US URL: `https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20`. Amazon edge servers execute server-side redirection to the visitor's local Amazon domain (`amazon.ca`, `amazon.co.uk`, `amazon.de`, `amazon.fr`, `amazon.it`, `amazon.es`, `amazon.nl`, `amazon.pl`, `amazon.se`).
+- **Zero Local Client-Side Links for OneLink**: The bridge script NEVER generates `amazon.nl`, `amazon.pl`, or `amazon.se` client-side links, preserving canonical OneLink attribution (`smartdeal0358-20`).
 
-### 2. 🛒 Amazon OneLink Integration & Store Tag Isolation
-- **OneLink Countries (`US`, `CA`, `GB/UK`, `DE`, `FR`, `IT`, `ES`)**: Sets `#buyBtn.href` to canonical Amazon US URL: `https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20`. Amazon OneLink handles server-side store redirection on Amazon servers.
-- **India Direct Listing (`IN` + direct ASIN)**: `https://www.amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21`
-- **India Search Fallback (`IN` + unlisted ASIN)**: `https://www.amazon.in/s?k={keywords}&tag=smartdeal0358-21`
-- **Strict Tag Isolation**: `smartdeal0358-20` is used exclusively on `amazon.com` for US/OneLink. `smartdeal0358-21` is used exclusively on `amazon.in`. Zero cross-contamination.
+### 2. 🇮🇳 India Direct & Search Fallback Isolation
+- **Direct ASIN Listing**: `https://www.amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21`
+- **Search Fallback Listing**: `https://www.amazon.in/s?k={keywords}&tag=smartdeal0358-21`
+- **Strict Tag Isolation**: Tag `smartdeal0358-21` is used exclusively on `amazon.in`. India traffic NEVER uses `amazon.com` or tag `smartdeal0358-20`.
 
-### 3. 💎 Verified vs. Unverified Pricing Engine
+### 3. 🌐 Authoritative Network-First Geo-Engine (`modules/bridge_creator.py`)
+- **Primary Detection**: Cloudflare trace + cascading IP APIs (`ipwho.is`, `freeipapi.com`, `api.country.is`, `ipapi.co`).
+- **1.5-Second Fallback Deadline**: Timezone and browser language detection execute ONLY if network requests time out after 1500ms.
+- **Single-Resolution Guard (`commitResolution`)**: Prevents race conditions and guarantees that exactly ONE country decision is committed per page view.
+
+### 4. 💎 Verified vs. Unverified Pricing & Currency Engine
 - **Verification Rule**: `isDirectListing === true` (presence of verified regional ASIN mapping or US canonical source listing) is strictly required before the `✨ VERIFIED DEAL` label is applied.
-- **Unverified Reseller Import Prices**: Unlisted reseller prices (such as `₹7,111.00` on `amazon.in/dp/B0BXP7YWHJ`) are displayed as `⚠️ UNLISTED IN REGION • Approx. ₹7,111.00`.
-- **Exchange Rate Conversions**: Real-time conversions from Open Exchange Rates API are explicitly prefixed with `Approx.`.
+- **Unverified Reseller Import Prices**: Displayed as `⚠️ UNLISTED IN REGION • Approx. [price]`.
+- **Exchange Rate Conversions**: Dynamically fetched from `open.er-api.com` (`EUR`, `GBP`, `CAD`, `AUD`, `INR`, `PLN`, `SEK`, etc.) and prefixed with `Approx.`.
 
-### 4. 📦 Geo-Aware Shipping & Prime Messaging Badges
+### 5. 📦 Geo-Aware Shipping Badges
 - **US Visitors (`targetCC === 'US'`)**: `⚡ Prime 2-Day Free Shipping`
-- **OneLink Visitors (`CA`, `GB`, `UK`, `DE`, `FR`, `IT`, `ES`)**: `📦 Amazon OneLink International Delivery`
+- **OneLink Visitors (`CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE`)**: `📦 Amazon OneLink International Delivery`
 - **India Direct Listing**: `📦 Amazon India Delivery Available`
 - **India Search Fallback**: `📦 US Import • Search Amazon.in Deals`
 - **Unknown / Other Countries**: `📦 Amazon Global Delivery`
-
-### 5. 📌 Pinterest Sandbox Batch Publishing Execution
-- **Publisher Script**: [`publish_all_homepage_pins.py`](file:///G:/CLI/pinterest-auto-affiliate/publish_all_homepage_pins.py) supports `sandbox` and `prod` modes.
-- **Payload Export**: [`sandbox_pins_payload.json`](file:///G:/CLI/pinterest-auto-affiliate/sandbox_pins_payload.json) exported all 23 pin payloads.
-- **Execution Result**: **23 / 23 SUCCESSFUL (100% PASS)**. All 23 products published to Sandbox Board `1092545259543959836` with valid Pin IDs returned. Recorded in [`pinterest_campaign_tracker.json`](file:///G:/CLI/pinterest-auto-affiliate/pinterest_campaign_tracker.json).
-
-### 6. 🔒 Security & Localhost Hardening
-- **Web Console Server (`web_console_server.py`)**: Bound explicitly to `127.0.0.1:5000` (localhost only), preventing public WAN access.
-- **Secret Isolation**: Secrets (`PINTEREST_ACCESS_TOKEN`, `PINTEREST_SANDBOX_ACCESS_TOKEN`, `REPLICATE_API_TOKEN`) loaded securely from `.env`. Zero plaintext keys in public HTML.
 
 ---
 
@@ -99,47 +94,22 @@
 
 ## 🧪 Automated Verification Suite (100% PASS)
 
-To verify system integrity on any machine, execute the full test suite:
-
 ```powershell
 python check_fixes.py               # Checks zero hardcoded paths, raw image paths, Jinja2 invariants
 python test_affiliate_routing.py    # Unit tests for URL generation & Associate tag isolation
 python audit_all_affiliate_tags.py   # Audits all bridge pages and index.html for tag compliance
 python validate_all_affiliate_urls.py# Crawls outgoing URLs and verifies HTTP 200 status
-python test_bridge_geo_routing.py   # Playwright headless browser test simulating US, IN, UK, DE geos
+python test_bridge_geo_routing.py   # Playwright headless browser test simulating US, IN, UK, DE, NL, PL, SE geos
 ```
 
 ---
 
-## 🛠️ Operational Maintenance Commands
+## 📌 Next Steps for Production Publishing
 
-1. **Start Web Console Server (Localhost 127.0.0.1:5000)**:
-   ```powershell
-   python web_console_server.py
-   ```
-2. **Rebuild All 23 Landing Pages & Sitemap**:
-   ```powershell
-   python rebuild_EVERY_single_bridge.py
-   ```
-3. **Run Batch Pinterest Sandbox Publisher**:
-   ```powershell
-   python publish_all_homepage_pins.py sandbox
-   ```
-4. **Run Batch Pinterest Production Publisher (Requires Standard Access)**:
+1. **Pinterest Standard Access Approval**: Once App `Cozy Room Decor Publisher Pro` (App ID: `1596368`) is approved on `developers.pinterest.com/apps/1596368/`, run:
    ```powershell
    python publish_all_homepage_pins.py prod
    ```
-5. **Delete Product Campaign**:
-   ```powershell
-   python delete_product.py <ASIN>
-   ```
-
----
-
-## 📌 Next Steps for Any AGY Instance / Developer
-
-1. **Pinterest Standard Access Approval**: When App `Cozy Room Decor Publisher Pro` (App ID: `1596368`) is approved for Standard Access on `developers.pinterest.com/apps/1596368/`, run `python publish_all_homepage_pins.py prod` to post all 23 pins live to production boards.
-2. **Amazon Associates OneLink Verification**: Ensure regional Store IDs (`smartdea04b3a-21`, `smartdeal0302-20`, `smartdeal0bb4-21`, etc.) are linked under **Tools → OneLink → Link Store IDs** in your US Amazon Associates Console (`smartdeal0358-20`).
 
 ---
 
