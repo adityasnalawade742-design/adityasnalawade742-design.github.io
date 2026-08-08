@@ -1,6 +1,6 @@
 # 🚀 Pinterest Auto Affiliate Platform: Master Progress, Architecture & Handover Record
 
-> **SINGLE SOURCE OF TRUTH & AGENT HANDOVER GUIDE**: This document details the entire state of the project, technical architecture, verified asset counts, dynamic precision prompt strength engine, error fixes, Pinterest compliance updates, Amazon OneLink integration, verified pricing engine, and Pinterest Sandbox batch execution logs. Any AGY instance, subagent, or developer can inspect this document to immediately resume work from where we left off with zero context loss.
+> **SINGLE SOURCE OF TRUTH & AGENT HANDOVER GUIDE**: This document details the entire state of the project, technical architecture, verified asset counts, dynamic precision prompt strength engine, error fixes, Pinterest compliance updates, Amazon OneLink integration, scraper data integrity engine, and Pinterest Sandbox batch execution logs. Any AGY instance, subagent, or developer can inspect this document to immediately resume work from where we left off with zero context loss.
 
 ---
 
@@ -22,7 +22,8 @@
 ## 📊 Current System State & Verified Disk Assets
 
 * 📦 **Active Storefront Catalog** (`index.html`): **23 Products** (100% compiled & deployed)
-* 📄 **Active Bridge Landing Pages** (`bridge_*.html` & `bridge_pages/`): **23 Landing Pages** (100% rebuilt with 10-marketplace OneLink engine)
+* 📄 **Active Bridge Landing Pages** (`bridge_*.html` & `bridge_pages/`): **23 Landing Pages** (100% rebuilt with 10-marketplace OneLink & normalized price model)
+* 🛡️ **Scraper Data Integrity Engine**: [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py) (Structured records, 7-day TTL, DOM seller tracking, US ASIN fallback prohibition)
 * 🖼️ **Committed High-Res Lifestyle Visuals** (`focus_product_{ASIN}_hook.jpg`): **23 Files** (HTTP 200 verified on GitHub Pages CDN)
 * 🏷️ **Graphic Price Overlay Badges**: Rendered via Playwright overlay engine (`modules/html_overlay_engine.py`)
 * 📄 **Master System Text Guide**: [`SYSTEM_SETUP_AND_GLOBAL_LINKING_GUIDE.txt`](file:///G:/CLI/pinterest-auto-affiliate/SYSTEM_SETUP_AND_GLOBAL_LINKING_GUIDE.txt) (Version 3.1 Enterprise Reference Edition)
@@ -31,34 +32,29 @@
 
 ---
 
-## ⚙️ Core Technical Architecture & Amazon OneLink Implementation
+## ⚙️ Core Technical Architecture & Scraper Integrity Remediation
 
-### 1. 🛒 Verified Amazon OneLink Engine (10 Marketplaces)
+### 1. 🛡️ Scraper Data Integrity & US ASIN Fallback Prohibition
+- **Prohibited US ASIN Fallback**: Scrapers ([`scrape_in.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/scrapers/scrape_in.py), [`scrape_uk.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/scrapers/scrape_uk.py), [`scrape_extended_domains.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/scrapers/scrape_extended_domains.py)) scrape a regional Amazon site ONLY IF `regional_asins[CC]` is explicitly mapped. Unmapped regions set status `NOT_MAPPED` without polluting the registry with third-party import reseller prices.
+- **DOM Seller & Merchant Tracking**: Scrapers inspect `#merchant-info`, `#sellerProfileTriggerId`, and `#bylineInfo` to capture `seller` and `ships_from` data.
+
+### 2. ⏳ 7-Day Configurable TTL & Stale-Price Protection
+- Defined `PRICE_TTL_DAYS = 7` in [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py).
+- Failed scrapes (CAPTCHA, timeout) preserve the previous `scraped_at` timestamp. Prices older than 7 days transition to `STALE_VERIFIED` or `STALE_UNVERIFIED` and cannot be displayed as current verified deals.
+
+### 3. 🛒 Verified Amazon OneLink Engine (10 Marketplaces)
 - **Verified OneLink Marketplaces**: `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` (10 active marketplaces).
 - **Canonical Destination CTA**: Sets `#buyBtn.href` to canonical Amazon US URL: `https://www.amazon.com/dp/{ASIN}?tag=smartdeal0358-20`. Amazon edge servers execute server-side redirection to the visitor's local Amazon domain (`amazon.ca`, `amazon.co.uk`, `amazon.de`, `amazon.fr`, `amazon.it`, `amazon.es`, `amazon.nl`, `amazon.pl`, `amazon.se`).
-- **Zero Local Client-Side Links for OneLink**: The bridge script NEVER generates `amazon.nl`, `amazon.pl`, or `amazon.se` client-side links, preserving canonical OneLink attribution (`smartdeal0358-20`).
 
-### 2. 🇮🇳 India Direct & Search Fallback Isolation
+### 4. 🇮🇳 India Direct & Search Fallback Isolation
 - **Direct ASIN Listing**: `https://www.amazon.in/dp/{IN_ASIN}?tag=smartdeal0358-21`
 - **Search Fallback Listing**: `https://www.amazon.in/s?k={keywords}&tag=smartdeal0358-21`
 - **Strict Tag Isolation**: Tag `smartdeal0358-21` is used exclusively on `amazon.in`. India traffic NEVER uses `amazon.com` or tag `smartdeal0358-20`.
 
-### 3. 🌐 Authoritative Network-First Geo-Engine (`modules/bridge_creator.py`)
-- **Primary Detection**: Cloudflare trace + cascading IP APIs (`ipwho.is`, `freeipapi.com`, `api.country.is`, `ipapi.co`).
-- **1.5-Second Fallback Deadline**: Timezone and browser language detection execute ONLY if network requests time out after 1500ms.
-- **Single-Resolution Guard (`commitResolution`)**: Prevents race conditions and guarantees that exactly ONE country decision is committed per page view.
-
-### 4. 💎 Verified vs. Unverified Pricing & Currency Engine
+### 5. 💎 Verified vs. Unverified Pricing & Currency Engine
 - **Verification Rule**: `isDirectListing === true` (presence of verified regional ASIN mapping or US canonical source listing) is strictly required before the `✨ VERIFIED DEAL` label is applied.
 - **Unverified Reseller Import Prices**: Displayed as `⚠️ UNLISTED IN REGION • Approx. [price]`.
 - **Exchange Rate Conversions**: Dynamically fetched from `open.er-api.com` (`EUR`, `GBP`, `CAD`, `AUD`, `INR`, `PLN`, `SEK`, etc.) and prefixed with `Approx.`.
-
-### 5. 📦 Geo-Aware Shipping Badges
-- **US Visitors (`targetCC === 'US'`)**: `⚡ Prime 2-Day Free Shipping`
-- **OneLink Visitors (`CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE`)**: `📦 Amazon OneLink International Delivery`
-- **India Direct Listing**: `📦 Amazon India Delivery Available`
-- **India Search Fallback**: `📦 US Import • Search Amazon.in Deals`
-- **Unknown / Other Countries**: `📦 Amazon Global Delivery`
 
 ---
 
@@ -100,6 +96,7 @@ python test_affiliate_routing.py    # Unit tests for URL generation & Associate 
 python audit_all_affiliate_tags.py   # Audits all bridge pages and index.html for tag compliance
 python validate_all_affiliate_urls.py# Crawls outgoing URLs and verifies HTTP 200 status
 python test_bridge_geo_routing.py   # Playwright headless browser test simulating US, IN, UK, DE, NL, PL, SE geos
+python test_price_scraper_integrity.py # Scraper data integrity, TTL stale logic & ASIN verification tests
 ```
 
 ---

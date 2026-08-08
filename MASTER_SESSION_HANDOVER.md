@@ -32,25 +32,24 @@
 
 ## 🚀 Major Milestones Completed & Verified
 
-1. **Verified 10-Marketplace OneLink Architecture**:
-   - `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` configured for OneLink canonical URL routing (`amazon.com/dp/{ASIN}?tag=smartdeal0358-20`).
-   - Rebuilt all 23 bridge pages via `rebuild_EVERY_single_bridge.py` and deployed live to GitHub Pages.
+1. **Price Scraper Integrity Remediation**:
+   - Built [`modules/price_registry_manager.py`](file:///G:/CLI/pinterest-auto-affiliate/modules/price_registry_manager.py) to manage structured price records, DOM seller info, status semantics (`FRESH_VERIFIED`, `FRESH_UNVERIFIED`, `STALE_VERIFIED`, `NOT_MAPPED`), and 7-day TTL stale price logic.
+   - Prohibited US ASIN fallback scraper pollution across all regional domain scrapers (`scrape_in.py`, `scrape_uk.py`, `scrape_extended_domains.py`).
+   - Created [`test_price_scraper_integrity.py`](file:///G:/CLI/pinterest-auto-affiliate/test_price_scraper_integrity.py) with 9/9 PASS.
 
-2. **Price Verification & OneLink Routing Independence**:
-   - Verified that OneLink routing and Regional Price Verification are 100% separate concepts. Unlisted items in OneLink countries are tagged `⚠️ UNLISTED IN REGION • Approx. [price]` with red warning styling.
+2. **Verified 10-Marketplace OneLink Architecture**:
+   - `US`, `CA`, `GB/UK`, `FR`, `DE`, `IT`, `ES`, `NL`, `PL`, `SE` configured for OneLink canonical URL routing (`amazon.com/dp/{ASIN}?tag=smartdeal0358-20`).
 
 3. **India Tag & Direct Listing Isolation**:
    - Preserved `smartdeal0358-21` isolation for India (`amazon.in/dp/...` or `amazon.in/s?k=...`).
 
-4. **Pinterest Batch Publishing (100% PASS)**:
-   - Executed batch publishing of all 23 products to Pinterest API v5 Sandbox Board `1092545259543959836` with 100% success rate (`HTTP 201 Created`).
-
-5. **Automated Test Suite Verification (100% PASS)**:
+4. **Automated Test Suite Verification (100% PASS)**:
    - `python check_fixes.py` (PASS)
    - `python test_affiliate_routing.py` (8/8 PASS)
    - `python audit_all_affiliate_tags.py` (PASS)
    - `python validate_all_affiliate_urls.py` (23/23 PASS)
-   - `python test_bridge_geo_routing.py` (8/8 PASS including NL, PL, SE)
+   - `python test_bridge_geo_routing.py` (8/8 PASS)
+   - `python test_price_scraper_integrity.py` (9/9 PASS)
 
 ---
 
