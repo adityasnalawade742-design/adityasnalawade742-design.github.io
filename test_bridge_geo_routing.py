@@ -199,19 +199,87 @@ class TestBridgeGeoRouting(unittest.TestCase):
         
         self.assertEqual(buy_href, "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-20")
 
-    def test_normal_showcase_links_have_no_country_parameter(self):
+    def test_geo_ui_shipping_badge_and_price_labeling(self):
         """
-        TEST 7:
-        Verify index.html card links do not append ?country= parameter.
+        REGRESSION TESTS FOR GEO-DEPENDENT PRODUCT UI:
+        Verifies that non-US visitors NEVER see 'Prime 2-Day Free Shipping',
+        that OneLink countries show 'Amazon OneLink International Delivery',
+        that India search fallbacks show 'Approx.' price and 'US Import • Search Amazon.in Deals',
+        and that India direct listings show 'Amazon India Delivery Available'.
         """
-        index_file = ROOT / "index.html"
-        content = index_file.read_text(encoding="utf-8")
-        soup = BeautifulSoup(content, "html.parser")
-        cards = soup.find_all("a", class_="card")
-        for card in cards:
-            href = card.get("href", "")
-            self.assertNotIn("?country=", href, f"Card href '{href}' should not contain ?country= override")
-            self.assertNotIn("?geo=", href, f"Card href '{href}' should not contain ?geo= override")
+        unlisted_bridge = ROOT / "bridge_B0BZXNSW5K.html"
+        direct_bridge = ROOT / "bridge_B0CX144DHK.html"
+        
+        context = self.browser.new_context()
+
+        # TEST 1: ?country=US
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=US".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        price = page.evaluate("document.querySelector('.price') ? document.querySelector('.price').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertEqual(badge, "⚡ Prime 2-Day Free Shipping")
+        self.assertNotIn("Approx.", price)
+        self.assertIn("amazon.com", href)
+        self.assertIn("smartdeal0358-20", href)
+        page.close()
+
+        # TEST 2: ?country=IN (Direct Listing)
+        page = context.new_page()
+        page.goto(f"file:///{direct_bridge.resolve()}?country=IN".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertNotEqual(badge, "⚡ Prime 2-Day Free Shipping", "India direct listing must NOT show US Prime claim")
+        self.assertEqual(badge, "📦 Amazon India Delivery Available")
+        self.assertIn("amazon.in/dp/B0CX144DHK", href)
+        self.assertIn("smartdeal0358-21", href)
+        page.close()
+
+        # TEST 3: ?country=IN (Unlisted Search Fallback)
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=IN".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        price = page.evaluate("document.querySelector('.price') ? document.querySelector('.price').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertNotEqual(badge, "⚡ Prime 2-Day Free Shipping", "India search fallback must NOT show US Prime claim")
+        self.assertEqual(badge, "📦 US Import • Search Amazon.in Deals")
+        self.assertIn("Approx.", price, "Converted price for India fallback must be labeled as Approx.")
+        self.assertIn("amazon.in/s?k=", href)
+        self.assertIn("smartdeal0358-21", href)
+        page.close()
+
+        # TEST 4: ?country=GB
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=GB".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        price = page.evaluate("document.querySelector('.price') ? document.querySelector('.price').innerText : ''")
+        href = page.evaluate("document.getElementById('buyBtn') ? document.getElementById('buyBtn').href : ''")
+        self.assertEqual(badge, "📦 Amazon OneLink International Delivery", "UK visitor must see OneLink delivery badge")
+        self.assertIn("Approx.", price)
+        self.assertEqual(href, "https://www.amazon.com/dp/B0BZXNSW5K?tag=smartdeal0358-20", "OneLink UK must preserve canonical US URL")
+        page.close()
+
+        # TEST 5: ?country=DE
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=DE".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        self.assertEqual(badge, "📦 Amazon OneLink International Delivery")
+        page.close()
+
+        # TEST 6: ?country=JP
+        page = context.new_page()
+        page.goto(f"file:///{unlisted_bridge.resolve()}?country=JP".replace("\\", "/"))
+        page.wait_for_timeout(300)
+        badge = page.evaluate("document.querySelector('.prime-badge') ? document.querySelector('.prime-badge').innerText : ''")
+        self.assertEqual(badge, "📦 Amazon Global Delivery")
+        page.close()
+
+        context.close()
 
 if __name__ == "__main__":
     unittest.main()

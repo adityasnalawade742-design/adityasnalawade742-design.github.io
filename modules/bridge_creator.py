@@ -714,7 +714,42 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                 const regKey = targetCC.toUpperCase();
                 const regPrice = regionalMatrix[regKey] || regionalMatrix[regKey.toLowerCase()] || (targetCC === 'GB' ? (regionalMatrix['UK'] || regionalMatrix['uk']) : null);
                 const priceTags = document.querySelectorAll('.price, .tag, .hero-price, .cta-price, #heroPriceTag');
+                const primeBadge = document.querySelector('.prime-badge');
 
+                // A. Geo-Aware Prime / Shipping Badge Update
+                if (primeBadge) {
+                    if (targetCC === 'US') {
+                        primeBadge.innerText = '⚡ Prime 2-Day Free Shipping';
+                        primeBadge.style.background = '';
+                        primeBadge.style.borderColor = '';
+                        primeBadge.style.color = '';
+                    } else if (onelinkCountries.includes(targetCC)) {
+                        primeBadge.innerText = '📦 Amazon OneLink International Delivery';
+                        primeBadge.style.background = 'rgba(59, 130, 246, 0.2)';
+                        primeBadge.style.borderColor = 'rgba(59, 130, 246, 0.4)';
+                        primeBadge.style.color = '#93c5fd';
+                    } else if (targetCC === 'IN') {
+                        const inAsin = regionalAsins['IN'] || (directRegions.includes('IN') ? currentAsin : null);
+                        if (inAsin) {
+                            primeBadge.innerText = '📦 Amazon India Delivery Available';
+                            primeBadge.style.background = 'rgba(34, 197, 94, 0.2)';
+                            primeBadge.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+                            primeBadge.style.color = '#86efac';
+                        } else {
+                            primeBadge.innerText = '📦 US Import • Search Amazon.in Deals';
+                            primeBadge.style.background = 'rgba(245, 158, 11, 0.2)';
+                            primeBadge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+                            primeBadge.style.color = '#fde047';
+                        }
+                    } else {
+                        primeBadge.innerText = '📦 Amazon Global Delivery';
+                        primeBadge.style.background = 'rgba(148, 163, 184, 0.2)';
+                        primeBadge.style.borderColor = 'rgba(148, 163, 184, 0.4)';
+                        primeBadge.style.color = '#cbd5e1';
+                    }
+                }
+
+                // B. Geo-Aware Price Display & Labeling
                 if (regPrice && regPrice === 'Not Available') {
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) { el.innerText = '🔴 OUT OF STOCK'; el.style.background = 'rgba(249, 115, 22, 0.25)'; el.style.color = '#fdba74'; el.style.borderColor = 'rgba(249, 115, 22, 0.4)'; } else { el.innerText = 'Out of Stock'; }
@@ -726,7 +761,9 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     const sym = currencySymbols[targetCurr] || (targetCurr + " ");
                     const baseUsd = parseFloat("{{ product.get('current_price', product.get('price', '$19.99')) }}".replace(/[^0-9.]/g, '') || '20.00');
                     const converted = (baseUsd * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    const finalDisplayPrice = `${sym}${converted}`;
+                    const isUsd = (targetCC === 'US');
+                    const displayVal = `${sym}${converted}`;
+                    const finalDisplayPrice = isUsd ? displayVal : `Approx. ${displayVal}`;
                     priceTags.forEach(el => {
                         if (el.classList.contains('tag')) {
                             el.innerText = isDirectListing ? `✨ VERIFIED DEAL • ${finalDisplayPrice}` : `⚠️ UNLISTED IN REGION • ${finalDisplayPrice}`;
@@ -735,7 +772,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     });
                 }
 
-                // A. ONELINK ENABLED MARKETPLACES (US, CA, UK/GB, DE, FR, IT, ES)
+                // C. ONELINK ENABLED MARKETPLACES (US, CA, UK/GB, DE, FR, IT, ES)
                 if (onelinkCountries.includes(targetCC)) {
                     if (buyBtn) buyBtn.href = canonicalUrl;
                     if (buyBtnText) buyBtnText.innerText = targetCC === 'US' ? 'BUY ON AMAZON (US $)' : `BUY ON ${target.label}`;
@@ -743,7 +780,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     return;
                 }
 
-                // B. INDIA FALLBACK (amazon.in with smartdeal0358-21)
+                // D. INDIA FALLBACK (amazon.in with smartdeal0358-21)
                 if (targetCC === 'IN') {
                     const inAsin = regionalAsins['IN'] || (directRegions.includes('IN') ? currentAsin : null);
                     if (inAsin) {
@@ -764,7 +801,7 @@ BRIDGE_PAGE_TEMPLATE = """<!DOCTYPE html>
                     return;
                 }
 
-                // C. NON-ONELINK DIRECT MATRIX / SEARCH FALLBACK
+                // E. NON-ONELINK DIRECT MATRIX / SEARCH FALLBACK
                 if (isDirectListing && targetAsin) {
                     if (buyBtn) buyBtn.href = `https://www.${target.domain}/dp/${targetAsin}${tagParam}`;
                     if (buyBtnText) buyBtnText.innerText = `BUY ON ${target.label}`;
